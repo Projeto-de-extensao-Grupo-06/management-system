@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Clients.module.css";
-import type Client from "../../interfaces/Client";
+import type Client from "./Client";
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);

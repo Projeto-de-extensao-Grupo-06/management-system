@@ -11,7 +11,6 @@ export default function AppRoutes() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Login />} />
 
-          {/* Rotas com layout */}
           <Route element={<AppLayout />}>
             <Route path="/clients" element={<Clients />} />
           </Route>
