@@ -1,24 +1,18 @@
 import { useEffect, useState } from "react";
-import styles from "./Clientes.module.css";
+import styles from "./Clients.module.css";
+import type Client from "../../interfaces/Client";
 
-interface Cliente {
-  id: number;
-  nome: string;
-  email: string;
-}
-
-export default function Clientes() {
-  const [clientes, setClientes] = useState<Cliente[]>([]);
+export default function Clients() {
+  const [clients, setClients] = useState<Client[]>([]);
 
   useEffect(() => {
-    // Simulação de requisição
-    const fakeData: Cliente[] = [
-      { id: 1, nome: "João da Silva", email: "joao@email.com" },
-      { id: 2, nome: "Maria Oliveira", email: "maria@email.com" }
+    const fakeData: Client[] = [
+      { id: 1, name: "João da Silva", email: "joao@email.com" },
+      { id: 2, name: "Maria Oliveira", email: "maria@email.com" }
     ];
 
     setTimeout(() => {
-      setClientes(fakeData);
+      setClients(fakeData);
     }, 400);
   }, []);
 
@@ -33,10 +27,10 @@ export default function Clientes() {
           <div>Email</div>
         </div>
 
-        {clientes.map((c) => (
+        {clients.map((c) => (
           <div key={c.id} className={styles.row}>
             <div>{c.id}</div>
-            <div>{c.nome}</div>
+            <div>{c.name}</div>
             <div>{c.email}</div>
           </div>
         ))}

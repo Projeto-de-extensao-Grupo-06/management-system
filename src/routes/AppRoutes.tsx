@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 //import Login from "../pages/Login/Login";
 import AppLayout from "../layouts/AppLayout/AppLayout";
-import Clientes from "../pages/Clientes/Clientes";
+import Clients from "../pages/Clients/Clients";
 
 export default function AppRoutes() {
   return (
@@ -9,7 +9,7 @@ export default function AppRoutes() {
         <AppLayout>
             <Routes>
                 <Route path="/" element={<div>Home Page</div>} />
-                <Route path="/clientes" element={<Clientes />} />
+                <Route path="/clientes" element={<Clients />} />
             </Routes>
         </AppLayout>
     </BrowserRouter>
