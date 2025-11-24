@@ -5,13 +5,16 @@ import Login from "./pages/Login/Login";
 import AppLayout from "./layouts/AppLayout/AppLayout";
 import Clients from "./pages/Clients/Clients";
 import NotFound from "./pages/NotFound";
+import LoginLayout from './layouts/AppLayout/LoginLayout';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Login />} />
+          <Route element={<LoginLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
+          </Route>
 
           <Route element={<AppLayout />}>
             <Route path="/clients" element={<Clients />} />
