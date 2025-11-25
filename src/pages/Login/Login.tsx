@@ -6,54 +6,27 @@ import styles from './Login.module.css';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // aqui vai sua lógica de login
-    console.log('Login:', { email, senha });
+    console.log('Login:', { email, password });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {/* Email */}
-      <div className={styles.inputGroup}>
-        <input
-          type="email"
-          placeholder="exemplo@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={styles.input}
-          required
-        />
-      </div>
+      <Input 
+        placeholder="Informe seu Email: exemplo@gmail.com" 
+        value={email} 
+        onChange={setEmail}/>
 
-      {/* Senha */}
-      <div className={styles.inputGroup}>
-        <input
-          type={mostrarSenha ? 'text' : 'password'}
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          className={styles.input}
-          required
-        />
-        <button
-          type="button"
-          onClick={() => setMostrarSenha(!mostrarSenha)}
-          className={styles.eyeButton}
-        >
-          <FontAwesomeIcon icon={mostrarSenha ? faEyeSlash : faEye} />
-        </button>
-      </div>
+      <PasswordInput 
+        placeholder="Informe sua Senha" 
+        value={password} 
+        onChange={setPassword}/>
 
-      {/* Botão Enviar */}
-      <button type="submit" className={styles.submitButton}>
-        Enviar
-      </button>
-
-      {/* Esqueceu a senha */}
+      <Button text="Entrar" />
+      
       <Link to="/esqueci-senha" className={styles.forgotLink}>
         Esqueceu sua senha?
       </Link>
