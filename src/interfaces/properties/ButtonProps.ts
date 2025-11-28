@@ -1,6 +1,6 @@
-export default interface ButtonProps = {
+export default interface ButtonProps {
     onClick?(): void;
     text: string;
     disabled?: boolean;
-    type?: string;
+    type?: "submit" | "reset" | "button" | undefined;
 }

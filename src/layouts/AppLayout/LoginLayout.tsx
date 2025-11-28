@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import logo from '../../assets/react.svg';
+import logo from '../../assets/logo-solarize.png';
 import styles from './LoginLayout.module.css';
 
 export default function LoginLayout() {
@@ -18,10 +18,6 @@ export default function LoginLayout() {
             className={styles.logo}
           />
         </div>
-
-        <p className={styles.subtitle}>
-          Bem-vindo de volta à sua conta
-        </p>
 
         <Outlet />
 

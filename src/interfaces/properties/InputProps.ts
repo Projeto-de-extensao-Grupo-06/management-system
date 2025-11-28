@@ -1,4 +1,4 @@
-export default interface InputProps = {
+export default interface InputProps {
     placeholder: string;
     type?: string;
     onChange(value: string): void;

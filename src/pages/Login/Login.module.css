@@ -1,0 +1,27 @@
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
+.forgotLinkContainer {
+    margin-top: 16px;
+    text-align: center;
+}
+
+.forgotLink {
+    display: inline-block;
+    color: #333333;
+    font-size: 14px;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.forgotLink:hover {
+    color: #FF8C00;
+}
+
+.forgotLink:active {
+    color: #E67E00;
+}

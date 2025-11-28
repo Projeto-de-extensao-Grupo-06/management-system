@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router';
 import styles from './Login.module.css'; 
+import { Input, PasswordInput, Button } from '../../components/Form';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,7 +13,7 @@ export default function LoginPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className={styles.loginForm}>
       <Input 
         placeholder="Informe seu Email: exemplo@gmail.com" 
         value={email} 
@@ -27,9 +26,11 @@ export default function LoginPage() {
 
       <Button text="Entrar" />
       
-      <Link to="/esqueci-senha" className={styles.forgotLink}>
-        Esqueceu sua senha?
-      </Link>
+      <div className={styles.forgotLinkContainer}>
+        <Link to="/esqueci-senha" className={styles.forgotLink}>
+          Esqueceu sua senha?
+        </Link>
+      </div>
     </form>
   );
 }
