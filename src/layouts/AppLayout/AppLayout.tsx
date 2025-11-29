@@ -2,17 +2,19 @@ import { NavLink } from "react-router";
 import styles from "./AppLayout.module.css";
 import { Outlet } from "react-router";
 
+import logo from '../../assets/logo-solarize.png';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartLine, faCalendar, faClipboard, faPeopleGroup, faGear, faWrench, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 export default function AppLayout() {
-    const menuItems = [
-    { to: '/agenda', label: 'Agenda', icon: Calendar },
-    { to: '/projetos', label: 'Projetos', icon: Clipboard },
-    { to: '/clientes', label: 'Clientes', icon: Users },
-    { to: '/materiais', label: 'Materiais', icon: Wrench },
-    { to: '/fornecedores', label: 'Fornecedores', icon: Truck },
-    { to: '/analises', label: 'Análises', icon: TrendingUp },
-    { to: '/configuracoes', label: 'Configurações', icon: Settings },
+  const menuItems = [
+    { to: '/agenda', label: 'Agenda', icon: faCalendar },
+    { to: '/projetos', label: 'Projetos', icon: faClipboard },
+    { to: '/clientes', label: 'Clientes', icon: faPeopleGroup },
+    { to: '/materiais', label: 'Materiais', icon: faWrench },
+    { to: '/analise', label: 'Análises', icon: faChartLine },
+    { to: '/configuracoes', label: 'Configurações', icon: faGear },
   ];
 
   const handleLogout = () => {
@@ -29,7 +31,7 @@ export default function AppLayout() {
           className={({ isActive }) => 
             `${styles.menuLink} ${isActive ? styles.menuLinkActive : ''}`
           }>
-          <Icon className={styles.menuIcon} size={20} />
+          <FontAwesomeIcon className={styles.menuIcon} icon={Icon} />
           <span className={styles.menuText}>{item.label}</span>
         </NavLink>
       </li>
@@ -42,7 +44,7 @@ export default function AppLayout() {
         <div className={styles.logo}>
           <div className={styles.logoImage}>
             <img 
-              src="/path/to/your/logo.png" 
+              src={logo} 
               alt="Solarize Logo"
             />
           </div>
@@ -60,7 +62,7 @@ export default function AppLayout() {
           <button 
             onClick={handleLogout}
             className={styles.menuLink}>
-            <LogOut className={styles.menuIcon} size={20} />
+            <FontAwesomeIcon className={styles.menuIcon} icon={faArrowRightFromBracket} />
             <span className={styles.menuText}>Sair</span>
           </button>
         </div>

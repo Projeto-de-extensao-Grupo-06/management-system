@@ -17,7 +17,7 @@ function App() {
           </Route>
 
           <Route element={<AppLayout />}>
-            <Route path="/clients" element={<Clients />} />
+            <Route path="/clientes" element={<Clients />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

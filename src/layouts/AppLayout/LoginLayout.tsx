@@ -1,6 +1,4 @@
 import { Outlet } from 'react-router';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import logo from '../../assets/logo-solarize.png';
 import styles from './LoginLayout.module.css';
 
