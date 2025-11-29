@@ -6,15 +6,16 @@ import ClientService from "../../services/ClientsService";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPen, faTrashCan, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-import { SimpleButton, Button, IconButton } from '../../components/Form';
+import { SimpleButton, Button, IconButton, Select, SelectOption } from '../../components/Form';
 
 export default function Clients() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('todos');
+  const [statusFilter, setStatusFilter] = useState('Todos');
   const [clients, setClients] = useState<Client[]>([]);
+  const [filteredClients, setFilteredClients] = useState<Client[]>([]);
   const clientsService = new ClientService();
 
-  const clientsMap = clients
+  const clientsMap = filteredClients
   .map((client) => (
     <tr key={client.id}>
       <td>{client.name}</td>
@@ -36,16 +37,17 @@ export default function Clients() {
         </div>
       </td>
     </tr>
-  ))
+  ));
 
   useEffect(() => {
     clientsService.getAllClients()
-      .then((data: Client[]) => {
-        setClients(data);
-      })
-      .catch((e: any) => {
-        console.error('Erro ao buscar clientes:', e);
-      });
+    .then((data: Client[]) => {
+      setClients(data);
+      setFilteredClients(data);
+    })
+    .catch((e: any) => {
+      console.error('Erro ao buscar clientes:', e);
+    });
   }, []);
 
   const handleEdit = (id: number) => {
@@ -65,12 +67,23 @@ export default function Clients() {
 
   const handleDelete = (id: number) => {
     clientsService.deleteClient(id)
-      .then(() => {
-        setClients((prevClients) => prevClients.filter(client => client.id !== id));
-      })
-      .catch((e: any) => {
-        console.error('Erro ao deletar cliente:', e);
-      });
+    .then(() => {
+      setClients((prevClients) => prevClients.filter(client => client.id !== id));
+    })
+    .catch((e: any) => {
+      console.error('Erro ao deletar cliente:', e);
+    });
+  };
+
+  const handleStatusChange = (value: string) => {
+    setStatusFilter(value);
+
+    if (value === 'Todos') {
+      setFilteredClients(clients);
+      return;
+    } 
+    
+    setFilteredClients(clients.filter(c => c.status === value));
   };
 
   return (
@@ -94,26 +107,14 @@ export default function Clients() {
           onClick={handleFilterClient}  />
 
         <div className={styles.dropdown}>
-          <select 
-            value={statusFilter} 
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className={styles.select}>
-            <option value="todos">Todos os status</option>
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-          </select>
+          <Select value={statusFilter} onChange={handleStatusChange}>
+            <SelectOption value="Todos" label="Todos"/>
+            <SelectOption value="Ativo" label="Ativo"/>
+            <SelectOption value="Inativo" label="Inativo"/>
+          </Select>
         </div>
 
-        <div className={styles.searchBox}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} className={styles.searchIcon}  />
-          <input
-            type="text"
-            placeholder="Buscar Cliente"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
-        </div>
+        <IconInput />
       </div>
 
       <div className={styles.tableWrapper}>
