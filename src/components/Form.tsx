@@ -17,7 +17,20 @@ export function Button ({text, icon, type="submit", onClick, disabled=false, ari
             disabled={disabled}
             onClick={onClick}
             aria-label={ariaLabel}>
-            {icon ? icon : ''}{text}
+            {icon ? icon : ''} {text}
+        </button>
+    );
+}
+
+export function SimpleButton ({text, icon, type="submit", onClick, disabled=false, ariaLabel}: ButtonProps){
+    return (
+        <button 
+            type={type}
+            className="simple-button" 
+            disabled={disabled}
+            onClick={onClick}
+            aria-label={ariaLabel}>
+            {icon ? icon : ''} {text}
         </button>
     );
 }

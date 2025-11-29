@@ -6,7 +6,7 @@ import ClientService from "../../services/ClientsService";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPen, faTrashCan, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-import { Button, IconButton } from '../../components/Form';
+import { SimpleButton, Button, IconButton } from '../../components/Form';
 
 export default function Clients() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -50,8 +50,18 @@ export default function Clients() {
 
   const handleEdit = (id: number) => {
     console.log('Editar cliente:', id);
-    // abrir tela de edição
+    // TODO abrir tela de edição
   };
+
+  const handleAddClient = () => {
+    console.log('Adicionar novo cliente');
+    // TODO abrir tela de cadastro
+  };
+
+  const handleFilterClient = () => {
+    console.log('Filtrar clientes');
+    // TODO abrir modal de filtros
+  }
 
   const handleDelete = (id: number) => {
     clientsService.deleteClient(id)
@@ -69,17 +79,19 @@ export default function Clients() {
         <h1 className={styles.title}>
           Clientes <span className={styles.count}>({clients.length})</span>
         </h1>
-        <button className={styles.addButton}>
-          <FontAwesomeIcon icon={faPlus} />
-          Cadastrar Cliente
-        </button>
+        <Button
+          icon={<FontAwesomeIcon icon={faPlus} />}
+          text="Cadastrar Cliente"
+          ariaLabel="Cadastrar Cliente"
+          onClick={handleAddClient}  />   
       </div>
 
       <div className={styles.filters}>
-        <button className={styles.filterButton}>
-          <FontAwesomeIcon icon={faFilter} />
-          Filtro
-        </button>
+        <SimpleButton
+          icon={<FontAwesomeIcon icon={faFilter} />}
+          text="Filtros"
+          ariaLabel="Filtrar Clientes"
+          onClick={handleFilterClient}  />
 
         <div className={styles.dropdown}>
           <select 
