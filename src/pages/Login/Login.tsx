@@ -24,7 +24,7 @@ export default function LoginPage() {
       console.log('Usuário logado:', user); // TODO - settar zustand ou context
 
       setLoading(false);
-      navigate('/clients');
+      navigate('/clientes');
     })
     .catch((e) => {
       setError(e.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.');

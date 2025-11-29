@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import styles from "./Clients.module.css";
 import type Client from "../../interfaces/types/Client";
-import clientService from "../../services/ClientsService";
+import ClientService from "../../services/ClientsService";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPen, faTrashCan, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from '../../components/Form';
+import { Button, IconButton } from '../../components/Form';
 
 export default function Clients() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('todos');
   const [clients, setClients] = useState<Client[]>([]);
+  const clientsService = new ClientService();
 
   const clientsMap = clients
   .map((client) => (
@@ -22,25 +23,24 @@ export default function Clients() {
       <td>{client.status}</td>
       <td>
         <div className={styles.actions}>
-          <Button 
-            text={''} 
+          <IconButton 
             onClick={() => handleEdit(client.id)} 
             icon={<FontAwesomeIcon icon={faPen} />}
-            ariaLabel="Editar"/>
-          <Button 
-            text={''} 
+            ariaLabel="Editar"
+            functionality="edit"/>
+          <IconButton 
             onClick={() => handleDelete(client.id)} 
             icon={<FontAwesomeIcon icon={faTrashCan} />}
-            ariaLabel="Deletar"/>
+            ariaLabel="Deletar"
+            functionality="delete"/>
         </div>
       </td>
     </tr>
   ))
 
   useEffect(() => {
-    const client = new clientService();
-    client.getAllClients()
-      .then((data) => {
+    clientsService.getAllClients()
+      .then((data: Client[]) => {
         setClients(data);
       })
       .catch((e: any) => {
@@ -50,10 +50,17 @@ export default function Clients() {
 
   const handleEdit = (id: number) => {
     console.log('Editar cliente:', id);
+    // abrir tela de edição
   };
 
   const handleDelete = (id: number) => {
-    console.log('Deletar cliente:', id);
+    clientsService.deleteClient(id)
+      .then(() => {
+        setClients((prevClients) => prevClients.filter(client => client.id !== id));
+      })
+      .catch((e: any) => {
+        console.error('Erro ao deletar cliente:', e);
+      });
   };
 
   return (

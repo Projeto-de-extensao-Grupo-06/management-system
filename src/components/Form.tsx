@@ -1,5 +1,6 @@
 import './components.css';
 
+import type IconButtonProps from '../interfaces/properties/IconButtonProps';
 import type ButtonProps from '../interfaces/properties/ButtonProps';
 import type InputProps from '../interfaces/properties/InputProps';
 import type PasswordInputProps from '../interfaces/properties/PasswordInputProps';
@@ -17,6 +18,18 @@ export function Button ({text, icon, type="submit", onClick, disabled=false, ari
             onClick={onClick}
             aria-label={ariaLabel}>
             {icon ? icon : ''}{text}
+        </button>
+    );
+}
+
+export function IconButton ({functionality="edit", icon, type="submit", onClick, disabled=false}: IconButtonProps){
+    return (
+        <button 
+            type={type}
+            className={`${functionality}-button`} 
+            disabled={disabled}
+            onClick={onClick}>
+            {icon}
         </button>
     );
 }

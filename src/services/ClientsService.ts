@@ -1,9 +1,13 @@
 import api from './api';
-import type User from '../interfaces/types/User';
+import type Client from '../interfaces/types/Client';
 
-export default class clientsService {
-    async getAllClients(): Promise<User[]> {
-        const response = await api.get<User[]>('/clients');
+export default class ClientsService {
+    async getAllClients(): Promise<Client[]> {
+        const response = await api.get<Client[]>('/clients');
         return response.data;
+    }
+
+    async deleteClient(id: number): Promise<void> {
+        await api.delete(`/clients/${id}`);
     }
 };

@@ -197,39 +197,6 @@
   gap: 12px;
 }
 
-.editButton,
-.deleteButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.editButton {
-  background: transparent;
-  color: #374151;
-}
-
-.editButton:hover {
-  background: #f3f4f6;
-  color: #1f2937;
-}
-
-.deleteButton {
-  background: transparent;
-  color: #dc2626;
-}
-
-.deleteButton:hover {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
