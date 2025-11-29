@@ -1,4 +1,5 @@
 import api from './api';
+import type User from '../interfaces/types/User';
 
 export interface LoginCredentials {
   email: string;
@@ -12,12 +13,12 @@ export interface LoginResponse {
 
 export default class authService {
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>('/auth/login', credentials);
+    const response = await api.post<LoginResponse>('/login', credentials);
     return response.data;
-  },
+  }
 
-  async logout(): void {
-    await api.post('/auth/logout');
+  async logout(): Promise<void> {
+    await api.post('/logout');
     localStorage.removeItem('user');
   }
 };

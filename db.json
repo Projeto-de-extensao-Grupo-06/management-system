@@ -1,0 +1,18 @@
+{
+    "users": [
+        {
+            "name": "admin",
+            "email": "teste@exemplo.com",
+            "password": "senha123",
+            "id": 1
+        }
+    ],
+    "material": [
+        {"id": 1, "name": "Notebook"},
+        {"id": 2, "name": "Mouse"}
+    ],
+    "clients": [
+        {"id": 1, "name": "Ranier"},
+        {"id": 2, "name": "João Silva"}
+    ]
+}
