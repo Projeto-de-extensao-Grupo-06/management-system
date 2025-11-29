@@ -18,9 +18,9 @@ function App() {
 
           <Route element={<AppLayout />}>
             <Route path="/clientes" element={<Clients />} />
-          </Route>
 
-          <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,8 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import styles from "./AppLayout.module.css";
 import { Outlet } from "react-router";
+
+import authService from '../../services/LoginService';
 
 import logo from '../../assets/logo-solarize.png';
 
@@ -16,9 +18,18 @@ export default function AppLayout() {
     { to: '/analise', label: 'Análises', icon: faChartLine },
     { to: '/configuracoes', label: 'Configurações', icon: faGear },
   ];
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    alert('Logout clicked');
+    const auth = new authService();
+    auth.logout()
+    .then(() => {
+      console.log('Usuário deslogado com sucesso!');
+      navigate('/login');
+    })
+    .catch((e) => {
+      console.error('Erro ao fazer logout:', e);
+    });
   };
 
   const menu = menuItems
@@ -50,14 +61,12 @@ export default function AppLayout() {
           </div>
         </div>
 
-        {/* MENU NAVIGATION */}
         <nav className={styles.nav}>
           <ul className={styles.menu}>
             {menu}
           </ul>
         </nav>
 
-    
         <div className={styles.logout}>
           <button 
             onClick={handleLogout}
