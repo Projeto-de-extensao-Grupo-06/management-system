@@ -8,14 +8,15 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-export function Button ({text, type="submit", onClick, disabled=false}: ButtonProps){
+export function Button ({text, icon, type="submit", onClick, disabled=false, ariaLabel}: ButtonProps){
     return (
         <button 
             type={type}
             className="submit-button" 
             disabled={disabled}
-            onClick={onClick}>
-            {text}
+            onClick={onClick}
+            aria-label={ariaLabel}>
+            {icon ? icon : ''}{text}
         </button>
     );
 }
