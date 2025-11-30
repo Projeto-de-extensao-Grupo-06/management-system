@@ -7,7 +7,7 @@ import type PasswordInputProps from '../interfaces/properties/PasswordInputProps
 
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import type SelectProps from '../interfaces/properties/SelectProps';
 
 export function Button ({text, icon, type="submit", onClick, disabled=false, ariaLabel}: ButtonProps){
@@ -65,7 +65,7 @@ export function Select({children, value, onChange}: SelectProps){
     );
 }
 
-export function Input({placeholder, type = "text", onChange, value}: InputProps){
+export function Input({placeholder, type = "text", onChange, value, }: InputProps){
     return (
         <div className="input-container">
             <input
@@ -77,6 +77,20 @@ export function Input({placeholder, type = "text", onChange, value}: InputProps)
                 required
             />
         </div>
+    );
+}
+
+export function SearchInput({placeholder, type = "text", onChange, value}: InputProps){
+    return (
+        <>
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon"  />
+            <input
+                type={type}
+                placeholder={placeholder}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="search-input" />
+        </>
     );
 }
 

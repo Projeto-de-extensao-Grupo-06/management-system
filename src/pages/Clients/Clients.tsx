@@ -4,9 +4,9 @@ import type Client from "../../interfaces/types/Client";
 import ClientService from "../../services/ClientsService";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faPen, faTrashCan, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPen, faTrashCan, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { SimpleButton, Button, IconButton, Select, SelectOption } from '../../components/Form';
+import { SimpleButton, Button, IconButton, Select, SelectOption, SearchInput } from '../../components/Form';
 
 export default function Clients() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -75,16 +75,20 @@ export default function Clients() {
     });
   };
 
-  const handleStatusChange = (value: string) => {
-    setStatusFilter(value);
+  useEffect(() => {
+    let result = [...clients];
 
-    if (value === 'Todos') {
-      setFilteredClients(clients);
-      return;
-    } 
-    
-    setFilteredClients(clients.filter(c => c.status === value));
-  };
+    if (statusFilter !== 'Todos') {
+      result = result.filter(c => c.status === statusFilter);
+    }
+
+    if (searchTerm.trim() !== '') {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(c => c.name.toLowerCase().includes(term));
+    }
+
+    setFilteredClients(result);
+  }, [clients, statusFilter, searchTerm]);
 
   return (
     <div className={styles.container}>
@@ -107,14 +111,20 @@ export default function Clients() {
           onClick={handleFilterClient}  />
 
         <div className={styles.dropdown}>
-          <Select value={statusFilter} onChange={handleStatusChange}>
+          <Select value={statusFilter} onChange={setStatusFilter}>
             <SelectOption value="Todos" label="Todos"/>
             <SelectOption value="Ativo" label="Ativo"/>
             <SelectOption value="Inativo" label="Inativo"/>
           </Select>
         </div>
 
-        <IconInput />
+        <div className={styles.searchBox}>
+          <SearchInput 
+            onChange={setSearchTerm} 
+            value={searchTerm}
+            placeholder="Buscar Cliente"/>
+        </div>
+        
       </div>
 
       <div className={styles.tableWrapper}>
