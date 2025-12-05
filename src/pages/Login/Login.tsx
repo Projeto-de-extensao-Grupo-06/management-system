@@ -46,7 +46,7 @@ export default function LoginPage() {
         value={password} 
         onChange={setPassword}/>
 
-      <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading}/>
+      <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading} width="100%"/>
       
       <div className={styles.forgotLinkContainer}>
         <Link to="/esqueci-senha" className={styles.forgotLink}>

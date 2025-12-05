@@ -10,27 +10,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import type SelectProps from '../interfaces/properties/SelectProps';
 
-export function Button ({text, icon, type="submit", onClick, disabled=false, ariaLabel}: ButtonProps){
+export function Button ({text, icon, type="submit", onClick, disabled=false, ariaLabel, width}: ButtonProps){
     return (
         <button 
             type={type}
             className="submit-button" 
             disabled={disabled}
             onClick={onClick}
-            aria-label={ariaLabel}>
+            aria-label={ariaLabel}
+            style={{ width }}>
             {icon ? icon : ''} {text}
         </button>
     );
 }
 
-export function SimpleButton ({text, icon, type="submit", onClick, disabled=false, ariaLabel}: ButtonProps){
+export function SimpleButton ({text, icon, type="submit", onClick, disabled=false, ariaLabel, width}: ButtonProps){
     return (
         <button 
             type={type}
             className="simple-button" 
             disabled={disabled}
             onClick={onClick}
-            aria-label={ariaLabel}>
+            aria-label={ariaLabel}
+            style={{ width }}>
             {icon ? icon : ''} {text}
         </button>
     );
