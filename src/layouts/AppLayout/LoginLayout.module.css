@@ -2,8 +2,8 @@
   min-height: 100vh;
   min-height: 100dvh;
   width: 100vw;
-  
-  background-image: url('../../assets/login-background.png');
+
+  background-image: url("../../assets/login-background-quality.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -19,11 +19,11 @@
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .card {
-  position: relative; 
+  position: relative;
   z-index: 10;
   background: white;
   border-radius: 22px;
@@ -31,7 +31,7 @@
   max-width: 580px;
   width: 100%;
   padding: 2.5rem 3.2rem;
-  margin: 2rem; 
+  margin: 2rem;
 }
 
 .title {
