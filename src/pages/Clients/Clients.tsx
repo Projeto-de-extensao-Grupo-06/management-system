@@ -100,7 +100,8 @@ export default function Clients() {
           icon={<FontAwesomeIcon icon={faPlus} />}
           text="Cadastrar Cliente"
           ariaLabel="Cadastrar Cliente"
-          onClick={handleAddClient}  />   
+          onClick={handleAddClient}  
+          width={"15%"}/>   
       </div>
 
       <div className={styles.filters}>

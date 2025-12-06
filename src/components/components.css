@@ -97,7 +97,6 @@
     transition: all 0.3s ease;
     font-family: inherit;
     min-height: 56px;
-    max-width: 250px;
 }
 
 .submit-button:hover:not(:disabled) {
