@@ -7,4 +7,5 @@ export default interface ButtonProps {
     type?: "submit" | "reset" | "button" | undefined;
     icon?: JSX.Element;
     ariaLabel?: string;
+    width?: string | number;
 }
