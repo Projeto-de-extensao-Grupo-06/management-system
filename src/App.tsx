@@ -6,7 +6,7 @@ import AppLayout from "./layouts/AppLayout/AppLayout";
 import Clients from "./pages/Clients/Clients";
 import NotFound from "./pages/NotFound";
 import LoginLayout from "./layouts/AppLayout/LoginLayout";
-import { Analysis } from "./pages/Analysis/Analysis";
+import Analysis from "./pages/Analysis/Analysis";
 
 function App() {
   return (
