@@ -8,6 +8,7 @@ import logo from '../../assets/logo-solarize.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faCalendar, faClipboard, faPeopleGroup, faGear, faWrench, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import VLibras from "@moreiraste/react-vlibras";
 
 export default function AppLayout() {
   const menuItems = [
@@ -51,6 +52,7 @@ export default function AppLayout() {
 
   return (
     <div className={styles.container}>
+      <VLibras forceOnload={true} /> 
       <aside className={styles.sidebar}>
         <div className={styles.logo}>
           <div className={styles.logoImage}>
