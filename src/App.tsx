@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import LoginLayout from './layouts/AppLayout/LoginLayout';
 
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
@@ -18,9 +19,9 @@ function App() {
 
           <Route element={<AppLayout />}>
             <Route path="/clientes" element={<Clients />} />
-
-            <Route path="*" element={<NotFound />} />
           </Route>
+
+          <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
