@@ -1,27 +1,94 @@
 {
-    "users": [
-        {
-            "name": "admin",
-            "email": "teste@exemplo.com",
-            "password": "senha123",
-            "id": 1
-        }
-    ],
-    "material": [
-        {"id": 1, "name": "Notebook"},
-        {"id": 2, "name": "Mouse"}
-    ],
-    "clients": [
-        { "id": 1, "name": "João Silva", "phone": "(19) 3323-3431", "email": "joao.silva@example.com", "status": "Status" },
-        { "id": 2, "name": "Cristiano Ronaldo", "phone": "(11) 91234-5678", "email": "cristiano.ronaldo@email.com", "status": "Status" },
-        { "id": 3, "name": "Maria Oliveira", "phone": "(21) 99986-5432", "email": "maria.oliveira@example.com", "status": "Status" },
-        { "id": 4, "name": "Pedro Santos", "phone": "(19) 3323-3431", "email": "pedro.santos@example.com", "status": "Status" },
-        { "id": 5, "name": "Ana Costa", "phone": "(31) 93456-7839", "email": "ana.costa@example.com", "status": "Status" },
-        { "id": 6, "name": "Lucas Almeida", "phone": "(41) 98605-4321", "email": "lucas.almeida@example.com", "status": "Status" },
-        { "id": 7, "name": "Carla Pereira", "phone": "(19) 3323-3431", "email": "carla.pereira@example.com", "status": "Status" },
-        { "id": 8, "name": "Fernando Rodrigues", "phone": "(19) 3323-3431", "email": "fernando.rodrigues@email.com", "status": "Status" },
-        { "id": 9, "name": "Júlia Martins", "phone": "(61) 94487-8901", "email": "julia.martins@example.com", "status": "Status" },
-        { "id": 10, "name": "Ricardo Ferreira", "phone": "(85) 9712-3456", "email": "ricardo.ferreira@example.com", "status": "Status" },
-        { "id": 11, "name": "Beatriz Gomes", "phone": "(19) 3323-3431", "email": "beatriz.gomes@example.com", "status": "Status" }
-    ]
+  "users": [
+    {
+      "name": "admin",
+      "email": "teste@exemplo.com",
+      "password": "senha123",
+      "id": 1
+    }
+  ],
+  "material": [
+    { "id": 1, "name": "Notebook" },
+    { "id": 2, "name": "Mouse" }
+  ],
+  "clients": [
+    {
+      "id": 1,
+      "name": "João Silva",
+      "phone": "(19) 3323-3431",
+      "email": "joao.silva@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 2,
+      "name": "Cristiano Ronaldo",
+      "phone": "(11) 91234-5678",
+      "email": "cristiano.ronaldo@email.com",
+      "status": "Status"
+    },
+    {
+      "id": 3,
+      "name": "Maria Oliveira",
+      "phone": "(21) 99986-5432",
+      "email": "maria.oliveira@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 4,
+      "name": "Pedro Santos",
+      "phone": "(19) 3323-3431",
+      "email": "pedro.santos@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 5,
+      "name": "Ana Costa",
+      "phone": "(31) 93456-7839",
+      "email": "ana.costa@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 6,
+      "name": "Lucas Almeida",
+      "phone": "(41) 98605-4321",
+      "email": "lucas.almeida@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 7,
+      "name": "Carla Pereira",
+      "phone": "(19) 3323-3431",
+      "email": "carla.pereira@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 8,
+      "name": "Fernando Rodrigues",
+      "phone": "(19) 3323-3431",
+      "email": "fernando.rodrigues@email.com",
+      "status": "Status"
+    },
+    {
+      "id": 9,
+      "name": "Júlia Martins",
+      "phone": "(61) 94487-8901",
+      "email": "julia.martins@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 10,
+      "name": "Ricardo Ferreira",
+      "phone": "(85) 9712-3456",
+      "email": "ricardo.ferreira@example.com",
+      "status": "Status"
+    },
+    {
+      "id": 11,
+      "name": "Beatriz Gomes",
+      "phone": "(19) 3323-3431",
+      "email": "beatriz.gomes@example.com",
+      "status": "Status"
+    }
+  ],
+  "analysis": []
 }

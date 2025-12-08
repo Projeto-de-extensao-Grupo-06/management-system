@@ -22,7 +22,7 @@ export default function Analysis() {
             <div className={styles.kpi_icon}>
               <FontAwesomeIcon icon={faArrowTrendUp} color="#fff" />
             </div>
-            <p>Canal Mais Custoso</p>
+            <b>Canal Mais Custoso</b>
           </div>
           <p>Site</p>
         </div>
@@ -31,7 +31,7 @@ export default function Analysis() {
             <div className={styles.kpi_icon}>
               <FontAwesomeIcon icon={faDollarSign} color="#fff" />
             </div>
-            <p>Margem Lucro</p>
+            <b>Margem Lucro</b>
           </div>
           <p>R$ 57.000</p>
         </div>
@@ -40,7 +40,7 @@ export default function Analysis() {
             <div className={styles.kpi_icon}>
               <FontAwesomeIcon icon={faCalendarDays} color="#fff" />
             </div>
-            <p>Finalização Projetos</p>
+            <b>Finalização Projetos</b>
           </div>
           <p>33%</p>
         </div>
@@ -49,7 +49,7 @@ export default function Analysis() {
             <div className={styles.kpi_icon}>
               <FontAwesomeIcon icon={faFilter} color="#fff" />
             </div>
-            <p>Conversão Funil</p>
+            <b>Conversão Funil</b>
           </div>
           <p>25%</p>
         </div>
@@ -61,16 +61,16 @@ export default function Analysis() {
     return (
       <>
         <div className={styles.filter_container}>
-          <p>Este Mes</p>
+          <b>Este Mes</b>
         </div>
         <div className={styles.filter_container}>
-          <p>Este Semestre</p>
+          <b>Este Semestre</b>
         </div>
         <div className={styles.filter_container}>
-          <p>Este Ano</p>
+          <b>Este Ano</b>
         </div>
         <div className={styles.filter_container}>
-          <p>Selecionar Periodo</p>
+          <b>Selecionar Periodo</b>
         </div>
       </>
     );
@@ -79,7 +79,7 @@ export default function Analysis() {
   return (
     <>
       <div className={styles.title_container}>
-        <h1>Analises</h1>
+        <h1>Análises</h1>
         <div className={styles.filters}>
           <Filter />
         </div>
