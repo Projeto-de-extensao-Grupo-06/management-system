@@ -53,6 +53,37 @@
     padding-right: 56px;
 }
 
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px 10px 44px;
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #e67e32;
+  box-shadow: 0 0 0 3px rgba(230, 126, 50, 0.1);
+}
+
+
 .submit-button {
     width: 100%;
     padding: 18px 20px;
@@ -83,6 +114,86 @@
     background-color: #A5D6A7;
     cursor: not-allowed;
     opacity: 0.6;
+}
+
+.edit-button,
+.delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-button {
+  background: transparent;
+  color: #374151;
+}
+
+.edit-button:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.delete-button {
+  background: transparent;
+  color: #dc2626;
+}
+
+.delete-button:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.simple-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.simple-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.select {
+  padding: 10px 36px 10px 16px;
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: all 0.2s ease;
+}
+
+.select:hover {
+  border-color: #9ca3af;
+  background-color: #f9fafb;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #e67e32;
+  box-shadow: 0 0 0 3px rgba(230, 126, 50, 0.1);
 }
 
 .space-y-5 > * + * {

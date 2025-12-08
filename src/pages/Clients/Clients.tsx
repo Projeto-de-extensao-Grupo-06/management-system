@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import styles from "./Clients.module.css";
 import type Client from "../../interfaces/types/Client";
-import clientService from "../../services/ClientsService";
+import ClientService from "../../services/ClientsService";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faPen, faTrashCan, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPen, faTrashCan, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from '../../components/Form';
+import { SimpleButton, Button, IconButton, Select, SelectOption, SearchInput } from '../../components/Form';
 
 export default function Clients() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('todos');
+  const [statusFilter, setStatusFilter] = useState('Todos');
   const [clients, setClients] = useState<Client[]>([]);
+  const [filteredClients, setFilteredClients] = useState<Client[]>([]);
+  const clientsService = new ClientService();
 
-  const clientsMap = clients
+  const clientsMap = filteredClients
   .map((client) => (
     <tr key={client.id}>
       <td>{client.name}</td>
@@ -22,39 +24,71 @@ export default function Clients() {
       <td>{client.status}</td>
       <td>
         <div className={styles.actions}>
-          <Button 
-            text={''} 
+          <IconButton 
             onClick={() => handleEdit(client.id)} 
             icon={<FontAwesomeIcon icon={faPen} />}
-            ariaLabel="Editar"/>
-          <Button 
-            text={''} 
+            ariaLabel="Editar"
+            functionality="edit"/>
+          <IconButton 
             onClick={() => handleDelete(client.id)} 
             icon={<FontAwesomeIcon icon={faTrashCan} />}
-            ariaLabel="Deletar"/>
+            ariaLabel="Deletar"
+            functionality="delete"/>
         </div>
       </td>
     </tr>
-  ))
+  ));
 
   useEffect(() => {
-    const client = new clientService();
-    client.getAllClients()
-      .then((data) => {
-        setClients(data);
-      })
-      .catch((e: any) => {
-        console.error('Erro ao buscar clientes:', e);
-      });
+    clientsService.getAllClients()
+    .then((data: Client[]) => {
+      setClients(data);
+      setFilteredClients(data);
+    })
+    .catch((e: any) => {
+      console.error('Erro ao buscar clientes:', e);
+    });
   }, []);
 
   const handleEdit = (id: number) => {
     console.log('Editar cliente:', id);
+    // TODO abrir tela de edição
   };
 
-  const handleDelete = (id: number) => {
-    console.log('Deletar cliente:', id);
+  const handleAddClient = () => {
+    console.log('Adicionar novo cliente');
+    // TODO abrir tela de cadastro
   };
+
+  const handleFilterClient = () => {
+    console.log('Filtrar clientes');
+    // TODO abrir modal de filtros
+  }
+
+  const handleDelete = (id: number) => {
+    clientsService.deleteClient(id)
+    .then(() => {
+      setClients((prevClients) => prevClients.filter(client => client.id !== id));
+    })
+    .catch((e: any) => {
+      console.error('Erro ao deletar cliente:', e);
+    });
+  };
+
+  useEffect(() => {
+    let result = [...clients];
+
+    if (statusFilter !== 'Todos') {
+      result = result.filter(c => c.status === statusFilter);
+    }
+
+    if (searchTerm.trim() !== '') {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(c => c.name.toLowerCase().includes(term));
+    }
+
+    setFilteredClients(result);
+  }, [clients, statusFilter, searchTerm]);
 
   return (
     <div className={styles.container}>
@@ -62,39 +96,36 @@ export default function Clients() {
         <h1 className={styles.title}>
           Clientes <span className={styles.count}>({clients.length})</span>
         </h1>
-        <button className={styles.addButton}>
-          <FontAwesomeIcon icon={faPlus} />
-          Cadastrar Cliente
-        </button>
+        <Button
+          icon={<FontAwesomeIcon icon={faPlus} />}
+          text="Cadastrar Cliente"
+          ariaLabel="Cadastrar Cliente"
+          onClick={handleAddClient}  
+          width={"15%"}/>   
       </div>
 
       <div className={styles.filters}>
-        <button className={styles.filterButton}>
-          <FontAwesomeIcon icon={faFilter} />
-          Filtro
-        </button>
+        <SimpleButton
+          icon={<FontAwesomeIcon icon={faFilter} />}
+          text="Filtros"
+          ariaLabel="Filtrar Clientes"
+          onClick={handleFilterClient}  />
 
         <div className={styles.dropdown}>
-          <select 
-            value={statusFilter} 
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className={styles.select}>
-            <option value="todos">Todos os status</option>
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-          </select>
+          <Select value={statusFilter} onChange={setStatusFilter}>
+            <SelectOption value="Todos" label="Todos"/>
+            <SelectOption value="Ativo" label="Ativo"/>
+            <SelectOption value="Inativo" label="Inativo"/>
+          </Select>
         </div>
 
         <div className={styles.searchBox}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} className={styles.searchIcon}  />
-          <input
-            type="text"
-            placeholder="Buscar Cliente"
+          <SearchInput 
+            onChange={setSearchTerm} 
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
+            placeholder="Buscar Cliente"/>
         </div>
+        
       </div>
 
       <div className={styles.tableWrapper}>

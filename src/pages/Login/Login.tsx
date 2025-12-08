@@ -24,13 +24,13 @@ export default function LoginPage() {
       console.log('Usuário logado:', user); // TODO - settar zustand ou context
 
       setLoading(false);
-      navigate('/clients');
+      navigate('/clientes');
     })
     .catch((e) => {
       setError(e.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.');
       // alert(error);
       setLoading(false);
-      navigate('/clients');
+      navigate('/clientes');
     });
   };
 
@@ -46,7 +46,7 @@ export default function LoginPage() {
         value={password} 
         onChange={setPassword}/>
 
-      <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading}/>
+      <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading} width={"100%"}/>
       
       <div className={styles.forgotLinkContainer}>
         <Link to="/esqueci-senha" className={styles.forgotLink}>
