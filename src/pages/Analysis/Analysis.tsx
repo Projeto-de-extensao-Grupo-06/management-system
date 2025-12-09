@@ -1,4 +1,5 @@
 import styles from "./Analysis.module.css";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowTrendUp,
@@ -6,11 +7,11 @@ import {
   faCalendarDays,
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
-
 import AcquisitionChannelsGraph from "./Graphs/AcquisitionChannelsGraph";
 import CostProfitGraph from "./Graphs/CostProfitGraph";
 import ProjectStatusGraph from "./Graphs/ProjectsStatusGraph";
 import SalesFunnelGraph from "./Graphs/SalesFunnelGraph";
+import { useState } from "react";
 
 export default function Analysis() {
   function Kpi() {
@@ -56,19 +57,59 @@ export default function Analysis() {
     );
   }
 
+  const [selectedFilter, setSelectedFilter] = useState("Este Mes");
+
   function Filter() {
     return (
       <>
-        <div className={styles.filter_container}>
+        <div
+          className={styles.filter_container}
+          onClick={() => setSelectedFilter("Este Mes")}
+          style={{
+            backgroundColor: selectedFilter === "Este Mes" ? "#125F0B" : "",
+            color: selectedFilter === "Este Mes" ? "#FFF" : "",
+            cursor: "pointer",
+          }}
+        >
           <b>Este Mes</b>
         </div>
-        <div className={styles.filter_container}>
+        <div
+          className={styles.filter_container}
+          onClick={() => setSelectedFilter("Este Semestre")}
+          style={{
+            backgroundColor:
+              selectedFilter === "Este Semestre" ? "#125F0B" : "",
+            color: selectedFilter === "Este Semestre" ? "#FFF" : "",
+            cursor: "pointer",
+          }}
+        >
           <b>Este Semestre</b>
         </div>
-        <div className={styles.filter_container}>
+        <div
+          className={styles.filter_container}
+          onClick={() => setSelectedFilter("Este Ano")}
+          style={{
+            backgroundColor: selectedFilter === "Este Ano" ? "#125F0B" : "",
+            color: selectedFilter === "Este Ano" ? "#FFF" : "",
+            cursor: "pointer",
+          }}
+        >
           <b>Este Ano</b>
         </div>
-        <div className={styles.filter_container}>
+        <div
+          className={styles.filter_container}
+          onClick={() => setSelectedFilter("Selecionar Periodo")}
+          style={{
+            backgroundColor:
+              selectedFilter === "Selecionar Periodo" ? "#125F0B" : "",
+            color: selectedFilter === "Selecionar Periodo" ? "#FFF" : "",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <FontAwesomeIcon icon={faCalendarDays} />
           <b>Selecionar Periodo</b>
         </div>
       </>
