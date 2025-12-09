@@ -101,7 +101,7 @@ export default function Clients() {
           text="Cadastrar Cliente"
           ariaLabel="Cadastrar Cliente"
           onClick={handleAddClient}  
-          width={"20%"}/>   
+          width={"15%"}/>   
       </div>
 
       <div className={styles.filters}>

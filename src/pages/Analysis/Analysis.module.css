@@ -1,0 +1,88 @@
+body {
+  font-family: "Montserrat";
+}
+
+h1 {
+  color: #dd7428;
+}
+
+.title_container {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter_container {
+  width: auto;
+  height: auto;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  gap: 2rem;
+}
+
+.kpi_container {
+  width: 85%;
+  height: auto;
+  padding: 1.5rem 1.2rem;
+  background-color: #fff;
+  border-color: #484544;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.kpi_content {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  gap: 0.6rem;
+}
+
+.kpi_value {
+  font-size: 1.5rem;
+}
+
+.kpi_icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #dd7428;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.graphs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.graph_container {
+  width: 100%;
+  height: auto;
+  padding: 1.2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}

@@ -1,27 +1,190 @@
 {
-    "users": [
-        {
-            "name": "admin",
-            "email": "teste@exemplo.com",
-            "password": "senha123",
-            "id": 1
-        }
-    ],
-    "material": [
-        {"id": 1, "name": "Notebook"},
-        {"id": 2, "name": "Mouse"}
-    ],
-    "clients": [
-        { "id": 1, "name": "João Silva", "phone": "(19) 3323-3431", "email": "joao.silva@example.com", "status": "Ativo" },
-        { "id": 2, "name": "Cristiano Ronaldo", "phone": "(11) 91234-5678", "email": "cristiano.ronaldo@email.com", "status": "Ativo" },
-        { "id": 3, "name": "Maria Oliveira", "phone": "(21) 99986-5432", "email": "maria.oliveira@example.com", "status": "Ativo" },
-        { "id": 4, "name": "Pedro Santos", "phone": "(19) 3323-3431", "email": "pedro.santos@example.com", "status": "Ativo" },
-        { "id": 5, "name": "Ana Costa", "phone": "(31) 93456-7839", "email": "ana.costa@example.com", "status": "Ativo" },
-        { "id": 6, "name": "Lucas Almeida", "phone": "(41) 98605-4321", "email": "lucas.almeida@example.com", "status": "Ativo" },
-        { "id": 7, "name": "Carla Pereira", "phone": "(19) 3323-3431", "email": "carla.pereira@example.com", "status": "Ativo" },
-        { "id": 8, "name": "Fernando Rodrigues", "phone": "(19) 3323-3431", "email": "fernando.rodrigues@email.com", "status": "Inativo" },
-        { "id": 9, "name": "Júlia Martins", "phone": "(61) 94487-8901", "email": "julia.martins@example.com", "status": "Inativo" },
-        { "id": 10, "name": "Ricardo Ferreira", "phone": "(85) 9712-3456", "email": "ricardo.ferreira@example.com", "status": "Inativo" },
-        { "id": 11, "name": "Beatriz Gomes", "phone": "(19) 3323-3431", "email": "beatriz.gomes@example.com", "status": "Inativo" }
+  "users": [
+    {
+      "name": "admin",
+      "email": "teste@exemplo.com",
+      "password": "senha123",
+      "id": 1
+    }
+  ],
+  "material": [
+    { "id": 1, "name": "Notebook" },
+    { "id": 2, "name": "Mouse" }
+  ],
+  "clients": [
+    {
+      "id": 1,
+      "name": "João Silva",
+      "phone": "(19) 3323-3431",
+      "email": "joao.silva@example.com",
+      "status": "Ativo"
+    },
+    {
+      "id": 2,
+      "name": "Cristiano Ronaldo",
+      "phone": "(11) 91234-5678",
+      "email": "cristiano.ronaldo@email.com",
+      "status": "Ativo"
+    },
+    {
+      "id": 3,
+      "name": "Maria Oliveira",
+      "phone": "(21) 99986-5432",
+      "email": "maria.oliveira@example.com",
+      "status": "Ativo"
+    },
+    {
+      "id": 4,
+      "name": "Pedro Santos",
+      "phone": "(19) 3323-3431",
+      "email": "pedro.santos@example.com",
+      "status": "Ativo"
+    },
+    {
+      "id": 5,
+      "name": "Ana Costa",
+      "phone": "(31) 93456-7839",
+      "email": "ana.costa@example.com",
+      "status": "Ativo"
+    },
+    {
+      "id": 6,
+      "name": "Lucas Almeida",
+      "phone": "(41) 98605-4321",
+      "email": "lucas.almeida@example.com",
+      "status": "Ativo"
+    },
+    {
+      "id": 7,
+      "name": "Carla Pereira",
+      "phone": "(19) 3323-3431",
+      "email": "carla.pereira@example.com",
+      "status": "Ativo"
+    },
+    {
+      "id": 8,
+      "name": "Fernando Rodrigues",
+      "phone": "(19) 3323-3431",
+      "email": "fernando.rodrigues@email.com",
+      "status": "Inativo"
+    },
+    {
+      "id": 9,
+      "name": "Júlia Martins",
+      "phone": "(61) 94487-8901",
+      "email": "julia.martins@example.com",
+      "status": "Inativo"
+    },
+    {
+      "id": 10,
+      "name": "Ricardo Ferreira",
+      "phone": "(85) 9712-3456",
+      "email": "ricardo.ferreira@example.com",
+      "status": "Inativo"
+    },
+    {
+      "id": 11,
+      "name": "Beatriz Gomes",
+      "phone": "(19) 3323-3431",
+      "email": "beatriz.gomes@example.com",
+      "status": "Inativo"
+    }
+  ],
+
+  "analysis_kpis": [
+    {
+      "mostExpensiveChannel": {
+        "name": "Site",
+        "icon": "chart-line"
+      },
+      "profitMargin": {
+        "value": 57000,
+        "currency": "R$",
+        "format": "currency"
+      },
+      "projectCompletionPercent": {
+        "value": 33,
+        "suffix": "%"
+      },
+      "funnelConversionPercent": {
+        "value": 25,
+        "suffix": "%"
+      }
+    }
+  ],
+
+  "analysis_acquisition_channels": [
+    {
+      "name": "Site",
+      "percentage": 52,
+      "color": "#f97316"
+    },
+    {
+      "name": "Boca a Boca",
+      "percentage": 23,
+      "color": "#22c55e"
+    },
+    {
+      "name": "Rede Social",
+      "percentage": 25,
+      "color": "#3b82f6"
+    }
+  ],
+
+  "analysis_profit_cost_comparison": {
+    "months": ["JAN", "FEV", "MAR"],
+    "series": [
+      {
+        "name": "Custo",
+        "data": [12000, 18000, 15000],
+        "color": "#ef4444"
+      },
+      {
+        "name": "Lucro",
+        "data": [8000, 12000, 42000],
+        "color": "#22c55e"
+      }
     ]
+  },
+
+  "analysis_projects_status": [
+    {
+      "status": "Em andamento",
+      "quantity": 5,
+      "color": "#0134A3"
+    },
+    {
+      "status": "Agendado",
+      "quantity": 3,
+      "color": "#125F0B"
+    },
+    {
+      "status": "Finalizado",
+      "quantity": 3,
+      "color": "#9CA3AF"
+    }
+  ],
+
+  "analysis_sales_funnel": [
+    {
+      "stage": "Visitas ao Site",
+      "value": 800,
+      "color": "#fb923c"
+    },
+    {
+      "stage": "Leads",
+      "value": 71,
+      "color": "#fb923c"
+    },
+    {
+      "stage": "Pré-Orçamento",
+      "value": 35,
+      "color": "#fb923c"
+    },
+    {
+      "stage": "Contrato Assinado",
+      "value": 20,
+      "color": "#fb923c"
+    }
+  ]
 }
