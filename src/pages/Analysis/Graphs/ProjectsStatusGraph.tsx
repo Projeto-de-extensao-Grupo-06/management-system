@@ -1,36 +1,107 @@
 import styles from "./ProjectStatus.module.css";
+import type { ApexOptions } from "apexcharts";
+import Chart from "react-apexcharts";
+import AnalysisService from "../../../services/AnalysisService";
+import { useEffect, useState } from "react";
+import type ProjectStatus from "../../../interfaces/types/ProjectStatus";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 export default function ProjectStatusGraph() {
+  const [projectStatus, setProjectStatus] = useState<ProjectStatus[]>([]);
+  const service = new AnalysisService();
+
+  useEffect(() => {
+    service
+      .getProjectsStatus()
+      .then((data: ProjectStatus[]) => {
+        setProjectStatus(data);
+      })
+      .catch((e: any) => {
+        console.error("Erro ao buscar dados do status do projeto", e);
+      });
+  }, []);
+
   const data = [
-    { label: "Em andamento", value: 5, color: "#0044B8" },
-    { label: "Agendado", value: 3, color: "#1C6321" },
-    { label: "Finalizado", value: 3, color: "#9CA3AF" },
+    { label: "Em andamento" },
+    { label: "Agendado" },
+    { label: "Finalizado" },
   ];
 
-  const max = Math.max(...data.map((item) => item.value));
+  const series = [
+    {
+      data: projectStatus.map((p) => p.quantity),
+    },
+  ];
+
+  const options: ApexOptions = {
+    chart: {
+      type: "bar",
+      height: 300,
+      toolbar: { show: false },
+    },
+    title: {
+      text: "Projetos por Status",
+      align: "left",
+      style: {
+        fontSize: "18px",
+        fontWeight: "600",
+        color: "#333",
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        distributed: true,
+        barHeight: "40%",
+        borderRadius: 4,
+        dataLabels: {
+          position: "top",
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val: number) => val.toString(),
+      offsetX: 30,
+      style: {
+        fontSize: "12px",
+        fontWeight: "600",
+        colors: ["#333"],
+      },
+    },
+    xaxis: {
+      categories: projectStatus.map((p) => p.status),
+      labels: { show: false },
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+    },
+    yaxis: {
+      labels: {
+        show: true,
+        style: {
+          fontSize: "14px",
+          colors: ["#666"],
+        },
+      },
+    },
+    grid: {
+      show: false,
+    },
+    legend: {
+      show: false,
+    },
+    colors: projectStatus.map((p) => p.color),
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter: (val: number) => `${val} projetos`,
+      },
+    },
+  };
 
   return (
-    <div className={styles.project_status}>
-      <h3 className={styles.project_status_title}>Projetos por Status</h3>
-
-      {data.map((item) => (
-        <div key={item.label} className="project-status-row">
-          <div className={styles.project_status_row_header}>
-            <span className={styles.project_status_label}>{item.label}</span>
-            <span className={styles.project_status_value}>{item.value}</span>
-          </div>
-
-          <div className={styles.project_status_bar_bg}>
-            <div
-              className={styles.project_status_bar_fill}
-              style={{
-                width: `${(item.value / max) * 100}%`,
-                backgroundColor: item.color,
-              }}
-            />
-          </div>
-        </div>
-      ))}
+    <div id="project-status-chart">
+      <Chart options={options} series={series} type="bar" height={300} />
     </div>
   );
 }
