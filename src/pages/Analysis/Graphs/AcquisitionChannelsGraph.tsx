@@ -1,14 +1,32 @@
+import type { ApexOptions } from "apexcharts";
 import Chart from "react-apexcharts";
+import AnalysisService from "../../../services/AnalysisService";
+import type AcquisitionChannel from "../../../interfaces/types/AcquisitionChannel";
+import { useEffect, useState } from "react";
 
 export default function AcquisitionChannelsGraph() {
+  const [channel, setChannel] = useState<AcquisitionChannel[]>([]);
+  const service = new AnalysisService();
+
+  useEffect(() => {
+    service
+      .getAcquisitionChannels()
+      .then((data: AcquisitionChannel[]) => {
+        setChannel(data);
+      })
+      .catch((e: any) => {
+        console.error("Erro ao buscar dados de aquisicao:", e);
+      });
+  }, []);
+
   const series = [
     {
-      name: "Canais de Aquisição",
-      data: [52, 23, 25],
+      name: "Dados",
+      data: channel.map((ch) => ch.percentage),
     },
   ];
 
-  const options = {
+  const options: ApexOptions = {
     chart: {
       type: "bar",
       height: 200,

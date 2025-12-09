@@ -7,7 +7,6 @@ import {
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 
-import clsx from "clsx";
 import AcquisitionChannelsGraph from "./Graphs/AcquisitionChannelsGraph";
 import CostProfitGraph from "./Graphs/CostProfitGraph";
 import ProjectStatusGraph from "./Graphs/ProjectsStatusGraph";
