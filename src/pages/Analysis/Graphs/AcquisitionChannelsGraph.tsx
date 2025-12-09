@@ -81,7 +81,7 @@ export default function AcquisitionChannelsGraph() {
 
   return (
     <div id="acquisition-channels-chart">
-      <Chart options={options} series={series} type="bar" height={200} />
+      <Chart options={options} series={series} type="bar" height={300} />
     </div>
   );
 }
