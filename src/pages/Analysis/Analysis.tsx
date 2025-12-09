@@ -83,7 +83,7 @@ export default function Analysis() {
             cursor: "pointer",
           }}
         >
-          <b>Este Semestre</b>
+          <b>Este Trimestre</b>
         </div>
         <div
           className={styles.filter_container}
