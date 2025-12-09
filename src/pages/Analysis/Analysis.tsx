@@ -11,10 +11,48 @@ import AcquisitionChannelsGraph from "./Graphs/AcquisitionChannelsGraph";
 import CostProfitGraph from "./Graphs/CostProfitGraph";
 import ProjectStatusGraph from "./Graphs/ProjectsStatusGraph";
 import SalesFunnelGraph from "./Graphs/SalesFunnelGraph";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AnalysisService from "../../services/AnalysisService";
+import type Kpis from "../../interfaces/types/Kpis";
 
 export default function Analysis() {
   function Kpi() {
+    const [kpi, setKpi] = useState<Kpis>({
+      mostExpensiveChannel: {
+        name: "",
+        icon: "",
+      },
+      profitMargin: {
+        value: 0,
+        currency: "",
+        format: "",
+      },
+      projectCompletionPercent: {
+        value: 0,
+        suffix: "",
+      },
+      funnelConversionPercent: {
+        value: 0,
+        suffix: "",
+      },
+    });
+
+    const service = new AnalysisService();
+
+    useEffect(() => {
+      service
+        .getKpis()
+        .then((data: any) => {
+          if (data && data.length > 0) {
+            setKpi(data[0]);
+          }
+          console.log("Dados:", data);
+        })
+        .catch((e: any) => {
+          console.error("Erro ao coletar os dados de kpis.", e);
+        });
+    }, []);
+
     return (
       <>
         <div className={styles.kpi_container}>
@@ -24,7 +62,7 @@ export default function Analysis() {
             </div>
             <b>Canal Mais Custoso</b>
           </div>
-          <p>Site</p>
+          <p>{kpi.mostExpensiveChannel?.name}</p>
         </div>
         <div className={styles.kpi_container}>
           <div className={styles.kpi_content}>
@@ -33,7 +71,7 @@ export default function Analysis() {
             </div>
             <b>Margem Lucro</b>
           </div>
-          <p>R$ 57.000</p>
+          <p>R$ {kpi.profitMargin?.value},00</p>
         </div>
         <div className={styles.kpi_container}>
           <div className={styles.kpi_content}>
@@ -42,7 +80,7 @@ export default function Analysis() {
             </div>
             <b>Finalização Projetos</b>
           </div>
-          <p>33%</p>
+          <p>{kpi.projectCompletionPercent?.value}%</p>
         </div>
         <div className={styles.kpi_container}>
           <div className={styles.kpi_content}>
@@ -51,15 +89,14 @@ export default function Analysis() {
             </div>
             <b>Conversão Funil</b>
           </div>
-          <p>25%</p>
+          <p>{kpi.funnelConversionPercent?.value}%</p>
         </div>
       </>
     );
   }
 
-  const [selectedFilter, setSelectedFilter] = useState("Este Mes");
-
   function Filter() {
+    const [selectedFilter, setSelectedFilter] = useState("Este Mes");
     return (
       <>
         <div

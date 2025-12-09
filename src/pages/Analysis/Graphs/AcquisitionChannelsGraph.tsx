@@ -35,7 +35,12 @@ export default function AcquisitionChannelsGraph() {
     title: {
       text: "Canais de Aquisição",
       align: "center",
-      style: { fontSize: "20px", fontWeight: 600, color: "#484544" },
+      style: {
+        fontSize: "24px",
+        fontWeight: 600,
+        fontFamily: "Montserrat",
+        color: "#484544",
+      },
     },
     plotOptions: {
       bar: {

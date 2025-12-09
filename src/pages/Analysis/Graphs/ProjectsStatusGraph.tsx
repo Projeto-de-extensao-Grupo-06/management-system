@@ -41,10 +41,11 @@ export default function ProjectStatusGraph() {
     },
     title: {
       text: "Projetos por Status",
-      align: "left",
+      align: "center",
       style: {
-        fontSize: "18px",
+        fontSize: "24px",
         fontWeight: "600",
+        fontFamily: "Montserrat",
         color: "#333",
       },
     },

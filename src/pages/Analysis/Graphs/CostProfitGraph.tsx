@@ -44,8 +44,9 @@ export default function CostProfitGraph() {
       text: "Análise de Custo x Lucro",
       align: "center",
       style: {
-        fontSize: "18px",
+        fontSize: "24px",
         fontWeight: 600,
+        fontFamily: "Montserrat",
         color: "#333",
       },
     },
