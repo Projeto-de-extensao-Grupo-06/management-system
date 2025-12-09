@@ -1,21 +1,39 @@
 import Chart from "react-apexcharts";
+import AnalysisService from "../../../services/AnalysisService";
+import type SalesFunnel from "../../../interfaces/types/SalesFunnel";
+import { useEffect, useState } from "react";
+import type { ApexOptions } from "apexcharts";
 
 export default function SalesFunnelGraph() {
-  const data = [
-    { label: "Leads", value: 80 },
-    { label: "Pré Orçamento", value: 71 },
-    { label: "Visita Técnica", value: 35 },
-    { label: "Assinado", value: 20 },
-  ];
+  const [funnel, setFunnel] = useState<SalesFunnel[]>([]);
+  const service = new AnalysisService();
+
+  useEffect(() => {
+    service
+      .getSalesFunnel()
+      .then((data: SalesFunnel[]) => {
+        setFunnel(data);
+      })
+      .catch((e: any) => {
+        console.error("Erro ao buscar dados de funil.", e);
+      });
+  }, []);
 
   const series = [
     {
-      name: "Etapas do funil",
-      data: data.map((item) => item.value),
+      name: "Funil",
+      data: funnel.map((f) => f.value),
     },
   ];
 
-  const options = {
+  const data = [
+    { label: "Leads" },
+    { label: "Pré Orçamento" },
+    { label: "Visita Técnica" },
+    { label: "Assinado" },
+  ];
+
+  const options: ApexOptions = {
     chart: {
       type: "bar",
       height: 320,
@@ -26,7 +44,7 @@ export default function SalesFunnelGraph() {
       align: "center",
       style: {
         fontSize: "18px",
-        fontWeight: 600,
+        fontWeight: "600",
         color: "#333",
       },
     },
@@ -35,7 +53,6 @@ export default function SalesFunnelGraph() {
         horizontal: true,
         isFunnel: true,
         isFunnel3d: false,
-        funnelAlign: "center",
         dataLabels: {
           position: "center",
         },
@@ -49,10 +66,9 @@ export default function SalesFunnelGraph() {
       },
       style: {
         fontSize: "14px",
-        fontWeight: 700,
+        fontWeight: "700",
         colors: ["#FFFFFF"],
       },
-      textAnchor: "middle",
     },
     xaxis: {
       categories: data.map((item) => item.label),
@@ -72,7 +88,7 @@ export default function SalesFunnelGraph() {
     },
     tooltip: {
       y: {
-        formatter: (val: any, opts: { dataPointIndex: string | number }) => {
+        formatter: (val: number, opts: any) => {
           const label = data[opts.dataPointIndex].label;
           return `${label}: ${val}`;
         },
