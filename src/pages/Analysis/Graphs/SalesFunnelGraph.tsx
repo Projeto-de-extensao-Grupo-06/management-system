@@ -19,18 +19,18 @@ export default function SalesFunnelGraph() {
       });
   }, []);
 
-  const series = [
-    {
-      name: "Funil",
-      data: funnel.map((f) => f.value),
-    },
-  ];
-
   const data = [
     { label: "Leads" },
     { label: "Pré Orçamento" },
     { label: "Visita Técnica" },
     { label: "Assinado" },
+  ];
+
+  const series = [
+    {
+      name: "Funil",
+      data: funnel.map((f) => f.value),
+    },
   ];
 
   const options: ApexOptions = {
