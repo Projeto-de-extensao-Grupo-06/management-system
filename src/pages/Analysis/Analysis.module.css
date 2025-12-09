@@ -73,12 +73,13 @@ h1 {
 }
 
 .graph_container {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: auto;
   padding: 2rem;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .card_border {
