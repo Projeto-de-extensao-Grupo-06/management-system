@@ -62,7 +62,7 @@ export default function Analysis() {
             </div>
             <b>Canal Mais Custoso</b>
           </div>
-          <p>{kpi.mostExpensiveChannel?.name}</p>
+          <p className={styles.kpi_value}>{kpi.mostExpensiveChannel?.name}</p>
         </div>
         <div className={styles.kpi_container}>
           <div className={styles.kpi_content}>
@@ -71,7 +71,7 @@ export default function Analysis() {
             </div>
             <b>Margem Lucro</b>
           </div>
-          <p>R$ {kpi.profitMargin?.value},00</p>
+          <p className={styles.kpi_value}>R$ {kpi.profitMargin?.value},00</p>
         </div>
         <div className={styles.kpi_container}>
           <div className={styles.kpi_content}>
@@ -80,7 +80,9 @@ export default function Analysis() {
             </div>
             <b>Finalização Projetos</b>
           </div>
-          <p>{kpi.projectCompletionPercent?.value}%</p>
+          <p className={styles.kpi_value}>
+            {kpi.projectCompletionPercent?.value}%
+          </p>
         </div>
         <div className={styles.kpi_container}>
           <div className={styles.kpi_content}>
@@ -89,7 +91,9 @@ export default function Analysis() {
             </div>
             <b>Conversão Funil</b>
           </div>
-          <p>{kpi.funnelConversionPercent?.value}%</p>
+          <p className={styles.kpi_value}>
+            {kpi.funnelConversionPercent?.value}%
+          </p>
         </div>
       </>
     );
