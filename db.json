@@ -89,5 +89,102 @@
       "email": "beatriz.gomes@example.com",
       "status": "Inativo"
     }
+  ],
+
+  "analysis_kpis": [
+    {
+      "mostExpensiveChannel": {
+        "name": "Site",
+        "icon": "chart-line"
+      },
+      "profitMargin": {
+        "value": 57000,
+        "currency": "R$",
+        "format": "currency"
+      },
+      "projectCompletionPercent": {
+        "value": 33,
+        "suffix": "%"
+      },
+      "funnelConversionPercent": {
+        "value": 25,
+        "suffix": "%"
+      }
+    }
+  ],
+
+  "analysis_acquisition_channels": [
+    {
+      "name": "Site",
+      "percentage": 52,
+      "color": "#f97316"
+    },
+    {
+      "name": "Boca a Boca",
+      "percentage": 23,
+      "color": "#22c55e"
+    },
+    {
+      "name": "Rede Social",
+      "percentage": 25,
+      "color": "#3b82f6"
+    }
+  ],
+
+  "analysis_profit_cost_comparison": {
+    "months": ["JAN", "FEV", "MAR"],
+    "series": [
+      {
+        "name": "Custo",
+        "data": [12000, 18000, 15000],
+        "color": "#ef4444"
+      },
+      {
+        "name": "Lucro",
+        "data": [8000, 12000, 42000],
+        "color": "#22c55e"
+      }
+    ]
+  },
+
+  "analysis_projects_status": [
+    {
+      "status": "Em andamento",
+      "quantity": 5,
+      "color": "#3b82f6"
+    },
+    {
+      "status": "Agendado",
+      "quantity": 3,
+      "color": "#eab308"
+    },
+    {
+      "status": "Finalizado",
+      "quantity": 3,
+      "color": "#6b7280"
+    }
+  ],
+
+  "analysis_sales_funnel": [
+    {
+      "stage": "Visitas ao Site",
+      "value": 800,
+      "color": "#fb923c"
+    },
+    {
+      "stage": "Leads",
+      "value": 71,
+      "color": "#fb923c"
+    },
+    {
+      "stage": "Pré-Orçamento",
+      "value": 35,
+      "color": "#fb923c"
+    },
+    {
+      "stage": "Contrato Assinado",
+      "value": 20,
+      "color": "#fb923c"
+    }
   ]
 }

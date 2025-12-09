@@ -1,6 +1,5 @@
 import api from "./api";
 
-import type Kpis from "../interfaces/types/Kpis";
 import type AcquisitionChannel from "../interfaces/types/AcquisitionChannel";
 import type CostProfit from "../interfaces/types/CostProfit";
 import type ProjectStatus from "../interfaces/types/ProjectStatus";
