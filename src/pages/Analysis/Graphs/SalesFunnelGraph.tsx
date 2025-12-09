@@ -66,8 +66,9 @@ export default function SalesFunnelGraph() {
         return `${label}: ${value}`;
       },
       style: {
-        fontSize: "14px",
+        fontSize: "24px",
         fontWeight: "700",
+        fontFamily: "Montserrat",
         colors: ["#FFFFFF"],
       },
     },

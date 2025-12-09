@@ -45,7 +45,7 @@ export default function AcquisitionChannelsGraph() {
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "50%",
+        barHeight: "70%",
         distributed: true,
         dataLabels: { position: "center" },
       },
@@ -53,8 +53,7 @@ export default function AcquisitionChannelsGraph() {
     dataLabels: {
       enabled: true,
       formatter: (val: any) => `${val}%`,
-      style: { colors: ["#fff"], fontSize: "12px" },
-      offsetX: -6,
+      style: { colors: ["#fff"], fontSize: "24px", fontFamily: "Montserrat" },
     },
 
     yaxis: {
@@ -66,13 +65,19 @@ export default function AcquisitionChannelsGraph() {
 
     xaxis: {
       categories: ["Site", "Boca a Boca", "Rede Social"],
-      labels: { show: false },
+      labels: {
+        show: false,
+      },
       axisBorder: { show: false },
       axisTicks: { show: false },
       max: 60,
     },
 
-    legend: { show: true },
+    legend: {
+      show: true,
+      fontSize: "24px",
+      fontFamily: "Montserrat",
+    },
     grid: { show: false },
 
     colors: ["#E47D26", "#1C6321", "#0033A0"],

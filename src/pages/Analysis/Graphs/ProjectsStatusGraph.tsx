@@ -1,4 +1,3 @@
-import styles from "./ProjectStatus.module.css";
 import type { ApexOptions } from "apexcharts";
 import Chart from "react-apexcharts";
 import AnalysisService from "../../../services/AnalysisService";
@@ -53,21 +52,22 @@ export default function ProjectStatusGraph() {
       bar: {
         horizontal: true,
         distributed: true,
-        barHeight: "40%",
+        barHeight: "70%",
         borderRadius: 4,
         dataLabels: {
-          position: "top",
+          position: "center",
         },
       },
     },
     dataLabels: {
       enabled: true,
       formatter: (val: number) => val.toString(),
-      offsetX: 30,
+      offsetY: 10,
       style: {
-        fontSize: "12px",
-        fontWeight: "600",
-        colors: ["#333"],
+        fontSize: "2rem",
+        fontFamily: "Montserrat",
+        fontWeight: "700",
+        colors: ["#FFF"],
       },
     },
     xaxis: {
@@ -80,7 +80,8 @@ export default function ProjectStatusGraph() {
       labels: {
         show: true,
         style: {
-          fontSize: "14px",
+          fontSize: "1.2rem",
+          fontFamily: "Montserrat",
           colors: ["#666"],
         },
       },
