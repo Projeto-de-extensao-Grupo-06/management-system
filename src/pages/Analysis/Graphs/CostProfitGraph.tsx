@@ -1,18 +1,40 @@
+import type { ApexOptions } from "apexcharts";
 import Chart from "react-apexcharts";
+import type CostProfit from "../../../interfaces/types/CostProfit";
+import AnalysisService from "../../../services/AnalysisService";
+import { useEffect, useState } from "react";
 
 export default function CostProfitGraph() {
+  const [costProfit, setCostProfit] = useState<CostProfit>({
+    months: [],
+    series: [],
+  });
+  const service = new AnalysisService();
+
+  useEffect(() => {
+    service
+      .getProfitCostComparison()
+      .then((data: any) => {
+        const { months, series } = data;
+        setCostProfit({ months, series });
+      })
+      .catch((e: any) => {
+        console.error("Erro ao buscar dados de custo e lucro.", e);
+      });
+  }, []);
+
   const series = [
     {
       name: "Custo",
-      data: [1000, 500, 2000],
+      data: costProfit?.series[0]?.data || [],
     },
     {
       name: "Lucro",
-      data: [1500, 1000, 4000],
+      data: costProfit?.series[1]?.data || [],
     },
   ];
 
-  const options = {
+  const options: ApexOptions = {
     chart: {
       type: "bar",
       height: 300,
@@ -31,7 +53,7 @@ export default function CostProfitGraph() {
       bar: {
         horizontal: false,
         columnWidth: "45%",
-        endingShape: "rounded",
+        borderRadius: 4,
       },
     },
     dataLabels: {
@@ -67,9 +89,6 @@ export default function CostProfitGraph() {
     legend: {
       position: "top",
       horizontalAlign: "right",
-      markers: {
-        radius: 4,
-      },
     },
     colors: ["#E47D26", "#1C6321"],
     tooltip: {
