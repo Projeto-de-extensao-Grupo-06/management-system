@@ -151,17 +151,17 @@
     {
       "status": "Em andamento",
       "quantity": 5,
-      "color": "#3b82f6"
+      "color": "#0134A3"
     },
     {
       "status": "Agendado",
       "quantity": 3,
-      "color": "#eab308"
+      "color": "#125F0B"
     },
     {
       "status": "Finalizado",
       "quantity": 3,
-      "color": "#6b7280"
+      "color": "#9CA3AF"
     }
   ],
 
