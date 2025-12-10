@@ -20,17 +20,14 @@ export default function LoginPage() {
 
     auth.login({ email, password })
     .then((response) => { 
-      const { user, message } = response;
-      console.log('Usuário logado:', user); // TODO - settar zustand ou context
-
+      console.log('Usuário logado:', response); 
       setLoading(false);
       navigate('/clientes');
     })
     .catch((e) => {
       setError(e.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.');
-      // alert(error);
       setLoading(false);
-      navigate('/clientes');
+      // TODO alertar erro;
     });
   };
 
