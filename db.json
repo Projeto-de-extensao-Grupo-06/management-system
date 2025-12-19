@@ -167,17 +167,17 @@
 
   "analysis_sales_funnel": [
     {
-      "stage": "Visitas ao Site",
-      "value": 800,
-      "color": "#fb923c"
-    },
-    {
       "stage": "Leads",
-      "value": 71,
+      "value": 80,
       "color": "#fb923c"
     },
     {
       "stage": "Pré-Orçamento",
+      "value": 71,
+      "color": "#fb923c"
+    },
+    {
+      "stage": "Visita Tecnica",
       "value": 35,
       "color": "#fb923c"
     },
