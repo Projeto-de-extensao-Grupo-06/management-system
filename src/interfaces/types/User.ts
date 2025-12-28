@@ -1,5 +1,5 @@
-export default interface Client {
-  id: number;
-  name: string;
-  email: string;
+export default interface User {
+  firstName: string;
+  lastName: string;
+  authorities: string[];
 }

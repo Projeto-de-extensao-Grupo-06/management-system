@@ -8,7 +8,16 @@ import NotFound from "./pages/shared/NotFound";
 import LoginLayout from "./layouts/AppLayout/LoginLayout";
 import Analysis from "./pages/Analysis/Analysis";
 
+import { useEffect } from "react";
+import useAuthStore from "./store/useAuthStore";
+
 function App() {
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return (
     <BrowserRouter>
       <Routes>
