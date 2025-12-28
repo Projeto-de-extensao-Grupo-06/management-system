@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import styles from './Login.module.css'; 
+import styles from './Login.module.css';
 import { Input, PasswordInput, Button } from '../../components/Form';
 import authService from '../../services/LoginService';
+import useAuthStore from '../../store/useAuthStore';
+import { Alert } from '../../components/Alert';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -10,6 +12,8 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const checkAuth = useAuthStore((state) => state.checkAuth);
 
   const auth = new authService();
 
@@ -19,35 +23,33 @@ export default function LoginPage() {
     setError('');
 
     auth.login({ email, password })
-    .then((response) => { 
-      const { user, message } = response;
-      console.log('Usuário logado:', user); // TODO - settar zustand ou context
-
-      setLoading(false);
-      navigate('/clientes');
-    })
-    .catch((e) => {
-      setError(e.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.');
-      // alert(error);
-      setLoading(false);
-      navigate('/clientes');
-    });
+      .then(() => {
+        checkAuth();
+        setLoading(false);
+        navigate('/clientes');
+      })
+      .catch(() => {
+        setError('Erro ao fazer login. Verifique suas credenciais.');
+        setLoading(false);
+      });
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.loginForm}>
-      <Input 
-        placeholder="Informe seu Email: exemplo@gmail.com" 
-        value={email} 
-        onChange={setEmail}/>
+      <Alert message={error} type="error" />
 
-      <PasswordInput 
-        placeholder="Informe sua Senha" 
-        value={password} 
-        onChange={setPassword}/>
+      <Input
+        placeholder="Informe seu Email: exemplo@gmail.com"
+        value={email}
+        onChange={setEmail} />
 
-      <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading} width={"100%"}/>
-      
+      <PasswordInput
+        placeholder="Informe sua Senha"
+        value={password}
+        onChange={setPassword} />
+
+      <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading} width={"100%"} />
+
       <div className={styles.forgotLinkContainer}>
         <Link to="/esqueci-senha" className={styles.forgotLink}>
           Esqueceu sua senha?

@@ -12,13 +12,11 @@ export interface LoginResponse {
 }
 
 export default class authService {
-  async login(credentials: LoginCredentials): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>('/login', credentials);
-    return response.data;
+  async login(credentials: LoginCredentials): Promise<void> {
+    await api.post('/auth/login', credentials);
   }
 
   async logout(): Promise<void> {
-    await api.post('/logout');
-    localStorage.removeItem('user');
+    await api.post('/auth/logout');
   }
 };
