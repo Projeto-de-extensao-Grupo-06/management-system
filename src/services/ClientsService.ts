@@ -1,5 +1,5 @@
-import api from './api';
 import type Client from '../interfaces/types/Client';
+import api from './api';
 
 export default class ClientsService {
     async getAllClients(): Promise<Client[]> {

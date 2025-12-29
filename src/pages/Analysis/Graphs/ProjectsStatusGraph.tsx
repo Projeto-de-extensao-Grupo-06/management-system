@@ -1,9 +1,8 @@
 import type { ApexOptions } from "apexcharts";
-import Chart from "react-apexcharts";
-import AnalysisService from "../../../services/AnalysisService";
 import { useEffect, useState } from "react";
+import Chart from "react-apexcharts";
 import type ProjectStatus from "../../../interfaces/types/ProjectStatus";
-import { faL } from "@fortawesome/free-solid-svg-icons";
+import AnalysisService from "../../../services/AnalysisService";
 
 export default function ProjectStatusGraph() {
   const [projectStatus, setProjectStatus] = useState<ProjectStatus[]>([]);
@@ -19,12 +18,6 @@ export default function ProjectStatusGraph() {
         console.error("Erro ao buscar dados do status do projeto", e);
       });
   }, []);
-
-  const data = [
-    { label: "Em andamento" },
-    { label: "Agendado" },
-    { label: "Finalizado" },
-  ];
 
   const series = [
     {

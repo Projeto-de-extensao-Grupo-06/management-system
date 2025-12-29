@@ -22,7 +22,7 @@ const useAuthStore = create<AuthState>((set) => ({
         if (firstName && lastName && authoritiesCookie) {
             try {
                 const decodedAuthorities = atob(authoritiesCookie);
-                const authorities = decodedAuthorities.replace(/[\[\]]/g, '').split(',').map(a => a.trim());
+                const authorities = decodedAuthorities.replace(/[[\]]/g, '').split(',').map(a => a.trim())
 
                 set({
                     user: {

@@ -1,5 +1,5 @@
-import api from './api';
 import type User from '../interfaces/types/User';
+import api from './api';
 
 export interface LoginCredentials {
   email: string;

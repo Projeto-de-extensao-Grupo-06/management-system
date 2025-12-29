@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import styles from './Login.module.css';
+import { Alert } from '../../components/Alert';
 import { Input, PasswordInput, Button } from '../../components/Form';
 import authService from '../../services/LoginService';
 import useAuthStore from '../../store/useAuthStore';
-import { Alert } from '../../components/Alert';
+import styles from './Login.module.css';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

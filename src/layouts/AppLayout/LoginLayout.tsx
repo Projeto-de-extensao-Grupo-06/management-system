@@ -1,7 +1,7 @@
+import VLibras from "@moreiraste/react-vlibras";
 import { Outlet } from 'react-router';
 import logo from '../../assets/logo-solarize.png';
 import styles from './LoginLayout.module.css';
-import VLibras from "@moreiraste/react-vlibras";
 
 export default function LoginLayout() {
   return (

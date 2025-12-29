@@ -1,10 +1,10 @@
-import api from "./api";
 
 import type AcquisitionChannel from "../interfaces/types/AcquisitionChannel";
 import type CostProfit from "../interfaces/types/CostProfit";
+import type Kpis from "../interfaces/types/Kpis";
 import type ProjectStatus from "../interfaces/types/ProjectStatus";
 import type SalesFunnel from "../interfaces/types/SalesFunnel";
-import type Kpis from "../interfaces/types/Kpis";
+import api from "./api";
 
 export default class AnalysisService {
   async getKpis(): Promise<Kpis> {

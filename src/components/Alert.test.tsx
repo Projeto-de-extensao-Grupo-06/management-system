@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { Alert } from './Alert'; // Adjusted import path assuming it's in same folder
 import { describe, it, expect } from 'vitest';
+import { Alert } from './Alert'; // Adjusted import path assuming it's in same folder
 
 describe('Alert Component', () => {
     it('renders the error message correctly', () => {
