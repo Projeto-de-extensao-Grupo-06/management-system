@@ -1,0 +1,112 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.container {
+    background-color: var(--color-background);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s ease-out;
+    position: relative;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.title {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    /* 24px or similar */
+    font-weight: 700;
+    color: var(--color-text-dark);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-text-light);
+    transition: color 0.2s;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: var(--color-error);
+}
+
+.content {
+    padding: 32px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.footer {
+    padding: 24px 32px;
+    border-top: 1px solid var(--color-border-light);
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    background-color: var(--color-background-alt);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        max-height: 95vh;
+    }
+
+    .header,
+    .content,
+    .footer {
+        padding: 16px;
+    }
+}

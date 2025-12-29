@@ -14,20 +14,51 @@ html {
 }
 
 :root {
-  /* Colors */
   --color-primary: #e67e32;
   --color-primary-dark: #cc6e28;
+  --color-primary-light: #f4a261;
+
   --color-secondary: #1e5128;
   --color-secondary-dark: #164019;
+
+  --color-error: #c53030;
+  --color-error-bg: #fce8e6;
+  --color-error-border: #fed7d7;
+
+  --color-success: #2f855a;
+  --color-success-bg: #f0fff4;
+  --color-success-border: #c6f6d5;
+
+  --color-warning: #c05621;
+  --color-warning-bg: #fffff0;
+  --color-warning-border: #fefcbf;
+
   --color-text: #374151;
+  --color-text-dark: #111827;
   --color-text-light: #9ca3af;
+  --color-text-description: #718096;
+
   --color-background: #ffffff;
   --color-background-alt: #f9fafb;
+  --color-background-input: #F5F5F5;
+
   --color-border: #d1d5db;
   --color-border-light: #e5e7eb;
 
-  /* Fonts */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
   --font-family-primary: 'Montserrat', sans-serif;
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+  --font-size-4xl: 32px;
 }
 
 body {

@@ -1,15 +1,19 @@
 import { faFilter, faPen, faTrashCan, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState, useMemo } from "react";
+import ClientForm from '../../components/ClientForm/ClientForm';
 import { SimpleButton, Button, IconButton, Select, SelectOption, SearchInput } from '../../components/Form';
+import Modal from '../../components/Modal/Modal';
 import type Client from "../../interfaces/types/Client";
 import ClientService from "../../services/ClientsService";
+
 import styles from "./Clients.module.css";
 
 export default function Clients() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Todos')
   const [clients, setClients] = useState<Client[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const clientsService = useMemo(() => new ClientService(), []);
 
@@ -29,8 +33,13 @@ export default function Clients() {
   }
 
   const handleAddClient = () => {
-    console.log('Adicionar novo cliente')
-    // TODO abrir tela de cadastro
+    setIsCreateModalOpen(true);
+  }
+
+  const handleCreateSubmit = () => {
+    // TODO: Implement submission logic
+    console.log("Submit Client Form");
+    setIsCreateModalOpen(false);
   }
 
   const handleFilterClient = () => {
@@ -85,8 +94,27 @@ export default function Clients() {
     </tr>
   ))
 
+  const modalFooter = (
+    <Button
+      icon={<FontAwesomeIcon icon={faPlus} />}
+      text="Cadastrar Cliente"
+      ariaLabel="Confirmar cadastro"
+      onClick={handleCreateSubmit}
+      width="fit-content"
+    />
+  );
+
   return (
     <div className={styles.container}>
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Criar Cliente"
+        footer={modalFooter}
+      >
+        <ClientForm />
+      </Modal>
+
       <div className={styles.header}>
         <h1 className={styles.title}>
           Clientes <span className={styles.count}>({clients.length})</span>

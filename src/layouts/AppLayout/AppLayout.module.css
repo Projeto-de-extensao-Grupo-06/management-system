@@ -5,8 +5,10 @@
 
 .sidebar {
   width: 260px;
-  background: linear-gradient(180deg, #e67e32 0%, #d66f28 100%);
-  color: #ffffff;
+  background: linear-gradient(180deg, var(--color-primary) 0%, #d66f28 100%);
+  /* #d66f28 is close to primary-dark, lets use primary-dark variable */
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-background);
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
@@ -28,7 +30,7 @@
 .logoImage {
   width: 140px;
   height: 140px;
-  background: #ffffff;
+  background: var(--color-background);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -63,10 +65,10 @@
   display: flex;
   align-items: center;
   padding: 18px 24px;
-  color: #ffffff;
+  color: var(--color-background);
   text-decoration: none;
   transition: all 0.3s ease;
-  font-size: 16px;
+  font-size: var(--font-size-base);
   font-weight: 400;
   gap: 16px;
   border-left: 3px solid transparent;
@@ -79,12 +81,12 @@
 
 .menuLink:hover {
   background: rgba(255, 255, 255, 0.15);
-  border-left-color: #ffffff;
+  border-left-color: var(--color-background);
 }
 
 .menuLinkActive {
   background: rgba(255, 255, 255, 0.2);
-  border-left-color: #ffffff;
+  border-left-color: var(--color-background);
   font-weight: 500;
 }
 
@@ -110,6 +112,8 @@
   padding: 40px;
   flex: 1;
   background: #f5f5f5;
+  /* Using standard background-input/alt which is close */
+  background: var(--color-background-input);
   min-height: 100vh;
 }
 
