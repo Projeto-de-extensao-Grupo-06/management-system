@@ -1,8 +1,8 @@
-import Chart from "react-apexcharts";
-import AnalysisService from "../../../services/AnalysisService";
-import type SalesFunnel from "../../../interfaces/types/SalesFunnel";
-import { useEffect, useState } from "react";
 import type { ApexOptions } from "apexcharts";
+import { useEffect, useState } from "react";
+import Chart from "react-apexcharts";
+import type SalesFunnel from "../../../interfaces/types/SalesFunnel";
+import AnalysisService from "../../../services/AnalysisService";
 
 export default function SalesFunnelGraph() {
   const [funnel, setFunnel] = useState<SalesFunnel[]>([]);

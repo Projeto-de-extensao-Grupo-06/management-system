@@ -1,8 +1,8 @@
 import type { ApexOptions } from "apexcharts";
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import type CostProfit from "../../../interfaces/types/CostProfit";
 import AnalysisService from "../../../services/AnalysisService";
-import { useEffect, useState } from "react";
 
 export default function CostProfitGraph() {
   const [costProfit, setCostProfit] = useState<CostProfit>({

@@ -1,12 +1,3 @@
-import { NavLink, useNavigate } from "react-router";
-import styles from "./AppLayout.module.css";
-import { Outlet } from "react-router";
-
-import authService from "../../services/LoginService";
-
-import logo from "../../assets/logo-solarize.png";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
   faCalendar,
@@ -16,7 +7,16 @@ import {
   faWrench,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import VLibras from "@moreiraste/react-vlibras";
+import { NavLink, useNavigate } from "react-router";
+import { Outlet } from "react-router";
+
+import logo from "../../assets/logo-solarize.png";
+import authService from "../../services/LoginService";
+
+import styles from "./AppLayout.module.css";
+
 
 export default function AppLayout() {
   const menuItems = [

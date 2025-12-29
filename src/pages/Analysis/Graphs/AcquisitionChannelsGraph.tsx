@@ -1,8 +1,8 @@
 import type { ApexOptions } from "apexcharts";
-import Chart from "react-apexcharts";
-import AnalysisService from "../../../services/AnalysisService";
-import type AcquisitionChannel from "../../../interfaces/types/AcquisitionChannel";
 import { useEffect, useState } from "react";
+import Chart from "react-apexcharts";
+import type AcquisitionChannel from "../../../interfaces/types/AcquisitionChannel";
+import AnalysisService from "../../../services/AnalysisService";
 
 export default function AcquisitionChannelsGraph() {
   const [channel, setChannel] = useState<AcquisitionChannel[]>([]);

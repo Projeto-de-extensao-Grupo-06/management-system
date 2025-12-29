@@ -1,14 +1,14 @@
 import "./App.css";
 
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
-import Login from "./pages/Login/Login";
 import AppLayout from "./layouts/AppLayout/AppLayout";
-import Clients from "./pages/Clients/Clients";
-import NotFound from "./pages/shared/NotFound";
 import LoginLayout from "./layouts/AppLayout/LoginLayout";
 import Analysis from "./pages/Analysis/Analysis";
+import Clients from "./pages/Clients/Clients";
+import Login from "./pages/Login/Login";
+import NotFound from "./pages/shared/NotFound";
 
-import { useEffect } from "react";
 import useAuthStore from "./store/useAuthStore";
 
 function App() {

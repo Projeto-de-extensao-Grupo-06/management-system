@@ -1,8 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import LoginPage from './Login';
-import { MemoryRouter } from 'react-router';
-import userEvent from '@testing-library/user-event';
 
 // Hoist mock function so it can be used in vi.mock factory
 const { mockLogin } = vi.hoisted(() => ({

@@ -1,19 +1,19 @@
-import styles from "./Analysis.module.css";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowTrendUp,
   faDollarSign,
   faCalendarDays,
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
+import type Kpis from "../../interfaces/types/Kpis";
+import AnalysisService from "../../services/AnalysisService";
+import styles from "./Analysis.module.css";
+
 import AcquisitionChannelsGraph from "./Graphs/AcquisitionChannelsGraph";
 import CostProfitGraph from "./Graphs/CostProfitGraph";
 import ProjectStatusGraph from "./Graphs/ProjectsStatusGraph";
 import SalesFunnelGraph from "./Graphs/SalesFunnelGraph";
-import { useEffect, useState } from "react";
-import AnalysisService from "../../services/AnalysisService";
-import type Kpis from "../../interfaces/types/Kpis";
 
 export default function Analysis() {
   function Kpi() {
