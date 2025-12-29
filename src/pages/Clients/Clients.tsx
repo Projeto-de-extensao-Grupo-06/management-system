@@ -11,7 +11,7 @@ export default function Clients() {
   const [statusFilter, setStatusFilter] = useState('Todos')
   const [clients, setClients] = useState<Client[]>([])
 
-  const clientsService = useMemo(() => new ClientService(), [])
+  const clientsService = useMemo(() => new ClientService(), []);
 
   useEffect(() => {
     clientsService.getAllClients()
@@ -96,10 +96,10 @@ export default function Clients() {
           text="Cadastrar Cliente"
           ariaLabel="Cadastrar Cliente"
           onClick={handleAddClient}
-          width={"15%"} />
+          width="fit-content" />
       </div>
 
-      <div className={styles.filters}>
+      <div className={`${styles.filters} ${styles.card}`}>
         <SimpleButton
           icon={<FontAwesomeIcon icon={faFilter} />}
           text="Filtros"
@@ -123,7 +123,7 @@ export default function Clients() {
 
       </div>
 
-      <div className={styles.tableWrapper}>
+      <div className={`${styles.tableWrapper} ${styles.card}`}>
         <table className={styles.table}>
           <thead>
             <tr>
