@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import LoginPage from './Login';
+import LoginPage from '../pages/Login/Login';
 
 // Hoist mock function so it can be used in vi.mock factory
 const { mockLogin } = vi.hoisted(() => ({
@@ -10,7 +10,7 @@ const { mockLogin } = vi.hoisted(() => ({
 }));
 
 // Explicitly mock the module with the hoisted mock
-vi.mock('../../services/LoginService', () => {
+vi.mock('../services/LoginService', () => {
     return {
         default: function () {
             return {
@@ -20,7 +20,7 @@ vi.mock('../../services/LoginService', () => {
     };
 });
 
-vi.mock('../../store/useAuthStore', () => ({
+vi.mock('../store/useAuthStore', () => ({
     default: () => ({
         setUser: vi.fn(),
         checkAuth: vi.fn(),
