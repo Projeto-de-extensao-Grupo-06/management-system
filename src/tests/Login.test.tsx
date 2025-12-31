@@ -4,12 +4,10 @@ import { MemoryRouter } from 'react-router';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import LoginPage from '../pages/Login/Login';
 
-// Hoist mock function so it can be used in vi.mock factory
 const { mockLogin } = vi.hoisted(() => ({
     mockLogin: vi.fn()
 }));
 
-// Explicitly mock the module with the hoisted mock
 vi.mock('../services/LoginService', () => {
     return {
         default: function () {
@@ -30,7 +28,6 @@ vi.mock('../store/useAuthStore', () => ({
 describe('LoginPage', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        // Reset mock implementation for failure case default
         mockLogin.mockResolvedValue({});
     });
 
@@ -49,7 +46,6 @@ describe('LoginPage', () => {
     it('shows error alert on login failure', async () => {
         const user = userEvent.setup();
 
-        // Setup mock to reject
         mockLogin.mockRejectedValue({
             response: { data: { message: 'Erro ao fazer login. Verifique suas credenciais.' } }
         });
@@ -68,12 +64,10 @@ describe('LoginPage', () => {
         await user.type(passwordInput, 'wrongpass');
         await user.click(submitButton);
 
-        // Expect the login to have been called
         await waitFor(() => {
             expect(mockLogin).toHaveBeenCalled();
         });
 
-        // Expect alert to appear
         const errorAlert = await screen.findByText(/Erro ao fazer login/i);
         expect(errorAlert).toBeInTheDocument();
     });

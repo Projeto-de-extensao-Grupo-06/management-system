@@ -1,6 +1,8 @@
 import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { AxiosError } from 'axios';
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Alert } from '../../components/Alert';
 import ClientForm from '../../components/ClientForm/ClientForm';
 import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
 import ClientTable from '../../components/ClientTable/ClientTable';
@@ -21,6 +23,9 @@ export default function Clients() {
   const formRef = useRef<ClientFormRef>(null);
   const [clientFormData, setClientFormData] = useState<Partial<ClientSchemaType>>({});
 
+  const [globalAlert, setGlobalAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+  const [modalTypeMessage, setModalMessage] = useState<string | null>(null);
+
   const clientsService = useMemo(() => new ClientService(), []);
 
   useEffect(() => {
@@ -28,8 +33,9 @@ export default function Clients() {
       .then((data: Client[]) => {
         setClients(data)
       })
-      .catch((e: any) => {
+      .catch((e) => {
         console.error('Erro ao buscar clientes:', e)
+        setGlobalAlert({ message: 'Erro ao carregar clientes.', type: 'error' });
       })
   }, [clientsService])
 
@@ -39,6 +45,7 @@ export default function Clients() {
   }
 
   const handleAddClient = () => {
+    setModalMessage(null);
     setIsCreateModalOpen(true);
   }
 
@@ -47,14 +54,27 @@ export default function Clients() {
   }
 
   const onFormSubmit = (data: ClientSchemaType) => {
+    setModalMessage(null);
+    setGlobalAlert(null);
+
+    console.log("PAYLOAD being sent:", JSON.stringify(data, null, 2));
+
     clientsService.createClient(data)
       .then((newClient) => {
         setClients(prev => [...prev, newClient]);
         setClientFormData({});
         setIsCreateModalOpen(false);
+        setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
+
+        // Auto dismiss success message
+        setTimeout(() => setGlobalAlert(null), 5000);
       })
       .catch((e) => {
-        console.error("Error creating client", e);
+        const error = e as AxiosError<{ message: string }>;
+        console.error("Backend Error Response:", JSON.stringify(error.response?.data, null, 2));
+
+        const errorMsg = error.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
+        setModalMessage(errorMsg);
       });
   }
 
@@ -64,12 +84,17 @@ export default function Clients() {
   }
 
   const handleDelete = (id: number) => {
+    if (!confirm('Tem certeza que deseja excluir este cliente?')) return;
+
     clientsService.deleteClient(id)
       .then(() => {
         setClients((prevClients) => prevClients.filter(client => client.id !== id))
+        setGlobalAlert({ message: 'Cliente removido com sucesso!', type: 'success' });
+        setTimeout(() => setGlobalAlert(null), 5000);
       })
-      .catch((e: any) => {
+      .catch((e) => {
         console.error('Erro ao deletar cliente:', e)
+        setGlobalAlert({ message: 'Erro ao deletar cliente.', type: 'error' });
       })
   }
 
@@ -99,12 +124,23 @@ export default function Clients() {
 
   return (
     <div className={styles.container}>
+      {globalAlert && !isCreateModalOpen && (
+        <div style={{ marginBottom: '1rem' }}>
+          <Alert message={globalAlert.message} type={globalAlert.type} />
+        </div>
+      )}
+
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         title="Criar Cliente"
         footer={modalFooter}
       >
+        {modalTypeMessage && (
+          <div style={{ marginBottom: '1rem' }}>
+            <Alert message={modalTypeMessage} type="error" />
+          </div>
+        )}
         <ClientForm
           ref={formRef}
           onSubmit={onFormSubmit}

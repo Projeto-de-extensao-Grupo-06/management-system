@@ -13,7 +13,25 @@ export default class ClientsService {
     }
 
     async createClient(client: Omit<Client, 'id' | 'status' | 'name'> & { document: string, documentType: string, zipCode: string, street: string, number: string, neighborhood: string, city: string, state: string, notes?: string }): Promise<Client> {
-        const response = await api.post<Client>('/clients', client);
+        const payload = {
+            firstName: client.firstName,
+            lastName: client.lastName,
+            documentNumber: client.document.replace(/\D/g, ''),
+            documentType: client.documentType,
+            email: client.email,
+            phone: client.phone.replace(/\D/g, ''),
+            note: client.notes,
+            mainAddress: {
+                streetName: client.street,
+                number: client.number,
+                neighborhood: client.neighborhood,
+                city: client.city,
+                state: client.state,
+                postalCode: client.zipCode.replace(/\D/g, ''),
+                type: 'RESIDENTIAL',
+            }
+        };
+        const response = await api.post<Client>('/clients', payload);
         return ClientMapper.toDomain(response.data);
     }
 };
