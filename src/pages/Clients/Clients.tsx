@@ -1,14 +1,16 @@
-import { faFilter, faPen, faTrashCan, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ClientForm from '../../components/ClientForm/ClientForm';
 import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
-import { SimpleButton, Button, IconButton, Select, SelectOption, SearchInput } from '../../components/Form';
+import ClientTable from '../../components/ClientTable/ClientTable';
+import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/Form';
+import FilterBar from '../../components/Layout/FilterBar';
+import PageHeader from '../../components/Layout/PageHeader';
 import Modal from '../../components/Modal/Modal';
 import type Client from "../../interfaces/types/Client";
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
-
 import styles from "./Clients.module.css";
 
 export default function Clients() {
@@ -85,29 +87,6 @@ export default function Clients() {
     return result
   }, [clients, statusFilter, searchTerm])
 
-  const clientsMap = filteredClients.map((client) => (
-    <tr key={client.id}>
-      <td>{client.name}</td>
-      <td>{client.phone}</td>
-      <td>{client.email}</td>
-      <td>{client.status}</td>
-      <td>
-        <div className={styles.actions}>
-          <IconButton
-            onClick={() => handleEdit(client.id)}
-            icon={<FontAwesomeIcon icon={faPen} />}
-            ariaLabel="Editar"
-            functionality="edit" />
-          <IconButton
-            onClick={() => handleDelete(client.id)}
-            icon={<FontAwesomeIcon icon={faTrashCan} />}
-            ariaLabel="Deletar"
-            functionality="delete" />
-        </div>
-      </td>
-    </tr>
-  ))
-
   const modalFooter = (
     <Button
       icon={<FontAwesomeIcon icon={faPlus} />}
@@ -134,24 +113,23 @@ export default function Clients() {
         />
       </Modal>
 
-      <div className={styles.header}>
-        <h1 className={styles.title}>
-          Clientes <span className={styles.count}>({clients.length})</span>
-        </h1>
+      <PageHeader title="Clientes" count={clients.length}>
         <Button
           icon={<FontAwesomeIcon icon={faPlus} />}
           text="Cadastrar Cliente"
           ariaLabel="Cadastrar Cliente"
           onClick={handleAddClient}
-          width="fit-content" />
-      </div>
+          width="fit-content"
+        />
+      </PageHeader>
 
-      <div className={`${styles.filters} ${styles.card}`}>
+      <FilterBar>
         <SimpleButton
           icon={<FontAwesomeIcon icon={faFilter} />}
           text="Filtros"
           ariaLabel="Filtrar Clientes"
-          onClick={handleFilterClient} />
+          onClick={handleFilterClient}
+        />
 
         <div className={styles.dropdown}>
           <Select value={statusFilter} onChange={setStatusFilter}>
@@ -165,27 +143,16 @@ export default function Clients() {
           <SearchInput
             onChange={setSearchTerm}
             value={searchTerm}
-            placeholder="Buscar Cliente" />
+            placeholder="Buscar Cliente"
+          />
         </div>
+      </FilterBar>
 
-      </div>
-
-      <div className={`${styles.tableWrapper} ${styles.card}`}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Nome do Cliente</th>
-              <th>Telefone</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Operação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clientsMap}
-          </tbody>
-        </table>
-      </div>
+      <ClientTable
+        clients={filteredClients}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }
