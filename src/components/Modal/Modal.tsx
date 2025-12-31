@@ -1,7 +1,7 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactNode } from 'react';
-import { useEffect } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -13,7 +13,19 @@ interface ModalProps {
     maxWidth?: string;
 }
 
-export default function Modal({ isOpen, onClose, title, children, footer, maxWidth }: ModalProps) {
+export interface ModalRef {
+    scrollToTop: () => void;
+}
+
+const Modal = forwardRef<ModalRef, ModalProps>(({ isOpen, onClose, title, children, footer, maxWidth }, ref) => {
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useImperativeHandle(ref, () => ({
+        scrollToTop: () => {
+            contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }));
+
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose();
@@ -50,7 +62,7 @@ export default function Modal({ isOpen, onClose, title, children, footer, maxWid
                     </button>
                 </div>
 
-                <div className={styles.content}>
+                <div className={styles.content} ref={contentRef}>
                     {children}
                 </div>
 
@@ -62,4 +74,6 @@ export default function Modal({ isOpen, onClose, title, children, footer, maxWid
             </div>
         </div>
     );
-}
+});
+
+export default Modal;

@@ -10,6 +10,7 @@ import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../c
 import FilterBar from '../../components/Layout/FilterBar';
 import PageHeader from '../../components/Layout/PageHeader';
 import Modal from '../../components/Modal/Modal';
+import type { ModalRef } from '../../components/Modal/Modal';
 import type Client from "../../interfaces/types/Client";
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
@@ -21,6 +22,7 @@ export default function Clients() {
   const [clients, setClients] = useState<Client[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const formRef = useRef<ClientFormRef>(null);
+  const modalRef = useRef<ModalRef>(null);
   const [clientFormData, setClientFormData] = useState<Partial<ClientSchemaType>>({});
 
   const [globalAlert, setGlobalAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
@@ -70,11 +72,20 @@ export default function Clients() {
         setTimeout(() => setGlobalAlert(null), 5000);
       })
       .catch((e) => {
-        const error = e as AxiosError<{ message: string }>;
+        const error = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[] }>;
         console.error("Backend Error Response:", JSON.stringify(error.response?.data, null, 2));
 
-        const errorMsg = error.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
+        let errorMsg = error.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
+
+        if (error.response?.data?.validationErrors?.length) {
+          const details = error.response.data.validationErrors
+            .map(err => `${err.field}: ${err.message}`)
+            .join('\n');
+          errorMsg += `\n\n${details}`;
+        }
+
         setModalMessage(errorMsg);
+        modalRef.current?.scrollToTop();
       });
   }
 
@@ -131,6 +142,7 @@ export default function Clients() {
       )}
 
       <Modal
+        ref={modalRef}
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         title="Criar Cliente"
