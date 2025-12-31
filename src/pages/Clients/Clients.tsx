@@ -1,10 +1,12 @@
 import { faFilter, faPen, faTrashCan, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import ClientForm from '../../components/ClientForm/ClientForm';
+import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
 import { SimpleButton, Button, IconButton, Select, SelectOption, SearchInput } from '../../components/Form';
 import Modal from '../../components/Modal/Modal';
 import type Client from "../../interfaces/types/Client";
+import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
 
 import styles from "./Clients.module.css";
@@ -14,6 +16,8 @@ export default function Clients() {
   const [statusFilter, setStatusFilter] = useState('Todos')
   const [clients, setClients] = useState<Client[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const formRef = useRef<ClientFormRef>(null);
+  const [clientFormData, setClientFormData] = useState<Partial<ClientSchemaType>>({});
 
   const clientsService = useMemo(() => new ClientService(), []);
 
@@ -37,9 +41,19 @@ export default function Clients() {
   }
 
   const handleCreateSubmit = () => {
-    // TODO: Implement submission logic
-    console.log("Submit Client Form");
-    setIsCreateModalOpen(false);
+    formRef.current?.submit();
+  }
+
+  const onFormSubmit = (data: ClientSchemaType) => {
+    clientsService.createClient(data)
+      .then((newClient) => {
+        setClients(prev => [...prev, newClient]);
+        setClientFormData({});
+        setIsCreateModalOpen(false);
+      })
+      .catch((e) => {
+        console.error("Error creating client", e);
+      });
   }
 
   const handleFilterClient = () => {
@@ -112,7 +126,12 @@ export default function Clients() {
         title="Criar Cliente"
         footer={modalFooter}
       >
-        <ClientForm />
+        <ClientForm
+          ref={formRef}
+          onSubmit={onFormSubmit}
+          defaultValues={clientFormData}
+          onFormChange={setClientFormData}
+        />
       </Modal>
 
       <div className={styles.header}>

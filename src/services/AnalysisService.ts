@@ -4,7 +4,7 @@ import type CostProfit from "../interfaces/types/CostProfit";
 import type Kpis from "../interfaces/types/Kpis";
 import type ProjectStatus from "../interfaces/types/ProjectStatus";
 import type SalesFunnel from "../interfaces/types/SalesFunnel";
-import api from "./api";
+import api from "./provider/api";
 
 export default class AnalysisService {
   async getKpis(): Promise<Kpis> {

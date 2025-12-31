@@ -5,8 +5,8 @@
 }
 
 .sectionTitle {
-    font-size: 16px;
-    color: #e67e32;
+    font-size: var(--font-size-base);
+    color: var(--color-primary);
     font-weight: 500;
     margin-bottom: 16px;
     border-bottom: 1px solid var(--color-border-light);
@@ -16,7 +16,7 @@
 .tittlePrimary {
     color: var(--color-primary);
     font-weight: 400;
-    font-size: 20px;
+    font-size: var(--font-size-xl);
     margin-bottom: 15px;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .label {
-    font-size: 14px;
+    font-size: var(--font-size-sm);
     font-weight: 700;
     color: var(--color-text-dark);
 }
@@ -54,9 +54,9 @@
 
 .input {
     padding: 12px 16px;
-    border: 1px solid #9ca3af;
+    border: 1px solid var(--color-text-light);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
     color: var(--color-text-description);
     outline: none;
     transition: all 0.2s;
@@ -72,11 +72,26 @@
     box-shadow: 0 0 0 3px rgba(230, 126, 50, 0.1);
 }
 
+.inputError {
+    border-color: var(--color-error);
+}
+
+.inputError:focus {
+    box-shadow: 0 0 0 3px var(--color-error-border);
+}
+
+.errorMessage {
+    color: var(--color-error);
+    font-size: var(--font-size-xs);
+    margin-top: -4px;
+    margin-left: 2px;
+}
+
 .select {
     padding: 12px 16px;
-    border: 1px solid #9ca3af;
+    border: 1px solid var(--color-text-light);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
     color: var(--color-text-description);
     outline: none;
     background-color: white;
