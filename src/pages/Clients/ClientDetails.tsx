@@ -228,8 +228,8 @@ export default function ClientDetails() {
                 </div>
             </div>
 
-            <h3 className={styles.sectionTitleTop}>Projetos:</h3>
             <div className={styles.card}>
+                <h3 className={styles.sectionTitle}>Projetos:</h3>
                 {projects.length === 0 ? (
                     <div className={styles.emptyState}>
                         Nenhum projeto vinculado a este cliente.
