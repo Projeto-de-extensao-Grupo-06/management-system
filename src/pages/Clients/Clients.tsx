@@ -201,7 +201,7 @@ export default function Clients() {
   return (
     <div className={styles.container}>
       {globalAlert && !isCreateModalOpen && (
-        <div style={{ marginBottom: '1rem' }}>
+        <div className={styles.alertWrapper}>
           <Alert message={globalAlert.message} type={globalAlert.type} />
         </div>
       )}
@@ -233,9 +233,9 @@ export default function Clients() {
         footer={filterModalFooter}
         maxWidth="500px"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className={styles.filterModalContainer}>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Cidade</label>
+            <label className={styles.filterLabel}>Cidade</label>
             <Input
               placeholder="Digite a cidade"
               value={filters.city}
@@ -243,7 +243,7 @@ export default function Clients() {
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Estado (UF)</label>
+            <label className={styles.filterLabel}>Estado (UF)</label>
             <Input
               placeholder="Ex: SP"
               maxLength={2}
@@ -252,7 +252,7 @@ export default function Clients() {
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Data de Cadastro (Início)</label>
+            <label className={styles.filterLabel}>Data de Cadastro (Início)</label>
             <Input
               type="date"
               placeholder=""
@@ -261,7 +261,7 @@ export default function Clients() {
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Data de Cadastro (Fim)</label>
+            <label className={styles.filterLabel}>Data de Cadastro (Fim)</label>
             <Input
               type="date"
               placeholder=""

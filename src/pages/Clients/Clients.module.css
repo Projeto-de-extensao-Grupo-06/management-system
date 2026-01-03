@@ -53,6 +53,7 @@
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 24px;
+  padding: 24px;
 }
 
 .filters {
@@ -172,7 +173,6 @@
   font-size: 14px;
   font-weight: 700;
   color: #111827;
-  /* Keeping explicit dark for headers if needed, or use text */
 }
 
 .table tbody tr {
@@ -198,6 +198,135 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+/* ClientDetails Classes */
+.backButton {
+  background: none;
+  border: none;
+  color: var(--color-text-light);
+  cursor: pointer;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+}
+
+.cancelButton {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.sectionTitle {
+  color: var(--color-secondary);
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.sectionTitleTop {
+  color: var(--color-secondary);
+  font-size: 18px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.gridThree {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.gridFour {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.gridAddress {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.readOnlyField {
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+}
+
+.emptyState {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-light);
+}
+
+.projectRow {
+  cursor: pointer;
+}
+
+.projectTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* New Clients.tsx / Table utility classes */
+.alertWrapper {
+  margin-bottom: 1rem;
+}
+
+.filterModalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filterLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+
+.defaultCursor {
+  cursor: default;
+}
+
+.noResultState {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-light);
 }
 
 @media (max-width: 768px) {
@@ -231,6 +360,13 @@
   .table th,
   .table td {
     padding: 12px 16px;
+  }
+
+  .gridTwo,
+  .gridThree,
+  .gridFour,
+  .gridAddress {
+    grid-template-columns: 1fr;
   }
 }
 

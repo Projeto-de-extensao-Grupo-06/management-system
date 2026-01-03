@@ -14,7 +14,6 @@ export default function ClientDetails() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Initialize editing mode based on navigation state, default to false (view only)
     const [isEditing, setIsEditing] = useState(location.state?.edit || false);
 
     const [client, setClient] = useState<Client | null>(null);
@@ -22,7 +21,6 @@ export default function ClientDetails() {
     const [loading, setLoading] = useState(true);
     const [alert, setAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
-    // Form state - separating raw values for editing
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -45,7 +43,6 @@ export default function ClientDetails() {
         if (!id) return;
         const clientId = parseInt(id);
 
-        // Fetch Client
         clientsService.getClientById(clientId)
             .then((data) => {
                 setClient(data);
@@ -82,18 +79,6 @@ export default function ClientDetails() {
     const handleSave = () => {
         if (!id || !client) return;
 
-        // Construct payload or partial client update logic
-        // Current updateClient in service calls PUT with client data.
-        // We'll need to adapt the formData back to domain or API structure.
-        // Since updateClient takes Partial<Client>, we might need to map it back manually if the API expects nested address.
-        // For now, let's assume we can send what we have or map it simpler.
-
-        // IMPORTANT: The service `updateClient` signature is `updateClient(id, client: Partial<Client>)`.
-        // But the backend likely expects the same structure as create or similar.
-        // Let's create a partial object that matches Client interface structure for now, 
-        // assuming standard mapper handling or we might need to adjust the service to handle flat->nested if API requires.
-
-        // Actually, looking at `Client` interface, it has `mainAddress`.
         const updatedClient: Partial<Client> = {
             firstName: formData.firstName,
             lastName: formData.lastName,
@@ -101,7 +86,7 @@ export default function ClientDetails() {
             phone: formData.phone,
             documentNumber: formData.documentNumber,
             mainAddress: {
-                ...client.mainAddress, // keep existing fields like type if needed
+                ...client.mainAddress,
                 streetName: formData.streetName,
                 number: formData.number,
                 neighborhood: formData.neighborhood,
@@ -110,15 +95,12 @@ export default function ClientDetails() {
                 postalCode: formData.zipCode,
                 type: client.mainAddress?.type || 'RESIDENTIAL'
             }
-            // notes? Client interface doesn't seem to have notes in the snippet I saw earlier, checking...
-            // Step 22 snippet showed: id, firstName, lastName, name, email, phone, status, documentNumber, mainAddress, createdAt.
-            // Notes seems missing from Client interface. I'll rely on what's there.
         };
 
         clientsService.updateClient(client.id, updatedClient)
             .then((updated) => {
                 setClient(updated);
-                setIsEditing(false); // Switch back to view mode
+                setIsEditing(false);
                 setAlert({ message: 'Dados salvos com sucesso!', type: 'success' });
             })
             .catch(err => {
@@ -131,11 +113,11 @@ export default function ClientDetails() {
 
     const renderField = (label: string, value: string, inputComponent: React.ReactNode) => (
         <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>{label}:</label>
+            <label className={styles.fieldLabel}>{label}:</label>
             {isEditing ? (
                 inputComponent
             ) : (
-                <div style={{ padding: '10px 12px', background: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb', minHeight: '42px', display: 'flex', alignItems: 'center' }}>
+                <div className={styles.readOnlyField}>
                     {value || '-'}
                 </div>
             )}
@@ -152,20 +134,20 @@ export default function ClientDetails() {
 
             <div className={styles.header}>
                 <div>
-                    <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'var(--color-text-light)', cursor: 'pointer', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <button onClick={() => navigate(-1)} className={styles.backButton}>
                         <FontAwesomeIcon icon={faArrowLeft} /> Voltar
                     </button>
-                    <h1 className={styles.title} style={{ color: 'var(--color-secondary)' }}>Detalhes do Cliente</h1>
+                    <h1 className={styles.title}>Detalhes do Cliente</h1>
                 </div>
 
                 {isEditing ? (
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div className={styles.headerActions}>
                         <Button
                             text="Cancelar"
                             width="fit-content"
                             onClick={() => setIsEditing(false)}
                             ariaLabel="Cancelar Edição"
-                            style={{ background: '#ef4444', borderColor: '#ef4444' }} // Custom style for cancel or use SimpleButton
+                            className={styles.cancelButton}
                         />
                         <Button
                             text="Salvar Dados"
@@ -186,9 +168,9 @@ export default function ClientDetails() {
                 )}
             </div>
 
-            <div className={styles.card} style={{ padding: '24px' }}>
-                <h3 style={{ color: 'var(--color-secondary)', marginBottom: '16px', fontSize: '18px' }}>Dados Cadastrais:</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className={styles.card}>
+                <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
+                <div className={styles.gridTwo}>
                     {renderField("Primeiro Nome", formData.firstName,
                         <Input value={formData.firstName} onChange={(v) => setFormData(p => ({ ...p, firstName: v }))} placeholder="" />
                     )}
@@ -196,7 +178,7 @@ export default function ClientDetails() {
                         <Input value={formData.lastName} onChange={(v) => setFormData(p => ({ ...p, lastName: v }))} placeholder="" />
                     )}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                <div className={styles.gridTwo}>
                     {renderField("E-mail", formData.email,
                         <Input value={formData.email} onChange={(v) => setFormData(p => ({ ...p, email: v }))} placeholder="" />
                     )}
@@ -204,12 +186,12 @@ export default function ClientDetails() {
                         <Input value={formData.phone} onChange={(v) => setFormData(p => ({ ...p, phone: v }))} placeholder="" />
                     )}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                <div className={styles.gridThree}>
                     {renderField("Número Documento", formData.documentNumber,
                         <Input value={formData.documentNumber} onChange={(v) => setFormData(p => ({ ...p, documentNumber: v }))} placeholder="" />
                     )}
                     {renderField("Tipo do Documento", formData.documentType,
-                        <Select value={formData.documentType} onChange={(v) => setFormData(p => ({ ...p, documentType: v }))} style={{ width: '100%' }}>
+                        <Select value={formData.documentType} onChange={(v) => setFormData(p => ({ ...p, documentType: v }))} className={styles.fullWidth}>
                             <SelectOption value="CPF" label="CPF" />
                             <SelectOption value="CNPJ" label="CNPJ" />
                         </Select>
@@ -220,9 +202,9 @@ export default function ClientDetails() {
                 </div>
             </div>
 
-            <div className={styles.card} style={{ padding: '24px' }}>
-                <h3 style={{ color: 'var(--color-secondary)', marginBottom: '16px', fontSize: '18px' }}>Endereço:</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className={styles.card}>
+                <h3 className={styles.sectionTitle}>Endereço:</h3>
+                <div className={styles.gridFour}>
                     {renderField("CEP", formData.zipCode,
                         <Input value={formData.zipCode} onChange={(v) => setFormData(p => ({ ...p, zipCode: v }))} placeholder="" />
                     )}
@@ -236,7 +218,7 @@ export default function ClientDetails() {
                         <Input value={formData.neighborhood} onChange={(v) => setFormData(p => ({ ...p, neighborhood: v }))} placeholder="" />
                     )}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
+                <div className={styles.gridAddress}>
                     {renderField("Logradouro", formData.streetName,
                         <Input value={formData.streetName} onChange={(v) => setFormData(p => ({ ...p, streetName: v }))} placeholder="" />
                     )}
@@ -246,10 +228,10 @@ export default function ClientDetails() {
                 </div>
             </div>
 
-            <h3 style={{ color: 'var(--color-secondary)', marginTop: '24px', marginBottom: '16px', fontSize: '18px' }}>Projetos:</h3>
+            <h3 className={styles.sectionTitleTop}>Projetos:</h3>
             <div className={styles.card}>
                 {projects.length === 0 ? (
-                    <div style={{ padding: '24px', textAlign: 'center', color: 'var(--color-text-light)' }}>
+                    <div className={styles.emptyState}>
                         Nenhum projeto vinculado a este cliente.
                     </div>
                 ) : (
@@ -263,11 +245,10 @@ export default function ClientDetails() {
                         </thead>
                         <tbody>
                             {projects.map(project => (
-                                <tr key={project.id} onClick={() => navigate(`/projetos/${project.id}`)} style={{ cursor: 'pointer' }}>
+                                <tr key={project.id} onClick={() => navigate(`/projetos/${project.id}`)} className={styles.projectRow}>
                                     <td>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <div className={styles.projectTitle}>
                                             {project.title}
-                                            {/* Example badge if needed */}
                                         </div>
                                     </td>
                                     <td>{project.status}</td>

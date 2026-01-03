@@ -15,7 +15,7 @@ export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: C
     if (clients.length === 0) {
         return (
             <div className={`${styles.tableWrapper} ${styles.card}`}>
-                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-text-light)' }}>
+                <div className={styles.noResultState}>
                     Nenhum cliente encontrado.
                 </div>
             </div>
@@ -38,7 +38,11 @@ export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: C
                 </thead>
                 <tbody>
                     {clients.map((client) => (
-                        <tr key={client.id} onClick={() => onRowClick && onRowClick(client.id)} style={{ cursor: onRowClick ? 'pointer' : 'default' }}>
+                        <tr
+                            key={client.id}
+                            onClick={() => onRowClick && onRowClick(client.id)}
+                            className={onRowClick ? styles.clickableRow : styles.defaultCursor}
+                        >
                             <td>{client.name}</td>
                             <td>{client.email}</td>
                             <td>{client.phone}</td>

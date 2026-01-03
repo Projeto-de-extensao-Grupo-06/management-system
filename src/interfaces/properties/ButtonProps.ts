@@ -9,4 +9,5 @@ export default interface ButtonProps {
     ariaLabel?: string;
     width?: string | number;
     style?: React.CSSProperties;
+    className?: string;
 }

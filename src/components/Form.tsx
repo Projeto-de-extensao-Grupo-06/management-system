@@ -10,11 +10,11 @@ import type PasswordInputProps from '../interfaces/properties/PasswordInputProps
 
 import type SelectProps from '../interfaces/properties/SelectProps';
 
-export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style }: ButtonProps) {
+export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style, className }: ButtonProps) {
     return (
         <button
             type={type}
-            className="submit-button"
+            className={`submit-button ${className || ''}`}
             disabled={disabled}
             onClick={onClick}
             aria-label={ariaLabel}
