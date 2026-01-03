@@ -6,7 +6,7 @@ import { Alert } from '../../components/Alert';
 import ClientForm from '../../components/ClientForm/ClientForm';
 import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
 import ClientTable from '../../components/ClientTable/ClientTable';
-import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/Form';
+import { Button, Input, SearchInput, Select, SelectOption, SimpleButton } from '../../components/Form';
 import FilterBar from '../../components/Layout/FilterBar';
 import PageHeader from '../../components/Layout/PageHeader';
 import Modal from '../../components/Modal/Modal';
@@ -21,6 +21,13 @@ export default function Clients() {
   const [statusFilter, setStatusFilter] = useState('Todos')
   const [clients, setClients] = useState<Client[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    startDate: '',
+    endDate: '',
+    city: '',
+    state: ''
+  });
   const formRef = useRef<ClientFormRef>(null);
   const modalRef = useRef<ModalRef>(null);
   const [clientFormData, setClientFormData] = useState<Partial<ClientSchemaType>>({});
@@ -68,6 +75,7 @@ export default function Clients() {
         setIsCreateModalOpen(false);
         setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
 
+        // Auto dismiss success message
         setTimeout(() => setGlobalAlert(null), 5000);
       })
       .catch((e) => {
@@ -89,8 +97,21 @@ export default function Clients() {
   }
 
   const handleFilterClient = () => {
-    console.log('Filtrar clientes')
-    // TODO abrir modal de filtros
+    setIsFilterModalOpen(true);
+  }
+
+  const handleApplyFilters = () => {
+    setIsFilterModalOpen(false);
+  }
+
+  const handleClearFilters = () => {
+    setFilters({
+      startDate: '',
+      endDate: '',
+      city: '',
+      state: ''
+    });
+    setIsFilterModalOpen(false);
   }
 
   const handleDelete = (id: number) => {
@@ -124,10 +145,28 @@ export default function Clients() {
         (c.documentNumber && c.documentNumber.includes(term))
       )
     }
-    return result
-  }, [clients, statusFilter, searchTerm])
 
-  const modalFooter = (
+    if (filters.city) {
+      result = result.filter(c => c.mainAddress?.city.toLowerCase().includes(filters.city.toLowerCase()));
+    }
+    if (filters.state) {
+      result = result.filter(c => c.mainAddress?.state.toLowerCase() === filters.state.toLowerCase());
+    }
+    if (filters.startDate) {
+      const start = new Date(filters.startDate);
+      result = result.filter(c => c.createdAt && new Date(c.createdAt) >= start);
+    }
+    if (filters.endDate) {
+      const end = new Date(filters.endDate);
+      // Set end date to end of day
+      end.setHours(23, 59, 59, 999);
+      result = result.filter(c => c.createdAt && new Date(c.createdAt) <= end);
+    }
+
+    return result
+  }, [clients, statusFilter, searchTerm, filters])
+
+  const createModalFooter = (
     <Button
       icon={<FontAwesomeIcon icon={faPlus} />}
       text="Cadastrar Cliente"
@@ -135,6 +174,23 @@ export default function Clients() {
       onClick={handleCreateSubmit}
       width="fit-content"
     />
+  );
+
+  const filterModalFooter = (
+    <>
+      <SimpleButton
+        text="Limpar Filtros"
+        ariaLabel="Limpar filtros"
+        onClick={handleClearFilters}
+        width="fit-content"
+      />
+      <Button
+        text="Aplicar Filtros"
+        ariaLabel="Aplicar filtros"
+        onClick={handleApplyFilters}
+        width="fit-content"
+      />
+    </>
   );
 
   return (
@@ -150,7 +206,7 @@ export default function Clients() {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         title="Criar Cliente"
-        footer={modalFooter}
+        footer={createModalFooter}
       >
         {modalTypeMessage && (
           <div style={{ marginBottom: '1rem' }}>
@@ -163,6 +219,52 @@ export default function Clients() {
           defaultValues={clientFormData}
           onFormChange={setClientFormData}
         />
+      </Modal>
+
+      <Modal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        title="Filtrar Clientes"
+        footer={filterModalFooter}
+        maxWidth="500px"
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Cidade</label>
+            <Input
+              placeholder="Digite a cidade"
+              value={filters.city}
+              onChange={(val: string) => setFilters(prev => ({ ...prev, city: val }))}
+            />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Estado (UF)</label>
+            <Input
+              placeholder="Ex: SP"
+              maxLength={2}
+              value={filters.state}
+              onChange={(val: string) => setFilters(prev => ({ ...prev, state: val }))}
+            />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Data de Cadastro (Início)</label>
+            <Input
+              type="date"
+              placeholder=""
+              value={filters.startDate}
+              onChange={(val: string) => setFilters(prev => ({ ...prev, startDate: val }))}
+            />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Data de Cadastro (Fim)</label>
+            <Input
+              type="date"
+              placeholder=""
+              value={filters.endDate}
+              onChange={(val: string) => setFilters(prev => ({ ...prev, endDate: val }))}
+            />
+          </div>
+        </div>
       </Modal>
 
       <PageHeader title="Clientes" count={clients.length}>
