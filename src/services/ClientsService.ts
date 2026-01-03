@@ -12,7 +12,7 @@ export default class ClientsService {
         await api.delete(`/clients/${id}`);
     }
 
-    async createClient(client: Omit<Client, 'id' | 'status' | 'name'> & { document: string, documentType: string, zipCode: string, street: string, number: string, neighborhood: string, city: string, state: string, notes?: string }): Promise<Client> {
+    async createClient(client: { firstName: string, lastName: string, email: string, phone: string, document: string, documentType: string, zipCode: string, street: string, number: string, neighborhood: string, city: string, state: string, notes?: string }): Promise<Client> {
         const payload = {
             firstName: client.firstName,
             lastName: client.lastName,

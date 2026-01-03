@@ -27,8 +27,10 @@ export default function ClientTable({ clients, onEdit, onDelete }: ClientTablePr
                 <thead>
                     <tr>
                         <th>Nome do Cliente</th>
+                        <th>E-mail</th>
                         <th>Telefone</th>
-                        <th>Email</th>
+                        <th>Cidade/Estado</th>
+                        <th>Data de Cadastro</th>
                         <th>Status</th>
                         <th>Operação</th>
                     </tr>
@@ -37,8 +39,10 @@ export default function ClientTable({ clients, onEdit, onDelete }: ClientTablePr
                     {clients.map((client) => (
                         <tr key={client.id}>
                             <td>{client.name}</td>
-                            <td>{client.phone}</td>
                             <td>{client.email}</td>
+                            <td>{client.phone}</td>
+                            <td>{client.mainAddress ? `${client.mainAddress.city} / ${client.mainAddress.state}` : '-'}</td>
+                            <td>{client.createdAt ? new Date(client.createdAt).toLocaleDateString('pt-BR') : '-'}</td>
                             <td>{client.status}</td>
                             <td>
                                 <div className={styles.actions}>

@@ -68,7 +68,6 @@ export default function Clients() {
         setIsCreateModalOpen(false);
         setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
 
-        // Auto dismiss success message
         setTimeout(() => setGlobalAlert(null), 5000);
       })
       .catch((e) => {
@@ -118,7 +117,12 @@ export default function Clients() {
 
     if (searchTerm.trim() !== '') {
       const term = searchTerm.toLowerCase()
-      result = result.filter(c => c.name.toLowerCase().includes(term))
+      result = result.filter(c =>
+        c.name.toLowerCase().includes(term) ||
+        c.email.toLowerCase().includes(term) ||
+        c.phone.includes(term) ||
+        (c.documentNumber && c.documentNumber.includes(term))
+      )
     }
     return result
   }, [clients, statusFilter, searchTerm])
@@ -191,7 +195,7 @@ export default function Clients() {
           <SearchInput
             onChange={setSearchTerm}
             value={searchTerm}
-            placeholder="Buscar Cliente"
+            placeholder="Buscar por Nome, CPF/CNPJ, E-mail ou Telefone"
           />
         </div>
       </FilterBar>

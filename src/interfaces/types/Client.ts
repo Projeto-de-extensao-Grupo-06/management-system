@@ -1,3 +1,13 @@
+export interface Address {
+  streetName: string;
+  number: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  type: string;
+}
+
 export default interface Client {
   id: number;
   firstName: string;
@@ -6,4 +16,7 @@ export default interface Client {
   email: string;
   phone: string;
   status: string;
+  documentNumber: string;
+  mainAddress: Address;
+  createdAt: string;
 }
