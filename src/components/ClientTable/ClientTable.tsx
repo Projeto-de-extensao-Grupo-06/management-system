@@ -8,9 +8,10 @@ interface ClientTableProps {
     clients: Client[];
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
+    onRowClick?: (id: number) => void;
 }
 
-export default function ClientTable({ clients, onEdit, onDelete }: ClientTableProps) {
+export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: ClientTableProps) {
     if (clients.length === 0) {
         return (
             <div className={`${styles.tableWrapper} ${styles.card}`}>
@@ -37,7 +38,7 @@ export default function ClientTable({ clients, onEdit, onDelete }: ClientTablePr
                 </thead>
                 <tbody>
                     {clients.map((client) => (
-                        <tr key={client.id}>
+                        <tr key={client.id} onClick={() => onRowClick && onRowClick(client.id)} style={{ cursor: onRowClick ? 'pointer' : 'default' }}>
                             <td>{client.name}</td>
                             <td>{client.email}</td>
                             <td>{client.phone}</td>
@@ -45,7 +46,7 @@ export default function ClientTable({ clients, onEdit, onDelete }: ClientTablePr
                             <td>{client.createdAt ? new Date(client.createdAt).toLocaleDateString('pt-BR') : '-'}</td>
                             <td>{client.status}</td>
                             <td>
-                                <div className={styles.actions}>
+                                <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
                                     <IconButton
                                         onClick={() => onEdit(client.id)}
                                         icon={<FontAwesomeIcon icon={faPen} />}

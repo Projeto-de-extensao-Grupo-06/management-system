@@ -2,6 +2,7 @@ import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { AxiosError } from 'axios';
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from 'react-router';
 import { Alert } from '../../components/Alert';
 import ClientForm from '../../components/ClientForm/ClientForm';
 import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
@@ -17,6 +18,7 @@ import ClientService from "../../services/ClientsService";
 import styles from "./Clients.module.css";
 
 export default function Clients() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Todos')
   const [clients, setClients] = useState<Client[]>([])
@@ -49,8 +51,11 @@ export default function Clients() {
   }, [clientsService])
 
   const handleEdit = (id: number) => {
-    console.log('Editar cliente:', id)
-    // TODO abrir tela de edição
+    navigate(`/clientes/${id}`, { state: { edit: true } });
+  }
+
+  const handleRowClick = (id: number) => {
+    navigate(`/clientes/${id}`, { state: { edit: false } });
   }
 
   const handleAddClient = () => {
@@ -306,6 +311,7 @@ export default function Clients() {
         clients={filteredClients}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onRowClick={handleRowClick}
       />
     </div>
   );

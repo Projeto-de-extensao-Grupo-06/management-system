@@ -10,7 +10,7 @@ import type PasswordInputProps from '../interfaces/properties/PasswordInputProps
 
 import type SelectProps from '../interfaces/properties/SelectProps';
 
-export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width }: ButtonProps) {
+export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style }: ButtonProps) {
     return (
         <button
             type={type}
@@ -18,7 +18,7 @@ export function Button({ text, icon, type = "submit", onClick, disabled = false,
             disabled={disabled}
             onClick={onClick}
             aria-label={ariaLabel}
-            style={{ width }}>
+            style={{ width, ...style }}>
             {icon ? icon : ''} {text}
         </button>
     );
@@ -56,12 +56,13 @@ export function SelectOption({ value, label }: { value: string, label: string })
     );
 }
 
-export function Select({ children, value, onChange }: SelectProps) {
+export function Select({ children, value, onChange, className, style }: SelectProps) {
     return (
         <select
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="select">
+            className={`select ${className || ''}`}
+            style={style}>
             {children}
         </select>
     );

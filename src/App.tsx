@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import AppLayout from "./layouts/AppLayout/AppLayout";
 import LoginLayout from "./layouts/AppLayout/LoginLayout";
 import Analysis from "./pages/Analysis/Analysis";
+import ClientDetails from "./pages/Clients/ClientDetails";
 import Clients from "./pages/Clients/Clients";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/shared/NotFound";
@@ -30,6 +31,7 @@ function App() {
 
         <Route element={<AppLayout />}>
           <Route path="/clientes" element={<Clients />} />
+          <Route path="/clientes/:id" element={<ClientDetails />} />
           <Route path="/analise" element={<Analysis />}></Route>
         </Route>
       </Routes>
