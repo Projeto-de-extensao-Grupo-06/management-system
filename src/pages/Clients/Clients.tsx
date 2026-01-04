@@ -7,7 +7,7 @@ import { Alert } from '../../components/Alert';
 import ClientForm from '../../components/ClientForm/ClientForm';
 import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
 import ClientTable from '../../components/ClientTable/ClientTable';
-import { Button, Input, SearchInput, Select, SelectOption, SimpleButton } from '../../components/Form';
+import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/Form';
 import FilterBar from '../../components/Layout/FilterBar';
 import PageHeader from '../../components/Layout/PageHeader';
 import Modal from '../../components/Modal/Modal';
@@ -16,6 +16,7 @@ import type Client from "../../interfaces/types/Client";
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
 import styles from "./Clients.module.css";
+import ClientFilterModal from './components/ClientFilterModal';
 
 export default function Clients() {
   const navigate = useNavigate();
@@ -100,10 +101,6 @@ export default function Clients() {
     setIsFilterModalOpen(true);
   }
 
-  const handleApplyFilters = () => {
-    setIsFilterModalOpen(false);
-  }
-
   const handleClearFilters = () => {
     setFilters({
       startDate: '',
@@ -176,23 +173,6 @@ export default function Clients() {
     />
   );
 
-  const filterModalFooter = (
-    <>
-      <SimpleButton
-        text="Limpar Filtros"
-        ariaLabel="Limpar filtros"
-        onClick={handleClearFilters}
-        width="fit-content"
-      />
-      <Button
-        text="Aplicar Filtros"
-        ariaLabel="Aplicar filtros"
-        onClick={handleApplyFilters}
-        width="fit-content"
-      />
-    </>
-  );
-
   return (
     <div className={styles.container}>
       {globalAlert && !isCreateModalOpen && (
@@ -221,51 +201,13 @@ export default function Clients() {
         />
       </Modal>
 
-      <Modal
+      <ClientFilterModal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
-        title="Filtrar Clientes"
-        footer={filterModalFooter}
-        maxWidth="500px"
-      >
-        <div className={styles.filterModalContainer}>
-          <div>
-            <label className={styles.filterLabel}>Cidade</label>
-            <Input
-              placeholder="Digite a cidade"
-              value={filters.city}
-              onChange={(val: string) => setFilters(prev => ({ ...prev, city: val }))}
-            />
-          </div>
-          <div>
-            <label className={styles.filterLabel}>Estado (UF)</label>
-            <Input
-              placeholder="Ex: SP"
-              maxLength={2}
-              value={filters.state}
-              onChange={(val: string) => setFilters(prev => ({ ...prev, state: val }))}
-            />
-          </div>
-          <div>
-            <label className={styles.filterLabel}>Data de Cadastro (Início)</label>
-            <Input
-              type="date"
-              placeholder=""
-              value={filters.startDate}
-              onChange={(val: string) => setFilters(prev => ({ ...prev, startDate: val }))}
-            />
-          </div>
-          <div>
-            <label className={styles.filterLabel}>Data de Cadastro (Fim)</label>
-            <Input
-              type="date"
-              placeholder=""
-              value={filters.endDate}
-              onChange={(val: string) => setFilters(prev => ({ ...prev, endDate: val }))}
-            />
-          </div>
-        </div>
-      </Modal>
+        filters={filters}
+        setFilters={setFilters}
+        onClear={handleClearFilters}
+      />
 
       <PageHeader title="Clientes" count={clients.length}>
         <Button
