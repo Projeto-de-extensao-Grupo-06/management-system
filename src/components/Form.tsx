@@ -38,13 +38,14 @@ export function SimpleButton({ text, icon, type = "submit", onClick, disabled = 
     );
 }
 
-export function IconButton({ functionality = "edit", icon, type = "submit", onClick, disabled = false }: IconButtonProps) {
+export function IconButton({ functionality = "edit", icon, type = "submit", onClick, disabled = false, ariaLabel }: IconButtonProps) {
     return (
         <button
             type={type}
             className={`${functionality}-button`}
             disabled={disabled}
-            onClick={onClick}>
+            onClick={onClick}
+            aria-label={ariaLabel}>
             {icon}
         </button>
     );
