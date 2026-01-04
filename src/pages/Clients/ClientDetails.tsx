@@ -6,6 +6,7 @@ import { Alert } from '../../components/Alert';
 import { Button, Input, Select, SelectOption } from '../../components/Form';
 import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
+import { clientSchema } from '../../schemas/clientSchema';
 import ClientsService from '../../services/ClientsService';
 import styles from './Clients.module.css'; // Reusing styles
 
@@ -20,6 +21,7 @@ export default function ClientDetails() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [alert, setAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -79,6 +81,47 @@ export default function ClientDetails() {
     const handleSave = () => {
         if (!id || !client) return;
 
+        // Map formData to schema expected structure
+        const schemaData = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            document: formData.documentNumber, // Map documentNumber -> document
+            documentType: formData.documentType as 'CPF' | 'CNPJ',
+            notes: formData.notes,
+            zipCode: formData.zipCode,
+            state: formData.state,
+            city: formData.city,
+            neighborhood: formData.neighborhood,
+            street: formData.streetName, // Map streetName -> street
+            number: formData.number
+        };
+
+        const result = clientSchema.safeParse(schemaData);
+
+        if (!result.success) {
+            const newErrors: Record<string, string> = {};
+            result.error.issues.forEach(err => {
+                if (err.path[0]) {
+                    // Map back schema keys to field names if necessary for error state keys
+                    // But we used schema keys for validation. Let's use schema keys for 'errors' state
+                    // and access them correctly in renderField.
+                    // Special cases: document -> documentNumber, street -> streetName
+                    let key = String(err.path[0]);
+                    if (key === 'document') key = 'documentNumber';
+                    if (key === 'street') key = 'streetName';
+                    newErrors[key] = err.message;
+                }
+            });
+            setErrors(newErrors);
+            setAlert({ message: 'Corrija os erros verifique os campos.', type: 'error' });
+            return;
+        }
+
+        // Clear errors if valid
+        setErrors({});
+
         const updatedClient: Partial<Client> = {
             firstName: formData.firstName,
             lastName: formData.lastName,
@@ -111,11 +154,17 @@ export default function ClientDetails() {
 
     if (loading) return <div className={styles.container}>Carregando...</div>;
 
-    const renderField = (label: string, value: string, inputComponent: React.ReactNode) => (
+    const renderField = (label: string, value: string, inputComponent: React.ReactNode, required: boolean = false, error?: string) => (
         <div>
-            <label className={styles.fieldLabel}>{label}:</label>
+            <label className={styles.fieldLabel}>
+                {label}
+                {required && <span style={{ color: 'red', marginLeft: '4px' }}>*</span>}:
+            </label>
             {isEditing ? (
-                inputComponent
+                <>
+                    {inputComponent}
+                    {error && <span style={{ color: 'red', fontSize: '12px', marginTop: '4px', display: 'block' }}>{error}</span>}
+                </>
             ) : (
                 <div className={styles.readOnlyField}>
                     {value || '-'}
@@ -145,7 +194,11 @@ export default function ClientDetails() {
                         <Button
                             text="Cancelar"
                             width="fit-content"
-                            onClick={() => setIsEditing(false)}
+                            onClick={() => {
+                                setIsEditing(false);
+                                setErrors({});
+                                setAlert(null);
+                            }}
                             ariaLabel="Cancelar Edição"
                             className={styles.cancelButton}
                         />
@@ -172,32 +225,39 @@ export default function ClientDetails() {
                 <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
                 <div className={styles.gridTwo}>
                     {renderField("Primeiro Nome", formData.firstName,
-                        <Input value={formData.firstName} onChange={(v) => setFormData(p => ({ ...p, firstName: v }))} placeholder="" />
+                        <Input value={formData.firstName} onChange={(v) => setFormData(p => ({ ...p, firstName: v }))} placeholder="" />,
+                        true, errors.firstName
                     )}
                     {renderField("Segundo Nome", formData.lastName,
-                        <Input value={formData.lastName} onChange={(v) => setFormData(p => ({ ...p, lastName: v }))} placeholder="" />
+                        <Input value={formData.lastName} onChange={(v) => setFormData(p => ({ ...p, lastName: v }))} placeholder="" />,
+                        true, errors.lastName
                     )}
                 </div>
                 <div className={styles.gridTwo}>
                     {renderField("E-mail", formData.email,
-                        <Input value={formData.email} onChange={(v) => setFormData(p => ({ ...p, email: v }))} placeholder="" />
+                        <Input value={formData.email} onChange={(v) => setFormData(p => ({ ...p, email: v }))} placeholder="" />,
+                        true, errors.email
                     )}
                     {renderField("Telefone", formData.phone,
-                        <Input value={formData.phone} onChange={(v) => setFormData(p => ({ ...p, phone: v }))} placeholder="" />
+                        <Input value={formData.phone} onChange={(v) => setFormData(p => ({ ...p, phone: v }))} placeholder="" />,
+                        true, errors.phone
                     )}
                 </div>
                 <div className={styles.gridThree}>
                     {renderField("Número Documento", formData.documentNumber,
-                        <Input value={formData.documentNumber} onChange={(v) => setFormData(p => ({ ...p, documentNumber: v }))} placeholder="" />
+                        <Input value={formData.documentNumber} onChange={(v) => setFormData(p => ({ ...p, documentNumber: v }))} placeholder="" />,
+                        true, errors.documentNumber
                     )}
                     {renderField("Tipo do Documento", formData.documentType,
-                        <Select value={formData.documentType} onChange={(v) => setFormData(p => ({ ...p, documentType: v }))} className={styles.fullWidth}>
+                        <Select value={formData.documentType} onChange={(v) => setFormData(p => ({ ...p, documentType: v }))} className={styles.formSelect}>
                             <SelectOption value="CPF" label="CPF" />
                             <SelectOption value="CNPJ" label="CNPJ" />
-                        </Select>
+                        </Select>,
+                        true, errors.documentType
                     )}
                     {renderField("Notas", formData.notes,
-                        <Input value={formData.notes} onChange={(v) => setFormData(p => ({ ...p, notes: v }))} placeholder="" />
+                        <Input value={formData.notes} onChange={(v) => setFormData(p => ({ ...p, notes: v }))} placeholder="" />,
+                        false, errors.notes
                     )}
                 </div>
             </div>
@@ -206,24 +266,30 @@ export default function ClientDetails() {
                 <h3 className={styles.sectionTitle}>Endereço:</h3>
                 <div className={styles.gridFour}>
                     {renderField("CEP", formData.zipCode,
-                        <Input value={formData.zipCode} onChange={(v) => setFormData(p => ({ ...p, zipCode: v }))} placeholder="" />
+                        <Input value={formData.zipCode} onChange={(v) => setFormData(p => ({ ...p, zipCode: v }))} placeholder="" />,
+                        true, errors.zipCode
                     )}
                     {renderField("Estado", formData.state,
-                        <Input value={formData.state} onChange={(v) => setFormData(p => ({ ...p, state: v }))} placeholder="" maxLength={2} />
+                        <Input value={formData.state} onChange={(v) => setFormData(p => ({ ...p, state: v }))} placeholder="" maxLength={2} />,
+                        true, errors.state
                     )}
                     {renderField("Cidade", formData.city,
-                        <Input value={formData.city} onChange={(v) => setFormData(p => ({ ...p, city: v }))} placeholder="" />
+                        <Input value={formData.city} onChange={(v) => setFormData(p => ({ ...p, city: v }))} placeholder="" />,
+                        true, errors.city
                     )}
                     {renderField("Bairro", formData.neighborhood,
-                        <Input value={formData.neighborhood} onChange={(v) => setFormData(p => ({ ...p, neighborhood: v }))} placeholder="" />
+                        <Input value={formData.neighborhood} onChange={(v) => setFormData(p => ({ ...p, neighborhood: v }))} placeholder="" />,
+                        true, errors.neighborhood
                     )}
                 </div>
                 <div className={styles.gridAddress}>
                     {renderField("Logradouro", formData.streetName,
-                        <Input value={formData.streetName} onChange={(v) => setFormData(p => ({ ...p, streetName: v }))} placeholder="" />
+                        <Input value={formData.streetName} onChange={(v) => setFormData(p => ({ ...p, streetName: v }))} placeholder="" />,
+                        true, errors.streetName
                     )}
                     {renderField("Número", formData.number,
-                        <Input value={formData.number} onChange={(v) => setFormData(p => ({ ...p, number: v }))} placeholder="" />
+                        <Input value={formData.number} onChange={(v) => setFormData(p => ({ ...p, number: v }))} placeholder="" />,
+                        true, errors.number
                     )}
                 </div>
             </div>

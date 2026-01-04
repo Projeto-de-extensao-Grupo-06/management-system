@@ -44,8 +44,7 @@ export default function Clients() {
       .then((data: Client[]) => {
         setClients(data)
       })
-      .catch((e) => {
-        console.error('Erro ao buscar clientes:', e)
+      .catch(() => {
         setGlobalAlert({ message: 'Erro ao carregar clientes.', type: 'error' });
       })
   }, [clientsService])
@@ -71,16 +70,12 @@ export default function Clients() {
     setModalMessage(null);
     setGlobalAlert(null);
 
-    console.log("PAYLOAD being sent:", JSON.stringify(data, null, 2));
-
     clientsService.createClient(data)
       .then((newClient) => {
         setClients(prev => [...prev, newClient]);
         setClientFormData({});
         setIsCreateModalOpen(false);
         setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
-
-        // Auto dismiss success message
         setTimeout(() => setGlobalAlert(null), 5000);
       })
       .catch((e) => {
@@ -129,7 +124,6 @@ export default function Clients() {
         setTimeout(() => setGlobalAlert(null), 5000);
       })
       .catch((e) => {
-        console.error('Erro ao deletar cliente:', e);
         const error = e as AxiosError<{ message: string }>;
         const errorMessage = error.response?.data?.message || 'Erro ao deletar cliente. Tente novamente.';
         setGlobalAlert({ message: errorMessage, type: 'error' });
@@ -165,7 +159,6 @@ export default function Clients() {
     }
     if (filters.endDate) {
       const end = new Date(filters.endDate);
-      // Set end date to end of day
       end.setHours(23, 59, 59, 999);
       result = result.filter(c => c.createdAt && new Date(c.createdAt) <= end);
     }
