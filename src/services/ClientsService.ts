@@ -24,8 +24,6 @@ export default class ClientsService {
     }
 
     async getClientProjects(id: number): Promise<Project[]> {
-        // Assuming there's an endpoint to get projects for a client
-        // If not, we might need to filter from all projects or similar
         const response = await api.get<Project[]>(`/clients/${id}/projects`);
         return response.data;
     }

@@ -129,8 +129,10 @@ export default function Clients() {
         setTimeout(() => setGlobalAlert(null), 5000);
       })
       .catch((e) => {
-        console.error('Erro ao deletar cliente:', e)
-        setGlobalAlert({ message: 'Erro ao deletar cliente.', type: 'error' });
+        console.error('Erro ao deletar cliente:', e);
+        const error = e as AxiosError<{ message: string }>;
+        const errorMessage = error.response?.data?.message || 'Erro ao deletar cliente. Tente novamente.';
+        setGlobalAlert({ message: errorMessage, type: 'error' });
       })
   }
 
