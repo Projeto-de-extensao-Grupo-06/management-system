@@ -19,22 +19,22 @@ export default function Clients() {
         setClients(data)
       })
       .catch((e: any) => {
-        console.error('Erro ao buscar clientes:', e)
+        // console.error('Erro ao buscar clientes:', e)
       })
   }, [clientsService])
 
   const handleEdit = (id: number) => {
-    console.log('Editar cliente:', id)
+    // console.log('Editar cliente:', id)
     // TODO abrir tela de edição
   }
 
   const handleAddClient = () => {
-    console.log('Adicionar novo cliente')
+    // console.log('Adicionar novo cliente')
     // TODO abrir tela de cadastro
   }
 
   const handleFilterClient = () => {
-    console.log('Filtrar clientes')
+    // console.log('Filtrar clientes')
     // TODO abrir modal de filtros
   }
 

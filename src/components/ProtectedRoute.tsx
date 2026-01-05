@@ -5,8 +5,6 @@ import useAuthStore from '../store/useAuthStore';
 const ProtectedRoute = () => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-    console.log('ProtectedRoute: isAuthenticated =', isAuthenticated);
-
     if (!isAuthenticated) {
         return <Unauthorized />;
     }
