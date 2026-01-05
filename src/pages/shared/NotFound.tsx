@@ -13,7 +13,7 @@ export default function NotFound() {
                 Parece que a página que você está procurando não existe ou foi movida para outro lugar.
             </p>
             
-            <Button text='Voltar para a Tela de Login' onClick={() => navigate('/')} />
+            <Button text='Voltar' onClick={() => navigate(-1)} />
         </div>
     );
 }
