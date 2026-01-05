@@ -2,6 +2,7 @@ import "./App.css";
 
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
+import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./layouts/AppLayout/AppLayout";
 import LoginLayout from "./layouts/AppLayout/LoginLayout";
 import Analysis from "./pages/Analysis/Analysis";
@@ -29,10 +30,12 @@ function App() {
           <Route path="*" element={<NotFound />}></Route>
         </Route>
 
-        <Route element={<AppLayout />}>
-          <Route path="/clientes" element={<Clients />} />
-          <Route path="/clientes/:id" element={<ClientDetails />} />
-          <Route path="/analise" element={<Analysis />}></Route>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/clientes" element={<Clients />} />
+            <Route path="/clientes/:id" element={<ClientDetails />} />
+            <Route path="/analise" element={<Analysis />}></Route>
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
