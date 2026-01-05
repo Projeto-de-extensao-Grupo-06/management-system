@@ -11,7 +11,10 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && !window.location.pathname.includes('/login')) {
+    const isLoginRequest = error.config?.url?.includes('/auth/login');
+    const isLoginPage = window.location.pathname.includes('/login') || window.location.pathname === '/';
+
+    if (error.response?.status === 401 && !isLoginPage && !isLoginRequest) {
       localStorage.removeItem('user');
       window.location.href = '/login';
     }

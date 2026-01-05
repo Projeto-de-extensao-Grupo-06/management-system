@@ -34,7 +34,6 @@ export default function AppLayout() {
     auth
       .logout()
       .then(() => {
-        console.log("Usuário deslogado com sucesso!");
         navigate("/login");
       })
       .catch((e) => {
