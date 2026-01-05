@@ -19,6 +19,8 @@ const useAuthStore = create<AuthState>((set) => ({
         const lastName = getCookie('userLastName');
         const authoritiesCookie = getCookie('userAuthorities');
 
+        console.log('AuthStore Check:', { firstName, lastName, hasAuthorities: !!authoritiesCookie });
+
         if (firstName && lastName && authoritiesCookie) {
             try {
                 const decodedAuthorities = atob(authoritiesCookie);
