@@ -3,4 +3,5 @@ export default interface InputProps {
     type?: string;
     onChange(value: string): void;
     value: string;
+    maxLength?: number;
 }

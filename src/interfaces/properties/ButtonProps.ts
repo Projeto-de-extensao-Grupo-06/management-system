@@ -8,4 +8,6 @@ export default interface ButtonProps {
     icon?: JSX.Element;
     ariaLabel?: string;
     width?: string | number;
+    style?: React.CSSProperties;
+    className?: string;
 }

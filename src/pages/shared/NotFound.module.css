@@ -10,6 +10,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -22,9 +23,12 @@
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -40,7 +44,7 @@
     font-size: 80px;
     font-weight: 800;
     margin: 0;
-    background: linear-gradient(135deg, #e67e32 0%, #f4a261 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -48,15 +52,15 @@
 }
 
 .title {
-    font-size: 28px;
+    font-size: var(--font-size-3xl);
     font-weight: 700;
-    color: #1a202c;
+    color: var(--color-text-dark);
     margin: 20px 0 15px;
 }
 
 .description {
-    font-size: 16px;
-    color: #718096;
+    font-size: var(--font-size-base);
+    color: var(--color-text-description);
     line-height: 1.6;
     margin: 0 0 35px;
 }
@@ -64,7 +68,7 @@
 .homeButton:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(230, 126, 50, 0.6);
-    background: linear-gradient(135deg, #2d9f5e 0%, #3bb273 100%);
+    background: linear-gradient(135deg, var(--color-success) 0%, #3bb273 100%);
 }
 
 .homeButton:active {
@@ -75,15 +79,15 @@
     .content {
         padding: 40px 25px;
     }
-    
+
     .errorCode {
         font-size: 60px;
     }
-    
+
     .title {
         font-size: 24px;
     }
-    
+
     .errorImage {
         width: 150px;
         height: 150px;

@@ -1,50 +1,129 @@
-import { faFilter, faPen, faTrashCan, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState, useMemo } from "react";
-import { SimpleButton, Button, IconButton, Select, SelectOption, SearchInput } from '../../components/Form';
+import type { AxiosError } from 'axios';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from 'react-router';
+import { Alert } from '../../components/Alert';
+import ClientForm from '../../components/ClientForm/ClientForm';
+import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
+import ClientTable from '../../components/ClientTable/ClientTable';
+import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/Form';
+import FilterBar from '../../components/Layout/FilterBar';
+import PageHeader from '../../components/Layout/PageHeader';
+import Modal from '../../components/Modal/Modal';
+import type { ModalRef } from '../../components/Modal/Modal';
 import type Client from "../../interfaces/types/Client";
+import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
 import styles from "./Clients.module.css";
+import ClientFilterModal from './components/ClientFilterModal';
 
 export default function Clients() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Todos')
   const [clients, setClients] = useState<Client[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    startDate: '',
+    endDate: '',
+    city: '',
+    state: ''
+  });
+  const formRef = useRef<ClientFormRef>(null);
+  const modalRef = useRef<ModalRef>(null);
+  const [clientFormData, setClientFormData] = useState<Partial<ClientSchemaType>>({});
 
-  const clientsService = useMemo(() => new ClientService(), [])
+  const [globalAlert, setGlobalAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+  const [modalTypeMessage, setModalMessage] = useState<string | null>(null);
+
+  const clientsService = useMemo(() => new ClientService(), []);
 
   useEffect(() => {
     clientsService.getAllClients()
       .then((data: Client[]) => {
         setClients(data)
       })
-      .catch((e: any) => {
-        console.error('Erro ao buscar clientes:', e)
+      .catch(() => {
+        setGlobalAlert({ message: 'Erro ao carregar clientes.', type: 'error' });
       })
   }, [clientsService])
 
   const handleEdit = (id: number) => {
-    console.log('Editar cliente:', id)
-    // TODO abrir tela de edição
+    navigate(`/clientes/${id}`, { state: { edit: true } });
+  }
+
+  const handleRowClick = (id: number) => {
+    navigate(`/clientes/${id}`, { state: { edit: false } });
   }
 
   const handleAddClient = () => {
-    console.log('Adicionar novo cliente')
-    // TODO abrir tela de cadastro
+    setModalMessage(null);
+    setIsCreateModalOpen(true);
+  }
+
+  const handleCreateSubmit = () => {
+    formRef.current?.submit();
+  }
+
+  const onFormSubmit = (data: ClientSchemaType) => {
+    setModalMessage(null);
+    setGlobalAlert(null);
+
+    clientsService.createClient(data)
+      .then((newClient) => {
+        setClients(prev => [...prev, newClient]);
+        setClientFormData({});
+        setIsCreateModalOpen(false);
+        setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
+        setTimeout(() => setGlobalAlert(null), 5000);
+      })
+      .catch((e) => {
+        const error = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[] }>;
+        console.error("Backend Error Response:", JSON.stringify(error.response?.data, null, 2));
+
+        let errorMsg = error.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
+
+        if (error.response?.data?.validationErrors?.length) {
+          const details = error.response.data.validationErrors
+            .map(err => `${err.field}: ${err.message}`)
+            .join('\n');
+          errorMsg += `\n\n${details}`;
+        }
+
+        setModalMessage(errorMsg);
+        modalRef.current?.scrollToTop();
+      });
   }
 
   const handleFilterClient = () => {
-    console.log('Filtrar clientes')
-    // TODO abrir modal de filtros
+    setIsFilterModalOpen(true);
+  }
+
+  const handleClearFilters = () => {
+    setFilters({
+      startDate: '',
+      endDate: '',
+      city: '',
+      state: ''
+    });
+    setIsFilterModalOpen(false);
   }
 
   const handleDelete = (id: number) => {
+    if (!confirm('Tem certeza que deseja excluir este cliente?')) return;
+
     clientsService.deleteClient(id)
       .then(() => {
         setClients((prevClients) => prevClients.filter(client => client.id !== id))
+        setGlobalAlert({ message: 'Cliente removido com sucesso!', type: 'success' });
+        setTimeout(() => setGlobalAlert(null), 5000);
       })
-      .catch((e: any) => {
-        console.error('Erro ao deletar cliente:', e)
+      .catch((e) => {
+        const error = e as AxiosError<{ message: string }>;
+        const errorMessage = error.response?.data?.message || 'Erro ao deletar cliente. Tente novamente.';
+        setGlobalAlert({ message: errorMessage, type: 'error' });
       })
   }
 
@@ -57,54 +136,96 @@ export default function Clients() {
 
     if (searchTerm.trim() !== '') {
       const term = searchTerm.toLowerCase()
-      result = result.filter(c => c.name.toLowerCase().includes(term))
+      result = result.filter(c =>
+        c.name.toLowerCase().includes(term) ||
+        c.email.toLowerCase().includes(term) ||
+        c.phone.includes(term) ||
+        (c.documentNumber && c.documentNumber.includes(term))
+      )
     }
-    return result
-  }, [clients, statusFilter, searchTerm])
 
-  const clientsMap = filteredClients.map((client) => (
-    <tr key={client.id}>
-      <td>{client.name}</td>
-      <td>{client.phone}</td>
-      <td>{client.email}</td>
-      <td>{client.status}</td>
-      <td>
-        <div className={styles.actions}>
-          <IconButton
-            onClick={() => handleEdit(client.id)}
-            icon={<FontAwesomeIcon icon={faPen} />}
-            ariaLabel="Editar"
-            functionality="edit" />
-          <IconButton
-            onClick={() => handleDelete(client.id)}
-            icon={<FontAwesomeIcon icon={faTrashCan} />}
-            ariaLabel="Deletar"
-            functionality="delete" />
-        </div>
-      </td>
-    </tr>
-  ))
+    if (filters.city) {
+      result = result.filter(c => c.mainAddress?.city.toLowerCase().includes(filters.city.toLowerCase()));
+    }
+    if (filters.state) {
+      result = result.filter(c => c.mainAddress?.state.toLowerCase() === filters.state.toLowerCase());
+    }
+    if (filters.startDate) {
+      const start = new Date(filters.startDate);
+      result = result.filter(c => c.createdAt && new Date(c.createdAt) >= start);
+    }
+    if (filters.endDate) {
+      const end = new Date(filters.endDate);
+      end.setHours(23, 59, 59, 999);
+      result = result.filter(c => c.createdAt && new Date(c.createdAt) <= end);
+    }
+
+    return result
+  }, [clients, statusFilter, searchTerm, filters])
+
+  const createModalFooter = (
+    <Button
+      icon={<FontAwesomeIcon icon={faPlus} />}
+      text="Cadastrar Cliente"
+      ariaLabel="Confirmar cadastro"
+      onClick={handleCreateSubmit}
+      width="fit-content"
+    />
+  );
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>
-          Clientes <span className={styles.count}>({clients.length})</span>
-        </h1>
+      {globalAlert && !isCreateModalOpen && (
+        <div className={styles.alertWrapper}>
+          <Alert message={globalAlert.message} type={globalAlert.type} />
+        </div>
+      )}
+
+      <Modal
+        ref={modalRef}
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Criar Cliente"
+        footer={createModalFooter}
+      >
+        {modalTypeMessage && (
+          <div style={{ marginBottom: '1rem' }}>
+            <Alert message={modalTypeMessage} type="error" />
+          </div>
+        )}
+        <ClientForm
+          ref={formRef}
+          onSubmit={onFormSubmit}
+          defaultValues={clientFormData}
+          onFormChange={setClientFormData}
+        />
+      </Modal>
+
+      <ClientFilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        filters={filters}
+        setFilters={setFilters}
+        onClear={handleClearFilters}
+      />
+
+      <PageHeader title="Clientes" count={clients.length}>
         <Button
           icon={<FontAwesomeIcon icon={faPlus} />}
           text="Cadastrar Cliente"
           ariaLabel="Cadastrar Cliente"
           onClick={handleAddClient}
-          width={"15%"} />
-      </div>
+          width="fit-content"
+        />
+      </PageHeader>
 
-      <div className={styles.filters}>
+      <FilterBar>
         <SimpleButton
           icon={<FontAwesomeIcon icon={faFilter} />}
           text="Filtros"
           ariaLabel="Filtrar Clientes"
-          onClick={handleFilterClient} />
+          onClick={handleFilterClient}
+        />
 
         <div className={styles.dropdown}>
           <Select value={statusFilter} onChange={setStatusFilter}>
@@ -118,27 +239,17 @@ export default function Clients() {
           <SearchInput
             onChange={setSearchTerm}
             value={searchTerm}
-            placeholder="Buscar Cliente" />
+            placeholder="Buscar por Nome, CPF/CNPJ, E-mail ou Telefone"
+          />
         </div>
+      </FilterBar>
 
-      </div>
-
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Nome do Cliente</th>
-              <th>Telefone</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Operação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clientsMap}
-          </tbody>
-        </table>
-      </div>
+      <ClientTable
+        clients={filteredClients}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onRowClick={handleRowClick}
+      />
     </div>
   );
 }

@@ -1,9 +1,9 @@
 body {
-  font-family: "Montserrat";
+  font-family: var(--font-family-primary);
 }
 
 h1 {
-  color: #dd7428;
+  color: var(--color-primary);
 }
 
 .title_container {
@@ -21,7 +21,7 @@ h1 {
   width: auto;
   height: auto;
   padding: 1rem 2rem;
-  background-color: #fff;
+  background-color: var(--color-background);
   cursor: pointer;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -39,8 +39,8 @@ h1 {
   width: 85%;
   height: auto;
   padding: 1.5rem 1.2rem;
-  background-color: #fff;
-  border-color: #484544;
+  background-color: var(--color-background);
+  border-color: var(--color-text);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -62,7 +62,7 @@ h1 {
 .kpi_icon {
   width: 2.5rem;
   height: 2.5rem;
-  background-color: #dd7428;
+  background-color: var(--color-primary);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -81,7 +81,7 @@ h1 {
   width: 100%;
   height: auto;
   padding: 1.2rem;
-  background-color: #fff;
+  background-color: var(--color-background);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
