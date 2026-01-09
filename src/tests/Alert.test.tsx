@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { Alert } from '../components/Alert';
+import { Alert } from '../components/ui/Alert';
 
 describe('Alert Component', () => {
     it('renders the error message correctly', () => {

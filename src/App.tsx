@@ -2,13 +2,13 @@ import "./App.css";
 
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AppLayout from "./layouts/AppLayout/AppLayout";
-import LoginLayout from "./layouts/AppLayout/LoginLayout";
-import Analysis from "./pages/Analysis/Analysis";
-import ClientDetails from "./pages/Clients/ClientDetails";
-import Clients from "./pages/Clients/Clients";
-import Login from "./pages/Login/Login";
+import ProtectedRoute from "./components/ui/ProtectedRoute";
+import AppLayout from "./layouts/app_layout/AppLayout";
+import LoginLayout from "./layouts/login_layout/LoginLayout";
+import Analysis from "./pages/analysis/Analysis";
+import ClientDetails from "./pages/clients/ClientDetails";
+import Clients from "./pages/clients/Clients";
+import Login from "./pages/login/Login";
 import NotFound from "./pages/shared/NotFound";
 
 import useAuthStore from "./store/useAuthStore";

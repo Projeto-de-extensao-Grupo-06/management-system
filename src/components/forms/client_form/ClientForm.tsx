@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import type { ClientSchemaType } from '../../schemas/clientSchema';
-import { clientSchema } from '../../schemas/clientSchema';
-import AddressService from '../../services/AddressService';
+import type { ClientSchemaType } from '../../../schemas/clientSchema';
+import { clientSchema } from '../../../schemas/clientSchema';
+import AddressService from '../../../services/AddressService';
 import styles from './ClientForm.module.css';
 import AddressForm from './partials/AddressForm';
 import BasicInfoForm from './partials/BasicInfoForm';

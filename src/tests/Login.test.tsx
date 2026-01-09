@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import LoginPage from '../pages/Login/Login';
+import LoginPage from '../pages/login/Login';
 
 const { mockLogin } = vi.hoisted(() => ({
     mockLogin: vi.fn()

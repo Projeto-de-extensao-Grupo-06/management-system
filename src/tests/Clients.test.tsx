@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Mock } from 'vitest';
 import type Client from '../interfaces/types/Client';
-import Clients from '../pages/Clients/Clients';
+import Clients from '../pages/clients/Clients';
 
 // Define mocks explicitly
 const mockGetAllClients = vi.fn();
@@ -170,6 +170,17 @@ describe('Clients Page', () => {
     it('should handle client deletion success', async () => {
         mockDeleteClient.mockResolvedValue({});
         (window.confirm as Mock).mockReturnValue(true);
+
+        const mockPageAfterDelete = {
+            ...mockPage,
+            content: [mockClients[1]], // Only Maria remains
+            totalElements: 1
+        };
+
+        // First call (mount) returns full list, Second call (after delete) returns list without João
+        mockGetAllClients
+            .mockResolvedValueOnce(mockPage)
+            .mockResolvedValueOnce(mockPageAfterDelete);
 
         render(
             <MemoryRouter>

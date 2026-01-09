@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
-import { Button } from '../../components/Form';
-import AuthLayout from '../../layouts/AppLayout/AuthLayout';
+import { Button } from '../../components/ui/Form';
+import AuthLayout from '../../layouts/login_layout/AuthLayout';
 
 export default function Unauthorized() {
     const navigate = useNavigate();
