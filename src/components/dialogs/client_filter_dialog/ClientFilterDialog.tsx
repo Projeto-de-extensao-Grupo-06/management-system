@@ -1,6 +1,6 @@
+import styles from "../../../pages/clients/Clients.module.css";
 import { Button, Input, SimpleButton } from "../../ui/Form";
 import Modal from "../modal/Modal";
-import styles from "../../../pages/clients/Clients.module.css";
 
 interface ClientFilterModalProps {
     isOpen: boolean;

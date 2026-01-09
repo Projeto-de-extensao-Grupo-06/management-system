@@ -3,22 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { AxiosError } from 'axios';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from 'react-router';
-import { Alert } from '../../components/ui/Alert';
-import ClientForm from '../../components/forms/client_form/ClientForm';
-import type { ClientFormRef } from '../../components/forms/client_form/ClientForm';
-import ClientTable from '../../components/tables/client_table/ClientTable';
-import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/ui/Form';
-import FilterBar from '../../components/layout/FilterBar';
-import PageHeader from '../../components/layout/PageHeader';
+import ClientFilterModal from '../../components/dialogs/client_filter_dialog/ClientFilterDialog';
 import Modal from '../../components/dialogs/modal/Modal';
 import type { ModalRef } from '../../components/dialogs/modal/Modal';
+import ClientForm from '../../components/forms/client_form/ClientForm';
+import type { ClientFormRef } from '../../components/forms/client_form/ClientForm';
+import FilterBar from '../../components/layout/FilterBar';
+import PageHeader from '../../components/layout/PageHeader';
+import ClientTable from '../../components/tables/client_table/ClientTable';
 import { Pagination } from '../../components/tables/pagination/Pagination';
+import { Alert } from '../../components/ui/Alert';
+import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/ui/Form';
 import type Client from "../../interfaces/types/Client";
 import type { Page } from '../../interfaces/types/Page';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
 import styles from "./Clients.module.css";
-import ClientFilterModal from '../../components/dialogs/client_filter_dialog/ClientFilterDialog';
 
 export default function Clients() {
   const navigate = useNavigate();
@@ -60,9 +60,15 @@ export default function Clients() {
     fetchClients();
   }, [fetchClients]);
 
-  useEffect(() => {
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term);
     setPage(0);
-  }, [searchTerm, statusFilter]);
+  };
+
+  const handleStatusChange = (status: string) => {
+    setStatusFilter(status);
+    setPage(0);
+  };
 
   const handleEdit = (id: number) => {
     navigate(`/clientes/${id}`, { state: { edit: true } });
@@ -228,7 +234,7 @@ export default function Clients() {
             onClick={handleFilterClient}
           />
           <div className={styles.dropdown}>
-            <Select value={statusFilter} onChange={setStatusFilter}>
+            <Select value={statusFilter} onChange={handleStatusChange}>
               <SelectOption value="Todos" label="Todos" />
               <SelectOption value="Ativo" label="Ativo" />
               <SelectOption value="Inativo" label="Inativo" />
@@ -237,7 +243,7 @@ export default function Clients() {
 
           <div className={styles.searchBox}>
             <SearchInput
-              onChange={setSearchTerm}
+              onChange={handleSearchChange}
               value={searchTerm}
               placeholder="Buscar por Nome, CPF/CNPJ, E-mail ou Telefone"
             />
