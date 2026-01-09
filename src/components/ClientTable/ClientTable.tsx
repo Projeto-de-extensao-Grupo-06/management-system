@@ -32,7 +32,7 @@ export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: C
                         <th>Telefone</th>
                         <th>Cidade/Estado</th>
                         <th>Data de Cadastro</th>
-                        <th>Status</th>
+
                         <th>Operação</th>
                     </tr>
                 </thead>
@@ -48,7 +48,7 @@ export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: C
                             <td>{client.phone}</td>
                             <td>{client.mainAddress ? `${client.mainAddress.city} / ${client.mainAddress.state}` : '-'}</td>
                             <td>{client.createdAt ? new Date(client.createdAt).toLocaleDateString('pt-BR') : '-'}</td>
-                            <td>{client.status}</td>
+
                             <td>
                                 <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
                                     <IconButton

@@ -1,7 +1,7 @@
 import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { AxiosError } from 'axios';
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from 'react-router';
 import { Alert } from '../../components/Alert';
 import ClientForm from '../../components/ClientForm/ClientForm';
@@ -12,7 +12,9 @@ import FilterBar from '../../components/Layout/FilterBar';
 import PageHeader from '../../components/Layout/PageHeader';
 import Modal from '../../components/Modal/Modal';
 import type { ModalRef } from '../../components/Modal/Modal';
+import { Pagination } from '../../components/Pagination/Pagination';
 import type Client from "../../interfaces/types/Client";
+import type { Page } from '../../interfaces/types/Page';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
 import styles from "./Clients.module.css";
@@ -21,8 +23,11 @@ import ClientFilterModal from './components/ClientFilterModal';
 export default function Clients() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Todos')
-  const [clients, setClients] = useState<Client[]>([])
+  const [statusFilter, setStatusFilter] = useState('Ativo');
+  const [clients, setClients] = useState<Client[]>([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -40,15 +45,24 @@ export default function Clients() {
 
   const clientsService = useMemo(() => new ClientService(), []);
 
-  useEffect(() => {
-    clientsService.getAllClients()
-      .then((data: Client[]) => {
-        setClients(data)
+  const fetchClients = useCallback(() => {
+    clientsService.getAllClients(page, 20, searchTerm, statusFilter)
+      .then((data: Page<Client>) => {
+        setClients(data.content);
+        setTotalPages(data.totalPages);
       })
       .catch(() => {
         setGlobalAlert({ message: 'Erro ao carregar clientes.', type: 'error' });
-      })
-  }, [clientsService])
+      });
+  }, [clientsService, page, searchTerm, statusFilter]);
+
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
+
+  useEffect(() => {
+    setPage(0);
+  }, [searchTerm, statusFilter]);
 
   const handleEdit = (id: number) => {
     navigate(`/clientes/${id}`, { state: { edit: true } });
@@ -72,8 +86,8 @@ export default function Clients() {
     setGlobalAlert(null);
 
     clientsService.createClient(data)
-      .then((newClient) => {
-        setClients(prev => [...prev, newClient]);
+      .then(() => {
+        fetchClients();
         setClientFormData({});
         setIsCreateModalOpen(false);
         setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
@@ -116,7 +130,7 @@ export default function Clients() {
 
     clientsService.deleteClient(id)
       .then(() => {
-        setClients((prevClients) => prevClients.filter(client => client.id !== id))
+        fetchClients(); // Reload page
         setGlobalAlert({ message: 'Cliente removido com sucesso!', type: 'success' });
         setTimeout(() => setGlobalAlert(null), 5000);
       })
@@ -128,21 +142,7 @@ export default function Clients() {
   }
 
   const filteredClients = useMemo(() => {
-    let result = [...clients]
-
-    if (statusFilter !== 'Todos') {
-      result = result.filter(c => c.status === statusFilter)
-    }
-
-    if (searchTerm.trim() !== '') {
-      const term = searchTerm.toLowerCase()
-      result = result.filter(c =>
-        c.name.toLowerCase().includes(term) ||
-        c.email.toLowerCase().includes(term) ||
-        c.phone.includes(term) ||
-        (c.documentNumber && c.documentNumber.includes(term))
-      )
-    }
+    let result = [...clients];
 
     if (filters.city) {
       result = result.filter(c => c.mainAddress?.city.toLowerCase().includes(filters.city.toLowerCase()));
@@ -160,8 +160,8 @@ export default function Clients() {
       result = result.filter(c => c.createdAt && new Date(c.createdAt) <= end);
     }
 
-    return result
-  }, [clients, statusFilter, searchTerm, filters])
+    return result;
+  }, [clients, filters]);
 
   const createModalFooter = (
     <Button
@@ -209,7 +209,7 @@ export default function Clients() {
         onClear={handleClearFilters}
       />
 
-      <PageHeader title="Clientes" count={clients.length}>
+      <PageHeader title="Clientes" count={filteredClients.length}>
         <Button
           icon={<FontAwesomeIcon icon={faPlus} />}
           text="Cadastrar Cliente"
@@ -220,27 +220,28 @@ export default function Clients() {
       </PageHeader>
 
       <FilterBar>
-        <SimpleButton
-          icon={<FontAwesomeIcon icon={faFilter} />}
-          text="Filtros"
-          ariaLabel="Filtrar Clientes"
-          onClick={handleFilterClient}
-        />
-
-        <div className={styles.dropdown}>
-          <Select value={statusFilter} onChange={setStatusFilter}>
-            <SelectOption value="Todos" label="Todos" />
-            <SelectOption value="Ativo" label="Ativo" />
-            <SelectOption value="Inativo" label="Inativo" />
-          </Select>
-        </div>
-
-        <div className={styles.searchBox}>
-          <SearchInput
-            onChange={setSearchTerm}
-            value={searchTerm}
-            placeholder="Buscar por Nome, CPF/CNPJ, E-mail ou Telefone"
+        <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+          <SimpleButton
+            icon={<FontAwesomeIcon icon={faFilter} />}
+            text="Filtros"
+            ariaLabel="Filtrar Clientes"
+            onClick={handleFilterClient}
           />
+          <div className={styles.dropdown}>
+            <Select value={statusFilter} onChange={setStatusFilter}>
+              <SelectOption value="Todos" label="Todos" />
+              <SelectOption value="Ativo" label="Ativo" />
+              <SelectOption value="Inativo" label="Inativo" />
+            </Select>
+          </div>
+
+          <div className={styles.searchBox}>
+            <SearchInput
+              onChange={setSearchTerm}
+              value={searchTerm}
+              placeholder="Buscar por Nome, CPF/CNPJ, E-mail ou Telefone"
+            />
+          </div>
         </div>
       </FilterBar>
 
@@ -249,6 +250,12 @@ export default function Clients() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onRowClick={handleRowClick}
+      />
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
       />
     </div>
   );
