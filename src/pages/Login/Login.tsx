@@ -28,8 +28,14 @@ export default function LoginPage() {
         setLoading(false);
         navigate('/clientes');
       })
-      .catch(() => {
-        setError('Erro ao fazer login. Verifique suas credenciais.');
+      .catch((err) => {
+        if (!err.response) {
+          setError('Erro de conexão. Verifique se o servidor está online.');
+        } else if (err.response.status === 401) {
+          setError('Credenciais inválidas. Verifique seu email e senha.');
+        } else {
+          setError('Ocorreu um erro inesperado. Tente novamente mais tarde.');
+        }
         setLoading(false);
       });
   };
