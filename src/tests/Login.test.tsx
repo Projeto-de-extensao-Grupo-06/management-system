@@ -47,7 +47,7 @@ describe('LoginPage', () => {
         const user = userEvent.setup();
 
         mockLogin.mockRejectedValue({
-            response: { data: { message: 'Erro ao fazer login. Verifique suas credenciais.' } }
+            response: { status: 401, data: { message: 'Credenciais inválidas' } }
         });
 
         render(
@@ -68,7 +68,7 @@ describe('LoginPage', () => {
             expect(mockLogin).toHaveBeenCalled();
         });
 
-        const errorAlert = await screen.findByText(/Erro ao fazer login/i);
+        const errorAlert = await screen.findByText(/Credenciais inválidas/i);
         expect(errorAlert).toBeInTheDocument();
     });
 });
