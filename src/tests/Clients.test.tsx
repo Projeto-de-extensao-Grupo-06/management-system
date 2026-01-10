@@ -6,7 +6,6 @@ import type { Mock } from 'vitest';
 import type Client from '../interfaces/types/Client';
 import Clients from '../pages/clients/Clients';
 
-// Define mocks explicitly
 const mockGetAllClients = vi.fn();
 const mockCreateClient = vi.fn();
 const mockDeleteClient = vi.fn();
@@ -27,7 +26,6 @@ vi.mock('../services/ClientsService', () => {
     };
 });
 
-// Setup globals
 vi.stubGlobal('confirm', vi.fn());
 vi.stubGlobal('scrollTo', vi.fn());
 Element.prototype.scrollTo = vi.fn();
@@ -120,9 +118,8 @@ describe('Clients Page', () => {
         const searchInput = screen.getByPlaceholderText('Buscar por Nome, CPF/CNPJ, E-mail ou Telefone');
         await userEvent.type(searchInput, 'Maria');
 
-        // Should call service with search term
         await waitFor(() => {
-            expect(mockGetAllClients).toHaveBeenCalledWith(0, 20, 'Maria', 'Ativo');
+            expect(mockGetAllClients).toHaveBeenCalledWith(0, 20, 'Maria', 'Ativo', '', '', '', '');
         });
     });
 
@@ -134,11 +131,6 @@ describe('Clients Page', () => {
         );
 
         await waitFor(() => expect(screen.getByText('João Silva')).toBeInTheDocument());
-
-        // Change status involves changing the select, then useEffect calls getAllClients
-
-        // Simulating the flow since Select component might be tricky to test with userEvent directly if custom
-        // But assuming generic select behavior...
     });
 
     it('should open filter modal and filter by city (local filter)', async () => {
@@ -162,8 +154,7 @@ describe('Clients Page', () => {
         await userEvent.click(applyBtn);
 
         await waitFor(() => {
-            expect(screen.queryByText('João Silva')).not.toBeInTheDocument();
-            expect(screen.getByText('Maria Souza')).toBeInTheDocument();
+            expect(mockGetAllClients).toHaveBeenCalledWith(0, 20, '', 'Ativo', 'Rio de Janeiro', '', '', '');
         });
     });
 
@@ -173,11 +164,10 @@ describe('Clients Page', () => {
 
         const mockPageAfterDelete = {
             ...mockPage,
-            content: [mockClients[1]], // Only Maria remains
+            content: [mockClients[1]],
             totalElements: 1
         };
 
-        // First call (mount) returns full list, Second call (after delete) returns list without João
         mockGetAllClients
             .mockResolvedValueOnce(mockPage)
             .mockResolvedValueOnce(mockPageAfterDelete);

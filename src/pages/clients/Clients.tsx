@@ -46,7 +46,7 @@ export default function Clients() {
   const clientsService = useMemo(() => new ClientService(), []);
 
   const fetchClients = useCallback(() => {
-    clientsService.getAllClients(page, 20, searchTerm, statusFilter)
+    clientsService.getAllClients(page, 20, searchTerm, statusFilter, filters.city, filters.state, filters.startDate, filters.endDate)
       .then((data: Page<Client>) => {
         setClients(data.content);
         setTotalPages(data.totalPages);
@@ -54,7 +54,7 @@ export default function Clients() {
       .catch(() => {
         setGlobalAlert({ message: 'Erro ao carregar clientes.', type: 'error' });
       });
-  }, [clientsService, page, searchTerm, statusFilter]);
+  }, [clientsService, page, searchTerm, statusFilter, filters]);
 
   useEffect(() => {
     fetchClients();
@@ -121,6 +121,11 @@ export default function Clients() {
     setIsFilterModalOpen(true);
   }
 
+  const handleApplyFilters = (newFilters: typeof filters) => {
+    setFilters(newFilters);
+    setPage(0);
+  };
+
   const handleClearFilters = () => {
     setFilters({
       startDate: '',
@@ -128,6 +133,7 @@ export default function Clients() {
       city: '',
       state: ''
     });
+    setPage(0);
     setIsFilterModalOpen(false);
   }
 
@@ -146,28 +152,6 @@ export default function Clients() {
         setGlobalAlert({ message: errorMessage, type: 'error' });
       })
   }
-
-  const filteredClients = useMemo(() => {
-    let result = [...clients];
-
-    if (filters.city) {
-      result = result.filter(c => c.mainAddress?.city.toLowerCase().includes(filters.city.toLowerCase()));
-    }
-    if (filters.state) {
-      result = result.filter(c => c.mainAddress?.state.toLowerCase() === filters.state.toLowerCase());
-    }
-    if (filters.startDate) {
-      const start = new Date(filters.startDate);
-      result = result.filter(c => c.createdAt && new Date(c.createdAt) >= start);
-    }
-    if (filters.endDate) {
-      const end = new Date(filters.endDate);
-      end.setHours(23, 59, 59, 999);
-      result = result.filter(c => c.createdAt && new Date(c.createdAt) <= end);
-    }
-
-    return result;
-  }, [clients, filters]);
 
   const createModalFooter = (
     <Button
@@ -211,11 +195,11 @@ export default function Clients() {
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         filters={filters}
-        setFilters={setFilters}
+        onApply={handleApplyFilters}
         onClear={handleClearFilters}
       />
 
-      <PageHeader title="Clientes" count={filteredClients.length}>
+      <PageHeader title="Clientes" count={clients.length}>
         <Button
           icon={<FontAwesomeIcon icon={faPlus} />}
           text="Cadastrar Cliente"
@@ -252,7 +236,7 @@ export default function Clients() {
       </FilterBar>
 
       <ClientTable
-        clients={filteredClients}
+        clients={clients}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onRowClick={handleRowClick}

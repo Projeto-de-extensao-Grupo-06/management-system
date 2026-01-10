@@ -5,12 +5,16 @@ import ClientMapper from '../utils/mappers/ClientMapper';
 import api from './provider/api';
 
 export default class ClientsService {
-    async getAllClients(page: number = 0, size: number = 20, search: string = '', status: string = 'ACTIVE'): Promise<Page<Client>> {
+    async getAllClients(page: number = 0, size: number = 20, search: string = '', status: string = 'ACTIVE', city: string = '', state: string = '', startDate: string = '', endDate: string = ''): Promise<Page<Client>> {
         const params = new URLSearchParams();
         params.append('page', page.toString());
         params.append('size', size.toString());
         if (search) params.append('search', search);
         if (status && status !== 'Todos') params.append('status', status === 'Ativo' ? 'ACTIVE' : status === 'Inativo' ? 'INACTIVE' : status);
+        if (city) params.append('city', city);
+        if (state) params.append('state', state);
+        if (startDate) params.append('startDate', startDate);
+        if (endDate) params.append('endDate', endDate);
 
         const response = await api.get<Page<Client>>('/clients', { params });
 
