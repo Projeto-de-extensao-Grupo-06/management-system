@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "../../../pages/clients/Clients.module.css";
 import { Button, Input, SimpleButton } from "../../ui/Form";
 import Modal from "../modal/Modal";
@@ -21,9 +21,7 @@ interface ClientFilterModalProps {
 export default function ClientFilterModal({ isOpen, onClose, filters: initialFilters, onApply, onClear }: ClientFilterModalProps) {
     const [localFilters, setLocalFilters] = useState<FilterState>(initialFilters);
 
-    useEffect(() => {
-        setLocalFilters(initialFilters);
-    }, [initialFilters, isOpen]);
+
 
     const handleApply = () => {
         onApply(localFilters);

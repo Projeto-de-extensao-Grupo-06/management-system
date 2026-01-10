@@ -192,6 +192,7 @@ export default function Clients() {
       </Modal>
 
       <ClientFilterModal
+        key={isFilterModalOpen ? 'open' : 'closed'}
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         filters={filters}
