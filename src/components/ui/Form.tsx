@@ -3,12 +3,12 @@ import './components.css';
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import type ButtonProps from '../interfaces/properties/ButtonProps';
-import type IconButtonProps from '../interfaces/properties/IconButtonProps';
-import type InputProps from '../interfaces/properties/InputProps';
-import type PasswordInputProps from '../interfaces/properties/PasswordInputProps';
+import type ButtonProps from '../../interfaces/properties/ButtonProps';
+import type IconButtonProps from '../../interfaces/properties/IconButtonProps';
+import type InputProps from '../../interfaces/properties/InputProps';
+import type PasswordInputProps from '../../interfaces/properties/PasswordInputProps';
 
-import type SelectProps from '../interfaces/properties/SelectProps';
+import type SelectProps from '../../interfaces/properties/SelectProps';
 
 export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style, className }: ButtonProps) {
     return (

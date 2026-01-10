@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { Button } from '../../components/Form';
+import { Button } from '../../components/ui/Form';
 import styles from './NotFound.module.css';
 
 export default function NotFound() {
@@ -12,7 +12,7 @@ export default function NotFound() {
             <p className={styles.description}>
                 Parece que a página que você está procurando não existe ou foi movida para outro lugar.
             </p>
-            
+
             <Button text='Voltar' onClick={() => navigate(-1)} />
         </div>
     );

@@ -1,28 +1,33 @@
 import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { AxiosError } from 'axios';
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from 'react-router';
-import { Alert } from '../../components/Alert';
-import ClientForm from '../../components/ClientForm/ClientForm';
-import type { ClientFormRef } from '../../components/ClientForm/ClientForm';
-import ClientTable from '../../components/ClientTable/ClientTable';
-import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/Form';
-import FilterBar from '../../components/Layout/FilterBar';
-import PageHeader from '../../components/Layout/PageHeader';
-import Modal from '../../components/Modal/Modal';
-import type { ModalRef } from '../../components/Modal/Modal';
+import ClientFilterModal from '../../components/dialogs/client_filter_dialog/ClientFilterDialog';
+import Modal from '../../components/dialogs/modal/Modal';
+import type { ModalRef } from '../../components/dialogs/modal/Modal';
+import ClientForm from '../../components/forms/client_form/ClientForm';
+import type { ClientFormRef } from '../../components/forms/client_form/ClientForm';
+import FilterBar from '../../components/layout/FilterBar';
+import PageHeader from '../../components/layout/PageHeader';
+import ClientTable from '../../components/tables/client_table/ClientTable';
+import { Pagination } from '../../components/tables/pagination/Pagination';
+import { Alert } from '../../components/ui/Alert';
+import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/ui/Form';
 import type Client from "../../interfaces/types/Client";
+import type { Page } from '../../interfaces/types/Page';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientService from "../../services/ClientsService";
 import styles from "./Clients.module.css";
-import ClientFilterModal from './components/ClientFilterModal';
 
 export default function Clients() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Todos')
-  const [clients, setClients] = useState<Client[]>([])
+  const [statusFilter, setStatusFilter] = useState('Ativo');
+  const [clients, setClients] = useState<Client[]>([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -40,15 +45,30 @@ export default function Clients() {
 
   const clientsService = useMemo(() => new ClientService(), []);
 
-  useEffect(() => {
-    clientsService.getAllClients()
-      .then((data: Client[]) => {
-        setClients(data)
+  const fetchClients = useCallback(() => {
+    clientsService.getAllClients(page, 20, searchTerm, statusFilter, filters.city, filters.state, filters.startDate, filters.endDate)
+      .then((data: Page<Client>) => {
+        setClients(data.content);
+        setTotalPages(data.totalPages);
       })
       .catch(() => {
         setGlobalAlert({ message: 'Erro ao carregar clientes.', type: 'error' });
-      })
-  }, [clientsService])
+      });
+  }, [clientsService, page, searchTerm, statusFilter, filters]);
+
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
+
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term);
+    setPage(0);
+  };
+
+  const handleStatusChange = (status: string) => {
+    setStatusFilter(status);
+    setPage(0);
+  };
 
   const handleEdit = (id: number) => {
     navigate(`/clientes/${id}`, { state: { edit: true } });
@@ -72,8 +92,8 @@ export default function Clients() {
     setGlobalAlert(null);
 
     clientsService.createClient(data)
-      .then((newClient) => {
-        setClients(prev => [...prev, newClient]);
+      .then(() => {
+        fetchClients();
         setClientFormData({});
         setIsCreateModalOpen(false);
         setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
@@ -101,6 +121,11 @@ export default function Clients() {
     setIsFilterModalOpen(true);
   }
 
+  const handleApplyFilters = (newFilters: typeof filters) => {
+    setFilters(newFilters);
+    setPage(0);
+  };
+
   const handleClearFilters = () => {
     setFilters({
       startDate: '',
@@ -108,6 +133,7 @@ export default function Clients() {
       city: '',
       state: ''
     });
+    setPage(0);
     setIsFilterModalOpen(false);
   }
 
@@ -116,7 +142,7 @@ export default function Clients() {
 
     clientsService.deleteClient(id)
       .then(() => {
-        setClients((prevClients) => prevClients.filter(client => client.id !== id))
+        fetchClients(); // Reload page
         setGlobalAlert({ message: 'Cliente removido com sucesso!', type: 'success' });
         setTimeout(() => setGlobalAlert(null), 5000);
       })
@@ -126,42 +152,6 @@ export default function Clients() {
         setGlobalAlert({ message: errorMessage, type: 'error' });
       })
   }
-
-  const filteredClients = useMemo(() => {
-    let result = [...clients]
-
-    if (statusFilter !== 'Todos') {
-      result = result.filter(c => c.status === statusFilter)
-    }
-
-    if (searchTerm.trim() !== '') {
-      const term = searchTerm.toLowerCase()
-      result = result.filter(c =>
-        c.name.toLowerCase().includes(term) ||
-        c.email.toLowerCase().includes(term) ||
-        c.phone.includes(term) ||
-        (c.documentNumber && c.documentNumber.includes(term))
-      )
-    }
-
-    if (filters.city) {
-      result = result.filter(c => c.mainAddress?.city.toLowerCase().includes(filters.city.toLowerCase()));
-    }
-    if (filters.state) {
-      result = result.filter(c => c.mainAddress?.state.toLowerCase() === filters.state.toLowerCase());
-    }
-    if (filters.startDate) {
-      const start = new Date(filters.startDate);
-      result = result.filter(c => c.createdAt && new Date(c.createdAt) >= start);
-    }
-    if (filters.endDate) {
-      const end = new Date(filters.endDate);
-      end.setHours(23, 59, 59, 999);
-      result = result.filter(c => c.createdAt && new Date(c.createdAt) <= end);
-    }
-
-    return result
-  }, [clients, statusFilter, searchTerm, filters])
 
   const createModalFooter = (
     <Button
@@ -202,10 +192,11 @@ export default function Clients() {
       </Modal>
 
       <ClientFilterModal
+        key={isFilterModalOpen ? 'open' : 'closed'}
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
         filters={filters}
-        setFilters={setFilters}
+        onApply={handleApplyFilters}
         onClear={handleClearFilters}
       />
 
@@ -220,35 +211,42 @@ export default function Clients() {
       </PageHeader>
 
       <FilterBar>
-        <SimpleButton
-          icon={<FontAwesomeIcon icon={faFilter} />}
-          text="Filtros"
-          ariaLabel="Filtrar Clientes"
-          onClick={handleFilterClient}
-        />
-
-        <div className={styles.dropdown}>
-          <Select value={statusFilter} onChange={setStatusFilter}>
-            <SelectOption value="Todos" label="Todos" />
-            <SelectOption value="Ativo" label="Ativo" />
-            <SelectOption value="Inativo" label="Inativo" />
-          </Select>
-        </div>
-
-        <div className={styles.searchBox}>
-          <SearchInput
-            onChange={setSearchTerm}
-            value={searchTerm}
-            placeholder="Buscar por Nome, CPF/CNPJ, E-mail ou Telefone"
+        <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+          <SimpleButton
+            icon={<FontAwesomeIcon icon={faFilter} />}
+            text="Filtros"
+            ariaLabel="Filtrar Clientes"
+            onClick={handleFilterClient}
           />
+          <div className={styles.dropdown}>
+            <Select value={statusFilter} onChange={handleStatusChange}>
+              <SelectOption value="Todos" label="Todos" />
+              <SelectOption value="Ativo" label="Ativo" />
+              <SelectOption value="Inativo" label="Inativo" />
+            </Select>
+          </div>
+
+          <div className={styles.searchBox}>
+            <SearchInput
+              onChange={handleSearchChange}
+              value={searchTerm}
+              placeholder="Buscar por Nome, CPF/CNPJ, E-mail ou Telefone"
+            />
+          </div>
         </div>
       </FilterBar>
 
       <ClientTable
-        clients={filteredClients}
+        clients={clients}
         onEdit={handleEdit}
         onDelete={handleDelete}
         onRowClick={handleRowClick}
+      />
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
       />
     </div>
   );

@@ -1,12 +1,27 @@
 import type Client from '../interfaces/types/Client';
+import type { Page } from '../interfaces/types/Page';
 import type Project from '../interfaces/types/Project';
 import ClientMapper from '../utils/mappers/ClientMapper';
 import api from './provider/api';
 
 export default class ClientsService {
-    async getAllClients(): Promise<Client[]> {
-        const response = await api.get<Client[]>('/clients');
-        return response.data.map(ClientMapper.toDomain);
+    async getAllClients(page: number = 0, size: number = 20, search: string = '', status: string = 'ACTIVE', city: string = '', state: string = '', startDate: string = '', endDate: string = ''): Promise<Page<Client>> {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('size', size.toString());
+        if (search) params.append('search', search);
+        if (status && status !== 'Todos') params.append('status', status === 'Ativo' ? 'ACTIVE' : status === 'Inativo' ? 'INACTIVE' : status);
+        if (city) params.append('city', city);
+        if (state) params.append('state', state);
+        if (startDate) params.append('startDate', startDate);
+        if (endDate) params.append('endDate', endDate);
+
+        const response = await api.get<Page<Client>>('/clients', { params });
+
+        return {
+            ...response.data,
+            content: response.data.content.map(ClientMapper.toDomain)
+        };
     }
 
     async deleteClient(id: number): Promise<void> {

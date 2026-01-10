@@ -1,28 +1,46 @@
-import { Button, Input, SimpleButton } from "../../../components/Form";
-import Modal from "../../../components/Modal/Modal";
-import styles from "../Clients.module.css";
+import { useState } from "react";
+import styles from "../../../pages/clients/Clients.module.css";
+import { Button, Input, SimpleButton } from "../../ui/Form";
+import Modal from "../modal/Modal";
+
+interface FilterState {
+    startDate: string;
+    endDate: string;
+    city: string;
+    state: string;
+}
 
 interface ClientFilterModalProps {
     isOpen: boolean;
     onClose: () => void;
-    filters: {
-        startDate: string;
-        endDate: string;
-        city: string;
-        state: string;
-    };
-    setFilters: React.Dispatch<React.SetStateAction<{
-        startDate: string;
-        endDate: string;
-        city: string;
-        state: string;
-    }>>;
+    filters: FilterState;
+    onApply: (filters: FilterState) => void;
     onClear: () => void;
 }
 
-export default function ClientFilterModal({ isOpen, onClose, filters, setFilters, onClear }: ClientFilterModalProps) {
+export default function ClientFilterModal({ isOpen, onClose, filters: initialFilters, onApply, onClear }: ClientFilterModalProps) {
+    const [localFilters, setLocalFilters] = useState<FilterState>(initialFilters);
+
+
+
     const handleApply = () => {
+        onApply(localFilters);
         onClose();
+    };
+
+    const handleClear = () => {
+        onClear();
+        setLocalFilters({
+            startDate: '',
+            endDate: '',
+            city: '',
+            state: ''
+        });
+        onClose();
+    };
+
+    const handleChange = (field: keyof FilterState, value: string) => {
+        setLocalFilters(prev => ({ ...prev, [field]: value }));
     };
 
     const footer = (
@@ -30,7 +48,7 @@ export default function ClientFilterModal({ isOpen, onClose, filters, setFilters
             <SimpleButton
                 text="Limpar Filtros"
                 ariaLabel="Limpar filtros"
-                onClick={onClear}
+                onClick={handleClear}
                 width="fit-content"
             />
             <Button
@@ -55,8 +73,8 @@ export default function ClientFilterModal({ isOpen, onClose, filters, setFilters
                     <label className={styles.filterLabel}>Cidade</label>
                     <Input
                         placeholder="Digite a cidade"
-                        value={filters.city}
-                        onChange={(val: string) => setFilters(prev => ({ ...prev, city: val }))}
+                        value={localFilters.city}
+                        onChange={(val: string) => handleChange('city', val)}
                     />
                 </div>
                 <div>
@@ -64,8 +82,8 @@ export default function ClientFilterModal({ isOpen, onClose, filters, setFilters
                     <Input
                         placeholder="Ex: SP"
                         maxLength={2}
-                        value={filters.state}
-                        onChange={(val: string) => setFilters(prev => ({ ...prev, state: val }))}
+                        value={localFilters.state}
+                        onChange={(val: string) => handleChange('state', val)}
                     />
                 </div>
                 <div>
@@ -73,8 +91,8 @@ export default function ClientFilterModal({ isOpen, onClose, filters, setFilters
                     <Input
                         type="date"
                         placeholder=""
-                        value={filters.startDate}
-                        onChange={(val: string) => setFilters(prev => ({ ...prev, startDate: val }))}
+                        value={localFilters.startDate}
+                        onChange={(val: string) => handleChange('startDate', val)}
                     />
                 </div>
                 <div>
@@ -82,8 +100,8 @@ export default function ClientFilterModal({ isOpen, onClose, filters, setFilters
                     <Input
                         type="date"
                         placeholder=""
-                        value={filters.endDate}
-                        onChange={(val: string) => setFilters(prev => ({ ...prev, endDate: val }))}
+                        value={localFilters.endDate}
+                        onChange={(val: string) => handleChange('endDate', val)}
                     />
                 </div>
             </div>

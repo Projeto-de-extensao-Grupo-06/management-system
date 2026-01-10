@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import styles from '../../pages/Clients/Clients.module.css'; // Reusing for consistency, ideally extract common layout styles
+import styles from '../../pages/clients/Clients.module.css'; // Reusing for consistency, ideally extract common layout styles
 
 interface PageHeaderProps {
     title: string;
