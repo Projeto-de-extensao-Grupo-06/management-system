@@ -39,7 +39,7 @@ export default class ClientsService {
     }
 
     async getClientProjects(id: number): Promise<Project[]> {
-        const response = await api.get<Project[]>(`/clients/${id}/projects`);
+        const response = await api.get<Project[]>(`/projects/client/${id}`);
         return response.data;
     }
 

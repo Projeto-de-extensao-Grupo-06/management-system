@@ -10,14 +10,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: true,
-      port: 5173,
-      proxy: {
-        '/api': {
-          target: env.VITE_API_TARGET || 'http://localhost:8080',
-          changeOrigin: true,
-          secure: false,
-        }
-      }
+      port: 5173
     },
     test: {
       globals: true,
