@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Alert } from '../../components/ui/Alert';
-import { Input, PasswordInput, Button } from '../../components/ui/Form';
-import authService from '../../services/LoginService';
-import useAuthStore from '../../store/useAuthStore';
+import { Alert } from '../../../components/ui/Alert';
+import { Input, PasswordInput, Button } from '../../../components/ui/Form';
+import authService from '../../../services/AuthService';
+import useAuthStore from '../../../store/useAuthStore';
 import styles from './Login.module.css';
 
 export default function LoginPage() {
@@ -14,8 +14,17 @@ export default function LoginPage() {
   const [error, setError] = useState('');
 
   const checkAuth = useAuthStore((state) => state.checkAuth);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const auth = new authService();
+
+  useEffect(() => {
+    checkAuth();
+
+    if(isAuthenticated) {
+      navigate("/clientes");
+    }
+  });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -57,7 +66,7 @@ export default function LoginPage() {
       <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading} width={"100%"} />
 
       <div className={styles.forgotLinkContainer}>
-        <Link to="/esqueci-senha" className={styles.forgotLink}>
+        <Link to="/forget-password" className={styles.forgotLink}>
           Esqueceu sua senha?
         </Link>
       </div>

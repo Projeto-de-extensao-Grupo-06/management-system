@@ -13,6 +13,7 @@ api.interceptors.response.use(
   (error) => {
     const isLoginRequest = error.config?.url?.includes('/auth/login');
     const isLoginPage = window.location.pathname.includes('/login') || window.location.pathname === '/';
+    const isForgetPasswordPage = window.location.pathname.includes('/forget-password') || window.location.pathname === '/';
 
     if (error.response?.status === 401 && !isLoginPage && !isLoginRequest) {
       localStorage.removeItem('user');
