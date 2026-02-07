@@ -17,6 +17,7 @@ export default interface Client {
   phone: string;
   status: string;
   documentNumber: string;
+  documentType?: string;
   mainAddress: Address;
   createdAt: string;
 }

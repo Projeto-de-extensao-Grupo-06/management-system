@@ -7,8 +7,9 @@ import { Button, Input, Select, SelectOption } from '../../components/ui/Form';
 import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
 import { clientSchema } from '../../schemas/clientSchema';
+import AddressService from '../../services/AddressService';
 import ClientsService from '../../services/ClientsService';
-import styles from './Clients.module.css'; // Reusing styles
+import styles from './Clients.module.css';
 
 export default function ClientDetails() {
     const { id } = useParams();
@@ -40,6 +41,7 @@ export default function ClientDetails() {
     });
 
     const clientsService = useMemo(() => new ClientsService(), []);
+    const addressService = useMemo(() => new AddressService(), []);
 
     useEffect(() => {
         if (!id) return;
@@ -77,6 +79,32 @@ export default function ClientDetails() {
                 setProjects([]);
             });
     }, [id, clientsService]);
+
+    // Auto-fill address by CEP
+    useEffect(() => {
+        if (!isEditing) return;
+
+        const zipCode = formData.zipCode;
+        const cleanCep = zipCode?.replace(/\D/g, '');
+
+        if (cleanCep?.length === 8) {
+            addressService.getAddressByCep(cleanCep)
+                .then((address) => {
+                    if (address) {
+                        setFormData(prev => ({
+                            ...prev,
+                            streetName: address.logradouro,
+                            neighborhood: address.bairro,
+                            city: address.localidade,
+                            state: address.uf
+                        }));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching address:', err);
+                });
+        }
+    }, [formData.zipCode, isEditing, addressService]);
 
     const handleSave = () => {
         if (!id || !client) return;
@@ -128,6 +156,7 @@ export default function ClientDetails() {
             email: formData.email,
             phone: formData.phone,
             documentNumber: formData.documentNumber,
+            documentType: formData.documentType,
             mainAddress: {
                 ...client.mainAddress,
                 streetName: formData.streetName,
