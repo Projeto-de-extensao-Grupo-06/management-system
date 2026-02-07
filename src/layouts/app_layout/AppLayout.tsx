@@ -13,7 +13,7 @@ import { NavLink, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 
 import logo from "../../assets/logo-solarize.png";
-import authService from "../../services/LoginService";
+import authService from "../../services/AuthService";
 
 import styles from "./AppLayout.module.css";
 

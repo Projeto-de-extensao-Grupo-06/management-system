@@ -2,13 +2,15 @@ import "./App.css";
 
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
-import ProtectedRoute from "./components/ui/ProtectedRoute";
+import ProtectedRoute from "./components/security/ProtectedRoute";
 import AppLayout from "./layouts/app_layout/AppLayout";
+import ForgetPasswordLayout from "./layouts/login_layout/ForgetPasswordLayout";
 import LoginLayout from "./layouts/login_layout/LoginLayout";
 import Analysis from "./pages/analysis/Analysis";
+import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
+import Login from "./pages/auth/login/Login";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
-import Login from "./pages/login/Login";
 import NotFound from "./pages/shared/NotFound";
 
 import useAuthStore from "./store/useAuthStore";
@@ -28,6 +30,10 @@ function App() {
           <Route path="/" element={<Login />} />
 
           <Route path="*" element={<NotFound />}></Route>
+        </Route>
+
+        <Route element={<ForgetPasswordLayout />}>
+          <Route path="/esqueci-senha" element={< ForgetPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

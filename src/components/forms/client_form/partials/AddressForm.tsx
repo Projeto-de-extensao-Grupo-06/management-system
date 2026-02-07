@@ -1,6 +1,6 @@
 import { useMask } from '@react-input/mask';
 import { useFormContext } from 'react-hook-form';
-import type { ClientSchemaType } from '../../../schemas/clientSchema';
+import type { ClientSchemaType } from '../../../../schemas/clientSchema';
 import styles from '../ClientForm.module.css';
 
 export default function AddressForm() {

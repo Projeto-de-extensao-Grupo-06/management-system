@@ -1,6 +1,6 @@
 export default interface Project {
     id: number;
-    title: string;
+    projectTitle: string;
     status: string;
     createdAt: string;
 }

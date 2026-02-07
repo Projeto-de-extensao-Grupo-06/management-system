@@ -314,7 +314,7 @@ export default function ClientDetails() {
                                 <tr key={project.id} onClick={() => navigate(`/projetos/${project.id}`)} className={styles.projectRow}>
                                     <td>
                                         <div className={styles.projectTitle}>
-                                            {project.title}
+                                            {project.projectTitle}
                                         </div>
                                     </td>
                                     <td>{project.status}</td>

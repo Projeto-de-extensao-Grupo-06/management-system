@@ -1,0 +1,67 @@
+.block {
+    border: solid #B3B3FF 1px;
+    height: 60px;
+    width: 50px;
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 38px;
+    font-weight: 600;
+
+    cursor: text;
+}
+
+.inputContainer {
+    display: flex;
+    justify-content: space-evenly;
+    width: 80%;
+    margin: auto;
+}
+
+.focus {
+    border-width: 4px;
+}
+
+.hiddenInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.loader {
+  width: 100%;
+  height: 4.8px;
+  display: inline-block;
+  position: relative;
+  background: #1B5E20;
+  overflow: hidden;
+}
+
+.loader::after {
+  content: '';
+  width: 192px;
+  height: 4.8px;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  animation: animloader 1.5s linear infinite;
+}
+
+@keyframes animloader {
+  0% {
+    left: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    left: 100%;
+    transform: translateX(0%);
+  }
+}
+
+    
