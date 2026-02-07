@@ -21,10 +21,10 @@ export default function LoginPage() {
   useEffect(() => {
     checkAuth();
 
-    if(isAuthenticated) {
+    if (isAuthenticated) {
       navigate("/clientes");
     }
-  });
+  }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
