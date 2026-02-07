@@ -62,7 +62,7 @@ export default function LoginPage() {
       <Button text={loading ? "Entrando..." : "Entrar"} disabled={loading} width={"100%"} />
 
       <div className={styles.forgotLinkContainer}>
-        <Link to="/forget-password" className={styles.forgotLink}>
+        <Link to="/esqueci-senha" className={styles.forgotLink}>
           Esqueceu sua senha?
         </Link>
       </div>

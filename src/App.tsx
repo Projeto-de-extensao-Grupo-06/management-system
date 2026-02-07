@@ -33,7 +33,7 @@ function App() {
         </Route>
 
         <Route element={<ForgetPasswordLayout />}>
-          <Route path="/forget-password" element={< ForgetPassword />} />
+          <Route path="/esqueci-senha" element={< ForgetPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
