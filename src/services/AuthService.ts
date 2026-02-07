@@ -26,7 +26,7 @@ export default class authService {
   }
 
   async requestRecoveryCode(email: string): Promise<void> {
-    await api.post("/api/auth/forget-password", {email});
+    await api.post("/auth/forget-password", {email});
   }
 
   async verifyOtpCode(credentials: PasswordRecoveryCredentials): Promise<number> {
