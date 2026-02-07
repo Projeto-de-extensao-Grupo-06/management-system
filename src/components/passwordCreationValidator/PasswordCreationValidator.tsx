@@ -1,7 +1,7 @@
 import { faCheck, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo } from "react";
-import styles from "./passwordCreationValidator.module.css";
+import styles from "./PasswordCreationValidator.module.css";
 
 
 interface PasswordCreationValidatorProps {
