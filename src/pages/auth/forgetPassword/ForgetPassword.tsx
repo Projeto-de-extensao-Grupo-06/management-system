@@ -29,7 +29,7 @@ export function ForgetPassword() {
             updateStep("send-code");
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                if (error.status === 429) {
+                if (error.response?.status === 429) {
                     setMessage("Aguarde um minuto para solicitar um novo token.");
                 } else {
                     setMessage("Falha ao enviar e-mail, tente novamente mais tarde.")
@@ -90,10 +90,10 @@ export function ForgetPassword() {
                     updateStep("change-password");
                 } catch (error) {
                     if (axios.isAxiosError(error)) {
-                        if (error.status === 401) {
+                        if (error.response?.status === 401) {
                             setMessage("Código de verificação incorreto...");
                             setOtpCode("");
-                        } else if (error.status !== 204) {
+                        } else if (error.response?.status !== 204) {
                             setMessage("Erro ao verificar código...");
                             setOtpCode("");
                         }
