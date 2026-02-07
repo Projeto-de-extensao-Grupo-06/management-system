@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Alert } from '../../../components/ui/Alert';
 import { Input, PasswordInput, Button } from '../../../components/ui/Form';
@@ -18,13 +18,9 @@ export default function LoginPage() {
 
   const auth = new authService();
 
-  useEffect(() => {
-    checkAuth();
-
-    if (isAuthenticated) {
-      navigate("/clientes");
-    }
-  }, []);
+  if (isAuthenticated) {
+    navigate("/clientes");
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
