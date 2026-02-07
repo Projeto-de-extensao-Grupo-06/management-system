@@ -1,29 +1,31 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link } from "react-router";
-import OtpCodeInput from "../../../components/otpCodeInput/OtpCodeInput";
-import { Alert } from '../../../components/ui/Alert';
-import { Input, Button } from "../../../components/ui/Form";
+import { useEffect, useRef, useState } from "react";
+import { SendCodeStep, SendEmailStep, ChangePasswordStep } from '../../../components/recoveryPasswordSteps/RecoveryPasswordSteps';
 import usePasswordRecoveryEmail from "../../../hooks/usePasswordRecoveryEmail";
 import usePasswordRecoverySteps from "../../../hooks/usePasswordRecoverySteps";
 import usePasswordRecoveryTimeRequestCode from "../../../hooks/usePasswordRecoveryTimeRequestCode";
 import authService from "../../../services/AuthService";
-import styles from "./ForgetPassword.module.css";
 
 const auth = new authService();
 
 export function ForgetPassword() {
     const [loading, setLoading] = useState(false);
     const { email, setEmail, clearEmail } = usePasswordRecoveryEmail();
+    const emailRef = useRef(email);
+
     const [message, setMessage] = useState<string>("");
+    const [messageType, setMessageType] = useState<"error" | "success" | "warning" | undefined>("error");
+
     const { step, updateStep, clearSteps } = usePasswordRecoverySteps();
 
     const [otpCode, setOtpCode] = useState("");
     const { timeToRequestNewCode, setTimeToRequestNewCode, clearTime } = usePasswordRecoveryTimeRequestCode();
 
+    const [password, setPassword] = useState("");
+
     const requestRecoveryCode = async () => {
         try {
-            await auth.requestRecoveryCode(email);
+            await auth.requestRecoveryCode(emailRef.current);
             updateStep("send-code");
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -38,15 +40,41 @@ export function ForgetPassword() {
 
     const handleEmailSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        requestRecoveryCode();
-    }
-
-    const requestNewCode = () => {
         if (timeToRequestNewCode === 0) {
             requestRecoveryCode();
             setTimeToRequestNewCode(60);
         }
     }
+
+    const requestNewCode = () => {
+        console.log(timeToRequestNewCode)
+        if (timeToRequestNewCode === 0) {
+            requestRecoveryCode();
+            setTimeToRequestNewCode(60);
+        }
+    }
+
+    const handlePasswordChange = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            await auth.changePasswordWithToken({ password });
+
+            setMessage("Senha alterada com sucesso, vá para a tela de login.");
+            setMessageType("success");
+        } catch {
+            setMessage("Erro ao alterar senha. Atualize a página e solicite um novo código de verificação.");
+        } finally {
+            clearEmail();
+            clearSteps();
+            clearTime();
+        }
+
+    }
+
+    useEffect(() => {
+        emailRef.current = email;
+    }, [email]);
 
     useEffect(() => {
         const handleOtpCode = async () => {
@@ -55,9 +83,11 @@ export function ForgetPassword() {
 
                 try {
                     await auth.verifyOtpCode({
-                        email: email,
+                        email: emailRef.current,
                         otp: otpCode
                     });
+
+                    updateStep("change-password");
                 } catch (error) {
                     if (axios.isAxiosError(error)) {
                         if (error.status === 401) {
@@ -69,15 +99,12 @@ export function ForgetPassword() {
                         }
                     }
                 }
-
-
-
                 setLoading(false);
             }
         }
 
         handleOtpCode();
-    }, [otpCode]);
+    }, [otpCode, updateStep]);
 
 
     useEffect(() => {
@@ -96,28 +123,46 @@ export function ForgetPassword() {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [timeToRequestNewCode]);
+    }, [timeToRequestNewCode, setTimeToRequestNewCode]);
 
     return (
         <>
-            <form className={`${styles.form} ${step !== "send-email" ? styles.outScreenRigth : ""}`} onSubmit={handleEmailSubmit}>
-                <span className={styles.infoText}>Informe o email associado a sua conta para redefinir a senha.</span>
-                <Alert message={message} type="error" />
-                <Input placeholder="exemplo@email.com" type="email" value={email} onChange={setEmail} />
+            <SendEmailStep
+                email={email}
+                handleEmailSubmit={handleEmailSubmit}
+                message={message}
+                setEmail={setEmail}
+                step={step}
+                clearSteps={clearSteps}
+                clearEmail={clearEmail}
+                clearTime={clearTime}
+            />
 
-                <Button text="Enviar Código de Recuperação" />
+            <SendCodeStep
+                email={email}
+                message={message}
+                step={step}
+                loading={loading}
+                otpCode={otpCode}
+                requestNewCode={requestNewCode}
+                setOtpCode={setOtpCode}
+                timeToRequestNewCode={timeToRequestNewCode}
+                clearSteps={clearSteps}
+                clearEmail={clearEmail}
+                clearTime={clearTime}
+            />
 
-                <Link className={styles.loginLink} to="/login" onClick={() => clearSteps()}>Voltar para a tela de login</Link>
-            </form>
-
-            <form className={`${styles.form} ${step === "send-email" ? styles.outScreenLeft : step === "send-code" ? styles.inScreen : ""} ${step === "change-password" ? styles.outScreenLeft : ""}`}>
-                <span className={styles.infoText}>Informe o código de verificação enviado para {email}.</span>
-                <Alert message={message} type="error" />
-                <OtpCodeInput valueState={{ value: otpCode, setValue: setOtpCode }} disabled={loading} />
-
-                <span onClick={requestNewCode} style={{ color: timeToRequestNewCode > 0 ? "#1b5e1fbb" : "" }} className={styles.requestNewCode}>Solicitar novo código {timeToRequestNewCode === 0 ? "" : `em ${timeToRequestNewCode}s`}</span>
-                <Link className={styles.loginLink} to="/login" onClick={() => { clearSteps(); clearEmail(); clearTime(); }}>Voltar para a tela de login</Link>
-            </form>
+            <ChangePasswordStep
+                message={message}
+                step={step}
+                setPassword={setPassword}
+                password={password}
+                clearEmail={clearEmail}
+                clearSteps={clearSteps}
+                clearTime={clearTime}
+                handlePasswordChange={handlePasswordChange}
+                messageType={messageType}
+            />
 
             {
                 loading &&

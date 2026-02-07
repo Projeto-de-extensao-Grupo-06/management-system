@@ -2,7 +2,7 @@ import "./App.css";
 
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
-import ProtectedRoute from "./components/ui/ProtectedRoute";
+import ProtectedRoute from "./components/security/ProtectedRoute";
 import AppLayout from "./layouts/app_layout/AppLayout";
 import ForgetPasswordLayout from "./layouts/login_layout/ForgetPasswordLayout";
 import LoginLayout from "./layouts/login_layout/LoginLayout";

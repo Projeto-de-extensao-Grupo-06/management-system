@@ -16,6 +16,10 @@ export interface PasswordRecoveryCredentials {
   otp: string;
 }
 
+export interface ChangePasswordWithToken {
+  password: string;
+}
+
 export default class authService {
   async login(credentials: LoginCredentials): Promise<void> {
     await api.post('/auth/login', credentials);
@@ -33,5 +37,9 @@ export default class authService {
     const data = await api.post("/auth/confirm-otp", credentials);
 
     return data.status;
+  }
+
+  async changePasswordWithToken(password: ChangePasswordWithToken) {
+    await api.patch("/auth/change-password/token", password);
   }
 };
