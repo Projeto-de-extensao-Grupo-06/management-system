@@ -82,8 +82,10 @@ export function ChangePasswordStep({ message, step, clearEmail, clearSteps, clea
 
     const isPasswordEqualsPasswordConfirm = password === confirmPassword && password !== "";
 
+    const [passwordChanged, setPasswordChanged] = useState(false);
+
     return (
-        <form onSubmit={handlePasswordChange} className={`${styles.form} ${step === "send-email" || step === "send-code" ? styles.outScreenLeft : step === "change-password" ? styles.inScreen : ""}`}>
+        <form onSubmit={(e) => { setPasswordChanged(true); handlePasswordChange(e); }} className={`${styles.form} ${step === "send-email" || step === "send-code" ? styles.outScreenLeft : step === "change-password" ? styles.inScreen : ""}`}>
             <span className={styles.infoText}>Crie uma senha para acessar sua conta</span>
             <Alert message={message} type={messageType} />
 
@@ -105,7 +107,7 @@ export function ChangePasswordStep({ message, step, clearEmail, clearSteps, clea
             </div>
 
             <span className={styles.infoText}>Deve conter pelo menos 8 caracteres (Letras, números ou símbolos)</span>
-            <Button text="Alterar Senha" disabled={!isPasswordEqualsPasswordConfirm} />
+            <Button text="Alterar Senha" disabled={!isPasswordEqualsPasswordConfirm || passwordChanged} />
 
             <Link className={styles.loginLink} to="/login" onClick={() => { clearSteps(); clearEmail(); clearTime(); }}>Voltar para a tela de login</Link>
         </form>
