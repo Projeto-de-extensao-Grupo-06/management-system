@@ -1,22 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import type { ClientFormProps, ClientFormRef } from '../../../interfaces/properties/FormProps';
 import type { ClientSchemaType } from '../../../schemas/clientSchema';
 import { clientSchema } from '../../../schemas/clientSchema';
 import AddressService from '../../../services/AddressService';
 import styles from './ClientForm.module.css';
 import AddressForm from './partials/AddressForm';
 import BasicInfoForm from './partials/BasicInfoForm';
-
-export interface ClientFormRef {
-    submit: () => void;
-}
-
-interface ClientFormProps {
-    onSubmit: (data: ClientSchemaType) => void;
-    defaultValues?: Partial<ClientSchemaType>;
-    onFormChange?: (data: Partial<ClientSchemaType>) => void;
-}
 
 const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defaultValues, onFormChange }, ref) => {
     const methods = useForm<ClientSchemaType>({

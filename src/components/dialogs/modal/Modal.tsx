@@ -1,21 +1,8 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactNode } from 'react';
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import type { ModalProps, ModalRef } from '../../../interfaces/properties/DialogProps';
 import styles from './Modal.module.css';
-
-interface ModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    title: string;
-    children: ReactNode;
-    footer?: ReactNode;
-    maxWidth?: string;
-}
-
-export interface ModalRef {
-    scrollToTop: () => void;
-}
 
 const Modal = forwardRef<ModalRef, ModalProps>(({ isOpen, onClose, title, children, footer, maxWidth }, ref) => {
     const contentRef = useRef<HTMLDivElement>(null);

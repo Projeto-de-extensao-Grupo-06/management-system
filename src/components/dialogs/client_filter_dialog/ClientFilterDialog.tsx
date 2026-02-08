@@ -1,27 +1,11 @@
 import { useState } from "react";
+import type { ClientFilterModalProps, ClientFilterState } from "../../../interfaces/properties/DialogProps";
 import styles from "../../../pages/clients/Clients.module.css";
 import { Button, Input, SimpleButton } from "../../ui/Form";
 import Modal from "../modal/Modal";
 
-interface FilterState {
-    startDate: string;
-    endDate: string;
-    city: string;
-    state: string;
-}
-
-interface ClientFilterModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    filters: FilterState;
-    onApply: (filters: FilterState) => void;
-    onClear: () => void;
-}
-
 export default function ClientFilterModal({ isOpen, onClose, filters: initialFilters, onApply, onClear }: ClientFilterModalProps) {
-    const [localFilters, setLocalFilters] = useState<FilterState>(initialFilters);
-
-
+    const [localFilters, setLocalFilters] = useState<ClientFilterState>(initialFilters);
 
     const handleApply = () => {
         onApply(localFilters);
@@ -39,8 +23,8 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
         onClose();
     };
 
-    const handleChange = (field: keyof FilterState, value: string) => {
-        setLocalFilters(prev => ({ ...prev, [field]: value }));
+    const handleChange = (field: keyof ClientFilterState, value: string) => {
+        setLocalFilters((prev: ClientFilterState) => ({ ...prev, [field]: value }));
     };
 
     const footer = (
