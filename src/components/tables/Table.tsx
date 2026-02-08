@@ -1,13 +1,5 @@
-import type { ReactNode } from 'react';
+import type { TableProps } from '../../interfaces/properties/TableProps';
 import styles from './Table.module.css';
-
-interface TableProps {
-    headers: string[];
-    children: ReactNode;
-    isEmpty?: boolean;
-    emptyMessage?: string;
-    className?: string;
-}
 
 export default function Table({
     headers,

@@ -15,7 +15,8 @@ export interface PaginationProps {
 
 export interface TableProps {
     headers: string[];
-    isEmpty: boolean;
-    emptyMessage: string;
     children?: React.ReactNode;
+    isEmpty?: boolean;
+    emptyMessage?: string;
+    className?: string;
 }
