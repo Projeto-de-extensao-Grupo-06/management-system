@@ -1,18 +1,5 @@
+import type { ViaCepResponse } from "../interfaces/types/AddressTypes";
 import viaCepApi from "./provider/viaCepApi";
-
-export interface ViaCepResponse {
-    cep: string;
-    logradouro: string;
-    complemento: string;
-    bairro: string;
-    localidade: string;
-    uf: string;
-    ibge: string;
-    gia: string;
-    ddd: string;
-    siafi: string;
-    erro?: boolean;
-}
 
 export default class AddressService {
     async getAddressByCep(cep: string): Promise<ViaCepResponse | null> {
