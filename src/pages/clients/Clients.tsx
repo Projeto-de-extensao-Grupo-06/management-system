@@ -1,7 +1,6 @@
 import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { AxiosError } from 'axios';
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from 'react-router';
 import ClientFilterModal from '../../components/dialogs/client_filter_dialog/ClientFilterDialog';
 import Modal from '../../components/dialogs/modal/Modal';
@@ -14,61 +13,36 @@ import ClientTable from '../../components/tables/client_table/ClientTable';
 import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
 import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/ui/Form';
-import type Client from "../../interfaces/types/Client";
-import type { Page } from '../../interfaces/types/Page';
+import useClients from '../../hooks/useClients';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
-import ClientService from "../../services/ClientsService";
 import styles from "./Clients.module.css";
 
 export default function Clients() {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Ativo');
-  const [clients, setClients] = useState<Client[]>([]);
-  const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const {
+    clients,
+    page,
+    totalPages,
+    searchTerm,
+    statusFilter,
+    filters,
+    setPage,
+    handleSearchChange,
+    handleStatusChange,
+    handleApplyFilters,
+    handleClearFilters,
+    createClient,
+    deleteClient
+  } = useClients();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filters, setFilters] = useState({
-    startDate: '',
-    endDate: '',
-    city: '',
-    state: ''
-  });
   const formRef = useRef<ClientFormRef>(null);
   const modalRef = useRef<ModalRef>(null);
   const [clientFormData, setClientFormData] = useState<Partial<ClientSchemaType>>({});
 
   const [globalAlert, setGlobalAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   const [modalTypeMessage, setModalMessage] = useState<string | null>(null);
-
-  const clientsService = useMemo(() => new ClientService(), []);
-
-  const fetchClients = useCallback(() => {
-    clientsService.getAllClients(page, 20, searchTerm, statusFilter, filters.city, filters.state, filters.startDate, filters.endDate)
-      .then((data: Page<Client>) => {
-        setClients(data.content);
-        setTotalPages(data.totalPages);
-      })
-      .catch(() => {
-        setGlobalAlert({ message: 'Erro ao carregar clientes.', type: 'error' });
-      });
-  }, [clientsService, page, searchTerm, statusFilter, filters]);
-
-  useEffect(() => {
-    fetchClients();
-  }, [fetchClients]);
-
-  const handleSearchChange = (term: string) => {
-    setSearchTerm(term);
-    setPage(0);
-  };
-
-  const handleStatusChange = (status: string) => {
-    setStatusFilter(status);
-    setPage(0);
-  };
 
   const handleEdit = (id: number) => {
     navigate(`/clientes/${id}`, { state: { edit: true } });
@@ -91,28 +65,15 @@ export default function Clients() {
     setModalMessage(null);
     setGlobalAlert(null);
 
-    clientsService.createClient(data)
+    createClient(data)
       .then(() => {
-        fetchClients();
         setClientFormData({});
         setIsCreateModalOpen(false);
         setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
         setTimeout(() => setGlobalAlert(null), 5000);
       })
-      .catch((e) => {
-        const error = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[] }>;
-        console.error("Backend Error Response:", JSON.stringify(error.response?.data, null, 2));
-
-        let errorMsg = error.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
-
-        if (error.response?.data?.validationErrors?.length) {
-          const details = error.response.data.validationErrors
-            .map(err => `${err.field}: ${err.message}`)
-            .join('\n');
-          errorMsg += `\n\n${details}`;
-        }
-
-        setModalMessage(errorMsg);
+      .catch((e: Error) => {
+        setModalMessage(e.message);
         modalRef.current?.scrollToTop();
       });
   }
@@ -121,35 +82,20 @@ export default function Clients() {
     setIsFilterModalOpen(true);
   }
 
-  const handleApplyFilters = (newFilters: typeof filters) => {
-    setFilters(newFilters);
-    setPage(0);
-  };
 
-  const handleClearFilters = () => {
-    setFilters({
-      startDate: '',
-      endDate: '',
-      city: '',
-      state: ''
-    });
-    setPage(0);
-    setIsFilterModalOpen(false);
-  }
+
+
 
   const handleDelete = (id: number) => {
     if (!confirm('Tem certeza que deseja excluir este cliente?')) return;
 
-    clientsService.deleteClient(id)
+    deleteClient(id)
       .then(() => {
-        fetchClients(); // Reload page
         setGlobalAlert({ message: 'Cliente removido com sucesso!', type: 'success' });
         setTimeout(() => setGlobalAlert(null), 5000);
       })
-      .catch((e) => {
-        const error = e as AxiosError<{ message: string }>;
-        const errorMessage = error.response?.data?.message || 'Erro ao deletar cliente. Tente novamente.';
-        setGlobalAlert({ message: errorMessage, type: 'error' });
+      .catch((e: Error) => {
+        setGlobalAlert({ message: e.message, type: 'error' });
       })
   }
 
