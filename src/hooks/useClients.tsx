@@ -20,10 +20,12 @@ export default function useClients(): UseClientsReturn {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [refetchTrigger, setRefetchTrigger] = useState(0);
 
     const clientsService = useMemo(() => new ClientService(), []);
 
-    const fetchClients = useCallback(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
+    useEffect(() => {
         setIsLoading(true);
         setError(null);
 
@@ -47,11 +49,8 @@ export default function useClients(): UseClientsReturn {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [clientsService, page, searchTerm, statusFilter, filters]);
-
-    useEffect(() => {
-        fetchClients();
-    }, [fetchClients]);
+    }, [clientsService, page, searchTerm, statusFilter, filters, refetchTrigger]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     const handleSearchChange = useCallback((term: string) => {
         setSearchTerm(term);
@@ -81,7 +80,7 @@ export default function useClients(): UseClientsReturn {
     const createClient = useCallback(async (data: ClientSchemaType): Promise<void> => {
         try {
             await clientsService.createClient(data);
-            fetchClients();
+            setRefetchTrigger(prev => prev + 1);
         } catch (e) {
             const axiosError = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[] }>;
             let errorMsg = axiosError.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
@@ -95,18 +94,18 @@ export default function useClients(): UseClientsReturn {
 
             throw new Error(errorMsg);
         }
-    }, [clientsService, fetchClients]);
+    }, [clientsService]);
 
     const deleteClient = useCallback(async (id: number): Promise<void> => {
         try {
             await clientsService.deleteClient(id);
-            fetchClients();
+            setRefetchTrigger(prev => prev + 1);
         } catch (e) {
             const axiosError = e as AxiosError<{ message: string }>;
             const errorMessage = axiosError.response?.data?.message || 'Erro ao deletar cliente. Tente novamente.';
             throw new Error(errorMessage);
         }
-    }, [clientsService, fetchClients]);
+    }, [clientsService]);
 
     return {
         clients,
@@ -126,7 +125,6 @@ export default function useClients(): UseClientsReturn {
         handleApplyFilters,
         handleClearFilters,
         createClient,
-        deleteClient,
-        fetchClients
+        deleteClient
     };
 }

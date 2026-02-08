@@ -4,9 +4,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from 'react-router';
 import ClientFilterModal from '../../components/dialogs/client_filter_dialog/ClientFilterDialog';
 import Modal from '../../components/dialogs/modal/Modal';
-import type { ModalRef } from '../../interfaces/properties/DialogProps';
 import ClientForm from '../../components/forms/client_form/ClientForm';
-import type { ClientFormRef } from '../../interfaces/properties/FormProps';
 import FilterBar from '../../components/layout/FilterBar';
 import PageHeader from '../../components/layout/PageHeader';
 import ClientTable from '../../components/tables/client_table/ClientTable';
@@ -14,6 +12,8 @@ import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
 import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../components/ui/Form';
 import useClients from '../../hooks/useClients';
+import type { ModalRef } from '../../interfaces/properties/DialogProps';
+import type { ClientFormRef } from '../../interfaces/properties/FormProps';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import styles from "./Clients.module.css";
 

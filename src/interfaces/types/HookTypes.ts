@@ -1,3 +1,6 @@
+import type { ClientSchemaType } from '../../schemas/clientSchema';
+import type Client from './Client';
+
 export interface ClientFilters {
     startDate: string;
     endDate: string;
@@ -6,7 +9,7 @@ export interface ClientFilters {
 }
 
 export interface UseClientsReturn {
-    clients: import('./Client').default[];
+    clients: Client[];
     page: number;
     totalPages: number;
     searchTerm: string;
@@ -22,7 +25,6 @@ export interface UseClientsReturn {
     handleStatusChange: (status: string) => void;
     handleApplyFilters: (newFilters: ClientFilters) => void;
     handleClearFilters: () => void;
-    createClient: (data: import('../../schemas/clientSchema').ClientSchemaType) => Promise<void>;
+    createClient: (data: ClientSchemaType) => Promise<void>;
     deleteClient: (id: number) => Promise<void>;
-    fetchClients: () => void;
 }
