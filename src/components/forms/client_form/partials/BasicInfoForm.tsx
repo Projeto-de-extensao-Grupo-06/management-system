@@ -1,13 +1,12 @@
 import { useMask } from '@react-input/mask';
 import { useFormContext } from 'react-hook-form';
-import type { ClientSchemaType } from '../../../schemas/clientSchema';
+import type { ClientSchemaType } from '../../../../schemas/clientSchema';
 import styles from '../ClientForm.module.css';
 
 export default function BasicInfoForm() {
     const { register, formState: { errors }, watch } = useFormContext<ClientSchemaType>();
     const documentType = watch('documentType');
 
-    // Masks
     const phoneMaskRef = useMask({ mask: '(__) _____-____', replacement: { _: /\d/ } });
     const cpfMaskRef = useMask({ mask: '___.___.___-__', replacement: { _: /\d/ } });
     const cnpjMaskRef = useMask({ mask: '__.___.___/____-__', replacement: { _: /\d/ } });
@@ -15,7 +14,6 @@ export default function BasicInfoForm() {
     const documentMaskRef = documentType === 'CPF' ? cpfMaskRef : cnpjMaskRef;
     const documentPlaceholder = documentType === 'CPF' ? '999.999.999-99' : '99.999.999/9999-99';
 
-    // Helper to merge refs
     const mergeRefs = (...refs: (React.Ref<any> | undefined)[]) => (e: any) => {
         refs.forEach((ref) => {
             if (typeof ref === 'function') ref(e);
