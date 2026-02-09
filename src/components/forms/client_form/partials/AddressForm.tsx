@@ -21,7 +21,7 @@ export default function AddressForm() {
             <div className={styles.row}>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>
-                        CEP:<span className={styles.required}>*</span>
+                        CEP:
                     </label>
                     <input
                         className={`${styles.input} ${errors.zipCode ? styles.inputError : ''}`}
@@ -33,7 +33,7 @@ export default function AddressForm() {
                 </div>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>
-                        Estado:<span className={styles.required}>*</span>
+                        Estado:
                     </label>
                     <input
                         className={`${styles.input} ${errors.state ? styles.inputError : ''}`}
@@ -48,7 +48,7 @@ export default function AddressForm() {
             <div className={styles.row}>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>
-                        Cidade:<span className={styles.required}>*</span>
+                        Cidade:
                     </label>
                     <input
                         className={`${styles.input} ${errors.city ? styles.inputError : ''}`}
@@ -59,7 +59,7 @@ export default function AddressForm() {
                 </div>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>
-                        Bairro:<span className={styles.required}>*</span>
+                        Bairro:
                     </label>
                     <input
                         className={`${styles.input} ${errors.neighborhood ? styles.inputError : ''}`}
@@ -73,7 +73,7 @@ export default function AddressForm() {
             <div className={styles.row}>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>
-                        Logradouro:<span className={styles.required}>*</span>
+                        Logradouro:
                     </label>
                     <input
                         className={`${styles.input} ${errors.street ? styles.inputError : ''}`}
@@ -84,7 +84,7 @@ export default function AddressForm() {
                 </div>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>
-                        Número:<span className={styles.required}>*</span>
+                        Número:
                     </label>
                     <input
                         className={`${styles.input} ${errors.number ? styles.inputError : ''}`}

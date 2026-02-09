@@ -18,6 +18,5 @@ export default interface Client {
   status: string;
   documentNumber: string;
   documentType?: string;
-  mainAddress: Address;
   createdAt: string;
 }

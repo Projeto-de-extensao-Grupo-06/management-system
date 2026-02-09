@@ -11,3 +11,50 @@ export interface ViaCepResponse {
     siafi: string;
     erro?: boolean;
 }
+
+export interface CreateAddressDto {
+    streetName: string;
+    number: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    type: string;
+}
+
+export interface UpdateAddressDto {
+    streetName?: string;
+    number?: string;
+    neighborhood?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    type?: string;
+}
+
+export interface ResponseAddressDto {
+    id: number;
+    streetName: string;
+    number: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    type: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+// Hook types
+export interface UseAddressApiState {
+    loading: boolean;
+    error: string | null;
+    success: boolean;
+}
+
+export interface UseAddressApiReturn extends UseAddressApiState {
+    createAddress: (dto: CreateAddressDto) => Promise<ResponseAddressDto | null>;
+    updateAddress: (addressId: number, dto: UpdateAddressDto) => Promise<ResponseAddressDto | null>;
+    getAddressById: (addressId: number) => Promise<ResponseAddressDto | null>;
+    resetState: () => void;
+}
