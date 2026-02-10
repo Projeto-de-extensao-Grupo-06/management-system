@@ -31,7 +31,7 @@ export default function useClients(): UseClientsReturn {
 
         clientsService.getAllClients(
             page,
-            20,
+            10,
             searchTerm,
             statusFilter,
             filters.city,
@@ -40,8 +40,11 @@ export default function useClients(): UseClientsReturn {
             filters.endDate
         )
             .then((data: Page<Client>) => {
+                console.log('Response data:', data);
+                console.log('Total Pages:', data.totalPages, 'Total Elements:', data.totalElements);
                 setClients(data.content);
-                setTotalPages(data.totalPages);
+                const total = data.totalPages || Math.ceil(data.totalElements / (data.pageable?.pageSize || 20));
+                setTotalPages(total);
             })
             .catch(() => {
                 setError('Erro ao carregar clientes.');

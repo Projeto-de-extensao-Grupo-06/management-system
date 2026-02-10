@@ -30,7 +30,7 @@ export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: C
                     <td>{client.name}</td>
                     <td>{client.email}</td>
                     <td>{client.phone}</td>
-                    <td>{client.mainAddress ? `${client.mainAddress.city} / ${client.mainAddress.state}` : '-'}</td>
+                    <td>{client.mainAddress ? `${client.mainAddress?.city} / ${client.mainAddress?.state}` : '-'}</td>
                     <td>{client.createdAt ? new Date(client.createdAt).toLocaleDateString('pt-BR') : '-'}</td>
                     <td>
                         <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
