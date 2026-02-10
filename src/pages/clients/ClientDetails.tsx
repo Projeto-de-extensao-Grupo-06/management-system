@@ -40,6 +40,11 @@ export default function ClientDetails() {
         number: ''
     });
 
+    const isAddressFilled = useMemo(() => {
+        const { zipCode, state, city, neighborhood, streetName, number } = formData;
+        return !!(zipCode || state || city || neighborhood || streetName || number);
+    }, [formData]);
+
     const clientsService = useMemo(() => new ClientsService(), []);
     const addressService = useMemo(() => new AddressService(), []);
 
@@ -296,29 +301,29 @@ export default function ClientDetails() {
                 <div className={styles.gridFour}>
                     {renderField("CEP", formData.zipCode,
                         <Input value={formData.zipCode} onChange={(v) => setFormData(p => ({ ...p, zipCode: v }))} placeholder="" />,
-                        true, errors.zipCode
+                        isAddressFilled, errors.zipCode
                     )}
                     {renderField("Estado", formData.state,
                         <Input value={formData.state} onChange={(v) => setFormData(p => ({ ...p, state: v }))} placeholder="" maxLength={2} />,
-                        true, errors.state
+                        isAddressFilled, errors.state
                     )}
                     {renderField("Cidade", formData.city,
                         <Input value={formData.city} onChange={(v) => setFormData(p => ({ ...p, city: v }))} placeholder="" />,
-                        true, errors.city
+                        isAddressFilled, errors.city
                     )}
                     {renderField("Bairro", formData.neighborhood,
                         <Input value={formData.neighborhood} onChange={(v) => setFormData(p => ({ ...p, neighborhood: v }))} placeholder="" />,
-                        true, errors.neighborhood
+                        isAddressFilled, errors.neighborhood
                     )}
                 </div>
                 <div className={styles.gridAddress}>
                     {renderField("Logradouro", formData.streetName,
                         <Input value={formData.streetName} onChange={(v) => setFormData(p => ({ ...p, streetName: v }))} placeholder="" />,
-                        true, errors.streetName
+                        isAddressFilled, errors.streetName
                     )}
                     {renderField("Número", formData.number,
                         <Input value={formData.number} onChange={(v) => setFormData(p => ({ ...p, number: v }))} placeholder="" />,
-                        true, errors.number
+                        isAddressFilled, errors.number
                     )}
                 </div>
             </div>
