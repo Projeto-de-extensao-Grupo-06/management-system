@@ -1,9 +1,7 @@
-import type { CreateAddressDto } from '../interfaces/types/AddressTypes';
 import type Client from '../interfaces/types/Client';
 import type { Page } from '../interfaces/types/Page';
 import type Project from '../interfaces/types/Project';
 import ClientMapper from '../utils/mappers/ClientMapper';
-import AddressService from './AddressService';
 import api from './provider/api';
 
 export default class ClientsService {
@@ -48,7 +46,7 @@ export default class ClientsService {
     async createClient(client: { firstName: string, lastName: string, email: string, phone: string, document: string, documentType: string, zipCode: string, street: string, number: string, neighborhood: string, city: string, state: string, notes?: string }): Promise<Client> {
         const hasAddress = !!(client.street || client.number || client.neighborhood || client.city || client.state || client.zipCode);
 
-        const clientPayload = {
+        const clientPayload: any = {
             firstName: client.firstName,
             lastName: client.lastName,
             documentNumber: client.document.replace(/\D/g, ''),
@@ -58,11 +56,8 @@ export default class ClientsService {
             note: client.notes,
         };
 
-        const response = await api.post<Client>('/clients', clientPayload);
-        const createdClient = ClientMapper.toDomain(response.data);
-
-        if (hasAddress && createdClient.id) {
-            const addressPayload: CreateAddressDto = {
+        if (hasAddress) {
+            clientPayload.mainAddress = {
                 streetName: client.street,
                 number: client.number,
                 neighborhood: client.neighborhood,
@@ -71,15 +66,9 @@ export default class ClientsService {
                 postalCode: client.zipCode.replace(/\D/g, ''),
                 type: 'RESIDENTIAL',
             };
-
-            try {
-                const addressService = new AddressService();
-                await addressService.createAddress(addressPayload);
-            } catch (error) {
-                console.error('Erro ao criar endereço do cliente:', error);
-            }
         }
 
-        return createdClient;
+        const response = await api.post<Client>('/clients', clientPayload);
+        return ClientMapper.toDomain(response.data);
     }
 };
