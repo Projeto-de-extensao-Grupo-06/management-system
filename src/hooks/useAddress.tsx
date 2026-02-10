@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CreateAddressDto, ResponseAddressDto, UpdateAddressDto, UseAddressApiState, UseAddressApiReturn } from '../interfaces/types/AddressTypes';
+import type { CreateAddressDto, ResponseAddressDto, UpdateAddressDto, UseAddressApiReturn } from '../interfaces/types/AddressTypes';
 import AddressService from '../services/AddressService';
 
 export function useAddress(): UseAddressApiReturn {

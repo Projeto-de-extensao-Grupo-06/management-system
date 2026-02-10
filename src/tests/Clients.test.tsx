@@ -119,7 +119,7 @@ describe('Clients Page', () => {
         await userEvent.type(searchInput, 'Maria');
 
         await waitFor(() => {
-            expect(mockGetAllClients).toHaveBeenCalledWith(0, 20, 'Maria', 'Ativo', '', '', '', '');
+            expect(mockGetAllClients).toHaveBeenCalledWith(0, 10, 'Maria', 'Ativo', '', '', '', '');
         });
     });
 
@@ -154,7 +154,7 @@ describe('Clients Page', () => {
         await userEvent.click(applyBtn);
 
         await waitFor(() => {
-            expect(mockGetAllClients).toHaveBeenCalledWith(0, 20, '', 'Ativo', 'Rio de Janeiro', '', '', '');
+            expect(mockGetAllClients).toHaveBeenCalledWith(0, 10, '', 'Ativo', 'Rio de Janeiro', '', '', '');
         });
     });
 

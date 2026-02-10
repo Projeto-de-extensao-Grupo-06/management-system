@@ -1,10 +1,10 @@
+import type { CreateAddressDto } from '../interfaces/types/AddressTypes';
 import type Client from '../interfaces/types/Client';
 import type { Page } from '../interfaces/types/Page';
 import type Project from '../interfaces/types/Project';
-import type { CreateAddressDto, UpdateAddressDto } from '../interfaces/types/AddressTypes';
 import ClientMapper from '../utils/mappers/ClientMapper';
-import api from './provider/api';
 import AddressService from './AddressService';
+import api from './provider/api';
 
 export default class ClientsService {
     async getAllClients(page: number = 0, size: number = 20, search: string = '', status: string = 'ACTIVE', city: string = '', state: string = '', startDate: string = '', endDate: string = ''): Promise<Page<Client>> {
