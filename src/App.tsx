@@ -12,6 +12,7 @@ import Login from "./pages/auth/login/Login";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import NotFound from "./pages/shared/NotFound";
+import PermissionRoute from "./components/security/PermissionsRoute";
 
 import useAuthStore from "./store/useAuthStore";
 
@@ -38,7 +39,7 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            <Route path="/clientes" element={<Clients />} />
+            <Route path="/clientes" element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients/>}/>} />
             <Route path="/clientes/:id" element={<ClientDetails />} />
             <Route path="/analise" element={<Analysis />}></Route>
           </Route>
