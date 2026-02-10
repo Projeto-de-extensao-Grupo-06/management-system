@@ -2,8 +2,8 @@ import { cpf, cnpj } from 'cpf-cnpj-validator';
 import { z } from 'zod';
 
 export const clientSchema = z.object({
-    firstName: z.string().min(1, 'Primeiro nome é obrigatório'),
-    lastName: z.string().min(1, 'Segundo nome é obrigatório'),
+    firstName: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres (aceita nomes compostos)'),
+    lastName: z.string().optional().default(''),
     email: z.string().email('E-mail inválido').min(1, 'E-mail é obrigatório'),
     phone: z.string().min(1, 'Telefone é obrigatório'),
     zipCode: z.string().transform(val => val || ''),

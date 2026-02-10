@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { Alert } from '../../components/ui/Alert';
 import { Button, Input, Select, SelectOption } from '../../components/ui/Form';
+import useClients from '../../hooks/useClients';
 import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
-import { clientSchema } from '../../schemas/clientSchema';
+import type { ClientSchemaType } from '../../schemas/clientSchema';
 import AddressService from '../../services/AddressService';
 import ClientsService from '../../services/ClientsService';
 import styles from './Clients.module.css';
@@ -15,6 +16,7 @@ export default function ClientDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+    const { updateClient } = useClients();
 
     const [isEditing, setIsEditing] = useState(location.state?.edit || false);
 
@@ -114,8 +116,7 @@ export default function ClientDetails() {
     const handleSave = () => {
         if (!id || !client) return;
 
-        // Map formData to schema expected structure
-        const schemaData = {
+        const schemaData: ClientSchemaType = {
             firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,
@@ -131,58 +132,57 @@ export default function ClientDetails() {
             number: formData.number
         };
 
-        const result = clientSchema.safeParse(schemaData);
-
-        if (!result.success) {
-            const newErrors: Record<string, string> = {};
-            result.error.issues.forEach(err => {
-                if (err.path[0]) {
-                    // Map back schema keys to field names if necessary for error state keys
-                    // But we used schema keys for validation. Let's use schema keys for 'errors' state
-                    // and access them correctly in renderField.
-                    // Special cases: document -> documentNumber, street -> streetName
-                    let key = String(err.path[0]);
-                    if (key === 'document') key = 'documentNumber';
-                    if (key === 'street') key = 'streetName';
-                    newErrors[key] = err.message;
-                }
-            });
-            setErrors(newErrors);
-            setAlert({ message: 'Corrija os erros verifique os campos.', type: 'error' });
-            return;
-        }
-
-        // Clear errors if valid
-        setErrors({});
-
-        const updatedClient: Partial<Client> = {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            documentNumber: formData.documentNumber,
-            documentType: formData.documentType,
-            mainAddress: {
-                ...client.mainAddress,
-                streetName: formData.streetName,
-                number: formData.number,
-                neighborhood: formData.neighborhood,
-                city: formData.city,
-                state: formData.state,
-                postalCode: formData.zipCode,
-                type: client.mainAddress?.type || 'RESIDENTIAL'
-            }
-        };
-
-        clientsService.updateClient(client.id, updatedClient)
+        updateClient(parseInt(id), schemaData)
             .then((updated) => {
                 setClient(updated);
                 setIsEditing(false);
+                setErrors({});
                 setAlert({ message: 'Dados salvos com sucesso!', type: 'success' });
             })
-            .catch(err => {
-                console.error(err);
-                setAlert({ message: 'Erro ao salvar dados.', type: 'error' });
+            .catch((err: Error) => {
+                const errorMsg = err.message;
+                
+                if (errorMsg.includes('\n')) {
+                    const newErrors: Record<string, string> = {};
+                    const lines = errorMsg.split('\n');
+                    
+                    lines.forEach(line => {
+                        if (line.includes(':')) {
+                            const [field, message] = line.split(':');
+                            const fieldName = field.trim().toLowerCase();
+                            
+                            if (fieldName.includes('firstName') || fieldName.includes('primeiro nome')) {
+                                newErrors.firstName = message.trim();
+                            } else if (fieldName.includes('lastName') || fieldName.includes('segundo nome')) {
+                                newErrors.lastName = message.trim();
+                            } else if (fieldName.includes('email')) {
+                                newErrors.email = message.trim();
+                            } else if (fieldName.includes('phone') || fieldName.includes('telefone')) {
+                                newErrors.phone = message.trim();
+                            } else if (fieldName.includes('document')) {
+                                newErrors.documentNumber = message.trim();
+                            } else if (fieldName.includes('zipCode') || fieldName.includes('cep')) {
+                                newErrors.zipCode = message.trim();
+                            } else if (fieldName.includes('state') || fieldName.includes('estado')) {
+                                newErrors.state = message.trim();
+                            } else if (fieldName.includes('city') || fieldName.includes('cidade')) {
+                                newErrors.city = message.trim();
+                            } else if (fieldName.includes('neighborhood') || fieldName.includes('bairro')) {
+                                newErrors.neighborhood = message.trim();
+                            } else if (fieldName.includes('street') || fieldName.includes('logradouro')) {
+                                newErrors.streetName = message.trim();
+                            } else if (fieldName.includes('number') || fieldName.includes('número')) {
+                                newErrors.number = message.trim();
+                            }
+                        }
+                    });
+                    
+                    if (Object.keys(newErrors).length > 0) {
+                        setErrors(newErrors);
+                    }
+                }
+                
+                setAlert({ message: errorMsg, type: 'error' });
             });
     };
 

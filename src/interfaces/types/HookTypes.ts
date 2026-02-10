@@ -26,5 +26,6 @@ export interface UseClientsReturn {
     handleApplyFilters: (newFilters: ClientFilters) => void;
     handleClearFilters: () => void;
     createClient: (data: ClientSchemaType) => Promise<void>;
+    updateClient: (id: number, data: ClientSchemaType) => Promise<Client>;
     deleteClient: (id: number) => Promise<void>;
 }

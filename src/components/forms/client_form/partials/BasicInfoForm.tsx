@@ -1,10 +1,11 @@
 import { useMask } from '@react-input/mask';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import type { ClientSchemaType } from '../../../../schemas/clientSchema';
 import styles from '../ClientForm.module.css';
 
 export default function BasicInfoForm() {
-    const { register, formState: { errors }, watch } = useFormContext<ClientSchemaType>();
+    const { register, formState: { errors }, watch, setValue } = useFormContext<ClientSchemaType>();
     const documentType = watch('documentType');
 
     const phoneMaskRef = useMask({ mask: '(__) _____-____', replacement: { _: /\d/ } });
@@ -13,6 +14,10 @@ export default function BasicInfoForm() {
 
     const documentMaskRef = documentType === 'CPF' ? cpfMaskRef : cnpjMaskRef;
     const documentPlaceholder = documentType === 'CPF' ? '999.999.999-99' : '99.999.999/9999-99';
+
+    useEffect(() => {
+        setValue('document', '', { shouldValidate: false });
+    }, [documentType]);
 
     const mergeRefs = (...refs: (React.Ref<any> | undefined)[]) => (e: any) => {
         refs.forEach((ref) => {
@@ -82,19 +87,6 @@ export default function BasicInfoForm() {
             <div className={`${styles.row} ${styles.fourPattern}`}>
                 <div className={`${styles.formGroup} ${styles.fullWidth}`} style={{ gridColumn: 'span 2' }}>
                     <label className={styles.label}>
-                        Número Documento:<span className={styles.required}>*</span>
-                    </label>
-                    <input
-                        className={`${styles.input} ${errors.document ? styles.inputError : ''}`}
-                        placeholder={documentPlaceholder}
-                        {...register('document')}
-                        ref={mergeRefs(register('document').ref, documentMaskRef)}
-                    />
-                    {errors.document && <span className={styles.errorMessage}>{errors.document.message}</span>}
-                </div>
-
-                <div className={`${styles.formGroup} ${styles.fullWidth}`} style={{ gridColumn: 'span 2' }}>
-                    <label className={styles.label}>
                         Tipo do Documento:<span className={styles.required}>*</span>
                     </label>
                     <select
@@ -104,6 +96,19 @@ export default function BasicInfoForm() {
                         <option value="CPF">CPF</option>
                         <option value="CNPJ">CNPJ</option>
                     </select>
+                </div>
+
+                <div className={`${styles.formGroup} ${styles.fullWidth}`} style={{ gridColumn: 'span 2' }}>
+                    <label className={styles.label}>
+                        Número Documento:<span className={styles.required}>*</span>
+                    </label>
+                    <input
+                        className={`${styles.input} ${errors.document ? styles.inputError : ''}`}
+                        placeholder={documentPlaceholder}
+                        {...register('document')}
+                        ref={mergeRefs(register('document').ref, documentMaskRef)}
+                    />
+                    {errors.document && <span className={styles.errorMessage}>{errors.document.message}</span>}
                 </div>
             </div>
 
