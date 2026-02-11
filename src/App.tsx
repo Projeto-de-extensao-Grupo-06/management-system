@@ -39,8 +39,13 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            <Route path="/clientes" element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients/>}/>} />
+            <Route 
+            path="/clientes" 
+            element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients/>}/>} 
+            />
+            
             <Route path="/clientes/:id" element={<ClientDetails />} />
+            
             <Route path="/analise" element={<Analysis />}></Route>
           </Route>
         </Route>
