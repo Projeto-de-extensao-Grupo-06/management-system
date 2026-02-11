@@ -1,99 +1,172 @@
-import { useMask } from '@react-input/mask';
-import { useFormContext } from 'react-hook-form';
-import type { ClientSchemaType } from '../../../../schemas/clientSchema';
+import { useMemo } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { CepInput, Input } from '../../../ui/Form';
 import styles from '../ClientForm.module.css';
 
-export default function AddressForm() {
-    const { register, formState: { errors } } = useFormContext<ClientSchemaType>();
-    const cepMaskRef = useMask({ mask: '_____-___', replacement: { _: /\d/ } });
+interface AddressFormProps {
+    readOnly?: boolean;
+}
 
-    const mergeRefs = (...refs: (React.Ref<any> | undefined)[]) => (e: any) => {
-        refs.forEach((ref) => {
-            if (typeof ref === 'function') ref(e);
-            else if (ref != null && typeof ref === 'object' && 'current' in ref) (ref as React.MutableRefObject<any>).current = e;
-        });
-    };
+export default function AddressForm({ readOnly }: AddressFormProps) {
+    const { watch, control } = useFormContext();
+    const formValues = watch();
+
+    const isAddressFilled = useMemo(() => {
+        const { zipCode, state, city, neighborhood, street, number } = formValues;
+        return !!(zipCode || state || city || neighborhood || street || number);
+    }, [formValues]);
+
+    if (readOnly) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.gridTwo}>
+                    <div>
+                        <label className={styles.fieldLabel}>CEP:</label>
+                        <div className={styles.readOnlyField}>{formValues.zipCode || '-'}</div>
+                    </div>
+                    <div>
+                        <label className={styles.fieldLabel}>Estado:</label>
+                        <div className={styles.readOnlyField}>{formValues.state || '-'}</div>
+                    </div>
+                </div>
+
+                <div className={styles.gridTwo}>
+                    <div>
+                        <label className={styles.fieldLabel}>Cidade:</label>
+                        <div className={styles.readOnlyField}>{formValues.city || '-'}</div>
+                    </div>
+                    <div>
+                        <label className={styles.fieldLabel}>Bairro:</label>
+                        <div className={styles.readOnlyField}>{formValues.neighborhood || '-'}</div>
+                    </div>
+                </div>
+
+                <div className={styles.gridTwo}>
+                    <div>
+                        <label className={styles.fieldLabel}>Logradouro:</label>
+                        <div className={styles.readOnlyField}>{formValues.street || '-'}</div>
+                    </div>
+                    <div>
+                        <label className={styles.fieldLabel}>Número:</label>
+                        <div className={styles.readOnlyField}>{formValues.number || '-'}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div>
-            <h3 className={styles.sectionTitle}>Endereço:</h3>
-
-            <div className={styles.row}>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        CEP:
+        <div className={styles.container}>
+            <div className={styles.gridTwo}>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="zipCode" className={styles.fieldLabel}>
+                        CEP
+                        {isAddressFilled && <span className={styles.required}>*</span>}
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.zipCode ? styles.inputError : ''}`}
-                        placeholder="01414-000"
-                        {...register('zipCode')}
-                        ref={mergeRefs(register('zipCode').ref, cepMaskRef)}
+                    <Controller
+                        name="zipCode"
+                        control={control}
+                        render={({ field }) => <CepInput {...field} id="zipCode" className="input" />}
                     />
-                    {errors.zipCode && <span className={styles.errorMessage}>{errors.zipCode.message}</span>}
                 </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Estado:
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="state" className={styles.fieldLabel}>
+                        Estado
+                        {isAddressFilled && <span className={styles.required}>*</span>}
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.state ? styles.inputError : ''}`}
-                        placeholder="SP"
-                        maxLength={2}
-                        {...register('state')}
+                    <Controller
+                        name="state"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                id="state"
+                                placeholder="SP"
+                                maxLength={2}
+                            />
+                        )}
                     />
-                    {errors.state && <span className={styles.errorMessage}>{errors.state.message}</span>}
                 </div>
             </div>
 
-            <div className={styles.row}>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Cidade:
+            <div className={styles.gridTwo}>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="city" className={styles.fieldLabel}>
+                        Cidade
+                        {isAddressFilled && <span className={styles.required}>*</span>}
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.city ? styles.inputError : ''}`}
-                        placeholder="São Paulo"
-                        {...register('city')}
+                    <Controller
+                        name="city"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                id="city"
+                                placeholder="São Paulo"
+                            />
+                        )}
                     />
-                    {errors.city && <span className={styles.errorMessage}>{errors.city.message}</span>}
                 </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Bairro:
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="neighborhood" className={styles.fieldLabel}>
+                        Bairro
+                        {isAddressFilled && <span className={styles.required}>*</span>}
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.neighborhood ? styles.inputError : ''}`}
-                        placeholder="Cerqueira César"
-                        {...register('neighborhood')}
+                    <Controller
+                        name="neighborhood"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                id="neighborhood"
+                                placeholder="Centro"
+                            />
+                        )}
                     />
-                    {errors.neighborhood && <span className={styles.errorMessage}>{errors.neighborhood.message}</span>}
                 </div>
             </div>
 
-            <div className={styles.row}>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Logradouro:
+            <div className={styles.gridTwo}>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="street" className={styles.fieldLabel}>
+                        Rua
+                        {isAddressFilled && <span className={styles.required}>*</span>}
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.street ? styles.inputError : ''}`}
-                        placeholder="Rua Haddock Lobo"
-                        {...register('street')}
+                    <Controller
+                        name="street"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                id="street"
+                                placeholder="Rua das Flores"
+                            />
+                        )}
                     />
-                    {errors.street && <span className={styles.errorMessage}>{errors.street.message}</span>}
                 </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Número:
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="number" className={styles.fieldLabel}>
+                        Número
+                        {isAddressFilled && <span className={styles.required}>*</span>}
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.number ? styles.inputError : ''}`}
-                        placeholder="595"
-                        {...register('number')}
+                    <Controller
+                        name="number"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                id="number"
+                                placeholder="123"
+                            />
+                        )}
                     />
-                    {errors.number && <span className={styles.errorMessage}>{errors.number.message}</span>}
                 </div>
             </div>
         </div>
     );
 }
+
+

@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const clientSchema = z.object({
     firstName: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres (aceita nomes compostos)'),
-    lastName: z.string().optional().default(''),
+    lastName: z.string().min(1, 'Sobrenome é obrigatório'),
     email: z.string().email('E-mail inválido').min(1, 'E-mail é obrigatório'),
     phone: z.string().min(1, 'Telefone é obrigatório'),
     zipCode: z.string().transform(val => val || ''),

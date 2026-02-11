@@ -52,7 +52,7 @@ export default function LoginPage() {
       <Input
         placeholder="Informe seu Email: exemplo@gmail.com"
         value={email}
-        onChange={setEmail} />
+        onChange={(e) => setEmail(e.target.value)} />
 
       <PasswordInput
         placeholder="Informe sua Senha"

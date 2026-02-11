@@ -1,14 +1,15 @@
 import { faArrowLeft, faSave, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import ClientForm from '../../components/forms/client_form/ClientForm';
 import { Alert } from '../../components/ui/Alert';
-import { Button, Input, Select, SelectOption } from '../../components/ui/Form';
+import { Button } from '../../components/ui/Form';
 import useClients from '../../hooks/useClients';
+import type { ClientFormRef } from '../../interfaces/properties/FormProps';
 import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
-import AddressService from '../../services/AddressService';
 import ClientsService from '../../services/ClientsService';
 import styles from './Clients.module.css';
 
@@ -17,38 +18,15 @@ export default function ClientDetails() {
     const navigate = useNavigate();
     const location = useLocation();
     const { updateClient } = useClients();
+    const formRef = useRef<ClientFormRef>(null);
 
     const [isEditing, setIsEditing] = useState(location.state?.edit || false);
-
     const [client, setClient] = useState<Client | null>(null);
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [alert, setAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        documentNumber: '',
-        documentType: 'CPF',
-        notes: '',
-        zipCode: '',
-        state: '',
-        city: '',
-        neighborhood: '',
-        streetName: '',
-        number: ''
-    });
-
-    const isAddressFilled = useMemo(() => {
-        const { zipCode, state, city, neighborhood, streetName, number } = formData;
-        return !!(zipCode || state || city || neighborhood || streetName || number);
-    }, [formData]);
 
     const clientsService = useMemo(() => new ClientsService(), []);
-    const addressService = useMemo(() => new AddressService(), []);
 
     useEffect(() => {
         if (!id) return;
@@ -57,21 +35,6 @@ export default function ClientDetails() {
         clientsService.getClientById(clientId)
             .then((data) => {
                 setClient(data);
-                setFormData({
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    email: data.email,
-                    phone: data.phone,
-                    documentNumber: data.documentNumber || '',
-                    documentType: (data.documentNumber && data.documentNumber.length > 14) ? 'CNPJ' : 'CPF',
-                    notes: '',
-                    zipCode: data.mainAddress?.postalCode || '',
-                    state: data.mainAddress?.state || '',
-                    city: data.mainAddress?.city || '',
-                    neighborhood: data.mainAddress?.neighborhood || '',
-                    streetName: data.mainAddress?.streetName || '',
-                    number: data.mainAddress?.number || ''
-                });
             })
             .catch(err => {
                 console.error("Error fetching client:", err);
@@ -87,125 +50,42 @@ export default function ClientDetails() {
             });
     }, [id, clientsService]);
 
-    // Auto-fill address by CEP
-    useEffect(() => {
-        if (!isEditing) return;
-
-        const zipCode = formData.zipCode;
-        const cleanCep = zipCode?.replace(/\D/g, '');
-
-        if (cleanCep?.length === 8) {
-            addressService.getAddressByCep(cleanCep)
-                .then((address) => {
-                    if (address) {
-                        setFormData(prev => ({
-                            ...prev,
-                            streetName: address.logradouro,
-                            neighborhood: address.bairro,
-                            city: address.localidade,
-                            state: address.uf
-                        }));
-                    }
-                })
-                .catch(err => {
-                    console.error('Error fetching address:', err);
-                });
-        }
-    }, [formData.zipCode, isEditing, addressService]);
-
     const handleSave = () => {
+        formRef.current?.submit();
+    };
+
+    const onFormSubmit = (data: ClientSchemaType) => {
         if (!id || !client) return;
 
-        const schemaData: ClientSchemaType = {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            document: formData.documentNumber, // Map documentNumber -> document
-            documentType: formData.documentType as 'CPF' | 'CNPJ',
-            notes: formData.notes,
-            zipCode: formData.zipCode,
-            state: formData.state,
-            city: formData.city,
-            neighborhood: formData.neighborhood,
-            street: formData.streetName, // Map streetName -> street
-            number: formData.number
-        };
-
-        updateClient(parseInt(id), schemaData)
+        updateClient(parseInt(id), data)
             .then((updated) => {
                 setClient(updated);
                 setIsEditing(false);
-                setErrors({});
                 setAlert({ message: 'Dados salvos com sucesso!', type: 'success' });
+                setTimeout(() => setAlert(null), 5000);
             })
             .catch((err: Error) => {
-                const errorMsg = err.message;
-                
-                if (errorMsg.includes('\n')) {
-                    const newErrors: Record<string, string> = {};
-                    const lines = errorMsg.split('\n');
-                    
-                    lines.forEach(line => {
-                        if (line.includes(':')) {
-                            const [field, message] = line.split(':');
-                            const fieldName = field.trim().toLowerCase();
-                            
-                            if (fieldName.includes('firstName') || fieldName.includes('primeiro nome')) {
-                                newErrors.firstName = message.trim();
-                            } else if (fieldName.includes('lastName') || fieldName.includes('segundo nome')) {
-                                newErrors.lastName = message.trim();
-                            } else if (fieldName.includes('email')) {
-                                newErrors.email = message.trim();
-                            } else if (fieldName.includes('phone') || fieldName.includes('telefone')) {
-                                newErrors.phone = message.trim();
-                            } else if (fieldName.includes('document')) {
-                                newErrors.documentNumber = message.trim();
-                            } else if (fieldName.includes('zipCode') || fieldName.includes('cep')) {
-                                newErrors.zipCode = message.trim();
-                            } else if (fieldName.includes('state') || fieldName.includes('estado')) {
-                                newErrors.state = message.trim();
-                            } else if (fieldName.includes('city') || fieldName.includes('cidade')) {
-                                newErrors.city = message.trim();
-                            } else if (fieldName.includes('neighborhood') || fieldName.includes('bairro')) {
-                                newErrors.neighborhood = message.trim();
-                            } else if (fieldName.includes('street') || fieldName.includes('logradouro')) {
-                                newErrors.streetName = message.trim();
-                            } else if (fieldName.includes('number') || fieldName.includes('número')) {
-                                newErrors.number = message.trim();
-                            }
-                        }
-                    });
-                    
-                    if (Object.keys(newErrors).length > 0) {
-                        setErrors(newErrors);
-                    }
-                }
-                
-                setAlert({ message: errorMsg, type: 'error' });
+                setAlert({ message: err.message, type: 'error' });
             });
     };
 
     if (loading) return <div className={styles.container}>Carregando...</div>;
 
-    const renderField = (label: string, value: string, inputComponent: React.ReactNode, required: boolean = false, error?: string) => (
-        <div>
-            <label className={styles.fieldLabel}>
-                {label}
-                {required && <span style={{ color: 'red', marginLeft: '4px' }}>*</span>}:
-            </label>
-            {isEditing ? (
-                <>
-                    {inputComponent}
-                    {error && <span style={{ color: 'red', fontSize: '12px', marginTop: '4px', display: 'block' }}>{error}</span>}
-                </>
-            ) : (
-                <div className={styles.readOnlyField}>
-                    {value || '-'}
-                </div>
-            )}
-        </div>
-    );
+    const defaultFormValues: Partial<ClientSchemaType> = client ? {
+        firstName: client.firstName,
+        lastName: client.lastName,
+        email: client.email,
+        phone: client.phone,
+        document: client.documentNumber || '',
+        documentType: (client.documentNumber && client.documentNumber.length > 14) ? 'CNPJ' : 'CPF',
+        notes: '',
+        zipCode: client.mainAddress?.postalCode || '',
+        state: client.mainAddress?.state || '',
+        city: client.mainAddress?.city || '',
+        neighborhood: client.mainAddress?.neighborhood || '',
+        street: client.mainAddress?.streetName || '',
+        number: client.mainAddress?.number || ''
+    } : {};
 
     return (
         <div className={styles.container}>
@@ -228,11 +108,7 @@ export default function ClientDetails() {
                         <Button
                             text="Cancelar"
                             width="fit-content"
-                            onClick={() => {
-                                setIsEditing(false);
-                                setErrors({});
-                                setAlert(null);
-                            }}
+                            onClick={() => setIsEditing(false)}
                             ariaLabel="Cancelar Edição"
                             className={styles.cancelButton}
                         />
@@ -255,78 +131,12 @@ export default function ClientDetails() {
                 )}
             </div>
 
-            <div className={styles.card}>
-                <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
-                <div className={styles.gridTwo}>
-                    {renderField("Primeiro Nome", formData.firstName,
-                        <Input value={formData.firstName} onChange={(v) => setFormData(p => ({ ...p, firstName: v }))} placeholder="" />,
-                        true, errors.firstName
-                    )}
-                    {renderField("Segundo Nome", formData.lastName,
-                        <Input value={formData.lastName} onChange={(v) => setFormData(p => ({ ...p, lastName: v }))} placeholder="" />,
-                        true, errors.lastName
-                    )}
-                </div>
-                <div className={styles.gridTwo}>
-                    {renderField("E-mail", formData.email,
-                        <Input value={formData.email} onChange={(v) => setFormData(p => ({ ...p, email: v }))} placeholder="" />,
-                        true, errors.email
-                    )}
-                    {renderField("Telefone", formData.phone,
-                        <Input value={formData.phone} onChange={(v) => setFormData(p => ({ ...p, phone: v }))} placeholder="" />,
-                        true, errors.phone
-                    )}
-                </div>
-                <div className={styles.gridThree}>
-                    {renderField("Número Documento", formData.documentNumber,
-                        <Input value={formData.documentNumber} onChange={(v) => setFormData(p => ({ ...p, documentNumber: v }))} placeholder="" />,
-                        true, errors.documentNumber
-                    )}
-                    {renderField("Tipo do Documento", formData.documentType,
-                        <Select value={formData.documentType} onChange={(v) => setFormData(p => ({ ...p, documentType: v }))} className={styles.formSelect}>
-                            <SelectOption value="CPF" label="CPF" />
-                            <SelectOption value="CNPJ" label="CNPJ" />
-                        </Select>,
-                        true, errors.documentType
-                    )}
-                    {renderField("Notas", formData.notes,
-                        <Input value={formData.notes} onChange={(v) => setFormData(p => ({ ...p, notes: v }))} placeholder="" />,
-                        false, errors.notes
-                    )}
-                </div>
-            </div>
-
-            <div className={styles.card}>
-                <h3 className={styles.sectionTitle}>Endereço:</h3>
-                <div className={styles.gridFour}>
-                    {renderField("CEP", formData.zipCode,
-                        <Input value={formData.zipCode} onChange={(v) => setFormData(p => ({ ...p, zipCode: v }))} placeholder="" />,
-                        isAddressFilled, errors.zipCode
-                    )}
-                    {renderField("Estado", formData.state,
-                        <Input value={formData.state} onChange={(v) => setFormData(p => ({ ...p, state: v }))} placeholder="" maxLength={2} />,
-                        isAddressFilled, errors.state
-                    )}
-                    {renderField("Cidade", formData.city,
-                        <Input value={formData.city} onChange={(v) => setFormData(p => ({ ...p, city: v }))} placeholder="" />,
-                        isAddressFilled, errors.city
-                    )}
-                    {renderField("Bairro", formData.neighborhood,
-                        <Input value={formData.neighborhood} onChange={(v) => setFormData(p => ({ ...p, neighborhood: v }))} placeholder="" />,
-                        isAddressFilled, errors.neighborhood
-                    )}
-                </div>
-                <div className={styles.gridAddress}>
-                    {renderField("Logradouro", formData.streetName,
-                        <Input value={formData.streetName} onChange={(v) => setFormData(p => ({ ...p, streetName: v }))} placeholder="" />,
-                        isAddressFilled, errors.streetName
-                    )}
-                    {renderField("Número", formData.number,
-                        <Input value={formData.number} onChange={(v) => setFormData(p => ({ ...p, number: v }))} placeholder="" />,
-                        isAddressFilled, errors.number
-                    )}
-                </div>
-            </div>
+            <ClientForm
+                ref={formRef}
+                onSubmit={onFormSubmit}
+                defaultValues={defaultFormValues}
+                readOnly={!isEditing}
+            />
 
             <div className={styles.card}>
                 <h3 className={styles.sectionTitle}>Projetos:</h3>
