@@ -58,7 +58,7 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
                     <Input
                         placeholder="Digite a cidade"
                         value={localFilters.city}
-                        onChange={(val: string) => handleChange('city', val)}
+                        onChange={(e) => handleChange('city', e.target.value)}
                     />
                 </div>
                 <div>
@@ -67,7 +67,7 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
                         placeholder="Ex: SP"
                         maxLength={2}
                         value={localFilters.state}
-                        onChange={(val: string) => handleChange('state', val)}
+                        onChange={(e) => handleChange('state', e.target.value)}
                     />
                 </div>
                 <div>
@@ -76,7 +76,7 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
                         type="date"
                         placeholder=""
                         value={localFilters.startDate}
-                        onChange={(val: string) => handleChange('startDate', val)}
+                        onChange={(e) => handleChange('startDate', e.target.value)}
                     />
                 </div>
                 <div>
@@ -85,7 +85,7 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
                         type="date"
                         placeholder=""
                         value={localFilters.endDate}
-                        onChange={(val: string) => handleChange('endDate', val)}
+                        onChange={(e) => handleChange('endDate', e.target.value)}
                     />
                 </div>
             </div>

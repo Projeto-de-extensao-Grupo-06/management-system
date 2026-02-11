@@ -1,122 +1,217 @@
-import { useMask } from '@react-input/mask';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import type { ClientSchemaType } from '../../../../schemas/clientSchema';
+import { DocumentInput, Input, PhoneInput, Select, SelectOption } from '../../../ui/Form';
 import styles from '../ClientForm.module.css';
 
-export default function BasicInfoForm() {
-    const { register, formState: { errors }, watch } = useFormContext<ClientSchemaType>();
+interface BasicInfoFormProps {
+    readOnly?: boolean;
+}
+
+export default function BasicInfoForm({ readOnly }: BasicInfoFormProps) {
+    const { control, watch } = useFormContext<ClientSchemaType>();
+
+    const formValues = watch();
+
+    if (readOnly) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.gridTwo}>
+                    <div>
+                        <label className={styles.fieldLabel}>Primeiro Nome:</label>
+                        <div className={styles.readOnlyField}>{formValues.firstName || '-'}</div>
+                    </div>
+                    <div>
+                        <label className={styles.fieldLabel}>Segundo Nome:</label>
+                        <div className={styles.readOnlyField}>{formValues.lastName || '-'}</div>
+                    </div>
+                </div>
+
+                <div className={styles.gridTwo}>
+                    <div>
+                        <label className={styles.fieldLabel}>Tipo de Pessoa:</label>
+                        <div className={styles.readOnlyField}>
+                            {formValues.documentType === 'CNPJ' ? 'Pessoa Jurídica' : 'Pessoa Física'}
+                        </div>
+                    </div>
+                    <div>
+                        <label className={styles.fieldLabel}>Documento:</label>
+                        <div className={styles.readOnlyField}>{formValues.document || '-'}</div>
+                    </div>
+                </div>
+
+                <div className={styles.gridTwo}>
+                    <div>
+                        <label className={styles.fieldLabel}>Email:</label>
+                        <div className={styles.readOnlyField}>{formValues.email || '-'}</div>
+                    </div>
+                    <div>
+                        <label className={styles.fieldLabel}>Telefone:</label>
+                        <div className={styles.readOnlyField}>{formValues.phone || '-'}</div>
+                    </div>
+                </div>
+
+                {formValues.notes && (
+                    <div className={styles.inputGroup}>
+                        <label className={styles.fieldLabel}>Notas:</label>
+                        <div className={styles.readOnlyField}>{formValues.notes}</div>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
     const documentType = watch('documentType');
 
-    const phoneMaskRef = useMask({ mask: '(__) _____-____', replacement: { _: /\d/ } });
-    const cpfMaskRef = useMask({ mask: '___.___.___-__', replacement: { _: /\d/ } });
-    const cnpjMaskRef = useMask({ mask: '__.___.___/____-__', replacement: { _: /\d/ } });
-
-    const documentMaskRef = documentType === 'CPF' ? cpfMaskRef : cnpjMaskRef;
-    const documentPlaceholder = documentType === 'CPF' ? '999.999.999-99' : '99.999.999/9999-99';
-
-    const mergeRefs = (...refs: (React.Ref<any> | undefined)[]) => (e: any) => {
-        refs.forEach((ref) => {
-            if (typeof ref === 'function') ref(e);
-            else if (ref != null && typeof ref === 'object' && 'current' in ref) (ref as React.MutableRefObject<any>).current = e;
-        });
-    };
-
     return (
-        <div>
-            <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
-
-            <div className={styles.row}>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Primeiro Nome:<span className={styles.required}>*</span>
+        <div className={styles.container}>
+            <div className={styles.gridTwo}>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="firstName" className={styles.fieldLabel}>
+                        Primeiro Nome <span className={styles.required}>*</span>
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.firstName ? styles.inputError : ''}`}
-                        placeholder="João"
-                        {...register('firstName')}
+                    <Controller
+                        name="firstName"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <Input
+                                    {...field}
+                                    id="firstName"
+                                    placeholder="Ex: João"
+                                    className={error ? styles.inputError : ''}
+                                />
+                                {error && <span className={styles.errorMessage}>{error.message}</span>}
+                            </>
+                        )}
                     />
-                    {errors.firstName && <span className={styles.errorMessage}>{errors.firstName.message}</span>}
                 </div>
 
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Segundo Nome:<span className={styles.required}>*</span>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="lastName" className={styles.fieldLabel}>
+                        Segundo Nome <span className={styles.required}>*</span>
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.lastName ? styles.inputError : ''}`}
-                        placeholder="Silva"
-                        {...register('lastName')}
+                    <Controller
+                        name="lastName"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <Input
+                                    {...field}
+                                    id="lastName"
+                                    placeholder="Ex: Silva"
+                                    className={error ? styles.inputError : ''}
+                                />
+                                {error && <span className={styles.errorMessage}>{error.message}</span>}
+                            </>
+                        )}
                     />
-                    {errors.lastName && <span className={styles.errorMessage}>{errors.lastName.message}</span>}
                 </div>
             </div>
 
-            <div className={styles.row}>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        E-mail:<span className={styles.required}>*</span>
+            <div className={styles.gridTwo}>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="documentType" className={styles.fieldLabel}>
+                        Tipo de Pessoa <span className={styles.required}>*</span>
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                        type="email"
-                        placeholder="joao.silva@example.com"
-                        {...register('email')}
+                    <Controller
+                        name="documentType"
+                        control={control}
+                        render={({ field }) => (
+                            <Select
+                                {...field}
+                                id="documentType"
+                            >
+                                <SelectOption value="CPF" label="Pessoa Física" />
+                                <SelectOption value="CNPJ" label="Pessoa Jurídica" />
+                            </Select>
+                        )}
                     />
-                    {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
                 </div>
 
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>
-                        Telefone:<span className={styles.required}>*</span>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="document" className={styles.fieldLabel}>
+                        Documento ({documentType}) <span className={styles.required}>*</span>
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.phone ? styles.inputError : ''}`}
-                        placeholder="(11) 98888-7777"
-                        {...register('phone')}
-                        ref={mergeRefs(register('phone').ref, phoneMaskRef)}
+                    <Controller
+                        name="document"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <DocumentInput
+                                    {...field}
+                                    id="document"
+                                    type={documentType}
+                                    className={error ? styles.inputError : ''}
+                                />
+                                {error && <span className={styles.errorMessage}>{error.message}</span>}
+                            </>
+                        )}
                     />
-                    {errors.phone && <span className={styles.errorMessage}>{errors.phone.message}</span>}
                 </div>
             </div>
 
-            <div className={`${styles.row} ${styles.fourPattern}`}>
-                <div className={`${styles.formGroup} ${styles.fullWidth}`} style={{ gridColumn: 'span 2' }}>
-                    <label className={styles.label}>
-                        Número Documento:<span className={styles.required}>*</span>
+            <div className={styles.gridTwo}>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="email" className={styles.fieldLabel}>
+                        Email <span className={styles.required}>*</span>
                     </label>
-                    <input
-                        className={`${styles.input} ${errors.document ? styles.inputError : ''}`}
-                        placeholder={documentPlaceholder}
-                        {...register('document')}
-                        ref={mergeRefs(register('document').ref, documentMaskRef)}
+                    <Controller
+                        name="email"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <Input
+                                    {...field}
+                                    id="email"
+                                    type="email"
+                                    placeholder="exemplo@email.com"
+                                    className={error ? styles.inputError : ''}
+                                />
+                                {error && <span className={styles.errorMessage}>{error.message}</span>}
+                            </>
+                        )}
                     />
-                    {errors.document && <span className={styles.errorMessage}>{errors.document.message}</span>}
                 </div>
 
-                <div className={`${styles.formGroup} ${styles.fullWidth}`} style={{ gridColumn: 'span 2' }}>
-                    <label className={styles.label}>
-                        Tipo do Documento:<span className={styles.required}>*</span>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="phone" className={styles.fieldLabel}>
+                        Telefone <span className={styles.required}>*</span>
                     </label>
-                    <select
-                        className={styles.select}
-                        {...register('documentType')}
-                    >
-                        <option value="CPF">CPF</option>
-                        <option value="CNPJ">CNPJ</option>
-                    </select>
+                    <Controller
+                        name="phone"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <PhoneInput
+                                    {...field}
+                                    id="phone"
+                                    className={error ? styles.inputError : ''}
+                                />
+                                {error && <span className={styles.errorMessage}>{error.message}</span>}
+                            </>
+                        )}
+                    />
                 </div>
             </div>
 
-            <div className={styles.row}>
-                <div className={`${styles.formGroup}`} style={{ gridColumn: '1 / -1' }}>
-                    <label className={styles.label}>Notas:</label>
-                    <input
-                        className={styles.input}
-                        placeholder="Lorem ipsum dolor"
-                        {...register('notes')}
-                    />
-                </div>
+            <div className={styles.inputGroup}>
+                <label htmlFor="notes" className={styles.fieldLabel}>
+                    Notas
+                </label>
+                <Controller
+                    name="notes"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            id="notes"
+                            placeholder="Notas sobre o cliente"
+                        />
+                    )}
+                />
             </div>
         </div>
     );
 }
+
+

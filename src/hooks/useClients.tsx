@@ -4,6 +4,7 @@ import type Client from '../interfaces/types/Client';
 import type { ClientFilters, UseClientsReturn } from '../interfaces/types/HookTypes';
 import type { Page } from '../interfaces/types/Page';
 import type { ClientSchemaType } from '../schemas/clientSchema';
+import { clientSchema } from '../schemas/clientSchema';
 import ClientService from '../services/ClientsService';
 
 export default function useClients(): UseClientsReturn {
@@ -85,14 +86,46 @@ export default function useClients(): UseClientsReturn {
             await clientsService.createClient(data);
             setRefetchTrigger(prev => prev + 1);
         } catch (e) {
-            const axiosError = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[] }>;
-            let errorMsg = axiosError.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
+            const axiosError = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[], errors?: string[] }>;
+            let errorMsg = '';
 
-            if (axiosError.response?.data?.validationErrors?.length) {
-                const details = axiosError.response.data.validationErrors
-                    .map(err => `${err.field}: ${err.message}`)
-                    .join('\n');
-                errorMsg += `\n\n${details}`;
+            // Tratar erro 409 (Conflito - duplicação)
+            if (axiosError.response?.status === 409) {
+                const responseData = axiosError.response.data;
+                const message = responseData?.message || '';
+
+                let duplicateField = '';
+                if (message.toLowerCase().includes('email')) {
+                    duplicateField = 'E-mail';
+                } 
+                
+                if (message.toLowerCase().includes('document') || message.toLowerCase().includes('cpf') || message.toLowerCase().includes('cnpj')) {
+                    duplicateField = 'Documento';
+                } 
+                
+                if (message.toLowerCase().includes('phone')) {
+                    duplicateField = 'Telefone';
+                }
+
+                if (duplicateField) {
+                    errorMsg = `${duplicateField} já está cadastrado no sistema. Verifique os dados e tente novamente.`;
+                } else {
+                    errorMsg = message || 'Este cliente já existe no sistema. Verifique os dados.';
+                }
+            } else {
+                errorMsg = axiosError.response?.data?.message || 'Erro ao criar cliente. Verifique os dados.';
+
+                if (axiosError.response?.data?.validationErrors?.length) {
+                    const details = axiosError.response.data.validationErrors
+                        .map(err => `${err.field}: ${err.message}`)
+                        .join('\n');
+                    errorMsg += `\n\n${details}`;
+                }
+
+                if (axiosError.response?.data?.errors?.length) {
+                    const details = axiosError.response.data.errors.join('\n');
+                    errorMsg += `\n\n${details}`;
+                }
             }
 
             throw new Error(errorMsg);
@@ -107,6 +140,87 @@ export default function useClients(): UseClientsReturn {
             const axiosError = e as AxiosError<{ message: string }>;
             const errorMessage = axiosError.response?.data?.message || 'Erro ao deletar cliente. Tente novamente.';
             throw new Error(errorMessage);
+        }
+    }, [clientsService]);
+
+    const updateClient = useCallback(async (id: number, data: ClientSchemaType): Promise<Client> => {
+        try {
+            const validatedData = clientSchema.parse(data);
+
+            const hasAddress = !!(validatedData.street || validatedData.number || validatedData.neighborhood || validatedData.city || validatedData.state || validatedData.zipCode);
+
+            const clientPayload: any = {
+                firstName: validatedData.firstName,
+                lastName: validatedData.lastName,
+                documentNumber: validatedData.document.replace(/\D/g, ''),
+                documentType: validatedData.documentType,
+                email: validatedData.email,
+                phone: validatedData.phone.replace(/\D/g, ''),
+                note: validatedData.notes,
+            };
+
+            if (hasAddress) {
+                clientPayload.mainAddress = {
+                    streetName: validatedData.street,
+                    number: validatedData.number,
+                    neighborhood: validatedData.neighborhood,
+                    city: validatedData.city,
+                    state: validatedData.state,
+                    postalCode: validatedData.zipCode.replace(/\D/g, ''),
+                    type: 'RESIDENTIAL',
+                };
+            }
+
+            const response = await clientsService.updateClient(id, clientPayload);
+            setRefetchTrigger(prev => prev + 1);
+            return response;
+        } catch (e) {
+            if (e instanceof Error && e.message.includes('validation')) {
+                throw new Error(`Validação falhou: ${e.message}`);
+            }
+
+            const axiosError = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[], errors?: string[] }>;
+            let errorMsg = '';
+
+            if (axiosError.response?.status === 409) {
+                const responseData = axiosError.response.data;
+                const message = responseData?.message || '';
+
+                let duplicateField = '';
+                if (message.toLowerCase().includes('email')) {
+                    duplicateField = 'E-mail';
+                } 
+                
+                if (message.toLowerCase().includes('document') || message.toLowerCase().includes('cpf') || message.toLowerCase().includes('cnpj')) {
+                    duplicateField = 'Documento';
+                } 
+                
+                if (message.toLowerCase().includes('phone')) {
+                    duplicateField = 'Telefone';
+                }
+
+                if (duplicateField) {
+                    errorMsg = `${duplicateField} já está cadastrado no sistema. Verifique os dados e tente novamente.`;
+                } else {
+                    errorMsg = message || 'Este cliente já existe no sistema. Verifique os dados.';
+                }
+            } else {
+                errorMsg = axiosError.response?.data?.message || 'Erro ao atualizar cliente. Verifique os dados.';
+
+                if (axiosError.response?.data?.validationErrors?.length) {
+                    const details = axiosError.response.data.validationErrors
+                        .map(err => `${err.field}: ${err.message}`)
+                        .join('\n');
+                    errorMsg += `\n\n${details}`;
+                }
+
+                if (axiosError.response?.data?.errors?.length) {
+                    const details = axiosError.response.data.errors.join('\n');
+                    errorMsg += `\n\n${details}`;
+                }
+            }
+
+            throw new Error(errorMsg);
         }
     }, [clientsService]);
 
@@ -128,6 +242,7 @@ export default function useClients(): UseClientsReturn {
         handleApplyFilters,
         handleClearFilters,
         createClient,
+        updateClient,
         deleteClient
     };
 }

@@ -8,4 +8,5 @@ export interface ClientFormProps {
     onSubmit: (data: ClientSchemaType) => void;
     defaultValues?: Partial<ClientSchemaType>;
     onFormChange?: (data: Partial<ClientSchemaType>) => void;
+    readOnly?: boolean;
 }

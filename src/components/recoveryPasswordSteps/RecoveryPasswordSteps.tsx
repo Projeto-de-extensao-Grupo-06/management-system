@@ -53,7 +53,7 @@ export function SendEmailStep({ step, handleEmailSubmit, message, clearSteps, em
         <form className={`${styles.form} ${step !== "send-email" ? styles.outScreenRigth : ""}`} onSubmit={handleEmailSubmit}>
             <span className={styles.infoText}>Informe o email associado a sua conta para redefinir a senha.</span>
             <Alert message={message} type="error" />
-            <Input placeholder="exemplo@email.com" type="email" value={email} onChange={setEmail} />
+            <Input placeholder="exemplo@email.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
             <Button text="Enviar Código de Recuperação" />
 

@@ -2,12 +2,14 @@ import './components.css';
 
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useMask } from '@react-input/mask';
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import type BaseInputProps from '../../interfaces/properties/BaseInputProps';
 import type ButtonProps from '../../interfaces/properties/ButtonProps';
+import type DocumentInputProps from '../../interfaces/properties/DocumentInputProps';
 import type IconButtonProps from '../../interfaces/properties/IconButtonProps';
 import type InputProps from '../../interfaces/properties/InputProps';
 import type PasswordInputProps from '../../interfaces/properties/PasswordInputProps';
-
 import type SelectProps from '../../interfaces/properties/SelectProps';
 
 export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style, className }: ButtonProps) {
@@ -57,9 +59,13 @@ export function SelectOption({ value, label }: { value: string, label: string })
     );
 }
 
-export function Select({ children, value, onChange, className, style }: SelectProps) {
+export function Select({ children, value, onChange, className, style, id, name, disabled, onBlur }: SelectProps) {
     return (
         <select
+            id={id}
+            name={name}
+            disabled={disabled}
+            onBlur={onBlur}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             className={`select ${className || ''}`}
@@ -69,21 +75,17 @@ export function Select({ children, value, onChange, className, style }: SelectPr
     );
 }
 
-export function Input({ placeholder, type = "text", onChange, value, maxLength }: InputProps) {
+export const Input = forwardRef<HTMLInputElement, BaseInputProps>(({ className, ...props }, ref) => {
     return (
         <div className="input-container">
             <input
-                type={type}
-                placeholder={placeholder}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                className="input"
-                required
-                maxLength={maxLength}
+                {...props}
+                ref={ref}
+                className={`input ${className || ''}`}
             />
         </div>
     );
-}
+});
 
 export function SearchInput({ placeholder, type = "text", onChange, value }: InputProps) {
     return (
@@ -121,3 +123,84 @@ export function PasswordInput({ placeholder, onChange, value }: PasswordInputPro
         </div>
     );
 }
+
+const mergeRefs = (...refs: (React.Ref<HTMLInputElement> | undefined)[]) => (e: HTMLInputElement | null) => {
+    refs.forEach((ref) => {
+        if (typeof ref === 'function') ref(e);
+        else if (ref != null && typeof ref === 'object' && 'current' in ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = e;
+    });
+};
+
+export const PhoneInput = forwardRef<HTMLInputElement, BaseInputProps>((props, ref) => {
+    const maskRef = useMask({
+        mask: '(__) _____-____',
+        replacement: { _: /\d/ },
+    });
+
+    return (
+        <Input
+            {...props}
+            ref={mergeRefs(ref, maskRef)}
+            type="tel"
+            placeholder="(11) 98888-7777"
+        />
+    );
+});
+
+export const DocumentInput = forwardRef<HTMLInputElement, DocumentInputProps>(({ documentType = 'cpf', onChange, ...props }, ref) => {
+    const cpfMaskRef = useMask({
+        mask: '___.___.___-__',
+        replacement: { _: /\d/ },
+    });
+
+    const cnpjMaskRef = useMask({
+        mask: '__.___.___/____-__',
+        replacement: { _: /\d/ },
+    });
+
+    const currentMaskRef = documentType === 'cnpj' ? cnpjMaskRef : cpfMaskRef;
+    const placeholder = documentType === 'cnpj' ? '99.999.999/9999-99' : '999.999.999-99';
+
+    const prevTypeRef = useRef(documentType);
+
+    useEffect(() => {
+        if (prevTypeRef.current !== documentType) {
+            if (onChange) {
+                const event = {
+                    target: { value: '' },
+                    currentTarget: { value: '' }
+                } as React.ChangeEvent<HTMLInputElement>;
+                onChange(event);
+            }
+            prevTypeRef.current = documentType;
+        }
+    }, [documentType, onChange]);
+
+    return (
+        <Input
+            {...props}
+            onChange={onChange}
+            ref={mergeRefs(ref, currentMaskRef)}
+            type="text"
+            placeholder={placeholder}
+            maxLength={documentType === 'cnpj' ? 18 : 14}
+        />
+    );
+});
+
+export const CepInput = forwardRef<HTMLInputElement, BaseInputProps>((props, ref) => {
+    const maskRef = useMask({
+        mask: '_____-___',
+        replacement: { _: /\d/ },
+    });
+
+    return (
+        <Input
+            {...props}
+            ref={mergeRefs(ref, maskRef)}
+            type="text"
+            placeholder="01414-000"
+            maxLength={9}
+        />
+    );
+});
