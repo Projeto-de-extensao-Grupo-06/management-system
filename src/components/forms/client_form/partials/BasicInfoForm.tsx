@@ -8,7 +8,7 @@ interface BasicInfoFormProps {
 }
 
 export default function BasicInfoForm({ readOnly }: BasicInfoFormProps) {
-    const { control, watch } = useFormContext<ClientSchemaType>();
+    const { control, watch, setValue } = useFormContext<ClientSchemaType>();
 
     const formValues = watch();
 
@@ -121,6 +121,10 @@ export default function BasicInfoForm({ readOnly }: BasicInfoFormProps) {
                                 {...field}
                                 id="documentType"
                                 className={styles.select}
+                                onChange={(value) => {
+                                    field.onChange(value);
+                                    setValue('document', '');
+                                }}
                             >
                                 <SelectOption value="CPF" label="CPF" />
                                 <SelectOption value="CNPJ" label="CNPJ" />
