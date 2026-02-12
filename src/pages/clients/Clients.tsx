@@ -59,7 +59,7 @@ export default function Clients() {
     formRef.current?.submit();
   }
 
-  const onFormSubmit = (data: ClientSchemaType) => {
+  const onFormSubmit = (data: any) => {
     setModalMessage(null);
     setGlobalAlert(null);
 

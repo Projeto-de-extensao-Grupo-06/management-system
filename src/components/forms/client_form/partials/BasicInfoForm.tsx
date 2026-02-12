@@ -141,7 +141,7 @@ export default function BasicInfoForm({ readOnly }: BasicInfoFormProps) {
                                 <DocumentInput
                                     {...field}
                                     id="document"
-                                    type={documentType}
+                                    documentType={documentType.toLowerCase() as 'cpf' | 'cnpj'}
                                     className={error ? styles.inputError : ''}
                                 />
                                 {error && <span className={styles.errorMessage}>{error.message}</span>}

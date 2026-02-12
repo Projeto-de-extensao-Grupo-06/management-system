@@ -11,6 +11,7 @@ import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientsService from '../../services/ClientsService';
+import { formatPhone, formatDocument, formatCep } from '../../utils/maskUtils';
 import styles from './Clients.module.css';
 
 export default function ClientDetails() {
@@ -71,15 +72,17 @@ export default function ClientDetails() {
 
     if (loading) return <div className={styles.container}>Carregando...</div>;
 
+    const documentType = (client?.documentNumber && client.documentNumber.length > 14) ? 'CNPJ' : 'CPF';
+
     const defaultFormValues: Partial<ClientSchemaType> = client ? {
         firstName: client.firstName,
         lastName: client.lastName,
         email: client.email,
-        phone: client.phone,
-        document: client.documentNumber || '',
-        documentType: (client.documentNumber && client.documentNumber.length > 14) ? 'CNPJ' : 'CPF',
+        phone: formatPhone(client.phone),
+        document: formatDocument(client.documentNumber, documentType),
+        documentType: documentType,
         notes: '',
-        zipCode: client.mainAddress?.postalCode || '',
+        zipCode: formatCep(client.mainAddress?.postalCode),
         state: client.mainAddress?.state || '',
         city: client.mainAddress?.city || '',
         neighborhood: client.mainAddress?.neighborhood || '',
