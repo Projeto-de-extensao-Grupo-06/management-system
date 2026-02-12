@@ -2,7 +2,7 @@ import { faArrowLeft, faSave, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
-import ClientForm from '../../components/forms/client_form/ClientForm';
+import ClientDetailsForm from '../../components/forms/client_form/ClientDetailsForm';
 import { Alert } from '../../components/ui/Alert';
 import { Button } from '../../components/ui/Form';
 import useClients from '../../hooks/useClients';
@@ -134,44 +134,14 @@ export default function ClientDetails() {
                 )}
             </div>
 
-            <ClientForm
+            <ClientDetailsForm
                 ref={formRef}
                 onSubmit={onFormSubmit}
                 defaultValues={defaultFormValues}
                 readOnly={!isEditing}
+                projects={projects}
+                onProjectClick={(projectId: number) => navigate(`/projetos/${projectId}`)}
             />
-
-            <div className={styles.card}>
-                <h3 className={styles.sectionTitle}>Projetos:</h3>
-                {projects.length === 0 ? (
-                    <div className={styles.emptyState}>
-                        Nenhum projeto vinculado a este cliente.
-                    </div>
-                ) : (
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th>Nome do Projeto</th>
-                                <th>Status</th>
-                                <th>Data de Criação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {projects.map(project => (
-                                <tr key={project.id} onClick={() => navigate(`/projetos/${project.id}`)} className={styles.projectRow}>
-                                    <td>
-                                        <div className={styles.projectTitle}>
-                                            {project.projectTitle}
-                                        </div>
-                                    </td>
-                                    <td>{project.status}</td>
-                                    <td>{new Date(project.createdAt).toLocaleDateString('pt-BR')}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
         </div>
     );
 }

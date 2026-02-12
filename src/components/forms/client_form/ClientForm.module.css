@@ -1,3 +1,9 @@
+.detailsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
 .formContainer {
     display: flex;
     flex-direction: column;

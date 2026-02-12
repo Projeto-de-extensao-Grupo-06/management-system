@@ -1,5 +1,4 @@
 import './components.css';
-
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMask } from '@react-input/mask';
@@ -165,9 +164,9 @@ export const DocumentInput = forwardRef<HTMLInputElement, DocumentInputProps>(({
 
     useEffect(() => {
         if (prevTypeRef.current !== documentType) {
-            
             if (ref) {
                 if (typeof ref === 'function') {
+                    ref(null);
                 } else if (ref && 'current' in ref && ref.current) {
                     ref.current.value = '';
                 }
