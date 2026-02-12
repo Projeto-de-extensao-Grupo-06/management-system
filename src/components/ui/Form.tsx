@@ -165,16 +165,16 @@ export const DocumentInput = forwardRef<HTMLInputElement, DocumentInputProps>(({
 
     useEffect(() => {
         if (prevTypeRef.current !== documentType) {
-            if (onChange) {
-                const event = {
-                    target: { value: '' },
-                    currentTarget: { value: '' }
-                } as React.ChangeEvent<HTMLInputElement>;
-                onChange(event);
+            
+            if (ref) {
+                if (typeof ref === 'function') {
+                } else if (ref && 'current' in ref && ref.current) {
+                    ref.current.value = '';
+                }
             }
             prevTypeRef.current = documentType;
         }
-    }, [documentType, onChange]);
+    }, [documentType, ref]);
 
     return (
         <Input

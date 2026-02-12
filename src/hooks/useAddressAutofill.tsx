@@ -47,5 +47,5 @@ export function useAddressAutofill() {
                 fetchAddressByCep(zipCode);
             }
         }
-    }, [zipCode, fetchAddressByCep, formContext]);
+    }, [zipCode, fetchAddressByCep]);
 }

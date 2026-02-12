@@ -28,9 +28,9 @@ export default function BasicInfoForm({ readOnly }: BasicInfoFormProps) {
 
                 <div className={styles.gridTwo}>
                     <div>
-                        <label className={styles.fieldLabel}>Tipo de Pessoa:</label>
+                        <label className={styles.fieldLabel}>Tipo de Documento:</label>
                         <div className={styles.readOnlyField}>
-                            {formValues.documentType === 'CNPJ' ? 'Pessoa Jurídica' : 'Pessoa Física'}
+                            {formValues.documentType === 'CNPJ' ? 'CNPJ' : 'CPF'}
                         </div>
                     </div>
                     <div>
@@ -111,7 +111,7 @@ export default function BasicInfoForm({ readOnly }: BasicInfoFormProps) {
             <div className={styles.gridTwo}>
                 <div className={styles.inputGroup}>
                     <label htmlFor="documentType" className={styles.fieldLabel}>
-                        Tipo de Pessoa <span className={styles.required}>*</span>
+                        Tipo de Documento <span className={styles.required}>*</span>
                     </label>
                     <Controller
                         name="documentType"
@@ -120,9 +120,10 @@ export default function BasicInfoForm({ readOnly }: BasicInfoFormProps) {
                             <Select
                                 {...field}
                                 id="documentType"
+                                className={styles.select}
                             >
-                                <SelectOption value="CPF" label="Pessoa Física" />
-                                <SelectOption value="CNPJ" label="Pessoa Jurídica" />
+                                <SelectOption value="CPF" label="CPF" />
+                                <SelectOption value="CNPJ" label="CNPJ" />
                             </Select>
                         )}
                     />

@@ -14,7 +14,6 @@ import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../c
 import useClients from '../../hooks/useClients';
 import type { ModalRef } from '../../interfaces/properties/DialogProps';
 import type { ClientFormRef } from '../../interfaces/properties/FormProps';
-import type { ClientSchemaType } from '../../schemas/clientSchema';
 import styles from "./Clients.module.css";
 
 export default function Clients() {
@@ -39,7 +38,6 @@ export default function Clients() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const formRef = useRef<ClientFormRef>(null);
   const modalRef = useRef<ModalRef>(null);
-  const [clientFormData, setClientFormData] = useState<Partial<ClientSchemaType>>({});
 
   const [globalAlert, setGlobalAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   const [modalTypeMessage, setModalMessage] = useState<string | null>(null);
@@ -67,7 +65,6 @@ export default function Clients() {
 
     createClient(data)
       .then(() => {
-        setClientFormData({});
         setIsCreateModalOpen(false);
         setGlobalAlert({ message: 'Cliente cadastrado com sucesso!', type: 'success' });
         setTimeout(() => setGlobalAlert(null), 5000);
@@ -117,25 +114,25 @@ export default function Clients() {
         </div>
       )}
 
-      <Modal
-        ref={modalRef}
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title="Criar Cliente"
-        footer={createModalFooter}
-      >
-        {modalTypeMessage && (
-          <div style={{ marginBottom: '1rem' }}>
-            <Alert message={modalTypeMessage} type="error" />
-          </div>
-        )}
-        <ClientForm
-          ref={formRef}
-          onSubmit={onFormSubmit}
-          defaultValues={clientFormData}
-          onFormChange={setClientFormData}
-        />
-      </Modal>
+      {isCreateModalOpen && (
+        <Modal
+          ref={modalRef}
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          title="Criar Cliente"
+          footer={createModalFooter}
+        >
+          {modalTypeMessage && (
+            <div style={{ marginBottom: '1rem' }}>
+              <Alert message={modalTypeMessage} type="error" />
+            </div>
+          )}
+          <ClientForm
+            ref={formRef}
+            onSubmit={onFormSubmit}
+          />
+        </Modal>
+      )}
 
       <ClientFilterModal
         key={isFilterModalOpen ? 'open' : 'closed'}

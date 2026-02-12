@@ -9,7 +9,7 @@ import styles from './ClientForm.module.css';
 import AddressForm from './partials/AddressForm';
 import BasicInfoForm from './partials/BasicInfoForm';
 
-const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defaultValues, onFormChange, readOnly }, ref) => {
+const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defaultValues, readOnly }, ref) => {
     const methods = useForm<ClientSchemaType>({
         resolver: zodResolver(clientSchema),
         defaultValues: {
@@ -30,7 +30,7 @@ const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defau
         },
     });
 
-    const { handleSubmit, watch, reset } = methods;
+    const { handleSubmit, reset } = methods;
 
     useEffect(() => {
         if (defaultValues) {
@@ -39,16 +39,6 @@ const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defau
     }, [defaultValues, reset]);
 
     useAddressAutofill();
-
-    useEffect(() => {
-        const subscription = watch((value) => {
-            if (onFormChange) {
-                onFormChange(value as Partial<ClientSchemaType>);
-            }
-        });
-
-        return () => subscription.unsubscribe();
-    }, [watch, onFormChange]);
 
     useImperativeHandle(ref, () => ({
         submit: () => {
