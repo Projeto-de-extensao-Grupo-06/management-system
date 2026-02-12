@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useAddressAutofill } from '../../../../hooks/useAddressAutofill';
 import { CepInput, Input } from '../../../ui/Form';
 import styles from '../ClientForm.module.css';
 
@@ -9,6 +10,7 @@ interface AddressFormProps {
 
 export default function AddressForm({ readOnly }: AddressFormProps) {
     const { watch, control } = useFormContext();
+    useAddressAutofill();
     const formValues = watch();
 
     const isAddressFilled = useMemo(() => {

@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useAddressAutofill } from '../../../hooks/useAddressAutofill';
 import type { ClientFormProps, ClientFormRef } from '../../../interfaces/properties/FormProps';
 import type { ClientSchemaType } from '../../../schemas/clientSchema';
 import { clientSchema } from '../../../schemas/clientSchema';
@@ -37,8 +36,6 @@ const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defau
             reset(defaultValues);
         }
     }, [defaultValues, reset]);
-
-    useAddressAutofill();
 
     useImperativeHandle(ref, () => ({
         submit: () => {
