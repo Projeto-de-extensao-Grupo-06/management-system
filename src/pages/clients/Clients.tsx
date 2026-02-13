@@ -22,6 +22,7 @@ export default function Clients() {
     clients,
     page,
     totalPages,
+    totalElements,
     searchTerm,
     statusFilter,
     filters,
@@ -143,7 +144,7 @@ export default function Clients() {
         onClear={handleClearFilters}
       />
 
-      <PageHeader title="Clientes" count={clients.length}>
+      <PageHeader title="Clientes" count={totalElements}>
         <Button
           icon={<FontAwesomeIcon icon={faPlus} />}
           text="Cadastrar Cliente"
