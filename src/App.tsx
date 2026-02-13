@@ -12,6 +12,7 @@ import Login from "./pages/auth/login/Login";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import NotFound from "./pages/shared/NotFound";
+import Projects from "./pages/projects/Projects";
 
 import useAuthStore from "./store/useAuthStore";
 
@@ -41,6 +42,7 @@ function App() {
             <Route path="/clientes" element={<Clients />} />
             <Route path="/clientes/:id" element={<ClientDetails />} />
             <Route path="/analise" element={<Analysis />}></Route>
+            <Route path="/projetos" element={<Projects />} />
           </Route>
         </Route>
       </Routes>
