@@ -1,8 +1,7 @@
 import './components.css';
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMask } from '@react-input/mask';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import type BaseInputProps from '../../interfaces/properties/BaseInputProps';
 import type ButtonProps from '../../interfaces/properties/ButtonProps';
 import type DocumentInputProps from '../../interfaces/properties/DocumentInputProps';
@@ -122,13 +121,6 @@ export function PasswordInput({ placeholder, onChange, value }: PasswordInputPro
         </div>
     );
 }
-
-const mergeRefs = (...refs: (React.Ref<HTMLInputElement> | undefined)[]) => (e: HTMLInputElement | null) => {
-    refs.forEach((ref) => {
-        if (typeof ref === 'function') ref(e);
-        else if (ref != null && typeof ref === 'object' && 'current' in ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = e;
-    });
-};
 
 export const PhoneInput = forwardRef<HTMLInputElement, BaseInputProps>(
   ({ value, onChange, ...props }, ref) => {
