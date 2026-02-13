@@ -68,7 +68,18 @@ export default function AddressForm({ readOnly }: AddressFormProps) {
                     <Controller
                         name="zipCode"
                         control={control}
-                        render={({ field }) => <CepInput {...field} id="zipCode" className="input" />}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <CepInput
+                                    {...field}
+                                    id="zipCode"
+                                    className={`input ${error ? styles.inputError : ''}`}
+                                />
+                                {error && (
+                                    <span className={styles.errorMessage}>{error.message}</span>
+                                )}
+                            </>
+                        )}
                     />
                 </div>
 
