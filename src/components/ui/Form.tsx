@@ -130,76 +130,126 @@ const mergeRefs = (...refs: (React.Ref<HTMLInputElement> | undefined)[]) => (e: 
     });
 };
 
-export const PhoneInput = forwardRef<HTMLInputElement, BaseInputProps>((props, ref) => {
-    const maskRef = useMask({
-        mask: '(__) _____-____',
-        replacement: { _: /\d/ },
-    });
+export const PhoneInput = forwardRef<HTMLInputElement, BaseInputProps>(
+  ({ value, onChange, ...props }, ref) => {
+
+    const formatPhone = (value: string) => {
+      const numbers = value.replace(/\D/g, '').slice(0, 11);
+
+      if (numbers.length <= 10) {
+        return numbers
+          .replace(/(\d{2})(\d)/, '($1) $2')
+          .replace(/(\d{4})(\d)/, '$1-$2');
+      }
+
+      return numbers
+        .replace(/(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d)/, '$1-$2');
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formatted = formatPhone(e.target.value);
+
+      e.target.value = formatted;
+      onChange?.(e);
+    };
 
     return (
-        <Input
-            {...props}
-            ref={mergeRefs(ref, maskRef)}
-            type="tel"
-            placeholder="(11) 98888-7777"
-        />
+      <Input
+        {...props}
+        ref={ref}
+        value={value || ''}
+        onChange={handleChange}
+        type="tel"
+        placeholder="(11) 98888-7777"
+        maxLength={15}
+      />
     );
-});
+  }
+);
 
-export const DocumentInput = forwardRef<HTMLInputElement, DocumentInputProps>(({ documentType = 'cpf', onChange, ...props }, ref) => {
-    const cpfMaskRef = useMask({
-        mask: '___.___.___-__',
-        replacement: { _: /\d/ },
-    });
 
-    const cnpjMaskRef = useMask({
-        mask: '__.___.___/____-__',
-        replacement: { _: /\d/ },
-    });
+export const DocumentInput = forwardRef<HTMLInputElement, DocumentInputProps>(
+  ({ documentType = 'cpf', value, onChange, ...props }, ref) => {
 
-    const currentMaskRef = documentType === 'cnpj' ? cnpjMaskRef : cpfMaskRef;
-    const placeholder = documentType === 'cnpj' ? '99.999.999/9999-99' : '999.999.999-99';
+    const formatCPF = (value: string) => {
+      return value
+        .replace(/\D/g, '')
+        .slice(0, 11)
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    };
 
-    const prevTypeRef = useRef(documentType);
+    const formatCNPJ = (value: string) => {
+      return value
+        .replace(/\D/g, '')
+        .slice(0, 14)
+        .replace(/^(\d{2})(\d)/, '$1.$2')
+        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1/$2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    };
 
-    useEffect(() => {
-        if (prevTypeRef.current !== documentType) {
-            if (ref) {
-                if (typeof ref === 'function') {
-                    ref(null);
-                } else if (ref && 'current' in ref && ref.current) {
-                    ref.current.value = '';
-                }
-            }
-            prevTypeRef.current = documentType;
-        }
-    }, [documentType, ref]);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value;
+
+      const formatted =
+        documentType === 'cnpj'
+          ? formatCNPJ(rawValue)
+          : formatCPF(rawValue);
+
+      e.target.value = formatted;
+
+      onChange?.(e);
+    };
+
+    const placeholder =
+      documentType === 'cnpj'
+        ? '99.999.999/9999-99'
+        : '999.999.999-99';
 
     return (
-        <Input
-            {...props}
-            onChange={onChange}
-            ref={mergeRefs(ref, currentMaskRef)}
-            type="text"
-            placeholder={placeholder}
-            maxLength={documentType === 'cnpj' ? 18 : 14}
-        />
+      <Input
+        {...props}
+        ref={ref}
+        value={value || ''}
+        onChange={handleChange}
+        type="text"
+        placeholder={placeholder}
+      />
     );
-});
+  }
+);
 
-export const CepInput = forwardRef<HTMLInputElement, BaseInputProps>((props, ref) => {
-    const maskRef = useMask({
-        mask: '_____-___',
-        replacement: { _: /\d/ },
-    });
+export const CepInput = forwardRef<HTMLInputElement, BaseInputProps>(
+  ({ value, onChange, ...props }, ref) => {
+
+    const formatCEP = (value: string) => {
+      return value
+        .replace(/\D/g, '')
+        .slice(0, 8)
+        .replace(/(\d{5})(\d)/, '$1-$2');
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value;
+      const formatted = formatCEP(rawValue);
+
+      e.target.value = formatted;
+      onChange?.(e);
+    };
 
     return (
-        <Input
-            {...props}
-            ref={mergeRefs(ref, maskRef)}
-            type="text"
-            placeholder="01414-000"
-            maxLength={9}
-        />
+      <Input
+        {...props}
+        ref={ref}
+        value={value || ''}
+        onChange={handleChange}
+        type="text"
+        placeholder="01414-000"
+        maxLength={9}
+      />
     );
-});
+  }
+);
