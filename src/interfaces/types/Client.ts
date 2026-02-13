@@ -1,4 +1,5 @@
 export interface Address {
+  id?: number;
   streetName: string;
   number: string;
   neighborhood: string;
@@ -17,6 +18,7 @@ export default interface Client {
   phone: string;
   status: string;
   documentNumber: string;
-  mainAddress: Address;
+  documentType?: string;
+  mainAddress: Address | null;
   createdAt: string;
 }

@@ -1,24 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import type { ClientFormProps, ClientFormRef } from '../../../interfaces/properties/FormProps';
 import type { ClientSchemaType } from '../../../schemas/clientSchema';
 import { clientSchema } from '../../../schemas/clientSchema';
-import AddressService from '../../../services/AddressService';
 import styles from './ClientForm.module.css';
 import AddressForm from './partials/AddressForm';
 import BasicInfoForm from './partials/BasicInfoForm';
 
-export interface ClientFormRef {
-    submit: () => void;
-}
-
-interface ClientFormProps {
-    onSubmit: (data: ClientSchemaType) => void;
-    defaultValues?: Partial<ClientSchemaType>;
-    onFormChange?: (data: Partial<ClientSchemaType>) => void;
-}
-
-const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defaultValues, onFormChange }, ref) => {
+const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defaultValues, readOnly }, ref) => {
     const methods = useForm<ClientSchemaType>({
         resolver: zodResolver(clientSchema),
         defaultValues: {
@@ -39,23 +29,13 @@ const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defau
         },
     });
 
-    const {
-        handleSubmit,
-        watch,
-        setValue,
-        setError,
-        clearErrors,
-    } = methods;
-
-    const zipCode = watch('zipCode');
-    const addressService = useMemo(() => new AddressService(), []);
+    const { handleSubmit, reset } = methods;
 
     useEffect(() => {
-        if (onFormChange) {
-            const subscription = watch((value) => onFormChange(value as Partial<ClientSchemaType>));
-            return () => subscription.unsubscribe();
+        if (defaultValues) {
+            reset(defaultValues);
         }
-    }, [watch, onFormChange]);
+    }, [defaultValues, reset]);
 
     useImperativeHandle(ref, () => ({
         submit: () => {
@@ -63,34 +43,18 @@ const ClientForm = forwardRef<ClientFormRef, ClientFormProps>(({ onSubmit, defau
         },
     }));
 
-    // Auto-fill address by CEP
-    useEffect(() => {
-        const fetchAddress = async () => {
-            const cleanCep = zipCode?.replace(/\D/g, '');
-            if (cleanCep?.length === 8) {
-                const address = await addressService.getAddressByCep(cleanCep);
-                if (address) {
-                    setValue('street', address.logradouro);
-                    setValue('neighborhood', address.bairro);
-                    setValue('city', address.localidade);
-                    setValue('state', address.uf);
-                    clearErrors('zipCode');
-                } else {
-                    setError('zipCode', { type: 'manual', message: 'CEP não encontrado' });
-                }
-            }
-        };
-
-        if (zipCode && zipCode.replace(/\D/g, '').length === 8) {
-            fetchAddress();
-        }
-    }, [zipCode, addressService, setValue, setError, clearErrors]);
-
     return (
         <FormProvider {...methods}>
             <div className={styles.formContainer}>
-                <BasicInfoForm />
-                <AddressForm />
+                <div className={styles.card}>
+                    <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
+                    <BasicInfoForm readOnly={readOnly} />
+                </div>
+
+                <div className={styles.card}>
+                    <h3 className={styles.sectionTitle}>Endereço:</h3>
+                    <AddressForm readOnly={readOnly} />
+                </div>
             </div>
         </FormProvider>
     );

@@ -5,22 +5,26 @@
 
 .input {
   width: 100%;
-  padding: 18px 20px;
-  font-size: 16px;
-  color: #666666;
+  padding: 10px 16px;
+  font-size: 14px;
   color: var(--color-text);
-  background-color: #F5F5F5;
-  background-color: var(--color-background-alt);
-  border: 1px solid var(--color-border-light);
-  border-radius: 20px;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
   outline: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-family: inherit;
-  min-height: 56px;
+  min-height: 44px;
+  font-weight: 500;
 }
 
 .input::placeholder {
-  color: #999999;
+  color: var(--color-text-light);
+}
+
+.input:hover {
+  border-color: var(--color-text-light);
+  background-color: var(--color-background-alt);
 }
 
 .input:focus {
@@ -31,19 +35,19 @@
 
 .input-icon {
   position: absolute;
-  right: 20px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  color: #666666;
-  font-size: 20px;
+  color: var(--color-text);
+  font-size: 16px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .input-icon:hover {
@@ -51,8 +55,8 @@
 }
 
 .input-container input[type="password"],
-.input-container input[type="text"]:not([placeholder*="Email"]) {
-  padding-right: 56px;
+.input-container input[type="text"] {
+  padding-right: 40px;
 }
 
 .search-icon {
@@ -88,18 +92,17 @@
 
 .submit-button {
   width: 100%;
-  padding: 18px 20px;
-  font-size: 18px;
+  padding: 10px 16px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-background);
-  background-color: #1B5E20;
   background-color: var(--color-secondary);
   border: none;
-  border-radius: 20px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-family: inherit;
-  min-height: 56px;
+  min-height: 44px;
 }
 
 .submit-button:hover:not(:disabled) {

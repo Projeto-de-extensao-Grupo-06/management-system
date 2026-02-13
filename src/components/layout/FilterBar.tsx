@@ -1,9 +1,5 @@
-import type { ReactNode } from 'react';
+import type { FilterBarProps } from '../../interfaces/properties/LayoutProps';
 import styles from '../../pages/clients/Clients.module.css'; // Reusing styles
-
-interface FilterBarProps {
-    children: ReactNode;
-}
 
 export default function FilterBar({ children }: FilterBarProps) {
     return (

@@ -1,9 +1,5 @@
+import type { AlertProps } from '../../interfaces/properties/UIProps';
 import styles from './Alert.module.css';
-
-interface AlertProps {
-    message: string;
-    type?: 'error' | 'success' | 'warning';
-}
 
 export function Alert({ message, type = 'error' }: AlertProps) {
     if (!message) return null;

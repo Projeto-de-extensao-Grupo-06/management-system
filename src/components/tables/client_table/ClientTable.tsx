@@ -1,16 +1,9 @@
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type Client from '../../../interfaces/types/Client';
+import type { ClientTableProps } from '../../../interfaces/properties/TableProps';
 import styles from '../../../pages/clients/Clients.module.css';
 import { IconButton } from '../../ui/Form';
 import Table from '../Table';
-
-interface ClientTableProps {
-    clients: Client[];
-    onEdit: (id: number) => void;
-    onDelete: (id: number) => void;
-    onRowClick?: (id: number) => void;
-}
 
 export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: ClientTableProps) {
     const headers = [
@@ -37,7 +30,7 @@ export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: C
                     <td>{client.name}</td>
                     <td>{client.email}</td>
                     <td>{client.phone}</td>
-                    <td>{client.mainAddress ? `${client.mainAddress.city} / ${client.mainAddress.state}` : '-'}</td>
+                    <td>{client.mainAddress ? `${client.mainAddress?.city} / ${client.mainAddress?.state}` : '-'}</td>
                     <td>{client.createdAt ? new Date(client.createdAt).toLocaleDateString('pt-BR') : '-'}</td>
                     <td>
                         <div className={styles.actions} onClick={(e) => e.stopPropagation()}>

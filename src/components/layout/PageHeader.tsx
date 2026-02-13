@@ -1,11 +1,5 @@
-import type { ReactNode } from 'react';
+import type { PageHeaderProps } from '../../interfaces/properties/LayoutProps';
 import styles from '../../pages/clients/Clients.module.css'; // Reusing for consistency, ideally extract common layout styles
-
-interface PageHeaderProps {
-    title: string;
-    count?: number;
-    children?: ReactNode;
-}
 
 export default function PageHeader({ title, count, children }: PageHeaderProps) {
     return (

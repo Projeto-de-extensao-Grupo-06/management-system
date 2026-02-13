@@ -44,7 +44,9 @@ export default class ClientsService {
     }
 
     async createClient(client: { firstName: string, lastName: string, email: string, phone: string, document: string, documentType: string, zipCode: string, street: string, number: string, neighborhood: string, city: string, state: string, notes?: string }): Promise<Client> {
-        const payload = {
+        const hasAddress = !!(client.street || client.number || client.neighborhood || client.city || client.state || client.zipCode);
+
+        const clientPayload: any = {
             firstName: client.firstName,
             lastName: client.lastName,
             documentNumber: client.document.replace(/\D/g, ''),
@@ -52,7 +54,10 @@ export default class ClientsService {
             email: client.email,
             phone: client.phone.replace(/\D/g, ''),
             note: client.notes,
-            mainAddress: {
+        };
+
+        if (hasAddress) {
+            clientPayload.mainAddress = {
                 streetName: client.street,
                 number: client.number,
                 neighborhood: client.neighborhood,
@@ -60,9 +65,10 @@ export default class ClientsService {
                 state: client.state,
                 postalCode: client.zipCode.replace(/\D/g, ''),
                 type: 'RESIDENTIAL',
-            }
-        };
-        const response = await api.post<Client>('/clients', payload);
+            };
+        }
+
+        const response = await api.post<Client>('/clients', clientPayload);
         return ClientMapper.toDomain(response.data);
     }
 };

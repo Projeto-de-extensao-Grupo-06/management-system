@@ -1,18 +1,6 @@
+import type { CreateAddressDto, ResponseAddressDto, UpdateAddressDto, ViaCepResponse } from "../interfaces/types/AddressTypes";
+import api from "./provider/api";
 import viaCepApi from "./provider/viaCepApi";
-
-export interface ViaCepResponse {
-    cep: string;
-    logradouro: string;
-    complemento: string;
-    bairro: string;
-    localidade: string;
-    uf: string;
-    ibge: string;
-    gia: string;
-    ddd: string;
-    siafi: string;
-    erro?: boolean;
-}
 
 export default class AddressService {
     async getAddressByCep(cep: string): Promise<ViaCepResponse | null> {
@@ -31,5 +19,20 @@ export default class AddressService {
             console.error("Error fetching address by CEP:", error);
             return null;
         }
+    }
+
+    async createAddress(dto: CreateAddressDto): Promise<ResponseAddressDto> {
+        const response = await api.post<ResponseAddressDto>('/address', dto);
+        return response.data;
+    }
+
+    async updateAddress(addressId: number, dto: UpdateAddressDto): Promise<ResponseAddressDto> {
+        const response = await api.patch<ResponseAddressDto>(`/address/${addressId}`, dto);
+        return response.data;
+    }
+
+    async getAddressById(addressId: number): Promise<ResponseAddressDto> {
+        const response = await api.get<ResponseAddressDto>(`/address/${addressId}`);
+        return response.data;
     }
 }

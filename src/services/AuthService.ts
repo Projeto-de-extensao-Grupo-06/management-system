@@ -1,25 +1,6 @@
-import type User from '../interfaces/types/User';
+import type { ChangePasswordWithToken, LoginCredentials, PasswordRecoveryCredentials } from '../interfaces/types/AuthTypes';
 import api from './provider/api';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  user: User;
-  message?: string;
-}
-
-export interface PasswordRecoveryCredentials {
-  email: string;
-  otp: string;
-}
-
-export interface ChangePasswordWithToken {
-  password: string;
-}
-
+  
 export default class authService {
   async login(credentials: LoginCredentials): Promise<void> {
     await api.post('/auth/login', credentials);
@@ -30,7 +11,7 @@ export default class authService {
   }
 
   async requestRecoveryCode(email: string): Promise<void> {
-    await api.post("/auth/forget-password", {email});
+    await api.post("/auth/forget-password", { email });
   }
 
   async verifyOtpCode(credentials: PasswordRecoveryCredentials): Promise<number> {
