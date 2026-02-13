@@ -2,6 +2,7 @@ import "./App.css";
 
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
+import PermissionRoute from "./components/security/PermissionsRoute";
 import ProtectedRoute from "./components/security/ProtectedRoute";
 import AppLayout from "./layouts/app_layout/AppLayout";
 import ForgetPasswordLayout from "./layouts/login_layout/ForgetPasswordLayout";
@@ -12,7 +13,6 @@ import Login from "./pages/auth/login/Login";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import NotFound from "./pages/shared/NotFound";
-import PermissionRoute from "./components/security/PermissionsRoute";
 
 import useAuthStore from "./store/useAuthStore";
 
@@ -39,13 +39,16 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            <Route 
-            path="/clientes" 
-            element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients/>}/>} 
+            <Route
+              path="/clientes"
+              element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients />} />}
             />
-            
-            <Route path="/clientes/:id" element={<ClientDetails />} />
-            
+
+            <Route
+              path="/clientes/:id"
+              element={<PermissionRoute permissions={["CLIENT_READ"]} element={<ClientDetails />} />}
+            />
+
             <Route path="/analise" element={<Analysis />}></Route>
           </Route>
         </Route>

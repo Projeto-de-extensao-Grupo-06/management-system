@@ -7,6 +7,7 @@ import Modal from '../../components/dialogs/modal/Modal';
 import ClientForm from '../../components/forms/client_form/ClientForm';
 import FilterBar from '../../components/layout/FilterBar';
 import PageHeader from '../../components/layout/PageHeader';
+import SecureComponent from '../../components/security/SecureComponent';
 import ClientTable from '../../components/tables/client_table/ClientTable';
 import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
@@ -147,13 +148,15 @@ export default function Clients() {
       />
 
       <PageHeader title="Clientes" count={clients.length}>
-        <Button
-          icon={<FontAwesomeIcon icon={faPlus} />}
-          text="Cadastrar Cliente"
-          ariaLabel="Cadastrar Cliente"
-          onClick={handleAddClient}
-          width="fit-content"
-        />
+        <SecureComponent permissions={["CLIENT_WRITE"]}>
+          <Button
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            text="Cadastrar Cliente"
+            ariaLabel="Cadastrar Cliente"
+            onClick={handleAddClient}
+            width="fit-content"
+          />
+        </SecureComponent>
       </PageHeader>
 
       <FilterBar>

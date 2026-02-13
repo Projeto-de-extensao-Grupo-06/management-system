@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import ClientForm from '../../components/forms/client_form/ClientForm';
+import SecureComponent from '../../components/security/SecureComponent';
 import { Alert } from '../../components/ui/Alert';
 import { Button } from '../../components/ui/Form';
 import useClients from '../../hooks/useClients';
@@ -121,13 +122,16 @@ export default function ClientDetails() {
                         />
                     </div>
                 ) : (
-                    <Button
-                        text="Editar"
-                        icon={<FontAwesomeIcon icon={faPen} />}
-                        onClick={() => setIsEditing(true)}
-                        width="fit-content"
-                        ariaLabel="Editar Dados"
-                    />
+                    <SecureComponent permissions={["CLIENT_UPDATE"]}>
+                        <Button
+                            text="Editar"
+                            icon={<FontAwesomeIcon icon={faPen} />}
+                            onClick={() => setIsEditing(true)}
+                            width="fit-content"
+                            ariaLabel="Editar Dados"
+                        />
+                    </SecureComponent>
+
                 )}
             </div>
 
