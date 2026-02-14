@@ -6,9 +6,12 @@ import {
   faGear,
   faWrench,
   faArrowRightFromBracket,
+  faBars,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import VLibras from "@moreiraste/react-vlibras";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 
@@ -19,6 +22,8 @@ import styles from "./AppLayout.module.css";
 
 
 export default function AppLayout() {
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+
   const menuItems = [
     { to: "/agenda", label: "Agenda", icon: faCalendar },
     { to: "/projetos", label: "Projetos", icon: faClipboard },
@@ -41,6 +46,10 @@ export default function AppLayout() {
       });
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
   const menu = menuItems.map((item) => {
     const Icon = item.icon;
     return (
@@ -50,6 +59,7 @@ export default function AppLayout() {
           className={({ isActive }) =>
             `${styles.menuLink} ${isActive ? styles.menuLinkActive : ""}`
           }
+          onClick={() => setIsSidebarExpanded(false)}
         >
           <FontAwesomeIcon className={styles.menuIcon} icon={Icon} />
           <span className={styles.menuText}>{item.label}</span>
@@ -61,10 +71,28 @@ export default function AppLayout() {
   return (
     <div className={styles.container}>
       <VLibras forceOnload={true} />
-      <aside className={styles.sidebar}>
+      {isSidebarExpanded && (
+        <div
+          className={styles.overlay}
+          onClick={() => setIsSidebarExpanded(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`${styles.sidebar} ${isSidebarExpanded ? styles.sidebarExpanded : ''}`}>
         <div className={styles.logo}>
-          <div className={styles.logoImage}>
-            <img src={logo} alt="Solarize Logo" />
+          <div className={styles.headerControl}>
+            <button
+              className={styles.toggleButton}
+              onClick={toggleSidebar}
+              aria-label={isSidebarExpanded ? "Fechar menu" : "Abrir menu"}
+            >
+              <FontAwesomeIcon icon={isSidebarExpanded ? faTimes : faBars} />
+            </button>
+
+            <div className={styles.logoImage}>
+              <img src={logo} alt="Solarize Logo" />
+            </div>
           </div>
         </div>
 
