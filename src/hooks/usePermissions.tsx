@@ -1,24 +1,20 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import type { Permissions } from "../interfaces/properties/PermissionsRouteProps"
 import { getCookie } from "../utils/cookieUtils";
 
 export default function usePermissions() {
-    const [permissions, setPermissions] = useState<Permissions[]>([]);
-
-    useEffect(() => {
+    const [permissions] = useState<Permissions[]>(() => {
         const permissionsCookie = getCookie("userAuthorities");
 
-        if(permissionsCookie) {
-            const decode = atob(permissionsCookie);
+        if (!permissionsCookie) return [];
 
-            const userPermissions = decode
+        const decode = atob(permissionsCookie);
+
+        return decode
             .replace("[", "")
             .replace("]", "")
             .split(", ") as Permissions[];
-
-            setPermissions(userPermissions);
-        }
-    }, []);
+    });
 
     return permissions;
 }
