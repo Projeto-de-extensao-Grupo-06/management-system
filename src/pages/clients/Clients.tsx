@@ -181,7 +181,7 @@ export default function Clients() {
         onClear={handleClearFilters}
       />
 
-      <PageHeader title="Clientes" count={clients.length}>
+      <PageHeader title="Clientes" count={totalElements}>
         <SecureComponent permissions={["CLIENT_WRITE"]}>
           <Button
             icon={<FontAwesomeIcon icon={faPlus} />}
