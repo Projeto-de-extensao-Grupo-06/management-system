@@ -2,7 +2,8 @@ import { faArrowLeft, faSave, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
-import ClientDetailsForm from '../../components/forms/client_form/ClientDetailsForm';
+import ClientForm from '../../components/forms/client_form/ClientForm';
+import SecureComponent from '../../components/security/SecureComponent';
 import { Alert } from '../../components/ui/Alert';
 import { Button } from '../../components/ui/Form';
 import useClients from '../../hooks/useClients';
@@ -11,7 +12,6 @@ import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientsService from '../../services/ClientsService';
-import { formatPhone, formatDocument, formatCep } from '../../utils/maskUtils';
 import styles from './Clients.module.css';
 
 export default function ClientDetails() {
@@ -124,13 +124,16 @@ export default function ClientDetails() {
                         />
                     </div>
                 ) : (
-                    <Button
-                        text="Editar"
-                        icon={<FontAwesomeIcon icon={faPen} />}
-                        onClick={() => setIsEditing(true)}
-                        width="fit-content"
-                        ariaLabel="Editar Dados"
-                    />
+                    <SecureComponent permissions={["CLIENT_UPDATE"]}>
+                        <Button
+                            text="Editar"
+                            icon={<FontAwesomeIcon icon={faPen} />}
+                            onClick={() => setIsEditing(true)}
+                            width="fit-content"
+                            ariaLabel="Editar Dados"
+                        />
+                    </SecureComponent>
+
                 )}
             </div>
 
