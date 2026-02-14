@@ -74,7 +74,9 @@ export default function AppLayout() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.vlibrasWrapper}>
         <VLibras forceOnload={true} />
+      </div>
       {isSidebarExpanded && (
         <div
           className={styles.overlay}
