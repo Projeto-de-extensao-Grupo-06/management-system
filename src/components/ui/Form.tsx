@@ -1,9 +1,7 @@
 import './components.css';
-
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMask } from '@react-input/mask';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import type BaseInputProps from '../../interfaces/properties/BaseInputProps';
 import type ButtonProps from '../../interfaces/properties/ButtonProps';
 import type DocumentInputProps from '../../interfaces/properties/DocumentInputProps';
@@ -124,83 +122,126 @@ export function PasswordInput({ placeholder, onChange, value }: PasswordInputPro
     );
 }
 
-const mergeRefs = (...refs: (React.Ref<HTMLInputElement> | undefined)[]) => (e: HTMLInputElement | null) => {
-    refs.forEach((ref) => {
-        if (typeof ref === 'function') ref(e);
-        else if (ref != null && typeof ref === 'object' && 'current' in ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = e;
-    });
-};
+export const PhoneInput = forwardRef<HTMLInputElement, BaseInputProps>(
+  ({ value, onChange, ...props }, ref) => {
 
-export const PhoneInput = forwardRef<HTMLInputElement, BaseInputProps>((props, ref) => {
-    const maskRef = useMask({
-        mask: '(__) _____-____',
-        replacement: { _: /\d/ },
-    });
+    const formatPhone = (value: string) => {
+      const numbers = value.replace(/\D/g, '').slice(0, 11);
 
-    return (
-        <Input
-            {...props}
-            ref={mergeRefs(ref, maskRef)}
-            type="tel"
-            placeholder="(11) 98888-7777"
-        />
-    );
-});
+      if (numbers.length <= 10) {
+        return numbers
+          .replace(/(\d{2})(\d)/, '($1) $2')
+          .replace(/(\d{4})(\d)/, '$1-$2');
+      }
 
-export const DocumentInput = forwardRef<HTMLInputElement, DocumentInputProps>(({ documentType = 'cpf', onChange, ...props }, ref) => {
-    const cpfMaskRef = useMask({
-        mask: '___.___.___-__',
-        replacement: { _: /\d/ },
-    });
+      return numbers
+        .replace(/(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d)/, '$1-$2');
+    };
 
-    const cnpjMaskRef = useMask({
-        mask: '__.___.___/____-__',
-        replacement: { _: /\d/ },
-    });
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formatted = formatPhone(e.target.value);
 
-    const currentMaskRef = documentType === 'cnpj' ? cnpjMaskRef : cpfMaskRef;
-    const placeholder = documentType === 'cnpj' ? '99.999.999/9999-99' : '999.999.999-99';
-
-    const prevTypeRef = useRef(documentType);
-
-    useEffect(() => {
-        if (prevTypeRef.current !== documentType) {
-            if (onChange) {
-                const event = {
-                    target: { value: '' },
-                    currentTarget: { value: '' }
-                } as React.ChangeEvent<HTMLInputElement>;
-                onChange(event);
-            }
-            prevTypeRef.current = documentType;
-        }
-    }, [documentType, onChange]);
+      e.target.value = formatted;
+      onChange?.(e);
+    };
 
     return (
-        <Input
-            {...props}
-            onChange={onChange}
-            ref={mergeRefs(ref, currentMaskRef)}
-            type="text"
-            placeholder={placeholder}
-            maxLength={documentType === 'cnpj' ? 18 : 14}
-        />
+      <Input
+        {...props}
+        ref={ref}
+        value={value || ''}
+        onChange={handleChange}
+        type="tel"
+        placeholder="(11) 98888-7777"
+        maxLength={15}
+      />
     );
-});
+  }
+);
 
-export const CepInput = forwardRef<HTMLInputElement, BaseInputProps>((props, ref) => {
-    const maskRef = useMask({
-        mask: '_____-___',
-        replacement: { _: /\d/ },
-    });
+
+export const DocumentInput = forwardRef<HTMLInputElement, DocumentInputProps>(
+  ({ documentType = 'cpf', value, onChange, ...props }, ref) => {
+
+    const formatCPF = (value: string) => {
+      return value
+        .replace(/\D/g, '')
+        .slice(0, 11)
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    };
+
+    const formatCNPJ = (value: string) => {
+      return value
+        .replace(/\D/g, '')
+        .slice(0, 14)
+        .replace(/^(\d{2})(\d)/, '$1.$2')
+        .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1/$2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value;
+
+      const formatted =
+        documentType === 'cnpj'
+          ? formatCNPJ(rawValue)
+          : formatCPF(rawValue);
+
+      e.target.value = formatted;
+
+      onChange?.(e);
+    };
+
+    const placeholder =
+      documentType === 'cnpj'
+        ? '99.999.999/9999-99'
+        : '999.999.999-99';
 
     return (
-        <Input
-            {...props}
-            ref={mergeRefs(ref, maskRef)}
-            type="text"
-            placeholder="01414-000"
-            maxLength={9}
-        />
+      <Input
+        {...props}
+        ref={ref}
+        value={value || ''}
+        onChange={handleChange}
+        type="text"
+        placeholder={placeholder}
+      />
     );
-});
+  }
+);
+
+export const CepInput = forwardRef<HTMLInputElement, BaseInputProps>(
+  ({ value, onChange, ...props }, ref) => {
+
+    const formatCEP = (value: string) => {
+      return value
+        .replace(/\D/g, '')
+        .slice(0, 8)
+        .replace(/(\d{5})(\d)/, '$1-$2');
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value;
+      const formatted = formatCEP(rawValue);
+
+      e.target.value = formatted;
+      onChange?.(e);
+    };
+
+    return (
+      <Input
+        {...props}
+        ref={ref}
+        value={value || ''}
+        onChange={handleChange}
+        type="text"
+        placeholder="01414-000"
+        maxLength={9}
+      />
+    );
+  }
+);

@@ -72,15 +72,17 @@ export default function ClientDetails() {
 
     if (loading) return <div className={styles.container}>Carregando...</div>;
 
+    const documentType = (client?.documentNumber && client.documentNumber.length > 14) ? 'CNPJ' : 'CPF';
+
     const defaultFormValues: Partial<ClientSchemaType> = client ? {
         firstName: client.firstName,
         lastName: client.lastName,
         email: client.email,
-        phone: client.phone,
-        document: client.documentNumber || '',
-        documentType: (client.documentNumber && client.documentNumber.length > 14) ? 'CNPJ' : 'CPF',
+        phone: formatPhone(client.phone),
+        document: formatDocument(client.documentNumber, documentType),
+        documentType: documentType,
         notes: '',
-        zipCode: client.mainAddress?.postalCode || '',
+        zipCode: formatCep(client.mainAddress?.postalCode),
         state: client.mainAddress?.state || '',
         city: client.mainAddress?.city || '',
         neighborhood: client.mainAddress?.neighborhood || '',
@@ -135,44 +137,14 @@ export default function ClientDetails() {
                 )}
             </div>
 
-            <ClientForm
+            <ClientDetailsForm
                 ref={formRef}
                 onSubmit={onFormSubmit}
                 defaultValues={defaultFormValues}
                 readOnly={!isEditing}
+                projects={projects}
+                onProjectClick={(projectId: number) => navigate(`/projetos/${projectId}`)}
             />
-
-            <div className={styles.card}>
-                <h3 className={styles.sectionTitle}>Projetos:</h3>
-                {projects.length === 0 ? (
-                    <div className={styles.emptyState}>
-                        Nenhum projeto vinculado a este cliente.
-                    </div>
-                ) : (
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th>Nome do Projeto</th>
-                                <th>Status</th>
-                                <th>Data de Criação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {projects.map(project => (
-                                <tr key={project.id} onClick={() => navigate(`/projetos/${project.id}`)} className={styles.projectRow}>
-                                    <td>
-                                        <div className={styles.projectTitle}>
-                                            {project.projectTitle}
-                                        </div>
-                                    </td>
-                                    <td>{project.status}</td>
-                                    <td>{new Date(project.createdAt).toLocaleDateString('pt-BR')}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
         </div>
     );
 }

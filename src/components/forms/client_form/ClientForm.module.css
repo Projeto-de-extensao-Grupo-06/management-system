@@ -1,3 +1,9 @@
+.detailsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
 .formContainer {
     display: flex;
     flex-direction: column;
@@ -39,32 +45,12 @@
     color: #111827;
 }
 
-.input {
-    padding: 10px 12px;
-    border: 1px solid var(--color-text-light);
-    border-radius: 6px;
-    font-size: 14px;
-    color: var(--color-text-description);
-    outline: none;
-    transition: all 0.2s;
-    width: 100%;
-}
-
-.input::placeholder {
-    color: var(--color-text-light);
-}
-
-.input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(230, 126, 50, 0.1);
-}
-
 .inputError {
-    border-color: var(--color-error);
+    border-color: var(--color-error) !important;
 }
 
 .inputError:focus {
-    box-shadow: 0 0 0 3px var(--color-error-border);
+    box-shadow: 0 0 0 3px var(--color-error-border) !important;
 }
 
 .errorMessage {
