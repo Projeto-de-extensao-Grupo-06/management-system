@@ -33,7 +33,7 @@ export default function useClients(): UseClientsReturn {
 
         clientsService.getAllClients(
             page,
-            10,
+            30,
             searchTerm,
             statusFilter,
             filters.city,

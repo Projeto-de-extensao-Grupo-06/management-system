@@ -45,16 +45,21 @@ export interface ResponseAddressDto {
     updatedAt?: string;
 }
 
-// Hook types
 export interface UseAddressApiState {
     loading: boolean;
     error: string | null;
     success: boolean;
 }
 
+export interface AddressLookupDto {
+    state: string;
+    cities: string[];
+}
+
 export interface UseAddressApiReturn extends UseAddressApiState {
     createAddress: (dto: CreateAddressDto) => Promise<ResponseAddressDto | null>;
     updateAddress: (addressId: number, dto: UpdateAddressDto) => Promise<ResponseAddressDto | null>;
     getAddressById: (addressId: number) => Promise<ResponseAddressDto | null>;
+    getAddressLookup: () => Promise<AddressLookupDto[] | null>;
     resetState: () => void;
 }
