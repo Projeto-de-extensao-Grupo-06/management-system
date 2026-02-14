@@ -18,6 +18,7 @@ import { Outlet } from "react-router";
 import logo from "../../assets/logo-solarize.png";
 import authService from "../../services/AuthService";
 
+import useAuthStore from "../../store/useAuthStore";
 import styles from "./AppLayout.module.css";
 
 
@@ -33,12 +34,15 @@ export default function AppLayout() {
     { to: "/configuracoes", label: "Configurações", icon: faGear },
   ];
   const navigate = useNavigate();
+  const { clearUser, checkAuth } = useAuthStore();
 
   const handleLogout = () => {
     const auth = new authService();
     auth
       .logout()
       .then(() => {
+        clearUser();
+        checkAuth();
         navigate("/login");
       })
       .catch((e) => {
