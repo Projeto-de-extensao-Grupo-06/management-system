@@ -136,6 +136,10 @@ const projectKpis = [
 <CreateProjectModal
   open={isCreateModalOpen}
   onClose={() => setIsCreateModalOpen(false)}
+   onSuccess={() => {
+    fetchProjects();        
+    setIsCreateModalOpen(false); 
+  }}
 />
 
       </PageHeader>

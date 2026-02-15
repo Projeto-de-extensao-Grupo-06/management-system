@@ -3,14 +3,14 @@ import type ProjectSummary from '../interfaces/types/ProjectSummary';
 import api from './provider/api';
 
 export default class ProjectsService {
- async getAllProjects(
-  page: number = 0,
-  size: number = 20,
-  search: string = '',
-  status: string[] = [],
-  clientId?: number,
-)
-  : Promise<Page<ProjectSummary>> {
+
+  async getAllProjects(
+    page: number = 0,
+    size: number = 20,
+    search: string = '',
+    status: string[] = [],
+    clientId?: number,
+  ): Promise<Page<ProjectSummary>> {
 
     const params = new URLSearchParams();
     params.append('page', page.toString());
@@ -28,22 +28,46 @@ export default class ProjectsService {
     return response.data;
   }
 
-  async deleteProject(id: number): Promise<void> {
-    await api.delete(`/projects/${id}`);
-  }
-
   async getProjectById(id: number) {
     const response = await api.get(`/projects/${id}`);
     return response.data;
   }
-  
-  createManualProject(data: {
-    name: string;
-    clientId: number;
-    addressId: number | null;
-    projectType: 'ON_GRID' | 'OFF_GRID';
-  }) {
-    return api.post('/projects/manual', data);
+
+  async deleteProject(id: number): Promise<void> {
+    await api.delete(`/projects/${id}`);
   }
 
+  async createManualProject(data: {
+  name: string;
+  description: string;
+  projectType: 'ON_GRID' | 'OFF_GRID';
+  status: string;
+  clientId: number;
+  responsibleId?: number;
+  addressId?: number;
+}) {
+  return api.post('/projects/manual', data);
+}
+
+
+  async getAllCoworkers(
+    page: number = 0,
+    size: number = 10,
+    search: string = ''
+  ) {
+    const params = new URLSearchParams();
+
+    params.append('page', page.toString());
+    params.append('size', size.toString());
+
+    if (search) {
+      params.append('search', search);
+    }
+
+    const response = await api.get('/coworkers', {
+      params,
+    });
+
+    return response.data;
+  }
 }

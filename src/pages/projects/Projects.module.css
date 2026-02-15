@@ -1,4 +1,3 @@
-
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -37,7 +36,6 @@
   font-weight: 600;
   color: var(--color-primary);
 }
-
 
 .installationOptions {
   display: flex;
@@ -78,12 +76,54 @@
   width: 100%;
 }
 
-
 .container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0rem 2rem 2rem 2rem;
 }
 
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.closeButton {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
 
+.field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.autocompleteList {
+  position: absolute;
+  top: 70px;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.autocompleteItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.autocompleteItem:hover {
+  background: #f2f2f2;
+}
