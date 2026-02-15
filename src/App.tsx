@@ -12,6 +12,7 @@ import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
+import ProjectDetails from "./pages/projects/ProjectDetails";
 import NotFound from "./pages/shared/NotFound";
 
 import useAuthStore from "./store/useAuthStore";
@@ -47,6 +48,11 @@ function App() {
             <Route
               path="/clientes/:id"
               element={<PermissionRoute permissions={["CLIENT_READ"]} element={<ClientDetails />} />}
+            />
+
+            <Route
+              path="/projetos/:id"
+              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectDetails />} />}
             />
 
             <Route path="/analise" element={<Analysis />}></Route>
