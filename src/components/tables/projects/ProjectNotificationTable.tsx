@@ -5,6 +5,7 @@ import { IconButton } from '../../ui/Form';
 import { ProjectStatus } from '../../../interfaces/enum/ProjectStatus';
 import type { ProjectNotification } from '../../../interfaces/types/ProjectNotification';
 import styles from '../../../pages/projects/ProjectNotifications.module.css';
+import SecureComponent from '../../security/SecureComponent';
 
 interface ProjectNotificationTableProps {
     notifications: ProjectNotification[];
@@ -81,12 +82,15 @@ export default function ProjectNotificationTable({
                                     ariaLabel="Entrar em contato"
                                     title="Entrar em contato"
                                 />
-                                <IconButton
-                                    icon={<FontAwesomeIcon icon={faTimes} style={{ color: '#ef4444' }} />}
-                                    onClick={() => onDismiss(notification.projectId)}
-                                    ariaLabel="Dispensar"
-                                    title="Dispensar"
-                                />
+                                <SecureComponent permissions={["PROJECT_DELETE"]}>
+                                    <IconButton
+                                        icon={<FontAwesomeIcon icon={faTimes} />}
+                                        onClick={() => onDismiss(notification.projectId)}
+                                        ariaLabel="Dispensar"
+                                        title="Dispensar"
+                                        functionality="delete"
+                                    />
+                                </SecureComponent>
                             </div>
                         </td>
                     </tr>
