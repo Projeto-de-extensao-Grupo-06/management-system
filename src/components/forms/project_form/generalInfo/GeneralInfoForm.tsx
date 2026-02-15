@@ -1,13 +1,20 @@
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type React from "react";
+import { useState } from "react";
 import type { ProjectStatus } from "../../../../interfaces/properties/ActionRequiredProps";
-import { Select, SelectOption } from "../../../ui/Form";
+import type { ProjectSystemType } from "../../../../interfaces/types/ProjectSystemType";
+import { CoworkerService } from "../../../../services/CoworkerService";
+import { Input, Select, SelectOption } from "../../../ui/Form";
 import styles from "./GeneralInfo.module.css";
 
 interface GeneralInfoFormProps {
-    projectStatus: ProjectStatus
-    setProjectStatus: React.Dispatch<React.SetStateAction<ProjectStatus>>
+    projectStatus: ProjectStatus;
+    setProjectStatus: React.Dispatch<React.SetStateAction<ProjectStatus>>;
+    projetcSystemType: ProjectSystemType;
+    setProjectSystemType: React.Dispatch<React.SetStateAction<ProjectSystemType>>;
+    coworkerId: number;
+    setCoworkerId: number
 }
 
 interface StatusLabel {
@@ -15,12 +22,12 @@ interface StatusLabel {
     label: string;
 }
 
-interface StatusLabel {
-    value: ProjectStatus;
+interface SystemTypeLabel {
+    value: ProjectSystemType;
     label: string;
 }
 
-export const statusLabels: StatusLabel[] = [
+const statusLabels: StatusLabel[] = [
     {
         value: "NEW",
         label: "Novo"
@@ -68,12 +75,45 @@ export const statusLabels: StatusLabel[] = [
 ];
 
 
+const projectSystemTypeLabels: SystemTypeLabel[] = [
+    {
+        value: "OFF_GRID",
+        label: "Off-Grid"
+    },
+    {
+        value: "ON_GRID",
+        label: "On-Grid"
+    }
+]
 
-export default function GeneralInfoForm({ projectStatus, setProjectStatus }: GeneralInfoFormProps) {
+
+
+
+
+export default function GeneralInfoForm(
+    {
+        projectStatus,
+        setProjectStatus,
+        projetcSystemType,
+        setProjectSystemType,
+        coworkerId,
+        setCoworkerId
+    }: GeneralInfoFormProps) {
+
+    const [coworkerName, setCoworkerName] = useState();
+    const coworkerService = new CoworkerService();
+
     function projectStatusChangeHandler(value: string) {
         setProjectStatus(value as ProjectStatus);
     }
 
+    function projectSystemTypeChangeHandler(value: string) {
+        setProjectSystemType(value as ProjectSystemType);
+    }
+
+    function handleCoworker(e: React.FormEvent) {
+        coworkerService.getCoworkerById()
+    }
 
     return (
         <div className={styles.container}>
@@ -88,6 +128,14 @@ export default function GeneralInfoForm({ projectStatus, setProjectStatus }: Gen
                         statusLabels.map((v, key) => <SelectOption label={v.label} value={v.value} key={key} />)
                     }
                 </Select>
+                <Select value={projetcSystemType} onChange={projectSystemTypeChangeHandler}>
+                    {
+                        projectSystemTypeLabels.map((v, key) => <SelectOption label={v.label} value={v.value} key={key} />)
+                    }
+                </Select>
+
+                <Input onChange={(e) => setCoworkerName(e.target.value)} value={coworkerName} />
+
             </div>
         </div>
     );
