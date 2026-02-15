@@ -1,16 +1,21 @@
 import type { Page } from '../interfaces/types/Page';
+import type { ProjectNotification } from '../interfaces/types/ProjectNotification';
 import type ProjectSummary from '../interfaces/types/ProjectSummary';
 import api from './provider/api';
 
 export default class ProjectsService {
- async getAllProjects(
-  page: number = 0,
-  size: number = 20,
-  search: string = '',
-  status: string[] = [],
-  clientId?: number,
-)
-  : Promise<Page<ProjectSummary>> {
+  async getProjectLeads(): Promise<ProjectNotification[]> {
+    const response = await api.get<ProjectNotification[]>('/projects/leads');
+    return response.data;
+  }
+  async getAllProjects(
+    page: number = 0,
+    size: number = 20,
+    search: string = '',
+    status: string[] = [],
+    clientId?: number,
+  )
+    : Promise<Page<ProjectSummary>> {
 
     const params = new URLSearchParams();
     params.append('page', page.toString());
@@ -36,7 +41,7 @@ export default class ProjectsService {
     const response = await api.get(`/projects/${id}`);
     return response.data;
   }
-  
+
   createManualProject(data: {
     name: string;
     clientId: number;
