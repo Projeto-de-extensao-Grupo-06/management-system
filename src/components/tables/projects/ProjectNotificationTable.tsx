@@ -23,12 +23,12 @@ export default function ProjectNotificationTable({
     const tableHeaders = ['Nome do Cliente', 'Fonte', 'Data', 'Status', 'Operação'];
 
     const getStatusLabel = (status: string) => {
-        // TODO: Implementar o mapeador de status para gerar textos e tags (cores) padronizados
+        // TODO: Implementar o mapeador de status para gerar textos e tags (cores) padronizados direto do enum ProjectStatus
         switch (status) {
             case ProjectStatus.CLIENT_AWAITING_CONTACT:
                 return 'Aguardando contato';
-            case ProjectStatus.CONTACT_NOT_REQUESTED:
-                return 'Contato não solicitado';
+            case ProjectStatus.RETRYING:
+                return 'Retentativa de Contato';
             default:
                 return status;
         }
@@ -57,10 +57,12 @@ export default function ProjectNotificationTable({
         window.open(`https://wa.me/${formattedPhone}`, '_blank');
     };
 
+    const hasData = Array.isArray(notifications) && notifications.length > 0;
+
     return (
         <Table
             headers={tableHeaders}
-            isEmpty={!loading && notifications.length === 0}
+            isEmpty={!loading && !hasData}
             emptyMessage="Nenhuma notificação encontrada."
         >
             {loading ? (
@@ -68,7 +70,7 @@ export default function ProjectNotificationTable({
                     <td colSpan={5} className={styles.emptyState}>Carregando...</td>
                 </tr>
             ) : (
-                notifications.map((notification) => (
+                hasData && notifications.map((notification) => (
                     <tr key={notification.projectId} onClick={() => onRowClick(notification.projectId)}>
                         <td>{notification.clientName}</td>
                         <td>{getSourceLabel(notification.projectFrom)}</td>

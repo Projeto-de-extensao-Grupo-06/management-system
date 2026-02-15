@@ -4,8 +4,19 @@ import type ProjectSummary from '../interfaces/types/ProjectSummary';
 import api from './provider/api';
 
 export default class ProjectsService {
-  async getProjectLeads(): Promise<ProjectNotification[]> {
-    const response = await api.get<ProjectNotification[]>('/projects/leads');
+  async getProjectLeads(
+    minDate?: string,
+    maxDate?: string,
+    status?: string,
+    clientName?: string
+  ): Promise<ProjectNotification[]> {
+    const params = new URLSearchParams();
+    if (minDate) params.append('minDate', minDate);
+    if (maxDate) params.append('maxDate', maxDate);
+    if (status && status !== 'Todos') params.append('status', status);
+    if (clientName) params.append('clientName', clientName);
+
+    const response = await api.get<ProjectNotification[]>('/projects/leads', { params });
     return response.data;
   }
   async getAllProjects(

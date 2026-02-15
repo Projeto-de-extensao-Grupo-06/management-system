@@ -85,3 +85,27 @@
         min-width: 800px;
     }
 }
+
+.filterModalContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.filterLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.gridTwo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .gridTwo {
+        grid-template-columns: 1fr;
+    }
+}
