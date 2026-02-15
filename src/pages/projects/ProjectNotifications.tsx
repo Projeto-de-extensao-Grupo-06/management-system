@@ -10,6 +10,7 @@ import ProjectsService from '../../services/ProjectsService';
 import ProjectNotificationFilterDialog from '../../components/dialogs/projects/ProjectNotificationFilterDialog';
 import ProjectNotificationTable from '../../components/tables/projects/ProjectNotificationTable';
 import styles from './ProjectNotifications.module.css';
+import ConfirmationModal from '../../components/dialogs/modal/Modal';
 
 export default function ProjectNotifications() {
     const navigate = useNavigate();
@@ -22,11 +23,13 @@ export default function ProjectNotifications() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [projectToDelete, setProjectToDelete] = useState<number | null>(null);
+
     const projectsService = useMemo(() => new ProjectsService(), []);
 
     useEffect(() => {
         setLoading(true);
-
         const formattedStartDate = startDate ? `${startDate}T00:00:00` : undefined;
         const formattedEndDate = endDate ? `${endDate}T23:59:59` : undefined;
 
@@ -47,14 +50,19 @@ export default function ProjectNotifications() {
         navigate(`/projetos/${id}`);
     };
 
-    const handleDismiss = async (id: number) => {
-        if (!confirm('Tem certeza que deseja dispensar esta notificação? O projeto será arquivado.')) {
-            return;
-        }
+    const handleDismiss = (id: number) => {
+        setProjectToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDismiss = async () => {
+        if (!projectToDelete) return;
 
         try {
-            await projectsService.deleteProject(id);
-            setFilteredNotifications(prev => prev.filter(n => n.projectId !== id));
+            await projectsService.deleteProject(projectToDelete);
+            setFilteredNotifications(prev => prev.filter(n => n.projectId !== projectToDelete));
+            setIsDeleteModalOpen(false);
+            setProjectToDelete(null);
         } catch (error) {
             console.error('Error dismissing notification:', error);
             alert('Erro ao dispensar notificação.');
@@ -70,6 +78,24 @@ export default function ProjectNotifications() {
         setStartDate('');
         setEndDate('');
     };
+
+    const deleteModalFooter = (
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', width: '100%' }}>
+            <SimpleButton
+                text="Cancelar"
+                ariaLabel="Cancelar exclusão"
+                onClick={() => setIsDeleteModalOpen(false)}
+                width="fit-content"
+            />
+            <SimpleButton
+                text="Confirmar"
+                ariaLabel="Confirmar exclusão"
+                onClick={handleConfirmDismiss}
+                width="fit-content"
+                style={{ backgroundColor: '#ef4444', color: 'white', border: 'none' }}
+            />
+        </div>
+    );
 
     return (
         <div className={styles.container}>
@@ -117,6 +143,16 @@ export default function ProjectNotifications() {
                 onApply={handleApplyFilters}
                 onClear={handleClearFilters}
             />
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Confirmar Exclusão"
+                footer={deleteModalFooter}
+                maxWidth="500px"
+            >
+                <p>Tem certeza que deseja dispensar esta notificação? O projeto será arquivado.</p>
+            </ConfirmationModal>
         </div>
     );
 }
