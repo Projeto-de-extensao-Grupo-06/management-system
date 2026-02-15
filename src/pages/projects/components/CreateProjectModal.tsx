@@ -43,16 +43,37 @@ export default function CreateProjectModal({ open, onClose }: Props) {
 
   const handleCreateProject = async () => {
      console.log('CLIQUEI');
-    if (!projectName || !clientId || !projectType) 
+    // if (!projectName || !clientId || !projectType) 
       
-      return;
+    //   return;
+     if (!projectName || !clientId || !projectType) {
+  console.log('BLOQUEADO', {
+    projectName,
+    clientId,
+    projectType,
+  });
+  return;
+}
 
-    const payload = {
-      name: projectName,
-      clientId,
-      addressId,
-      projectType,
-    };
+    // const payload = {
+    //   name: projectName,
+    //   clientId,
+    //   addressId,
+    //   projectType,
+    // };
+    const payload: any = {
+  name: projectName,
+  projectType,
+  description: "",
+  client: {
+    id: clientId,
+  },
+};
+
+if (addressId) {
+  payload.address = { id: addressId };
+}
+
 
     try {
       await projectsService.createManualProject(payload);
@@ -77,7 +98,7 @@ export default function CreateProjectModal({ open, onClose }: Props) {
             <label>Nome do projeto</label>
             <Input
               value={projectName}
-              onChange={setProjectName}
+             onChange={(e) => setProjectName(e.target.value)}
               placeholder="Digite o nome do projeto"
             />
           </div>
@@ -114,10 +135,10 @@ export default function CreateProjectModal({ open, onClose }: Props) {
             <label>Cliente</label>
             <Input
               value={clientSearch}
-              onChange={value => {
-                setClientSearch(value);
-                setClientId(null);
-              }}
+             onChange={(e) => {
+      setClientSearch(e.target.value);
+      setClientId(null);
+    }}
               placeholder="Digite o nome do cliente"
             />
 
@@ -147,8 +168,8 @@ export default function CreateProjectModal({ open, onClose }: Props) {
             <label>Endereço</label>
             <Input
               value={addressSearch}
-              onChange={value => {
-                setAddressSearch(value);
+               onChange={(e) => {
+                setAddressSearch(e.target.value);
                 setAddressId(null);
               }}
               placeholder="Digite o endereço"

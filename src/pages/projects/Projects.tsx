@@ -19,7 +19,9 @@ import { projectStatusLabel } from '../../utils/mappers/projectStatusLabel';
 import CreateProjectModal from '../projects/components/CreateProjectModal'
 import styles from '../clients/Clients.module.css';
 import kpistyles from '../analysis/Analysis.module.css';
-
+import Projectstyles from '../projects/Projects.module.css';
+import ProjectStatusBadge from '../projects/components/ProjectStatusBadge';
+import ProjectCard from '../projects/components/ProjectCard';
 
 import {
   faClock,
@@ -115,7 +117,7 @@ const projectKpis = [
 
 
   return (
-    <div className={styles.container}>
+    <div className={Projectstyles.container}>
       {globalAlert && (
         <div className={styles.alertWrapper}>
           <Alert message={globalAlert.message} type={globalAlert.type} />
@@ -176,9 +178,6 @@ const projectKpis = [
     />
   ))}
 </Select>
-
-
-  
           <Select
             value={clientId}
             onChange={setClientId}
@@ -205,27 +204,15 @@ const projectKpis = [
         </div>
       </FilterBar>
 
-   
-      <div className={styles.card}>
-        {projects.map(project => (
-          <div
-            key={project.id}
-            style={{
-              padding: '1rem',
-              borderBottom: '1px solid #eee',
-            }}
-          >
-            <strong>{project.projectTitle}</strong>
-           <div>
-     Status: {projectStatusLabel[project.status] ?? project.status}
-           </div>
+ <div className={Projectstyles.projectsGrid}>
+  {projects.map(project => (
+    <ProjectCard
+      key={project.id}
+      project={project}
+    />
+  ))}
+</div>
 
-            <div>Cliente: {project.client?.firstName}</div>
-          </div>
-        ))}
-      </div>
-
- 
       <Pagination
         currentPage={page}
         totalPages={totalPages}

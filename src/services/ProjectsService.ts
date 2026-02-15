@@ -43,7 +43,7 @@ export default class ProjectsService {
     addressId: number | null;
     projectType: 'ON_GRID' | 'OFF_GRID';
   }) {
-    return api.post('/api/projects/manual', data);
+    return api.post('/projects/manual', data);
   }
 
 }

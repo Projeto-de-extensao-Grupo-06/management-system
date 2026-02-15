@@ -4,11 +4,13 @@ export default interface ProjectSummary {
   id: number;
   projectTitle: string;
   status: string;
-  nextSchedule: string | null;
+ deadline: string | null;
+  systemType: 'ON_GRID' | 'OFF_GRID' | null;
   responsible: {
-    id: number;
-    name: string;
-  };
+  id: number;
+  firstName: string;
+  lastName: string;
+};
   client: Client;
   commentCount: number;
   fileCount: number;
