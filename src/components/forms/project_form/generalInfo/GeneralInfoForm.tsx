@@ -1,33 +1,25 @@
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type React from "react";
-import { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import ReactSelect from "react-select"
 import type { ProjectStatus } from "../../../../interfaces/properties/ActionRequiredProps";
+import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
 import type { ProjectSystemType } from "../../../../interfaces/types/ProjectSystemType";
 import { CoworkerService } from "../../../../services/CoworkerService";
-import { Input, Select, SelectOption } from "../../../ui/Form";
+import { Select, SelectOption, Input } from "../../../ui/Form";
 import styles from "./GeneralInfo.module.css";
 
 interface GeneralInfoFormProps {
-    projectStatus: ProjectStatus;
-    setProjectStatus: React.Dispatch<React.SetStateAction<ProjectStatus>>;
-    projetcSystemType: ProjectSystemType;
-    setProjectSystemType: React.Dispatch<React.SetStateAction<ProjectSystemType>>;
-    coworkerId: number;
-    setCoworkerId: number
+    project: ProjectDetails;
+    setProject: React.Dispatch<React.SetStateAction<ProjectDetails | null>>
 }
 
-interface StatusLabel {
-    value: ProjectStatus;
+interface Label<T> {
+    value: T;
     label: string;
 }
 
-interface SystemTypeLabel {
-    value: ProjectSystemType;
-    label: string;
-}
-
-const statusLabels: StatusLabel[] = [
+const statusLabels: Label<ProjectStatus>[] = [
     {
         value: "NEW",
         label: "Novo"
@@ -75,7 +67,7 @@ const statusLabels: StatusLabel[] = [
 ];
 
 
-const projectSystemTypeLabels: SystemTypeLabel[] = [
+const projectSystemTypeLabels: Label<ProjectSystemType>[] = [
     {
         value: "OFF_GRID",
         label: "Off-Grid"
@@ -86,56 +78,99 @@ const projectSystemTypeLabels: SystemTypeLabel[] = [
     }
 ]
 
-
-
-
-
-export default function GeneralInfoForm(
-    {
-        projectStatus,
-        setProjectStatus,
-        projetcSystemType,
-        setProjectSystemType,
-        coworkerId,
-        setCoworkerId
-    }: GeneralInfoFormProps) {
-
-    const [coworkerName, setCoworkerName] = useState();
+export default function GeneralInfoForm({ project, setProject }: GeneralInfoFormProps) {
     const coworkerService = new CoworkerService();
+    const [coworkerSelectOptions, setCoworkersSelectOptions] = useState<Label<number>[]>([]);
 
-    function projectStatusChangeHandler(value: string) {
-        setProjectStatus(value as ProjectStatus);
+    function projectNameHandler(e: React.ChangeEvent<HTMLInputElement>) {
+        setProject(prev => {
+            if (!prev) return prev;
+            return { ...prev, name: e.target.value }
+        });
     }
 
     function projectSystemTypeChangeHandler(value: string) {
-        setProjectSystemType(value as ProjectSystemType);
+        setProject(prev => {
+            if (!prev) return prev;
+            return { ...prev, systemType: value as ProjectStatus };
+        });
     }
 
-    function handleCoworker(e: React.FormEvent) {
-        coworkerService.getCoworkerById()
-    }
+    useEffect(() => {
+        const loadCoworkers = async () => {
+            const coworkers = await coworkerService.getAllCoworkers();
+
+            if (coworkers.length > 0) {
+                const coworkersLabels = coworkers.map(c => {
+                    return { value: c.id, label: `${c.firstName} ${c.lastName}` }
+                });
+
+                setCoworkersSelectOptions(coworkersLabels);
+            }
+        }
+
+        loadCoworkers();
+    }, [coworkerSelectOptions]);
+
+
+    const projectSystemTypeOptions = useMemo(() => [
+        {
+            value: "OFF_GRID",
+            label: "Off-Grid"
+        },
+        {
+            value: "ON_GRID",
+            label: "On-Grid"
+        }
+    ], []);
 
     return (
-        <div className={styles.container}>
+        <div>
             <div className={styles.infoContainer}>
                 <FontAwesomeIcon icon={faInfoCircle} color="#FFC300" size="xl" />
                 <span className={styles.infoText}>Informações Gerais</span>
             </div>
 
-            <div className="form">
-                <Select value={projectStatus} onChange={projectStatusChangeHandler}>
-                    {
-                        statusLabels.map((v, key) => <SelectOption label={v.label} value={v.value} key={key} />)
-                    }
-                </Select>
-                <Select value={projetcSystemType} onChange={projectSystemTypeChangeHandler}>
-                    {
-                        projectSystemTypeLabels.map((v, key) => <SelectOption label={v.label} value={v.value} key={key} />)
-                    }
-                </Select>
+            <div className={styles.form}>
+                <div className={styles.inputContainer}>
+                    <label className={styles.inputLabel}>Nome do projeto:</label>
+                    <Input value={project.name} onChange={projectNameHandler} placeholder="Nome do projeto..." />
+                </div>
 
-                <Input onChange={(e) => setCoworkerName(e.target.value)} value={coworkerName} />
+                <div className={styles.inputContainer}>
+                    <label className={styles.inputLabel}>Status do projeto:</label>
+                    <ReactSelect<Label<ProjectStatus>>
+                        value={statusLabels.find(o => o.value === project.status) ?? null}
+                        onChange={(v) => setProject(prev => {
+                            if (!prev) return prev;
+                            return { ...prev, status: v?.value || "NEW" };
+                        })}
+                        options={statusLabels.map((v) => {
+                            return { value: v.value, label: v.label }
+                        })}
+                    />
+                </div>
 
+                <div className={styles.inputContainer}>
+                    <label className={styles.inputLabel}>Tipo de Instalação:</label>
+                    <Select value={project.systemType} onChange={projectSystemTypeChangeHandler}>
+                        {
+                            projectSystemTypeLabels.map((v, key) => <SelectOption label={v.label} value={v.value} key={key} />)
+                        }
+                    </Select>
+                </div>
+
+                <div className={styles.inputContainer}>
+                    <label className={styles.inputLabel}>Responsável:</label>
+                    <ReactSelect<Label<number>>
+                        options={coworkerSelectOptions}
+                        value={coworkerSelectOptions.find(o => o.value === project.coworkerId) ?? null}
+                        onChange={(v) => setProject(prev => {
+                            if (!prev) return prev;
+                            return { ...prev, coworkerId: v?.value || 0 };
+                        })}
+                    />
+                </div>
             </div>
         </div>
     );

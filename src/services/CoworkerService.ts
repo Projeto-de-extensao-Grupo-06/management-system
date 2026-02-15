@@ -7,4 +7,10 @@ export class CoworkerService {
 
     return coworker.data;
   }
+  
+  async getAllCoworkers() {
+    const coworker = await api.get<Coworker[]>(`/coworkers`);
+
+    return coworker.data;
+  }
 };

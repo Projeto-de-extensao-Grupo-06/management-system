@@ -3,12 +3,30 @@
     gap: 10px;
     align-items: center;
     margin-bottom: 10px;
+    justify-content: space-between;
+
+}
+
+.infoIconAndText {
+    display: flex;
+    align-items: center;
 }
 
 .infoText {
     color: black;
     font-size: 18px;
     font-weight: 500;
+}
+
+.editClient, .editAddress {
+    color: #0C3900;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.editAddress {
+    text-indent: 10px;
+    cursor: pointer;
 }
 
 .form {
@@ -26,4 +44,9 @@
 .inputLabel {
     color: #DD7428;
     font-weight: 600;
+}
+
+.map {
+    height: 300px;
+    margin-top: 10px;
 }

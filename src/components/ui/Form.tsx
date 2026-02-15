@@ -2,12 +2,15 @@ import './components.css';
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { forwardRef, useState } from 'react';
+import type { GroupBase, StylesConfig } from 'react-select';
+import ReactSelect from "react-select";
 import type BaseInputProps from '../../interfaces/properties/BaseInputProps';
 import type ButtonProps from '../../interfaces/properties/ButtonProps';
 import type DocumentInputProps from '../../interfaces/properties/DocumentInputProps';
 import type IconButtonProps from '../../interfaces/properties/IconButtonProps';
 import type InputProps from '../../interfaces/properties/InputProps';
 import type PasswordInputProps from '../../interfaces/properties/PasswordInputProps';
+import type { AutoCompleteSelectProps, AutoCompleteSelectOption } from '../../interfaces/properties/ReactSelectFormProps';
 import type SelectProps from '../../interfaces/properties/SelectProps';
 
 export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style, className }: ButtonProps) {
@@ -245,3 +248,63 @@ export const CepInput = forwardRef<HTMLInputElement, BaseInputProps>(
     );
   }
 );
+
+export function AutoCompleteSelect({
+  options,
+  value,
+  onChange,
+  placeholder = "Selecione...",
+  isDisabled = false
+}: AutoCompleteSelectProps) {
+
+  const customStyles: StylesConfig<
+    AutoCompleteSelectOption,
+    false,
+    GroupBase<AutoCompleteSelectOption>
+  > = {
+    control: (base, state) => ({
+      ...base,
+      borderColor: state.isFocused ? "#0C3900" : base.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px #0C3900" : base.boxShadow,
+      "&:hover": {
+        borderColor: "#0C3900"
+      }
+    }),
+
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isSelected
+        ? "#0C3900"
+        : state.isFocused
+          ? "rgba(12, 57, 0, 0.1)"
+          : base.backgroundColor,
+      color: state.isSelected ? "#fff" : base.color,
+      cursor: "pointer"
+    }),
+
+    singleValue: (base) => ({
+      ...base,
+      color: "#0C3900"
+    }),
+
+    dropdownIndicator: (base, state) => ({
+      ...base,
+      color: state.isFocused ? "#0C3900" : base.color,
+      "&:hover": {
+        color: "#0C3900"
+      }
+    })
+  };
+
+  return (
+    <ReactSelect<AutoCompleteSelectOption>
+      options={options}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      isDisabled={isDisabled}
+      styles={customStyles}
+      isClearable
+    />
+  );
+}
