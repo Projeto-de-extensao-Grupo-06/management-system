@@ -1,0 +1,29 @@
+.infoContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.infoText {
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.inputLabel {
+    color: #DD7428;
+    font-weight: 600;
+}

@@ -8,17 +8,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(2px);
+    z-index: 2000;
+    backdrop-filter: blur(0.125rem);
     animation: fadeIn 0.2s ease-out;
 }
 
 .container {
     background-color: var(--color-background);
-    border-radius: 8px;
+    border-radius: 0.5rem;
     box-shadow: var(--shadow-lg);
     width: 90%;
-    max-width: 900px;
+    max-width: 56.25rem;
     max-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -30,14 +30,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 32px;
-    border-bottom: 1px solid var(--color-border-light);
+    padding: 1.5rem 2rem;
+    border-bottom: 0.0625rem solid var(--color-border-light);
 }
 
 .title {
     margin: 0;
     font-size: var(--font-size-2xl);
-    /* 24px or similar */
     font-weight: 700;
     color: var(--color-text-dark);
 }
@@ -45,11 +44,11 @@
 .closeButton {
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 1.5rem;
     cursor: pointer;
     color: var(--color-text-light);
     transition: color 0.2s;
-    padding: 4px;
+    padding: 0.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -60,20 +59,20 @@
 }
 
 .content {
-    padding: 32px;
+    padding: 2rem;
     overflow-y: auto;
     flex: 1;
 }
 
 .footer {
-    padding: 24px 32px;
-    border-top: 1px solid var(--color-border-light);
+    padding: 1.5rem 2rem;
+    border-top: 0.0625rem solid var(--color-border-light);
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
+    gap: 1rem;
     background-color: var(--color-background-alt);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 
 @keyframes fadeIn {
@@ -89,7 +88,7 @@
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(1.25rem);
     }
 
     to {
@@ -107,6 +106,6 @@
     .header,
     .content,
     .footer {
-        padding: 16px;
+        padding: 1rem;
     }
 }

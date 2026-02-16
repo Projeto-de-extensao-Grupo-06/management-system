@@ -12,6 +12,7 @@ export interface UseClientsReturn {
     clients: Client[];
     page: number;
     totalPages: number;
+    totalElements: number;
     searchTerm: string;
     statusFilter: string;
     filters: ClientFilters;

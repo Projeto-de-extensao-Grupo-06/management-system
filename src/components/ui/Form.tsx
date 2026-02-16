@@ -2,124 +2,129 @@ import './components.css';
 import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { forwardRef, useState } from 'react';
+import type { GroupBase, StylesConfig } from 'react-select';
+import ReactSelect from "react-select";
 import type BaseInputProps from '../../interfaces/properties/BaseInputProps';
 import type ButtonProps from '../../interfaces/properties/ButtonProps';
 import type DocumentInputProps from '../../interfaces/properties/DocumentInputProps';
 import type IconButtonProps from '../../interfaces/properties/IconButtonProps';
 import type InputProps from '../../interfaces/properties/InputProps';
 import type PasswordInputProps from '../../interfaces/properties/PasswordInputProps';
+import type { AutoCompleteSelectProps, AutoCompleteSelectOption } from '../../interfaces/properties/ReactSelectFormProps';
+export type { AutoCompleteSelectProps, AutoCompleteSelectOption };
 import type SelectProps from '../../interfaces/properties/SelectProps';
 
 export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style, className }: ButtonProps) {
-    return (
-        <button
-            type={type}
-            className={`submit-button ${className || ''}`}
-            disabled={disabled}
-            onClick={onClick}
-            aria-label={ariaLabel}
-            style={{ width, ...style }}>
-            {icon ? icon : ''} {text}
-        </button>
-    );
+  return (
+    <button
+      type={type}
+      className={`submit-button ${className || ''}`}
+      disabled={disabled}
+      onClick={onClick}
+      aria-label={ariaLabel}
+      style={{ width, ...style }}>
+      {icon ? icon : ''} {text}
+    </button>
+  );
 }
 
 export function SimpleButton({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width }: ButtonProps) {
-    return (
-        <button
-            type={type}
-            className="simple-button"
-            disabled={disabled}
-            onClick={onClick}
-            aria-label={ariaLabel}
-            style={{ width }}>
-            {icon ? icon : ''} {text}
-        </button>
-    );
+  return (
+    <button
+      type={type}
+      className="simple-button"
+      disabled={disabled}
+      onClick={onClick}
+      aria-label={ariaLabel}
+      style={{ width }}>
+      {icon ? icon : ''} {text}
+    </button>
+  );
 }
 
-export function IconButton({ functionality = "edit", icon, type = "submit", onClick, disabled = false, ariaLabel }: IconButtonProps) {
-    return (
-        <button
-            type={type}
-            className={`${functionality}-button`}
-            disabled={disabled}
-            onClick={onClick}
-            aria-label={ariaLabel}>
-            {icon}
-        </button>
-    );
+export function IconButton({ functionality = "edit", icon, type = "submit", onClick, disabled = false, ariaLabel, title }: IconButtonProps) {
+  return (
+    <button
+      type={type}
+      className={`${functionality}-button`}
+      disabled={disabled}
+      onClick={onClick}
+      title={title}
+      aria-label={ariaLabel}>
+      {icon}
+    </button>
+  );
 }
 
 export function SelectOption({ value, label }: { value: string, label: string }) {
-    return (
-        <option value={value}>{label}</option>
-    );
+  return (
+    <option value={value}>{label}</option>
+  );
 }
 
 export function Select({ children, value, onChange, className, style, id, name, disabled, onBlur }: SelectProps) {
-    return (
-        <select
-            id={id}
-            name={name}
-            disabled={disabled}
-            onBlur={onBlur}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className={`select ${className || ''}`}
-            style={style}>
-            {children}
-        </select>
-    );
+  return (
+    <select
+      id={id}
+      name={name}
+      disabled={disabled}
+      onBlur={onBlur}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={`select ${className || ''}`}
+      style={style}>
+      {children}
+    </select>
+  );
 }
 
 export const Input = forwardRef<HTMLInputElement, BaseInputProps>(({ className, ...props }, ref) => {
-    return (
-        <div className="input-container">
-            <input
-                {...props}
-                ref={ref}
-                className={`input ${className || ''}`}
-            />
-        </div>
-    );
+  return (
+    <div className="input-container">
+      <input
+        {...props}
+        ref={ref}
+        className={`input ${className || ''}`}
+      />
+    </div>
+  );
 });
 
 export function SearchInput({ placeholder, type = "text", onChange, value }: InputProps) {
-    return (
-        <>
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
-            <input
-                type={type}
-                placeholder={placeholder}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                className="search-input" />
-        </>
-    );
+  return (
+    <>
+      <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="search-input" />
+    </>
+  );
 }
 
 export function PasswordInput({ placeholder, onChange, value }: PasswordInputProps) {
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-    return (
-        <div className="input-container">
-            <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder={placeholder}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                className="input"
-                required
-            />
-            <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="input-icon" >
-                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-            </button>
-        </div>
-    );
+  return (
+    <div className="input-container">
+      <input
+        type={showPassword ? 'text' : 'password'}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="input"
+        required
+      />
+      <button
+        type="button"
+        onClick={() => setShowPassword(!showPassword)}
+        className="input-icon" >
+        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+      </button>
+    </div>
+  );
 }
 
 export const PhoneInput = forwardRef<HTMLInputElement, BaseInputProps>(
@@ -245,3 +250,62 @@ export const CepInput = forwardRef<HTMLInputElement, BaseInputProps>(
     );
   }
 );
+
+export function AutoCompleteSelect({
+  options,
+  value,
+  onChange,
+  placeholder = "Selecione...",
+  isDisabled = false,
+  isMulti = false
+}: AutoCompleteSelectProps) {
+
+  const customStyles: StylesConfig<
+    AutoCompleteSelectOption,
+    boolean,
+    GroupBase<AutoCompleteSelectOption>
+  > = {
+    control: (base, state) => ({
+      ...base,
+      borderColor: state.isFocused ? "#0C3900" : base.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px #0C3900" : base.boxShadow,
+      "&:hover": {
+        borderColor: "#0C3900"
+      }
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isSelected
+        ? "#0C3900"
+        : state.isFocused
+          ? "rgba(12, 57, 0, 0.1)"
+          : base.backgroundColor,
+      cursor: "pointer"
+    }),
+    dropdownIndicator: (base, state) => ({
+      ...base,
+      color: state.isFocused ? "#0C3900" : base.color,
+      "&:hover": {
+        color: "#0C3900"
+      }
+    })
+  };
+
+  return (
+    <ReactSelect<AutoCompleteSelectOption, boolean>
+      options={options}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      isDisabled={isDisabled}
+      styles={customStyles}
+      isClearable
+      isMulti={isMulti}
+    />
+  );
+}
+
+
+// function FileInput() {
+
+// }

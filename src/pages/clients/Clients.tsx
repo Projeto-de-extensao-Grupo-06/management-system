@@ -23,6 +23,7 @@ export default function Clients() {
     clients,
     page,
     totalPages,
+    totalElements,
     searchTerm,
     statusFilter,
     filters,
@@ -42,6 +43,9 @@ export default function Clients() {
 
   const [globalAlert, setGlobalAlert] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
   const [modalTypeMessage, setModalMessage] = useState<string | null>(null);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteClientId, setDeleteClientId] = useState<number | null>(null);
 
   const handleEdit = (id: number) => {
     navigate(`/clientes/${id}`, { state: { edit: true } });
@@ -80,21 +84,24 @@ export default function Clients() {
     setIsFilterModalOpen(true);
   }
 
-
-
-
-
   const handleDelete = (id: number) => {
-    if (!confirm('Tem certeza que deseja excluir este cliente?')) return;
+    setDeleteClientId(id);
+    setIsDeleteModalOpen(true);
+  }
 
-    deleteClient(id)
+  const confirmDelete = () => {
+    if (deleteClientId === null) return;
+
+    deleteClient(deleteClientId)
       .then(() => {
         setGlobalAlert({ message: 'Cliente removido com sucesso!', type: 'success' });
         setTimeout(() => setGlobalAlert(null), 5000);
+        setIsDeleteModalOpen(false);
       })
       .catch((e: Error) => {
         setGlobalAlert({ message: e.message, type: 'error' });
-      })
+        setIsDeleteModalOpen(false);
+      });
   }
 
   const createModalFooter = (
@@ -105,6 +112,24 @@ export default function Clients() {
       onClick={handleCreateSubmit}
       width="fit-content"
     />
+  );
+
+  const deleteModalFooter = (
+    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', width: '100%' }}>
+      <SimpleButton
+        text="Cancelar"
+        ariaLabel="Cancelar exclusão"
+        onClick={() => setIsDeleteModalOpen(false)}
+        style={{ backgroundColor: '#ccc', color: '#333' }}
+      />
+      <Button
+        text="Confirmar"
+        ariaLabel="Confirmar exclusão"
+        onClick={confirmDelete}
+        width="fit-content"
+        style={{ backgroundColor: '#d32f2f' }}
+      />
+    </div>
   );
 
   return (
@@ -135,6 +160,18 @@ export default function Clients() {
         </Modal>
       )}
 
+      {isDeleteModalOpen && (
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          title="Confirmar Exclusão"
+          footer={deleteModalFooter}
+          maxWidth="400px"
+        >
+          <p>Tem certeza que deseja excluir este cliente?</p>
+        </Modal>
+      )}
+
       <ClientFilterModal
         key={isFilterModalOpen ? 'open' : 'closed'}
         isOpen={isFilterModalOpen}
@@ -144,7 +181,7 @@ export default function Clients() {
         onClear={handleClearFilters}
       />
 
-      <PageHeader title="Clientes" count={clients.length}>
+      <PageHeader title="Clientes" count={totalElements}>
         <SecureComponent permissions={["CLIENT_WRITE"]}>
           <Button
             icon={<FontAwesomeIcon icon={faPlus} />}
@@ -164,7 +201,7 @@ export default function Clients() {
             ariaLabel="Filtrar Clientes"
             onClick={handleFilterClient}
           />
-          <div className={styles.dropdown}>
+          <div className={styles.dropdown} style={{ width: '200px' }}>
             <Select value={statusFilter} onChange={handleStatusChange}>
               <SelectOption value="Todos" label="Todos" />
               <SelectOption value="Ativo" label="Ativo" />

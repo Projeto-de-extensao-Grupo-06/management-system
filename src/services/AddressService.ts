@@ -1,4 +1,4 @@
-import type { CreateAddressDto, ResponseAddressDto, UpdateAddressDto, ViaCepResponse } from "../interfaces/types/AddressTypes";
+import type { AddressLookupDto, CreateAddressDto, ResponseAddressDto, UpdateAddressDto, ViaCepResponse } from "../interfaces/types/AddressTypes";
 import api from "./provider/api";
 import viaCepApi from "./provider/viaCepApi";
 
@@ -33,6 +33,11 @@ export default class AddressService {
 
     async getAddressById(addressId: number): Promise<ResponseAddressDto> {
         const response = await api.get<ResponseAddressDto>(`/address/${addressId}`);
+        return response.data;
+    }
+
+    async getAddressLookup(): Promise<AddressLookupDto[]> {
+        const response = await api.get<AddressLookupDto[]>('/address/lookup');
         return response.data;
     }
 }

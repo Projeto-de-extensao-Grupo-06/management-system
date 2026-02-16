@@ -1,0 +1,61 @@
+.content {
+    margin: 0 auto;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.container {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.warningContent {
+    display: flex;
+    gap: 5px;
+}
+
+.messageContent {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.actionButton {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.actionButton:hover {
+    opacity: .8;
+}
+
+@media (min-width: 768px) {
+    .actionButton {
+        padding: 10px;
+        width: 30%;
+    }
+}
+
+
+.contactButton {
+    background-color: #0C3900;
+}
+
+.laterButton {
+    background-color: #001A5D;
+}
+
+.ignoreButton {
+    background-color: #F62B0C;
+}

@@ -6,9 +6,12 @@ import {
   faGear,
   faWrench,
   faArrowRightFromBracket,
+  faBars,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import VLibras from "@moreiraste/react-vlibras";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 
@@ -20,6 +23,8 @@ import styles from "./AppLayout.module.css";
 
 
 export default function AppLayout() {
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+
   const menuItems = [
     { to: "/agenda", label: "Agenda", icon: faCalendar },
     { to: "/projetos", label: "Projetos", icon: faClipboard },
@@ -45,6 +50,35 @@ export default function AppLayout() {
       });
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        document.body.style.overflow = "auto";
+      } else if (isSidebarExpanded) {
+        document.body.style.overflow = "hidden";
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    if (isSidebarExpanded && window.innerWidth <= 1024) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isSidebarExpanded]);
+
+
   const menu = menuItems.map((item) => {
     const Icon = item.icon;
     return (
@@ -54,6 +88,9 @@ export default function AppLayout() {
           className={({ isActive }) =>
             `${styles.menuLink} ${isActive ? styles.menuLinkActive : ""}`
           }
+          onClick={() => {
+            if (window.innerWidth <= 1024) setIsSidebarExpanded(false);
+          }}
         >
           <FontAwesomeIcon className={styles.menuIcon} icon={Icon} />
           <span className={styles.menuText}>{item.label}</span>
@@ -64,11 +101,31 @@ export default function AppLayout() {
 
   return (
     <div className={styles.container}>
-      <VLibras forceOnload={true} />
-      <aside className={styles.sidebar}>
-        <div className={styles.logo}>
-          <div className={styles.logoImage}>
-            <img src={logo} alt="Solarize Logo" />
+      <div className={styles.vlibrasWrapper}>
+        <VLibras forceOnload={true} />
+      </div>
+      {isSidebarExpanded && (
+        <div
+          className={styles.overlay}
+          onClick={() => setIsSidebarExpanded(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`${styles.sidebar} ${isSidebarExpanded ? styles.sidebarExpanded : ''}`}>
+        <div className={styles.sidebarHeader}>
+          <button
+            className={`${styles.toggleButton} ${styles.desktopToggle}`}
+            onClick={toggleSidebar}
+            aria-label={isSidebarExpanded ? "Fechar menu" : "Abrir menu"}
+          >
+            <FontAwesomeIcon icon={isSidebarExpanded ? faTimes : faBars} />
+          </button>
+
+          <div className={styles.logo}>
+            <div className={styles.logoImage}>
+              <img src={logo} alt="Solarize Logo" />
+            </div>
           </div>
         </div>
 
@@ -86,6 +143,14 @@ export default function AppLayout() {
           </button>
         </div>
       </aside>
+
+      <button
+        className={`${styles.toggleButton} ${styles.mobileToggle}`}
+        onClick={toggleSidebar}
+        aria-label={isSidebarExpanded ? "Fechar menu" : "Abrir menu"}
+      >
+        <FontAwesomeIcon icon={isSidebarExpanded ? faTimes : faBars} />
+      </button>
 
       <main className={styles.content}>
         <Outlet />
