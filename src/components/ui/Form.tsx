@@ -270,7 +270,6 @@ export function AutoCompleteSelect({
         borderColor: "#0C3900"
       }
     }),
-
     option: (base, state) => ({
       ...base,
       backgroundColor: state.isSelected
@@ -278,15 +277,8 @@ export function AutoCompleteSelect({
         : state.isFocused
           ? "rgba(12, 57, 0, 0.1)"
           : base.backgroundColor,
-      color: state.isSelected ? "#fff" : base.color,
       cursor: "pointer"
     }),
-
-    singleValue: (base) => ({
-      ...base,
-      color: "#0C3900"
-    }),
-
     dropdownIndicator: (base, state) => ({
       ...base,
       color: state.isFocused ? "#0C3900" : base.color,
@@ -308,3 +300,8 @@ export function AutoCompleteSelect({
     />
   );
 }
+
+
+// function FileInput() {
+
+// }

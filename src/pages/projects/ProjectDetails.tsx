@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import ActionRequired from "../../components/actionRequired/ActionRequired";
 import ClientInfoForm from "../../components/forms/project_form/clientInfo/ClientInfoForm";
 import GeneralInfoForm from "../../components/forms/project_form/generalInfo/GeneralInfoForm";
+import ProjectFiles from "../../components/forms/project_form/projectFiles/ProjectFiles";
 import PageHeader from "../../components/layout/PageHeader";
 import type { ProjectDetails } from "../../interfaces/types/ProjectDetails";
 import ProjectService from "../../services/ProjectService";
@@ -48,6 +49,9 @@ export default function ProjectDetails() {
                         <ClientInfoForm project={project} />
                     </div>
 
+                    <div className={styles.projectFiles}>
+                        <ProjectFiles />
+                    </div>
                 </div>
             </div>
         </>

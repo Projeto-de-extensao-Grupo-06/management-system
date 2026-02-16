@@ -6,6 +6,10 @@
     margin-top: 50px;
 }
 
+.projectFiles {
+    margin-top: 50px;
+}
+
 @media (min-width: 768px) {
     .container {
         display: grid;
@@ -16,7 +20,5 @@
     .generalInfos {
         margin-top: 0px;
     }
-
-    
 }
 
