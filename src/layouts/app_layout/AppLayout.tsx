@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import VLibras from "@moreiraste/react-vlibras";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 
@@ -54,6 +54,31 @@ export default function AppLayout() {
     setIsSidebarExpanded(!isSidebarExpanded);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        document.body.style.overflow = "auto";
+      } else if (isSidebarExpanded) {
+        document.body.style.overflow = "hidden";
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    if (isSidebarExpanded && window.innerWidth <= 1024) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isSidebarExpanded]);
+
+
   const menu = menuItems.map((item) => {
     const Icon = item.icon;
     return (
@@ -63,7 +88,9 @@ export default function AppLayout() {
           className={({ isActive }) =>
             `${styles.menuLink} ${isActive ? styles.menuLinkActive : ""}`
           }
-          onClick={() => setIsSidebarExpanded(false)}
+          onClick={() => {
+            if (window.innerWidth <= 1024) setIsSidebarExpanded(false);
+          }}
         >
           <FontAwesomeIcon className={styles.menuIcon} icon={Icon} />
           <span className={styles.menuText}>{item.label}</span>
@@ -86,8 +113,16 @@ export default function AppLayout() {
       )}
 
       <aside className={`${styles.sidebar} ${isSidebarExpanded ? styles.sidebarExpanded : ''}`}>
-        <div className={styles.logo}>
-          <div className={styles.headerControl}>
+        <div className={styles.sidebarHeader}>
+          <button
+            className={`${styles.toggleButton} ${styles.desktopToggle}`}
+            onClick={toggleSidebar}
+            aria-label={isSidebarExpanded ? "Fechar menu" : "Abrir menu"}
+          >
+            <FontAwesomeIcon icon={isSidebarExpanded ? faTimes : faBars} />
+          </button>
+
+          <div className={styles.logo}>
             <div className={styles.logoImage}>
               <img src={logo} alt="Solarize Logo" />
             </div>
@@ -110,7 +145,7 @@ export default function AppLayout() {
       </aside>
 
       <button
-        className={styles.toggleButton}
+        className={`${styles.toggleButton} ${styles.mobileToggle}`}
         onClick={toggleSidebar}
         aria-label={isSidebarExpanded ? "Fechar menu" : "Abrir menu"}
       >

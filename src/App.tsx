@@ -59,7 +59,7 @@ function App() {
             />
             <Route
               path="/projetos/notificacoes"
-              // element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}
+              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}
             />
 
           </Route>
