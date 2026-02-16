@@ -1,0 +1,1 @@
+export type ProjectSystemType = "ON_GRID" | "OFF_GRID";
