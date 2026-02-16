@@ -7,4 +7,5 @@ export default interface IconButtonProps {
     icon: JSX.Element;
     ariaLabel?: string;
     functionality?: "edit" | "delete";
+    title?: string;
 }

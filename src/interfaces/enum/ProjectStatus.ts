@@ -12,6 +12,7 @@ export const ProjectStatus = {
   INSTALLED: 'INSTALLED',
   COMPLETED: 'COMPLETED',
   NEGOTIATION_FAILED: 'NEGOTIATION_FAILED',
+  CONTACT_NOT_REQUESTED: 'CONTACT_NOT_REQUESTED',
 } as const;
 
 export type ProjectStatusType =

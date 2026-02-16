@@ -1,16 +1,32 @@
 import type { Page } from '../interfaces/types/Page';
+import type { ProjectNotification } from '../interfaces/types/ProjectNotification';
 import type ProjectSummary from '../interfaces/types/ProjectSummary';
 import api from './provider/api';
 
 export default class ProjectsService {
+  async getProjectLeads(
+    minDate?: string,
+    maxDate?: string,
+    status?: string,
+    clientName?: string
+  ): Promise<ProjectNotification[]> {
+    const params = new URLSearchParams();
+    if (minDate) params.append('minDate', minDate);
+    if (maxDate) params.append('maxDate', maxDate);
+    if (status && status !== 'Todos') params.append('status', status);
+    if (clientName) params.append('clientName', clientName);
 
+    const response = await api.get<ProjectNotification[]>('/projects/leads', { params });
+    return response.data;
+  }
   async getAllProjects(
     page: number = 0,
     size: number = 20,
     search: string = '',
     status: string[] = [],
     clientId?: number,
-  ): Promise<Page<ProjectSummary>> {
+  )
+    : Promise<Page<ProjectSummary>> {
 
     const params = new URLSearchParams();
     params.append('page', page.toString());
