@@ -15,7 +15,7 @@ import { projectStatusLabel } from '../../../utils/mappers/projectStatusLabel';
 interface Props {
   open: boolean;
   onClose: () => void;
-  onSuccess?: () => void; 
+  onSuccess?: () => void;
 }
 
 export default function CreateProjectModal({ open, onClose, onSuccess }: Props) {
@@ -25,7 +25,9 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
 
   const [projectName, setProjectName] = useState('');
   const [projectType, setProjectType] =
-    useState<'ON_GRID' | 'OFF_GRID'>('ON_GRID');
+    useState<'ON_GRID' | 'OFF_GRID' | null>(null);
+
+
 
   const [status, setStatus] =
     useState<ProjectStatusType>(ProjectStatus.NEW);
@@ -85,29 +87,29 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
 
   }, [responsibleSearch, projectsService]);
 
-const handleCreateProject = async () => {
-  if (!projectName || !clientId) return;
+  const handleCreateProject = async () => {
+   if (!projectName || !clientId || !projectType) return;
 
   const payload = {
-    name: projectName,
-    description: "",
-    projectType,
-    status,
-    clientId: clientId,
-    responsibleId: responsibleId ?? undefined,
-    // addressId: addressId ?? undefined,
-    addressId: 1
-  };
-
-  try {
-    await projectsService.createManualProject(payload);
-   if (onSuccess) {
-    onSuccess(); 
-  }
-  } catch (e: any) {
-    console.error('Erro ao criar projeto', e.response?.data || e);
-  }
+  name: projectName,
+  description: "",
+  projectType: projectType as 'ON_GRID' | 'OFF_GRID',
+  status,
+  clientId,
+  responsibleId: responsibleId ?? undefined,
+  addressId: addressId ?? 1,
 };
+
+
+    try {
+      await projectsService.createManualProject(payload);
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (e: any) {
+      console.error('Erro ao criar projeto', e.response?.data || e);
+    }
+  };
 
 
   if (!open) return null;
@@ -145,14 +147,20 @@ const handleCreateProject = async () => {
             <label>Tipo de instalação</label>
             <select
               className={styles.input}
-              value={projectType}
+              value={projectType ?? ""}
               onChange={(e) =>
-                setProjectType(e.target.value as 'ON_GRID' | 'OFF_GRID')
+                setProjectType(
+                  e.target.value === ""
+                    ? null
+                    : (e.target.value as 'ON_GRID' | 'OFF_GRID')
+                )
               }
             >
+              <option value="">Escolha o tipo</option>
               <option value="ON_GRID">On-Grid</option>
               <option value="OFF_GRID">Off-Grid</option>
             </select>
+
           </div>
 
           {/* Status */}

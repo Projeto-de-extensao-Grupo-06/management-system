@@ -127,3 +127,104 @@
 .autocompleteItem:hover {
   background: #f2f2f2;
 }
+
+select.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fff;
+  appearance: none;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+
+.titleNotification {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  position: relative;
+}
+
+.titleNotification svg {
+  font-size: 24px;
+  color: #000;
+}
+
+.titleNotification .notificationBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #2E7D32;
+  color: white;
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 999px;
+  height: 20px;
+  font-size: 12px;
+}
+
+
+@media (max-width: 1024px) {
+  .projectsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .container {
+    padding: 0rem 1.5rem 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .projectsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .modal {
+    width: 95%;
+    max-width: calc(100% - 32px);
+    padding: 20px;
+  }
+
+  .container {
+    padding: 0rem 1rem 1.5rem 1rem;
+  }
+
+  .titleNotification {
+    margin-left: 4px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .projectsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .modal {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .container {
+    padding: 0.5rem 1rem 1.5rem 1rem;
+  }
+
+  .titleNotification {
+    margin-left: 2px;
+  }
+}
