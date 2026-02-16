@@ -88,14 +88,6 @@ export default function AppLayout() {
       <aside className={`${styles.sidebar} ${isSidebarExpanded ? styles.sidebarExpanded : ''}`}>
         <div className={styles.logo}>
           <div className={styles.headerControl}>
-            <button
-              className={styles.toggleButton}
-              onClick={toggleSidebar}
-              aria-label={isSidebarExpanded ? "Fechar menu" : "Abrir menu"}
-            >
-              <FontAwesomeIcon icon={isSidebarExpanded ? faTimes : faBars} />
-            </button>
-
             <div className={styles.logoImage}>
               <img src={logo} alt="Solarize Logo" />
             </div>
@@ -116,6 +108,14 @@ export default function AppLayout() {
           </button>
         </div>
       </aside>
+
+      <button
+        className={styles.toggleButton}
+        onClick={toggleSidebar}
+        aria-label={isSidebarExpanded ? "Fechar menu" : "Abrir menu"}
+      >
+        <FontAwesomeIcon icon={isSidebarExpanded ? faTimes : faBars} />
+      </button>
 
       <main className={styles.content}>
         <Outlet />
