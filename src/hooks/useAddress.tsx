@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CreateAddressDto, ResponseAddressDto, UpdateAddressDto, UseAddressApiReturn } from '../interfaces/types/AddressTypes';
+import type { AddressLookupDto, CreateAddressDto, ResponseAddressDto, UpdateAddressDto, UseAddressApiReturn } from '../interfaces/types/AddressTypes';
 import AddressService from '../services/AddressService';
 
 export function useAddress(): UseAddressApiReturn {
@@ -72,6 +72,24 @@ export function useAddress(): UseAddressApiReturn {
         }
     };
 
+    const getAddressLookup = async (): Promise<AddressLookupDto[] | null> => {
+        try {
+            setLoading(true);
+            setError(null);
+            setSuccess(false);
+
+            const result = await addressService.getAddressLookup();
+
+            setSuccess(true);
+            setLoading(false);
+            return result;
+        } catch (err) {
+            console.error('Erro ao obter lookup de endereços', err);
+            setLoading(false);
+            return null;
+        }
+    };
+
     return {
         loading,
         error,
@@ -79,6 +97,7 @@ export function useAddress(): UseAddressApiReturn {
         createAddress,
         updateAddress,
         getAddressById,
+        getAddressLookup,
         resetState,
     };
 }

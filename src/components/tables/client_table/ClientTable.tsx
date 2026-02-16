@@ -1,5 +1,6 @@
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import usePermissions from '../../../hooks/usePermissions';
 import type { ClientTableProps } from '../../../interfaces/properties/TableProps';
 import styles from '../../../pages/clients/Clients.module.css';
 import SecureComponent from '../../security/SecureComponent';
@@ -7,13 +8,16 @@ import { IconButton } from '../../ui/Form';
 import Table from '../Table';
 
 export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: ClientTableProps) {
+    const permissions = usePermissions();
+    const canManageClients = permissions.includes("CLIENT_UPDATE") || permissions.includes("CLIENT_DELETE");
+
     const headers = [
         'Nome do Cliente',
         'E-mail',
         'Telefone',
         'Cidade/Estado',
         'Data de Cadastro',
-        'Operação'
+        ...(canManageClients ? ['Operação'] : [])
     ];
 
     return (
@@ -33,28 +37,30 @@ export default function ClientTable({ clients, onEdit, onDelete, onRowClick }: C
                     <td>{client.phone}</td>
                     <td>{client.mainAddress ? `${client.mainAddress?.city} / ${client.mainAddress?.state}` : '-'}</td>
                     <td>{client.createdAt ? new Date(client.createdAt).toLocaleDateString('pt-BR') : '-'}</td>
-                    <td>
-                        <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
-                            <SecureComponent permissions={["CLIENT_UPDATE"]}>
-                                <IconButton
-                                    onClick={() => onEdit(client.id)}
-                                    icon={<FontAwesomeIcon icon={faPen} />}
-                                    ariaLabel="Editar"
-                                    functionality="edit"
-                                />
-                            </SecureComponent>
+                    <SecureComponent permissions={["CLIENT_UPDATE", "CLIENT_DELETE"]}>
+                        <td>
+                            <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
+                                <SecureComponent permissions={["CLIENT_UPDATE"]}>
+                                    <IconButton
+                                        onClick={() => onEdit(client.id)}
+                                        icon={<FontAwesomeIcon icon={faPen} />}
+                                        ariaLabel="Editar"
+                                        functionality="edit"
+                                    />
+                                </SecureComponent>
 
-                            <SecureComponent permissions={["CLIENT_DELETE"]}>
-                                <IconButton
-                                    onClick={() => onDelete(client.id)}
-                                    icon={<FontAwesomeIcon icon={faTrashCan} />}
-                                    ariaLabel="Deletar"
-                                    functionality="delete"
-                                />
-                            </SecureComponent>
+                                <SecureComponent permissions={["CLIENT_DELETE"]}>
+                                    <IconButton
+                                        onClick={() => onDelete(client.id)}
+                                        icon={<FontAwesomeIcon icon={faTrashCan} />}
+                                        ariaLabel="Deletar"
+                                        functionality="delete"
+                                    />
+                                </SecureComponent>
 
-                        </div>
-                    </td>
+                            </div>
+                        </td>
+                    </SecureComponent>
                 </tr>
             ))}
         </Table>

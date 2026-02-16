@@ -13,6 +13,14 @@ const mockUpdateClient = vi.fn();
 const mockGetClientById = vi.fn();
 const mockGetClientProjects = vi.fn();
 
+vi.mock('../components/security/SecureComponent', () => ({
+    default: ({ children }: { children: React.ReactNode }) => <>{children}</>
+}));
+
+vi.mock('../hooks/usePermissions', () => ({
+    default: () => ['CLIENT_READ', 'CLIENT_UPDATE', 'CLIENT_DELETE', 'CLIENT_WRITE']
+}));
+
 vi.mock('../services/ClientsService', () => {
     return {
         default: class {
@@ -29,6 +37,12 @@ vi.mock('../services/ClientsService', () => {
 vi.stubGlobal('confirm', vi.fn());
 vi.stubGlobal('scrollTo', vi.fn());
 Element.prototype.scrollTo = vi.fn();
+
+vi.stubGlobal('ResizeObserver', vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+})));
 
 const mockClients: Client[] = [
     {
@@ -119,7 +133,7 @@ describe('Clients Page', () => {
         await userEvent.type(searchInput, 'Maria');
 
         await waitFor(() => {
-            expect(mockGetAllClients).toHaveBeenCalledWith(0, 10, 'Maria', 'Ativo', '', '', '', '');
+            expect(mockGetAllClients).toHaveBeenCalledWith(0, 30, 'Maria', 'Ativo', '', '', '', '');
         });
     });
 
@@ -154,7 +168,7 @@ describe('Clients Page', () => {
         await userEvent.click(applyBtn);
 
         await waitFor(() => {
-            expect(mockGetAllClients).toHaveBeenCalledWith(0, 10, '', 'Ativo', 'Rio de Janeiro', '', '', '');
+            expect(mockGetAllClients).toHaveBeenCalledWith(0, 30, '', 'Ativo', 'Rio de Janeiro', '', '', '');
         });
     });
 
@@ -184,7 +198,9 @@ describe('Clients Page', () => {
 
         await userEvent.click(deleteButtons[0]);
 
-        expect(window.confirm).toHaveBeenCalled();
+        const confirmBtn = screen.getByText('Confirmar');
+        await userEvent.click(confirmBtn);
+
         expect(mockDeleteClient).toHaveBeenCalledWith(1);
 
         await waitFor(() => {
@@ -209,6 +225,9 @@ describe('Clients Page', () => {
 
         const deleteButtons = screen.getAllByLabelText('Deletar');
         await userEvent.click(deleteButtons[0]);
+
+        const confirmBtn = screen.getByText('Confirmar');
+        await userEvent.click(confirmBtn);
 
         await waitFor(() => {
             expect(screen.getByText('Erro ao deletar: Possui vínculos.')).toBeInTheDocument();
@@ -235,13 +254,18 @@ describe('Clients Page', () => {
 
         await waitFor(() => expect(screen.getByText('Clientes')).toBeInTheDocument());
 
-        const createBtn = screen.getByText('Cadastrar Cliente', { selector: 'button' });
-        await userEvent.click(createBtn);
+        const createBtns = screen.getAllByText('Cadastrar Cliente');
+        await userEvent.click(createBtns[0]);
 
         expect(screen.getByText('Criar Cliente')).toBeInTheDocument();
 
         vi.spyOn(console, 'error').mockImplementation(() => { });
 
-        expect(screen.getAllByText('Cadastrar Cliente')[1]).toBeInTheDocument();
+        const submitBtn = screen.getAllByText('Cadastrar Cliente')[1];
+        await userEvent.click(submitBtn);
+
+        await waitFor(() => {
+            expect(screen.getAllByText('Cadastrar Cliente')[1]).toBeInTheDocument();
+        });
     });
 });

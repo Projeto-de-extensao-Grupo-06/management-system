@@ -13,6 +13,7 @@ export default function useClients(): UseClientsReturn {
     const [clients, setClients] = useState<Client[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
     const [filters, setFilters] = useState<ClientFilters>({
         startDate: '',
         endDate: '',
@@ -32,7 +33,7 @@ export default function useClients(): UseClientsReturn {
 
         clientsService.getAllClients(
             page,
-            10,
+            30,
             searchTerm,
             statusFilter,
             filters.city,
@@ -46,6 +47,7 @@ export default function useClients(): UseClientsReturn {
                 setClients(data.content);
                 const total = data.totalPages || Math.ceil(data.totalElements / (data.pageable?.pageSize || 20));
                 setTotalPages(total);
+                setTotalElements(data.totalElements);
             })
             .catch(() => {
                 setError('Erro ao carregar clientes.');
@@ -97,12 +99,12 @@ export default function useClients(): UseClientsReturn {
                 let duplicateField = '';
                 if (message.toLowerCase().includes('email')) {
                     duplicateField = 'E-mail';
-                } 
-                
+                }
+
                 if (message.toLowerCase().includes('document') || message.toLowerCase().includes('cpf') || message.toLowerCase().includes('cnpj')) {
                     duplicateField = 'Documento';
-                } 
-                
+                }
+
                 if (message.toLowerCase().includes('phone')) {
                     duplicateField = 'Telefone';
                 }
@@ -189,12 +191,12 @@ export default function useClients(): UseClientsReturn {
                 let duplicateField = '';
                 if (message.toLowerCase().includes('email')) {
                     duplicateField = 'E-mail';
-                } 
-                
+                }
+
                 if (message.toLowerCase().includes('document') || message.toLowerCase().includes('cpf') || message.toLowerCase().includes('cnpj')) {
                     duplicateField = 'Documento';
-                } 
-                
+                }
+
                 if (message.toLowerCase().includes('phone')) {
                     duplicateField = 'Telefone';
                 }
@@ -228,6 +230,7 @@ export default function useClients(): UseClientsReturn {
         clients,
         page,
         totalPages,
+        totalElements,
         searchTerm,
         statusFilter,
         filters,
