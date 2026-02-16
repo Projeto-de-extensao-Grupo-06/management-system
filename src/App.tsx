@@ -14,6 +14,8 @@ import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import NotFound from "./pages/shared/NotFound";
+import Projects from "./pages/projects/Projects";
+import ProjectNotifications from "./pages/projects/ProjectNotifications";
 
 import useAuthStore from "./store/useAuthStore";
 
@@ -56,6 +58,16 @@ function App() {
             />
 
             <Route path="/analise" element={<Analysis />}></Route>
+
+            <Route
+              path="/projetos"
+              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<Projects />} />}
+            />
+            <Route
+              path="/projetos/notificacoes"
+              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}
+            />
+
           </Route>
         </Route>
       </Routes>

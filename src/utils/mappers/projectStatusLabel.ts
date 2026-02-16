@@ -1,0 +1,15 @@
+export const projectStatusLabel: Record<string, string> = {
+  NEW: 'Novo',
+  PRE_BUDGET: 'Pré-orçamento',
+  CLIENT_AWAITING_CONTACT: 'Aguardando contato',
+  AWAITING_RETRY: 'Aguardando retorno',
+  RETRYING: 'Em tentativa',
+  SCHEDULED_TECHNICAL_VISIT: 'Visita técnica agendada',
+  TECHNICAL_VISIT_COMPLETED: 'Visita técnica concluída',
+  FINAL_BUDGET: 'Orçamento final',
+  AWAITING_MATERIALS: 'Aguardando materiais',
+  SCHEDULED_INSTALLING_VISIT: 'Instalação agendada',
+  INSTALLED: 'Instalado',
+  COMPLETED: 'Concluído',
+  NEGOTIATION_FAILED: 'Negociação perdida',
+};
