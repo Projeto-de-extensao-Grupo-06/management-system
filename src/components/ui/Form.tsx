@@ -13,6 +13,7 @@ import type InputProps from '../../interfaces/properties/InputProps';
 import type PasswordInputProps from '../../interfaces/properties/PasswordInputProps';
 import type { AutoCompleteSelectProps, AutoCompleteSelectOption } from '../../interfaces/properties/ReactSelectFormProps';
 import type SelectProps from '../../interfaces/properties/SelectProps';
+import SecureComponent from '../security/SecureComponent';
 
 export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style, className }: ButtonProps) {
   return (
@@ -313,9 +314,11 @@ export function FileInput({ fileName, onDelete, onDownload }: FileInputProps) {
         <FontAwesomeIcon icon={faFileDownload} size='lg' />
       </button>
 
-      <button className="btn btn-delete" onClick={onDelete}>
-        <FontAwesomeIcon icon={faTrash} size='lg' />
-      </button>
+      <SecureComponent permissions={["PROJECT_UPDATE"]}>
+        <button className="btn btn-delete" onClick={onDelete}>
+          <FontAwesomeIcon icon={faTrash} size='lg' />
+        </button>
+      </SecureComponent>
     </div>
   );
 }

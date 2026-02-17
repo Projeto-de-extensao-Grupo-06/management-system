@@ -1,6 +1,7 @@
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useMemo, useState } from "react";
+import usePermissions from "../../../../hooks/usePermissions";
 import type { AutoCompleteSelectOption } from "../../../../interfaces/properties/ReactSelectFormProps";
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
 import { CoworkerService } from "../../../../services/CoworkerService";
@@ -16,6 +17,8 @@ interface GeneralInfoFormProps {
 export default function GeneralInfoForm({ project, setProject }: GeneralInfoFormProps) {
     const coworkerService = new CoworkerService();
     const projectService = new ProjectService();
+    const permissions = usePermissions();
+    const canEdit = permissions.includes("PROJECT_UPDATE");
 
     const [coworkerSelectOptions, setCoworkersSelectOptions] = useState<AutoCompleteSelectOption[]>([]);
 
@@ -116,6 +119,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Nome do projeto:</label>
                     <Input
+                        disabled={!canEdit}
                         value={project.name}
                         onChange={projectNameHandler}
                         onBlur={projectNameBlurHandler}
@@ -126,6 +130,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Status do projeto:</label>
                     <AutoCompleteSelect
+                        isDisabled={!canEdit}
                         options={projectStatusOptions}
                         onChange={(v) => {
                             setProject(prev => {
@@ -146,6 +151,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Tipo de Instalação:</label>
                     <Select
+                        disabled={!canEdit}
                         value={project.systemType}
                         onChange={projectSystemTypeChangeHandler}
                     >
@@ -162,6 +168,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Responsável:</label>
                     <AutoCompleteSelect
+                        isDisabled={!canEdit}
                         options={coworkerSelectOptions}
                         onChange={coworkerChangeHandler}
                         value={

@@ -2,6 +2,7 @@ import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type React from "react";
 import { useState } from "react";
+import usePermissions from "../../../../hooks/usePermissions";
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
 import ProjectService from "../../../../services/ProjectService";
 import styles from "./ProjectObservation.module.css";
@@ -15,6 +16,8 @@ export default function ProjectObservation({ project, setProject }: ProjectObser
 
     const projectService = new ProjectService();
     const [loading, setLoading] = useState(false);
+    const permissions = usePermissions();
+    const canEdit = permissions.includes("PROJECT_UPDATE");
 
     async function handleBlur() {
         try {
@@ -52,7 +55,7 @@ export default function ProjectObservation({ project, setProject }: ProjectObser
                 }
                 onBlur={handleBlur}
                 placeholder="Digite observações sobre o projeto..."
-                disabled={loading}
+                disabled={loading || !canEdit}
             />
         </div>
     );

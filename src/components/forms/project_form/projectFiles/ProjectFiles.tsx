@@ -6,6 +6,7 @@ import type { ProjectFilesProps } from "../../../../interfaces/properties/Projec
 import type { ProjectFile } from "../../../../interfaces/types/File";
 import FilesService from "../../../../services/FilesService";
 import Modal from "../../../dialogs/modal/Modal";
+import SecureComponent from "../../../security/SecureComponent";
 import { FileInput } from "../../../ui/Form";
 import FileUploadForm from "../../fileUploadForm/FileUploadForm";
 import styles from "./ProjectFiles.module.css";
@@ -101,11 +102,12 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
                         return <FileInput key={key} fileName={file.originalFilename ?? ""} onDelete={() => { }} onDownload={() => handleDownload(file.id)} />
                     })}
 
-                    <div className={styles.uploadFilesContainer} onClick={() => setModalOpen(true)}>
-                        <span className={styles.uploadFiles}>Realizar upload de arquivo</span>
-                        <FontAwesomeIcon icon={faPlusCircle} size="lg" />
-
-                    </div>
+                    <SecureComponent permissions={["PROJECT_UPDATE"]}>
+                        <div className={styles.uploadFilesContainer} onClick={() => setModalOpen(true)}>
+                            <span className={styles.uploadFiles}>Realizar upload de arquivo</span>
+                            <FontAwesomeIcon icon={faPlusCircle} size="lg" />
+                        </div>
+                    </SecureComponent>
 
                     <Modal title="Upload de arquivos" isOpen={modalOpen} onClose={() => setModalOpen(false)}>
                         <FileUploadForm

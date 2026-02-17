@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import type { Schedule } from "../../../../interfaces/types/Schedule";
 import ScheduleService from "../../../../services/ScheduleService";
+import SecureComponent from "../../../security/SecureComponent";
 import styles from "./NextSchedules.module.css";
 import ScheduleCard from "./partials/ScheduleCard";
 
@@ -39,9 +40,11 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
                     <span>Próximos compromissos</span>
                 </div>
 
-                <button className={styles.editButton}>
-                    Editar
-                </button>
+                <SecureComponent permissions={["SCHEDULE_UPDATE"]}>
+                    <button className={styles.editButton}>
+                        Editar
+                    </button>
+                </SecureComponent>
             </div>
 
             {loading && <p>Carregando...</p>}
