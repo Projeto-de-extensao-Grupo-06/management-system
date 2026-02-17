@@ -57,7 +57,10 @@ function App() {
               element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectDetails />} />}
             />
 
-            <Route path="/analise" element={<Analysis />}></Route>
+            <Route 
+              path="/analise" 
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Analysis />} />}
+            />
 
             <Route
               path="/projetos"
