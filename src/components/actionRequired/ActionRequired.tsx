@@ -1,10 +1,26 @@
 import { faWarning } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from "clsx";
+import { useEffect, useState } from 'react';
 import type { ActionRequiredProps } from '../../interfaces/properties/ActionRequiredProps';
+import ClientsService from '../../services/ClientsService';
 import styles from "./ActionRequired.module.css";
 
-export default function ActionRequired({ projectStatus, clientName }: ActionRequiredProps) {
+const clientService = new ClientsService();
+
+export default function ActionRequired({ projectStatus, clientId }: ActionRequiredProps) {
+    const [clientName, setClientName] = useState("");
+
+    useEffect(() => {
+        const fetchClient = async () => {
+            const data = await clientService.getClientById(clientId);
+
+            setClientName(data.firstName);
+        }
+
+        fetchClient();
+    }, []);
+
     const message = (() => {
         if (projectStatus === "CLIENT_AWAITING_CONTACT") {
             return `${clientName} está aguardando seu contato.`;

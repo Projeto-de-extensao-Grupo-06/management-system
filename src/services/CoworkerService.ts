@@ -5,6 +5,8 @@ export class CoworkerService {
   async getCoworkerById(id: number) {
     const coworker = await api.get<Coworker>(`/coworkers/${id}`);
 
+    console.log(coworker)
+
     return coworker.data;
   }
   

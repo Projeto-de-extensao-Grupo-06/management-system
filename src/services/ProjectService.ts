@@ -6,4 +6,16 @@ export default class ProjectService {
     const res = await api.get<ProjectDetails>(`/projects/${projectId}`);
     return res.data;
   }
+
+    async updateProject(
+    id: number,
+    data: {
+      name?: string;
+      responsibleId?: number;
+      projectType?: "ON_GRID" | "OFF_GRID";
+      description?: string
+    }
+  ): Promise<void> {
+    await api.patch(`/projects/${id}`, data);
+  }
 };

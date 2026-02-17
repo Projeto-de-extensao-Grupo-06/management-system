@@ -16,5 +16,5 @@ export type ProjectStatus =
 
 export interface ActionRequiredProps {
     projectStatus: ProjectStatus;
-    clientName: string;
+    clientId: number;
 }
