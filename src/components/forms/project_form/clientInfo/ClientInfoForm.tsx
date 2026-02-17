@@ -119,7 +119,7 @@ export default function ClientInfoForm({ project }: ClientInfoFormProps) {
                         </SecureComponent>
                     </div>
                     <div className={styles.map}>
-                        <GoogleMaps address={textAddress} />
+                        {textAddress && <GoogleMaps address={textAddress} />}
                     </div>
 
                     <Modal isOpen={editAddress} title="Editar endereço" onClose={handleModalClose}>
