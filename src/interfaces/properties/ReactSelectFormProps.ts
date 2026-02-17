@@ -7,9 +7,16 @@ export interface AutoCompleteSelectOption {
 
 export interface AutoCompleteSelectProps {
   options: AutoCompleteSelectOption[];
-  value: SingleValue<AutoCompleteSelectOption> | MultiValue<AutoCompleteSelectOption>;
-  onChange: (value: SingleValue<AutoCompleteSelectOption> | MultiValue<AutoCompleteSelectOption>) => void;
+  value: SingleValue<AutoCompleteSelectOption>;
+  onChange: (value: SingleValue<AutoCompleteSelectOption>) => void;
   placeholder?: string;
   isDisabled?: boolean;
-  isMulti?: boolean;
+}
+
+export interface MultiSelectProps {
+  options: AutoCompleteSelectOption[];
+  value: MultiValue<AutoCompleteSelectOption>;
+  onChange: (value: MultiValue<AutoCompleteSelectOption>) => void;
+  placeholder?: string;
+  isDisabled?: boolean;
 }
