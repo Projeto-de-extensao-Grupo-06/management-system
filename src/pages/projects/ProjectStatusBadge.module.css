@@ -1,0 +1,8 @@
+.badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: black;
+  white-space: nowrap;
+}

@@ -3,10 +3,40 @@
   min-height: 100vh;
 }
 
+.toggleButton {
+  background: transparent;
+  border: none;
+  color: var(--color-background);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  z-index: 1100;
+}
+
+.toggleButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.mobileToggle {
+  display: none;
+}
+
+.desktopToggle {
+  display: flex;
+  color: var(--color-background);
+  margin-bottom: 10px;
+}
+
 .sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, var(--color-primary) 0%, #d66f28 100%);
-  /* #d66f28 is close to primary-dark, lets use primary-dark variable */
+  width: 70px;
   background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   color: var(--color-background);
   display: flex;
@@ -17,25 +47,52 @@
   left: 0;
   top: 0;
   z-index: 1000;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  white-space: nowrap;
 }
 
-@media (max-width: 500px) {
-  .vlibrasWrapper {
-    display: none !important;
-  }
+.sidebarExpanded {
+  width: 260px;
+}
+
+.sidebarHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(230, 208, 208, 0.2);
+  width: 100%;
+}
+
+.sidebarExpanded .sidebarHeader {
+  padding: 20px 25px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebarExpanded .sidebarHeader {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sidebarExpanded .desktopToggle {
+  align-self: flex-start;
+  margin-bottom: 0;
 }
 
 .logo {
-  padding: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid rgba(230, 208, 208, 0.2);
+  width: 100%;
+  margin-top: 10px;
 }
 
 .logoImage {
-  width: 140px;
-  height: 140px;
+  width: 40px;
+  height: 40px;
   background: var(--color-background);
   border-radius: 50%;
   display: flex;
@@ -43,6 +100,7 @@
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .logoImage img {
@@ -51,10 +109,22 @@
   object-fit: cover;
 }
 
+.sidebarExpanded .logoImage {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.sidebarExpanded .logo {
+  height: auto;
+  padding: 10px 0;
+}
+
 .nav {
   flex: 1;
   padding: 10px 0;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .menu {
@@ -70,7 +140,8 @@
 .menuLink {
   display: flex;
   align-items: center;
-  padding: 18px 24px;
+  padding: 18px 0;
+  justify-content: center;
   color: var(--color-background);
   text-decoration: none;
   transition: all 0.3s ease;
@@ -82,7 +153,6 @@
   background: transparent;
   border: none;
   width: 100%;
-  text-align: left;
 }
 
 .menuLink:hover {
@@ -102,10 +172,24 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  font-size: 1.2rem;
 }
 
 .menuText {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebarExpanded .menuText {
+  display: block;
+  opacity: 1;
   flex: 1;
+}
+
+.sidebarExpanded .menuLink {
+  justify-content: flex-start;
+  padding: 18px 24px;
 }
 
 .logout {
@@ -114,13 +198,16 @@
 }
 
 .content {
-  margin-left: 260px;
+  margin-left: 70px;
   padding: 40px;
   flex: 1;
-  background: #f5f5f5;
-  /* Using standard background-input/alt which is close */
   background: var(--color-background-input);
   min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebarExpanded~.content {
+  margin-left: 260px;
 }
 
 .nav::-webkit-scrollbar {
@@ -141,141 +228,54 @@
 }
 
 .headerControl {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
   width: 100%;
-}
-
-.toggleButton {
-  background: none;
-  border: none;
-  color: var(--color-background);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  display: none;
-  transition: transform 0.2s ease;
-  align-items: center;
+  display: flex;
   justify-content: center;
-}
-
-.toggleButton:hover {
-  transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
 }
 
 @media (max-width: 1024px) {
+  .vlibrasWrapper {
+    display: none !important;
+  }
 
   .sidebar {
-    width: 60px;
-    align-items: center;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .content {
-    margin-left: 60px;
-    padding: 0.5rem;
-    width: calc(100% - 60px);
-    overflow-x: hidden;
-    box-sizing: border-box;
-  }
-
-  .menuText {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  .logo {
-    padding: 0.5rem;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    border-bottom: none;
-  }
-
-  .logoImage {
-    display: none;
-  }
-
-  .menuLink {
-    justify-content: center;
-    padding: 1rem 0;
-    width: 100%;
-  }
-
-  .menuIcon {
-    margin: 0;
-    font-size: 1.25rem;
-  }
-
-  .toggleButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .headerControl {
-    flex-direction: row;
-    justify-content: center;
-    padding: 0;
-    gap: 0;
-    width: 100%;
-    height: 100%;
+    width: 0;
+    left: 0;
   }
 
   .sidebarExpanded {
     width: 260px;
-    align-items: stretch;
   }
 
-  .sidebarExpanded .menuText {
-    display: block;
-    opacity: 1;
-    margin-left: 10px;
+  .desktopToggle {
+    display: none;
   }
 
-  .sidebarExpanded .menuLink {
-    justify-content: flex-start;
-    padding: 18px 24px;
-  }
-
-  .sidebarExpanded .logoImage {
+  .mobileToggle {
     display: flex;
-    width: 100px;
-    height: 100px;
-    opacity: 1;
-    margin: 0;
-    margin-bottom: 10px;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    color: var(--color-primary);
   }
 
-  .sidebarExpanded .logo {
-    height: auto;
-    padding: 40px 0 20px 0;
-    align-items: center;
-    flex-direction: column;
+  .mobileToggle:hover {
+    background: rgba(0, 0, 0, 0.05);
   }
 
-  .sidebarExpanded .headerControl {
-    position: relative;
-    flex-direction: row;
-    justify-content: center;
-    padding-top: 10px;
+  .sidebarExpanded~.mobileToggle {
+    color: var(--color-background);
+    z-index: 1100;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 60px 20px 20px 20px;
     width: 100%;
   }
 
-  .sidebarExpanded .toggleButton {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: auto;
-    height: auto;
+  .sidebarExpanded~.content {
+    margin-left: 0;
   }
 
   .overlay {
@@ -289,14 +289,14 @@
     backdrop-filter: blur(2px);
     animation: fadeIn 0.3s ease;
   }
+}
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 
-    to {
-      opacity: 1;
-    }
+  to {
+    opacity: 1;
   }
 }

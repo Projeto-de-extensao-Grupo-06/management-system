@@ -12,6 +12,7 @@ import type IconButtonProps from '../../interfaces/properties/IconButtonProps';
 import type InputProps from '../../interfaces/properties/InputProps';
 import type PasswordInputProps from '../../interfaces/properties/PasswordInputProps';
 import type { AutoCompleteSelectProps, AutoCompleteSelectOption } from '../../interfaces/properties/ReactSelectFormProps';
+export type { AutoCompleteSelectProps, AutoCompleteSelectOption };
 import type SelectProps from '../../interfaces/properties/SelectProps';
 
 export function Button({ text, icon, type = "submit", onClick, disabled = false, ariaLabel, width, style, className }: ButtonProps) {
@@ -256,12 +257,13 @@ export function AutoCompleteSelect({
   value,
   onChange,
   placeholder = "Selecione...",
-  isDisabled = false
+  isDisabled = false,
+  isMulti = false
 }: AutoCompleteSelectProps) {
 
   const customStyles: StylesConfig<
     AutoCompleteSelectOption,
-    false,
+    boolean,
     GroupBase<AutoCompleteSelectOption>
   > = {
     control: (base, state) => ({
@@ -291,7 +293,7 @@ export function AutoCompleteSelect({
   };
 
   return (
-    <ReactSelect<AutoCompleteSelectOption>
+    <ReactSelect<AutoCompleteSelectOption, boolean>
       options={options}
       value={value}
       onChange={onChange}
@@ -299,6 +301,7 @@ export function AutoCompleteSelect({
       isDisabled={isDisabled}
       styles={customStyles}
       isClearable
+      isMulti={isMulti}
     />
   );
 }

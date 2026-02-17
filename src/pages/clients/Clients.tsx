@@ -201,7 +201,7 @@ export default function Clients() {
             ariaLabel="Filtrar Clientes"
             onClick={handleFilterClient}
           />
-          <div className={styles.dropdown}>
+          <div className={styles.dropdown} style={{ width: '200px' }}>
             <Select value={statusFilter} onChange={handleStatusChange}>
               <SelectOption value="Todos" label="Todos" />
               <SelectOption value="Ativo" label="Ativo" />

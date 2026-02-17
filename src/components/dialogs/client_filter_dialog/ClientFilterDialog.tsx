@@ -3,7 +3,8 @@ import { useAddress } from "../../../hooks/useAddress";
 import type { ClientFilterModalProps, ClientFilterState } from "../../../interfaces/properties/DialogProps";
 import type { AddressLookupDto } from "../../../interfaces/types/AddressTypes";
 import styles from "../../../pages/clients/Clients.module.css";
-import { Button, Input, Select, SimpleButton } from "../../ui/Form";
+import type { MultiValue } from "react-select";
+import { Button, Input, SimpleButton, AutoCompleteSelect, type AutoCompleteSelectOption } from "../../ui/Form";
 import Modal from "../modal/Modal";
 
 export default function ClientFilterModal({ isOpen, onClose, filters: initialFilters, onApply, onClear }: ClientFilterModalProps) {
@@ -23,8 +24,15 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
     }, []);
 
     const states = lookupData.map(item => item.state).sort();
-    const cities = localFilters.state
-        ? lookupData.find(item => item.state === localFilters.state)?.cities.sort() || []
+
+    const selectedStates = localFilters.state ? localFilters.state.split(',') : [];
+
+    const cities = selectedStates.length > 0
+        ? Array.from(new Set(
+            lookupData
+                .filter(item => selectedStates.includes(item.state))
+                .flatMap(item => item.cities)
+        )).sort()
         : Array.from(new Set(lookupData.flatMap(item => item.cities))).sort();
 
     const handleApply = () => {
@@ -46,9 +54,27 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
     const handleChange = (field: keyof ClientFilterState, value: string) => {
         setLocalFilters((prev: ClientFilterState) => {
             const updates: Partial<ClientFilterState> = { [field]: value };
+
             if (field === 'state') {
-                updates.city = '';
+                const selectedStates = value ? value.split(',') : [];
+
+                const validCities = selectedStates.length > 0
+                    ? new Set(
+                        lookupData
+                            .filter(item => selectedStates.includes(item.state))
+                            .flatMap(item => item.cities)
+                    )
+                    : new Set(lookupData.flatMap(item => item.cities));
+
+                if (prev.city) {
+                    const currentCities = prev.city.split(',');
+                    const newValidCities = currentCities.filter(city => validCities.has(city));
+                    updates.city = newValidCities.join(',');
+                } else {
+                    updates.city = '';
+                }
             }
+
             return { ...prev, ...updates };
         });
     };
@@ -81,17 +107,18 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
             <div className={styles.filterModalContainer}>
                 <div>
                     <label className={styles.filterLabel}>Estado (UF)</label>
+
                     {states.length > 0 ? (
-                        <Select
-                            value={localFilters.state}
-                            onChange={(value) => handleChange('state', value)}
-                            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
-                        >
-                            <option value="">Selecione um estado</option>
-                            {states.map(state => (
-                                <option key={state} value={state}>{state}</option>
-                            ))}
-                        </Select>
+                        <AutoCompleteSelect
+                            isMulti
+                            value={localFilters.state ? localFilters.state.split(',').map(s => ({ value: s, label: s })) : []}
+                            onChange={(newValue) => {
+                                const selectedValues = (newValue as MultiValue<AutoCompleteSelectOption>).map(v => v.value).join(',');
+                                handleChange('state', selectedValues);
+                            }}
+                            options={states.map(state => ({ value: state, label: state }))}
+                            placeholder="Selecione um estado"
+                        />
                     ) : (
                         <Input
                             placeholder="Ex: SP"
@@ -104,17 +131,17 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
                 <div>
                     <label className={styles.filterLabel}>Cidade</label>
                     {cities.length > 0 ? (
-                        <Select
-                            value={localFilters.city}
-                            onChange={(value) => handleChange('city', value)}
-                            disabled={!localFilters.state && cities.length > 100}
-                            style={{ width: '100%' }}
-                        >
-                            <option value="">Selecione uma cidade</option>
-                            {cities.map(city => (
-                                <option key={city} value={city}>{city}</option>
-                            ))}
-                        </Select>
+                        <AutoCompleteSelect
+                            isMulti
+                            value={localFilters.city ? localFilters.city.split(',').map(c => ({ value: c, label: c })) : []}
+                            onChange={(newValue) => {
+                                const selectedValues = (newValue as MultiValue<AutoCompleteSelectOption>).map(v => v.value).join(',');
+                                handleChange('city', selectedValues);
+                            }}
+                            options={cities.map(city => ({ value: city, label: city }))}
+                            isDisabled={!localFilters.state && cities.length > 100}
+                            placeholder="Selecione uma cidade"
+                        />
                     ) : (
                         <Input
                             placeholder="Digite a cidade"

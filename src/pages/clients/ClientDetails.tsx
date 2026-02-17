@@ -12,6 +12,8 @@ import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientsService from '../../services/ClientsService';
+import type ProjectSummary from '../../interfaces/types/ProjectSummary';
+import ProjectGrid from '../../components/layout/ProjectGrid';
 import styles from './Clients.module.css';
 
 export default function ClientDetails() {
@@ -69,6 +71,20 @@ export default function ClientDetails() {
                 setAlert({ message: err.message, type: 'error' });
             });
     };
+
+    const projectSummaries: ProjectSummary[] = useMemo(() => {
+        return projects.map(project => ({
+            id: project.id,
+            projectTitle: project.projectTitle,
+            status: project.status,
+            deadline: null,
+            systemType: null,
+            responsible: { id: 0, firstName: '', lastName: '' },
+            client: client!,
+            commentCount: 0,
+            fileCount: 0
+        }));
+    }, [projects, client]);
 
     if (loading) return <div className={styles.container}>Carregando...</div>;
 
@@ -142,37 +158,15 @@ export default function ClientDetails() {
                 readOnly={!isEditing}
             />
 
-            <div className={styles.card}>
-                <h3 className={styles.sectionTitle}>Projetos:</h3>
-                {projects.length === 0 ? (
-                    <div className={styles.emptyState}>
-                        Nenhum projeto vinculado a este cliente.
-                    </div>
-                ) : (
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th>Nome do Projeto</th>
-                                <th>Status</th>
-                                <th>Data de Criação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {projects.map(project => (
-                                <tr key={project.id} onClick={() => navigate(`/projetos/${project.id}`)} className={styles.projectRow}>
-                                    <td>
-                                        <div className={styles.projectTitle}>
-                                            {project.projectTitle}
-                                        </div>
-                                    </td>
-                                    <td>{project.status}</td>
-                                    <td>{new Date(project.createdAt).toLocaleDateString('pt-BR')}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
+            <SecureComponent permissions={["PROJECT_READ"]}>
+                <div className={`${styles.card} ${styles.projectsSection}`}>
+                    <h3 className={styles.sectionTitle}>Projetos:</h3>
+                    <ProjectGrid
+                        projects={projectSummaries}
+                        emptyMessage="Nenhum projeto vinculado a este cliente."
+                    />
+                </div>
+            </SecureComponent>
         </div>
     );
 }
