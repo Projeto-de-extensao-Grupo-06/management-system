@@ -1,34 +1,34 @@
-import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-
-import PageHeader from '../../components/layout/PageHeader';
-import FilterBar from '../../components/layout/FilterBar';
-import { Button, SearchInput, Select, SelectOption } from '../../components/ui/Form';
-import { Pagination } from '../../components/tables/pagination/Pagination';
-import { Alert } from '../../components/ui/Alert';
-
-import ProjectsService from '../../services/ProjectsService';
-import ClientsService from '../../services/ClientsService';
-
-import type ProjectSummary from '../../interfaces/types/ProjectSummary';
-import type Client from '../../interfaces/types/Client';
-
-import { projectStatusLabel } from '../../utils/mappers/projectStatusLabel';
-// import {CreateProjectModal } from '../projects/components/CreateProjectModal';
-import CreateProjectModal from '../projects/components/CreateProjectModal'
-import styles from '../clients/Clients.module.css';
-import kpistyles from '../analysis/Analysis.module.css';
-import Projectstyles from '../projects/Projects.module.css';
-import ProjectCard from '../projects/components/ProjectCard';
-
+import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   faClock,
   faTriangleExclamation,
   faPhone,
 } from '@fortawesome/free-solid-svg-icons';
-import { faBell } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import FilterBar from '../../components/layout/FilterBar';
+import PageHeader from '../../components/layout/PageHeader';
+import { Pagination } from '../../components/tables/pagination/Pagination';
+import { Alert } from '../../components/ui/Alert';
+import { Button, SearchInput, Select, SelectOption } from '../../components/ui/Form';
+
+import type Client from '../../interfaces/types/Client';
+import type ProjectSummary from '../../interfaces/types/ProjectSummary';
+import ClientsService from '../../services/ClientsService';
+import ProjectsService from '../../services/ProjectsService';
+
+
+import { projectStatusLabel } from '../../utils/mappers/projectStatusLabel';
+// import {CreateProjectModal } from '../projects/components/CreateProjectModal';
+import kpistyles from '../analysis/Analysis.module.css';
+import styles from '../clients/Clients.module.css';
+import CreateProjectModal from '../projects/components/CreateProjectModal'
+import ProjectCard from '../projects/components/ProjectCard';
+import Projectstyles from '../projects/Projects.module.css';
+
 
 
 
@@ -166,40 +166,40 @@ export default function Projects() {
         </div>
       )}
 
-<PageHeader
-  title="Projetos"
-  count={projects.length}
-  titleRight={
-    <div className={Projectstyles.titleNotification}>
-      <FontAwesomeIcon icon={faBell as IconProp} />
-      {notificationCount > 0 && (
-        <span className={Projectstyles.notificationBadge}>
-          {notificationCount}
-        </span>
-      )}
-    </div>
-  }
->
-  <div className={Projectstyles.headerActions}>
-    <Button
-      icon={<FontAwesomeIcon icon={faPlus} />}
-      text="Novo Projeto"
-      ariaLabel="Criar Projeto"
-      onClick={() => setIsCreateModalOpen(true)}
-      width="fit-content"
-    />
+      <PageHeader
+        title="Projetos"
+        count={projects.length}
+        titleRight={
+          <div className={Projectstyles.titleNotification}>
+            <FontAwesomeIcon icon={faBell as IconProp} />
+            {notificationCount > 0 && (
+              <span className={Projectstyles.notificationBadge}>
+                {notificationCount}
+              </span>
+            )}
+          </div>
+        }
+      >
+        <div className={Projectstyles.headerActions}>
+          <Button
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            text="Novo Projeto"
+            ariaLabel="Criar Projeto"
+            onClick={() => setIsCreateModalOpen(true)}
+            width="fit-content"
+          />
 
-  </div>
+        </div>
 
-  <CreateProjectModal
-    open={isCreateModalOpen}
-    onClose={() => setIsCreateModalOpen(false)}
-    onSuccess={() => {
-      fetchProjects();
-      setIsCreateModalOpen(false);
-    }}
-  />
-</PageHeader>
+        <CreateProjectModal
+          open={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSuccess={() => {
+            fetchProjects();
+            setIsCreateModalOpen(false);
+          }}
+        />
+      </PageHeader>
 
 
 
