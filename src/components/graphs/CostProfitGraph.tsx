@@ -1,8 +1,8 @@
 import type { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import type FinancialRecord from "../../../interfaces/types/FinancialRecord";
-import AnalysisService from "../../../services/AnalysisService";
+import type FinancialRecord from "../../interfaces/types/FinancialRecord";
+import AnalysisService from "../../services/AnalysisService";
 
 interface CostProfitGraphProps {
   startDate?: string;
@@ -38,24 +38,27 @@ export default function CostProfitGraph({ startDate, endDate }: CostProfitGraphP
   const options: ApexOptions = {
     chart: {
       type: "bar",
-      height: 300,
+      height: 350,
       toolbar: { show: false },
+      fontFamily: "Montserrat, sans-serif",
     },
     title: {
       text: "Análise de Custo x Lucro",
       align: "center",
       style: {
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: 600,
-        fontFamily: "Montserrat",
         color: "#333",
       },
     },
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: "45%",
+        columnWidth: "50%",
         borderRadius: 4,
+        dataLabels: {
+          position: "top",
+        },
       },
     },
     dataLabels: {
@@ -73,27 +76,38 @@ export default function CostProfitGraph({ startDate, endDate }: CostProfitGraphP
       labels: {
         style: {
           fontSize: "12px",
+          fontWeight: 500,
         },
       },
     },
     yaxis: {
       labels: {
-        formatter: (val: number) => `R$ ${(val / 1000).toFixed(0)}k`,
+        formatter: (val: number) => `R$ ${(val / 1000).toFixed(1)}k`,
         style: {
-          fontSize: "11px",
+          fontSize: "12px",
+          fontWeight: 500,
         },
       },
     },
     grid: {
       strokeDashArray: 4,
-      borderColor: "#e5e7eb",
+      borderColor: "#f0f0f0",
+      yaxis: {
+        lines: {
+          show: true,
+        }
+      }
     },
     legend: {
       position: "top",
       horizontalAlign: "right",
+      markers: {
+        radius: 12,
+      } as any,
     },
     colors: ["#E47D26", "#1C6321"],
     tooltip: {
+      theme: 'light',
       y: {
         formatter: (val: number) =>
           `R$ ${val.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
@@ -103,7 +117,7 @@ export default function CostProfitGraph({ startDate, endDate }: CostProfitGraphP
 
   return (
     <div id="cost-profit-chart">
-      <Chart options={options} series={series} type="bar" height={300} />
+      <Chart options={options} series={series} type="bar" height={350} />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import type { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import type ProjectStatus from "../../../interfaces/types/ProjectStatus";
-import AnalysisService from "../../../services/AnalysisService";
+import type ProjectStatus from "../../interfaces/types/ProjectStatus";
+import AnalysisService from "../../services/AnalysisService";
 
 interface ProjectStatusGraphProps {
   startDate?: string;
@@ -33,16 +33,16 @@ export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatus
   const options: ApexOptions = {
     chart: {
       type: "bar",
-      height: 300,
+      height: 350,
       toolbar: { show: false },
+      fontFamily: "Montserrat, sans-serif",
     },
     title: {
       text: "Projetos por Status",
       align: "center",
       style: {
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: "600",
-        fontFamily: "Montserrat",
         color: "#333",
       },
     },
@@ -50,7 +50,7 @@ export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatus
       bar: {
         horizontal: true,
         distributed: true,
-        barHeight: "70%",
+        barHeight: "60%",
         borderRadius: 4,
         dataLabels: {
           position: "center",
@@ -59,13 +59,18 @@ export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatus
     },
     dataLabels: {
       enabled: true,
-      formatter: (val: number) => val.toString(),
-      offsetY: 10,
+      textAnchor: "middle",
+      formatter: (val: number) => {
+        return val.toString();
+      },
+      offsetX: 0,
+      offsetY: -2,
+      dropShadow: { enabled: false },
       style: {
-        fontSize: "2rem",
+        fontSize: "14px",
         fontFamily: "Montserrat",
-        fontWeight: "700",
-        colors: ["#FFF"],
+        fontWeight: "600",
+        colors: ["#fff"],
       },
     },
     xaxis: {
@@ -77,22 +82,30 @@ export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatus
     yaxis: {
       labels: {
         show: true,
+        align: 'left',
         style: {
-          fontSize: "1.2rem",
-          fontFamily: "Montserrat",
-          colors: ["#666"],
+          fontSize: "13px",
+          fontWeight: 500,
+          colors: ["#333"],
         },
       },
     },
     grid: {
-      show: false,
+      show: true,
+      strokeDashArray: 4,
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: false } },
+      padding: {
+        left: 10,
+        right: 10
+      }
     },
     legend: {
       show: false,
     },
     colors: ["#125F0B", "#E47D26", "#0033A0", "#FFC300", "#FF5733", "#C70039", "#900C3F", "#581845"],
     tooltip: {
-      enabled: true,
+      theme: 'light',
       y: {
         formatter: (val: number) => `${val} projetos`,
       },
@@ -101,7 +114,7 @@ export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatus
 
   return (
     <div id="project-status-chart">
-      <Chart options={options} series={series} type="bar" height={300} />
+      <Chart options={options} series={series} type="bar" height={350} />
     </div>
   );
 }

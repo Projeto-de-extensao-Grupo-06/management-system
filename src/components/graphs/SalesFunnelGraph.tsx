@@ -1,8 +1,8 @@
 import type { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import type SalesFunnel from "../../../interfaces/types/SalesFunnel";
-import AnalysisService from "../../../services/AnalysisService";
+import type SalesFunnel from "../../interfaces/types/SalesFunnel";
+import AnalysisService from "../../services/AnalysisService";
 
 interface SalesFunnelGraphProps {
   startDate?: string;
@@ -34,40 +34,37 @@ export default function SalesFunnelGraph({ startDate, endDate }: SalesFunnelGrap
   const options: ApexOptions = {
     chart: {
       type: "bar",
-      height: 320,
+      height: 350,
       toolbar: { show: false },
+      fontFamily: "Montserrat, sans-serif",
     },
     title: {
       text: "Funil de Conversão de Vendas",
       align: "center",
       style: {
-        fontSize: "24px",
-        fontWeight: "600",
-        fontFamily: "Montserrat",
+        fontSize: "18px",
+        fontWeight: 600,
         color: "#333",
       },
     },
     plotOptions: {
       bar: {
         horizontal: true,
+        barHeight: "60%",
+        borderRadius: 4,
         isFunnel: true,
-        isFunnel3d: false,
-        dataLabels: {
-          position: "center",
-        },
       },
     },
     dataLabels: {
       enabled: true,
-      formatter: (value, opts) => {
-        const label = funnel[opts.dataPointIndex]?.stage || '';
-        return `${label}: ${value}`;
+      formatter: function (val) {
+        return val.toString();
       },
+      dropShadow: { enabled: false },
       style: {
-        fontSize: "14px",
-        fontWeight: "700",
-        fontFamily: "Montserrat",
-        colors: ["#FFFFFF"],
+        fontSize: "13px",
+        colors: ["#fff"],
+        fontWeight: 600,
       },
     },
     xaxis: {
@@ -75,23 +72,36 @@ export default function SalesFunnelGraph({ startDate, endDate }: SalesFunnelGrap
       labels: { show: false },
       axisBorder: { show: false },
       axisTicks: { show: false },
-      max: 45,
     },
     yaxis: {
-      labels: { show: false },
+      labels: {
+        show: true,
+        style: {
+          fontSize: "13px",
+          fontWeight: 500,
+          colors: ["#333"],
+        },
+      },
     },
     grid: {
-      show: false,
+      show: true,
+      strokeDashArray: 4,
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: false } },
+      padding: {
+        top: 0,
+        bottom: 0,
+        left: 10,
+        right: 10
+      }
     },
     legend: {
       show: false,
     },
     tooltip: {
+      theme: 'light',
       y: {
-        formatter: (val: number, opts: any) => {
-          const label = funnel[opts.dataPointIndex]?.stage || '';
-          return `${label}: ${val}`;
-        },
+        formatter: (val: number) => `${val}`,
       },
     },
     colors: ["#D8691D", "#E7893B", "#EFA96A", "#F3BF87"],
@@ -99,7 +109,7 @@ export default function SalesFunnelGraph({ startDate, endDate }: SalesFunnelGrap
 
   return (
     <div id="sales-funnel-chart">
-      <Chart options={options} series={series} type="bar" height={320} />
+      <Chart options={options} series={series} type="bar" height={350} />
     </div>
   );
 }

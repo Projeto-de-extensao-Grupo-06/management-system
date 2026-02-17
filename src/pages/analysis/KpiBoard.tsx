@@ -4,11 +4,10 @@ import {
     faCalendarDays,
     faFilter,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import type Kpis from "../../interfaces/types/Kpis";
 import AnalysisService from "../../services/AnalysisService";
-import styles from "./Analysis.module.css";
+import KpiCard from "../../components/ui/KpiCard";
 
 interface KpiBoardProps {
     startDate?: string;
@@ -48,48 +47,26 @@ export default function KpiBoard({ startDate, endDate }: KpiBoardProps) {
 
     return (
         <>
-            <div className={styles.kpi_container}>
-                <div className={styles.kpi_content}>
-                    <div className={styles.kpi_icon}>
-                        <FontAwesomeIcon icon={faArrowTrendUp} color="#fff" />
-                    </div>
-                    <b>Canal Mais Custoso</b>
-                </div>
-                <p className={styles.kpi_value}>{kpi.mostCostlyChannel || "N/A"}</p>
-            </div>
-            <div className={styles.kpi_container}>
-                <div className={styles.kpi_content}>
-                    <div className={styles.kpi_icon}>
-                        <FontAwesomeIcon icon={faDollarSign} color="#fff" />
-                    </div>
-                    <b>Margem Lucro</b>
-                </div>
-                <p className={styles.kpi_value}>
-                    {kpi.totalProfitMargin?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
-                </p>
-            </div>
-            <div className={styles.kpi_container}>
-                <div className={styles.kpi_content}>
-                    <div className={styles.kpi_icon}>
-                        <FontAwesomeIcon icon={faCalendarDays} color="#fff" />
-                    </div>
-                    <b>Finalização Projetos</b>
-                </div>
-                <p className={styles.kpi_value}>
-                    {kpi.projectCompletionRate?.toFixed(2)}%
-                </p>
-            </div>
-            <div className={styles.kpi_container}>
-                <div className={styles.kpi_content}>
-                    <div className={styles.kpi_icon}>
-                        <FontAwesomeIcon icon={faFilter} color="#fff" />
-                    </div>
-                    <b>Conversão Funil</b>
-                </div>
-                <p className={styles.kpi_value}>
-                    {kpi.funnelConversionRate?.toFixed(2)}%
-                </p>
-            </div>
+            <KpiCard
+                title="Canal Mais Custoso"
+                value={kpi.mostCostlyChannel || "N/A"}
+                icon={faArrowTrendUp}
+            />
+            <KpiCard
+                title="Margem Lucro"
+                value={kpi.totalProfitMargin?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                icon={faDollarSign}
+            />
+            <KpiCard
+                title="Finalização Projetos"
+                value={`${kpi.projectCompletionRate?.toFixed(2)}%`}
+                icon={faCalendarDays}
+            />
+            <KpiCard
+                title="Conversão Funil"
+                value={`${kpi.funnelConversionRate?.toFixed(2)}%`}
+                icon={faFilter}
+            />
         </>
     );
 }

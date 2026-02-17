@@ -1,8 +1,8 @@
 import type { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import type AcquisitionChannel from "../../../interfaces/types/AcquisitionChannel";
-import AnalysisService from "../../../services/AnalysisService";
+import type AcquisitionChannel from "../../interfaces/types/AcquisitionChannel";
+import AnalysisService from "../../services/AnalysisService";
 
 interface AcquisitionChannelsGraphProps {
   startDate?: string;
@@ -34,60 +34,70 @@ export default function AcquisitionChannelsGraph({ startDate, endDate }: Acquisi
   const options: ApexOptions = {
     chart: {
       type: "bar",
-      height: 200,
+      height: 350,
       toolbar: { show: false },
+      fontFamily: "Montserrat, sans-serif",
     },
     title: {
       text: "Canais de Aquisição",
       align: "center",
       style: {
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: 600,
-        fontFamily: "Montserrat",
-        color: "#484544",
+        color: "#333",
       },
     },
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "70%",
+        barHeight: "60%",
         distributed: true,
+        borderRadius: 4,
         dataLabels: { position: "center" },
       },
     },
     dataLabels: {
       enabled: true,
-      formatter: (val: any) => `${val}%`,
-      style: { colors: ["#fff"], fontSize: "24px", fontFamily: "Montserrat" },
+      textAnchor: "middle",
+      style: { colors: ["#fff"], fontSize: "14px", fontWeight: 600 },
+      formatter: function (val) {
+        return val + "%";
+      },
+      offsetX: 0,
     },
-
     yaxis: {
-      show: false,
       labels: {
-        style: { fontSize: "16px" },
+        show: true,
+        style: {
+          fontSize: "13px",
+          fontWeight: 500,
+          colors: ["#333"],
+        },
       },
     },
-
     xaxis: {
       categories: channel.map((ch) => ch.name),
-      labels: {
-        show: false,
-      },
+      labels: { show: false },
       axisBorder: { show: false },
       axisTicks: { show: false },
       max: 100,
     },
-
     legend: {
-      show: true,
-      fontSize: "24px",
-      fontFamily: "Montserrat",
+      show: false,
     },
-    grid: { show: false },
-
-    colors: ["#E47D26", "#1C6321", "#0033A0"],
-
+    grid: {
+      show: true,
+      strokeDashArray: 4,
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: false } },
+      padding: {
+        left: 10,
+        right: 10
+      }
+    },
+    colors: ["#E47D26", "#1C6321", "#0033A0", "#FFC300", "#FF5733"],
     tooltip: {
+      theme: 'light',
       y: {
         formatter: (val: any) => `${val}%`,
       },
@@ -96,7 +106,7 @@ export default function AcquisitionChannelsGraph({ startDate, endDate }: Acquisi
 
   return (
     <div id="acquisition-channels-chart">
-      <Chart options={options} series={series} type="bar" height={300} />
+      <Chart options={options} series={series} type="bar" height={350} />
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styles from "./Analysis.module.css";
 import AnalysisFilter from "./AnalysisFilter";
-import AcquisitionChannelsGraph from "./Graphs/AcquisitionChannelsGraph";
-import CostProfitGraph from "./Graphs/CostProfitGraph";
-import ProjectStatusGraph from "./Graphs/ProjectsStatusGraph";
-import SalesFunnelGraph from "./Graphs/SalesFunnelGraph";
+import AcquisitionChannelsGraph from "../../components/graphs/AcquisitionChannelsGraph";
+import CostProfitGraph from "../../components/graphs/CostProfitGraph";
+import ProjectStatusGraph from "../../components/graphs/ProjectsStatusGraph";
+import SalesFunnelGraph from "../../components/graphs/SalesFunnelGraph";
 import KpiBoard from "./KpiBoard";
 
 export default function Analysis() {
