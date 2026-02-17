@@ -53,7 +53,7 @@ export default class ProjectsService {
     return response.data;
   }
 
-  createManualProject(data: {
+  async createManualProject(data: {
     name: string;
     clientId: number;
     addressId: number | null;
@@ -61,5 +61,18 @@ export default class ProjectsService {
   }) {
     return api.post('/api/projects/manual', data);
   }
+
+  async updateProject(
+    id: number,
+    data: {
+      name?: string;
+      responsibleId?: number;
+      projectType?: "ON_GRID" | "OFF_GRID";
+      description?: string
+    }
+  ): Promise<void> {
+    await api.patch(`/projects/${id}`, data);
+  }
+
 
 }

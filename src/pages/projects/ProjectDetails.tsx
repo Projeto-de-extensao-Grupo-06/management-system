@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ActionRequired from "../../components/actionRequired/ActionRequired";
+import BudgetSummary from "../../components/forms/project_form/budgetSummary/BudgetSummary";
 import ClientInfoForm from "../../components/forms/project_form/clientInfo/ClientInfoForm";
 import GeneralInfoForm from "../../components/forms/project_form/generalInfo/GeneralInfoForm";
+import NextSchedules from "../../components/forms/project_form/nextSchedules/NextSchedules";
+import ProjectObservation from "../../components/forms/project_form/observation/ProjectObservation";
 import ProjectFiles from "../../components/forms/project_form/projectFiles/ProjectFiles";
 import PageHeader from "../../components/layout/PageHeader";
 import type { ProjectDetails } from "../../interfaces/types/ProjectDetails";
@@ -36,24 +39,41 @@ export default function ProjectDetails() {
         <>
             <PageHeader title="Detalhes de Projeto" />
 
-            <div className={styles.container}>
-                <div className={styles.left}>
-                    <ActionRequired projectStatus="RETRYING" clientName="Bryan" />
-                </div>
+            {/* MOBILE */}
+            <div className={styles.mobileLayout}>
+                <ActionRequired projectStatus={project.status} clientId={project.clientId} />
+                <NextSchedules projectId={project.id} />
+                <GeneralInfoForm project={project} setProject={setProject} />
+                <ClientInfoForm project={project} />
+                <BudgetSummary projectId={project.id} />
+                <ProjectObservation project={project} setProject={setProject} />
+                <ProjectFiles projectId={project.id} />
+            </div>
 
-                <div className={styles.right}>
-                    <div className={styles.generalInfos}>
-                        <GeneralInfoForm project={project} setProject={setProject} />
-                    </div>
-                    <div className={styles.clientInfos}>
-                        <ClientInfoForm project={project} />
+            <div className={styles.desktopLayout}>
+                <div className={styles.container}>
+                    <div className={styles.left}>
+                        <ActionRequired projectStatus={project.status} clientId={project.clientId} />
+                        <NextSchedules projectId={project.id} />
+                        <BudgetSummary projectId={project.id} />
+                        <ProjectObservation project={project} setProject={setProject} />
                     </div>
 
-                    <div className={styles.projectFiles}>
-                        <ProjectFiles />
+                    <div className={styles.right}>
+                        <div className={styles.generalInfos}>
+                            <GeneralInfoForm project={project} setProject={setProject} />
+                        </div>
+                        <div className={styles.clientInfos}>
+                            <ClientInfoForm project={project} />
+                        </div>
+
+                        <div className={styles.projectFiles}>
+                            <ProjectFiles projectId={project.id} />
+                        </div>
                     </div>
                 </div>
             </div>
         </>
     );
+
 }

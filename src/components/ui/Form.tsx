@@ -1,5 +1,5 @@
 import './components.css';
-import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faMagnifyingGlass, faFileDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { forwardRef, useState } from 'react';
 import type { GroupBase, StylesConfig } from 'react-select';
@@ -7,6 +7,7 @@ import ReactSelect from "react-select";
 import type BaseInputProps from '../../interfaces/properties/BaseInputProps';
 import type ButtonProps from '../../interfaces/properties/ButtonProps';
 import type DocumentInputProps from '../../interfaces/properties/DocumentInputProps';
+import type { FileInputProps } from '../../interfaces/properties/FileInputProps';
 import type IconButtonProps from '../../interfaces/properties/IconButtonProps';
 import type InputProps from '../../interfaces/properties/InputProps';
 import type PasswordInputProps from '../../interfaces/properties/PasswordInputProps';
@@ -303,6 +304,18 @@ export function AutoCompleteSelect({
 }
 
 
-// function FileInput() {
+export function FileInput({ fileName, onDelete, onDownload }: FileInputProps) {
+  return (
+    <div className="file-input-wrapper">
+      <Input type="text" value={fileName} readOnly={true} />
 
-// }
+      <button className="btn btn-download" onClick={onDownload}>
+        <FontAwesomeIcon icon={faFileDownload} size='lg' />
+      </button>
+
+      <button className="btn btn-delete" onClick={onDelete}>
+        <FontAwesomeIcon icon={faTrash} size='lg' />
+      </button>
+    </div>
+  );
+}

@@ -105,12 +105,12 @@ export default function ClientInfoForm({ project }: ClientInfoFormProps) {
             <div className={styles.form}>
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Nome do projeto:</label>
-                    <Input disabled={true} value={client?.name} />
+                    <Input disabled={true} value={client?.name ?? ""} />
                 </div>
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Endereço:</label>
                     <div>
-                        <Input disabled={true} value={textAddress} />
+                        <Input disabled={true} value={textAddress ?? ""} />
                         <span className={styles.editAddress} onClick={() => setEditAddress(true)}>Editar Endereço</span>
                     </div>
                     <div className={styles.map}>
