@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type React from "react";
 import { useState } from "react";
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
-import ProjectsService from "../../../../services/ProjectsService";
+import ProjectService from "../../../../services/ProjectService";
 import styles from "./ProjectObservation.module.css";
 
 interface ProjectObservationProps {
@@ -13,14 +13,14 @@ interface ProjectObservationProps {
 
 export default function ProjectObservation({ project, setProject }: ProjectObservationProps) {
 
-    const projectsService = new ProjectsService();
+    const projectService = new ProjectService();
     const [loading, setLoading] = useState(false);
 
     async function handleBlur() {
         try {
             setLoading(true);
 
-            await projectsService.updateProject(project.id, {
+            await projectService.updateProject(project.id, {
                 description: project.description
             });
 

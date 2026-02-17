@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { AutoCompleteSelectOption } from "../../../../interfaces/properties/ReactSelectFormProps";
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
 import { CoworkerService } from "../../../../services/CoworkerService";
-import ProjectsService from "../../../../services/ProjectsService";
+import ProjectService from "../../../../services/ProjectService";
 import { Select, SelectOption, Input, AutoCompleteSelect } from "../../../ui/Form";
 import styles from "./GeneralInfo.module.css";
 
@@ -15,7 +15,7 @@ interface GeneralInfoFormProps {
 
 export default function GeneralInfoForm({ project, setProject }: GeneralInfoFormProps) {
     const coworkerService = new CoworkerService();
-    const projectsService = new ProjectsService();
+    const projectService = new ProjectService();
 
     const [coworkerSelectOptions, setCoworkersSelectOptions] = useState<AutoCompleteSelectOption[]>([]);
 
@@ -25,7 +25,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
         projectType: "ON_GRID" | "OFF_GRID";
     }>) {
         try {
-            await projectsService.updateProject(project.id, data);
+            await projectService.updateProject(project.id, data);
         } catch (err) {
             console.error("Erro ao atualizar projeto", err);
         }
