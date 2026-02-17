@@ -4,24 +4,29 @@ import Chart from "react-apexcharts";
 import type ProjectStatus from "../../../interfaces/types/ProjectStatus";
 import AnalysisService from "../../../services/AnalysisService";
 
-export default function ProjectStatusGraph() {
+interface ProjectStatusGraphProps {
+  startDate?: string;
+  endDate?: string;
+}
+
+export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatusGraphProps) {
   const [projectStatus, setProjectStatus] = useState<ProjectStatus[]>([]);
   const service = new AnalysisService();
 
   useEffect(() => {
     service
-      .getProjectsStatus()
+      .getProjectsStatus(startDate, endDate)
       .then((data: ProjectStatus[]) => {
         setProjectStatus(data);
       })
       .catch((e: any) => {
         console.error("Erro ao buscar dados do status do projeto", e);
       });
-  }, []);
+  }, [startDate, endDate]);
 
   const series = [
     {
-      data: projectStatus.map((p) => p.quantity),
+      data: projectStatus.map((p) => p.count),
     },
   ];
 
@@ -85,7 +90,7 @@ export default function ProjectStatusGraph() {
     legend: {
       show: false,
     },
-    colors: projectStatus.map((p) => p.color),
+    colors: ["#125F0B", "#E47D26", "#0033A0", "#FFC300", "#FF5733", "#C70039", "#900C3F", "#581845"],
     tooltip: {
       enabled: true,
       y: {

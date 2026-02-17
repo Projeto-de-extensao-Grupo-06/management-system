@@ -1,36 +1,37 @@
 import type { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import type CostProfit from "../../../interfaces/types/CostProfit";
+import type FinancialRecord from "../../../interfaces/types/FinancialRecord";
 import AnalysisService from "../../../services/AnalysisService";
 
-export default function CostProfitGraph() {
-  const [costProfit, setCostProfit] = useState<CostProfit>({
-    months: [],
-    series: [],
-  });
+interface CostProfitGraphProps {
+  startDate?: string;
+  endDate?: string;
+}
+
+export default function CostProfitGraph({ startDate, endDate }: CostProfitGraphProps) {
+  const [financials, setFinancials] = useState<FinancialRecord[]>([]);
   const service = new AnalysisService();
 
   useEffect(() => {
     service
-      .getProfitCostComparison()
-      .then((data: any) => {
-        const { months, series } = data;
-        setCostProfit({ months, series });
+      .getFinancials(startDate, endDate)
+      .then((data: FinancialRecord[]) => {
+        setFinancials(data);
       })
       .catch((e: any) => {
         console.error("Erro ao buscar dados de custo e lucro.", e);
       });
-  }, []);
+  }, [startDate, endDate]);
 
   const series = [
     {
       name: "Custo",
-      data: costProfit?.series[0]?.data || [],
+      data: financials.map((f) => f.totalCost),
     },
     {
       name: "Lucro",
-      data: costProfit?.series[1]?.data || [],
+      data: financials.map((f) => f.totalProfit),
     },
   ];
 
@@ -66,7 +67,7 @@ export default function CostProfitGraph() {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: ["JAN", "FEV", "MAR"],
+      categories: financials.map((f) => `${f.month}/${f.year}`),
       axisBorder: { show: false },
       axisTicks: { show: false },
       labels: {
@@ -94,8 +95,8 @@ export default function CostProfitGraph() {
     colors: ["#E47D26", "#1C6321"],
     tooltip: {
       y: {
-        formatter: (val: { toLocaleString: (arg0: string) => any }) =>
-          `R$ ${val.toLocaleString("pt-BR")}`,
+        formatter: (val: number) =>
+          `R$ ${val.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
       },
     },
   };

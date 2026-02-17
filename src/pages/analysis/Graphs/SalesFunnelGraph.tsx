@@ -4,27 +4,25 @@ import Chart from "react-apexcharts";
 import type SalesFunnel from "../../../interfaces/types/SalesFunnel";
 import AnalysisService from "../../../services/AnalysisService";
 
-export default function SalesFunnelGraph() {
+interface SalesFunnelGraphProps {
+  startDate?: string;
+  endDate?: string;
+}
+
+export default function SalesFunnelGraph({ startDate, endDate }: SalesFunnelGraphProps) {
   const [funnel, setFunnel] = useState<SalesFunnel[]>([]);
   const service = new AnalysisService();
 
   useEffect(() => {
     service
-      .getSalesFunnel()
+      .getSalesFunnel(startDate, endDate)
       .then((data: SalesFunnel[]) => {
         setFunnel(data);
       })
       .catch((e: any) => {
         console.error("Erro ao buscar dados de funil.", e);
       });
-  }, []);
-
-  const data = [
-    { label: "Leads" },
-    { label: "Pré Orçamento" },
-    { label: "Visita Técnica" },
-    { label: "Assinado" },
-  ];
+  }, [startDate, endDate]);
 
   const series = [
     {
@@ -62,18 +60,18 @@ export default function SalesFunnelGraph() {
     dataLabels: {
       enabled: true,
       formatter: (value, opts) => {
-        const label = data[opts.dataPointIndex].label;
+        const label = funnel[opts.dataPointIndex]?.stage || '';
         return `${label}: ${value}`;
       },
       style: {
-        fontSize: "24px",
+        fontSize: "14px",
         fontWeight: "700",
         fontFamily: "Montserrat",
         colors: ["#FFFFFF"],
       },
     },
     xaxis: {
-      categories: data.map((item) => item.label),
+      categories: funnel.map((item) => item.stage),
       labels: { show: false },
       axisBorder: { show: false },
       axisTicks: { show: false },
@@ -91,7 +89,7 @@ export default function SalesFunnelGraph() {
     tooltip: {
       y: {
         formatter: (val: number, opts: any) => {
-          const label = data[opts.dataPointIndex].label;
+          const label = funnel[opts.dataPointIndex]?.stage || '';
           return `${label}: ${val}`;
         },
       },

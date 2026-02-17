@@ -4,20 +4,25 @@ import Chart from "react-apexcharts";
 import type AcquisitionChannel from "../../../interfaces/types/AcquisitionChannel";
 import AnalysisService from "../../../services/AnalysisService";
 
-export default function AcquisitionChannelsGraph() {
+interface AcquisitionChannelsGraphProps {
+  startDate?: string;
+  endDate?: string;
+}
+
+export default function AcquisitionChannelsGraph({ startDate, endDate }: AcquisitionChannelsGraphProps) {
   const [channel, setChannel] = useState<AcquisitionChannel[]>([]);
   const service = new AnalysisService();
 
   useEffect(() => {
     service
-      .getAcquisitionChannels()
+      .getAcquisitionChannels(startDate, endDate)
       .then((data: AcquisitionChannel[]) => {
         setChannel(data);
       })
       .catch((e: any) => {
         console.error("Erro ao buscar dados de aquisicao:", e);
       });
-  }, []);
+  }, [startDate, endDate]);
 
   const series = [
     {
@@ -64,13 +69,13 @@ export default function AcquisitionChannelsGraph() {
     },
 
     xaxis: {
-      categories: ["Site", "Boca a Boca", "Rede Social"],
+      categories: channel.map((ch) => ch.name),
       labels: {
         show: false,
       },
       axisBorder: { show: false },
       axisTicks: { show: false },
-      max: 60,
+      max: 100,
     },
 
     legend: {

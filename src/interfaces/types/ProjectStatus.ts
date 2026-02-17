@@ -1,5 +1,4 @@
 export default interface ProjectStatus {
   status: string;
-  quantity: number;
-  color: string;
+  count: number;
 }
