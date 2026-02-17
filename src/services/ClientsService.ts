@@ -11,8 +11,12 @@ export default class ClientsService {
         params.append('size', size.toString());
         if (search) params.append('search', search);
         if (status && status !== 'Todos') params.append('status', status === 'Ativo' ? 'ACTIVE' : status === 'Inativo' ? 'INACTIVE' : status);
-        if (city) params.append('city', city);
-        if (state) params.append('state', state);
+        if (city) {
+            city.split(',').forEach(c => params.append('city', c.trim()));
+        }
+        if (state) {
+            state.split(',').forEach(s => params.append('state', s.trim()));
+        }
         if (startDate) params.append('startDate', startDate);
         if (endDate) params.append('endDate', endDate);
 

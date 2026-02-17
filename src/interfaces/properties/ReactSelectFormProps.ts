@@ -1,4 +1,4 @@
-import type { SingleValue } from "react-select";
+import type { MultiValue, SingleValue } from "react-select";
 
 export interface AutoCompleteSelectOption {
   value: string;
@@ -7,8 +7,16 @@ export interface AutoCompleteSelectOption {
 
 export interface AutoCompleteSelectProps {
   options: AutoCompleteSelectOption[];
-  value: AutoCompleteSelectOption | null;
+  value: SingleValue<AutoCompleteSelectOption>;
   onChange: (value: SingleValue<AutoCompleteSelectOption>) => void;
+  placeholder?: string;
+  isDisabled?: boolean;
+}
+
+export interface MultiSelectProps {
+  options: AutoCompleteSelectOption[];
+  value: MultiValue<AutoCompleteSelectOption>;
+  onChange: (value: MultiValue<AutoCompleteSelectOption>) => void;
   placeholder?: string;
   isDisabled?: boolean;
 }
