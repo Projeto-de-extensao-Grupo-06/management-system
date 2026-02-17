@@ -1,24 +1,51 @@
-.generalInfos {
-    margin-top: 20px;
+
+.mobileLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
-.clientInfos {
-    margin-top: 50px;
+.desktopLayout {
+    display: none;
 }
 
-.projectFiles {
-    margin-top: 50px;
-}
 
 @media (min-width: 768px) {
+
+    .mobileLayout {
+        display: none;
+    }
+
+    .desktopLayout {
+        display: block;
+    }
+
     .container {
         display: grid;
         grid-template-columns: 60% 40%;
-        gap: 20px;
+        gap: 30px;
+    }
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .right {
+        display: flex;
+        flex-direction: column;
     }
 
     .generalInfos {
-        margin-top: 0px;
+        margin-top: 0;
+    }
+
+    .clientInfos {
+        margin-top: 40px;
+    }
+
+    .projectFiles {
+        margin-top: 40px;
     }
 }
-

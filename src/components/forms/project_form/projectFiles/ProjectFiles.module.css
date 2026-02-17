@@ -18,11 +18,18 @@
     font-weight: 500;
 }
 
+.uploadFilesContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+}
+
 .uploadFiles {
     color: #0C3900;
     text-decoration: none;
     font-weight: 900;
-    cursor: pointer;
 }
 
 .form {

@@ -1,0 +1,65 @@
+.wrapper {
+    padding: 20px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.editButton {
+    background-color: #0b3d02;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.editButton:hover {
+    opacity: 0.9;
+}
+
+.card {
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.cardTitle {
+    font-weight: 600;
+}
+
+.blue {
+    background-color: #cfe3ec;
+}
+
+.pink {
+    background-color: #e9c3c3;
+}

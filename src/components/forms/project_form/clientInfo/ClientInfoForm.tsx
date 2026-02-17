@@ -11,6 +11,7 @@ import ClientsService from "../../../../services/ClientsService";
 import { formatAddress } from "../../../../utils/AddressUtils";
 import Modal from "../../../dialogs/modal/Modal";
 import GoogleMaps from "../../../maps/GoogleMaps";
+import SecureComponent from "../../../security/SecureComponent";
 import { Input } from "../../../ui/Form";
 import { Button } from "../../../ui/Form";
 import AddressForm from "../../client_form/partials/AddressForm";
@@ -99,22 +100,26 @@ export default function ClientInfoForm({ project }: ClientInfoFormProps) {
                     <FontAwesomeIcon icon={faUser} color="black" size="xl" />
                     <span className={styles.infoText}>  Cliente</span>
                 </div>
-                <Link className={styles.editClient} to={`/clientes/${project.clientId}`}>Editar Cliente</Link>
+                <SecureComponent permissions={["CLIENT_UPDATE"]}>
+                    <Link className={styles.editClient} to={`/clientes/${project.clientId}`}>Editar Cliente</Link>
+                </SecureComponent>
             </div>
 
             <div className={styles.form}>
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Nome do projeto:</label>
-                    <Input disabled={true} value={client?.name} />
+                    <Input disabled={true} value={client?.name ?? ""} />
                 </div>
                 <div className={styles.inputContainer}>
                     <label className={styles.inputLabel}>Endereço:</label>
                     <div>
-                        <Input disabled={true} value={textAddress} />
-                        <span className={styles.editAddress} onClick={() => setEditAddress(true)}>Editar Endereço</span>
+                        <Input disabled={true} value={textAddress ?? ""} />
+                        <SecureComponent permissions={["PROJECT_UPDATE"]}>
+                            <span className={styles.editAddress} onClick={() => setEditAddress(true)}>Editar Endereço</span>
+                        </SecureComponent>
                     </div>
                     <div className={styles.map}>
-                        <GoogleMaps address={textAddress} />
+                        {textAddress && <GoogleMaps address={textAddress} />}
                     </div>
 
                     <Modal isOpen={editAddress} title="Editar endereço" onClose={handleModalClose}>

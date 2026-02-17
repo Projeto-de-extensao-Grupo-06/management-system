@@ -1,0 +1,63 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid #dcdcdc;
+  resize: vertical;
+  font-size: 15px;
+  font-family: inherit;
+  background-color: #f5f5f5;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.textarea:focus {
+  border-color: #0a4d00;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(10, 77, 0, 0.08);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.saveButton {
+  background-color: #0a4d00;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveButton:hover {
+  background-color: #083a00;
+  transform: translateY(-1px);
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}

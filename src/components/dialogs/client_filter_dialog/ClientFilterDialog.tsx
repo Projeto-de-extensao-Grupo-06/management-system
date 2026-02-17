@@ -3,8 +3,8 @@ import { useAddress } from "../../../hooks/useAddress";
 import type { ClientFilterModalProps, ClientFilterState } from "../../../interfaces/properties/DialogProps";
 import type { AddressLookupDto } from "../../../interfaces/types/AddressTypes";
 import styles from "../../../pages/clients/Clients.module.css";
-import type { MultiValue } from "react-select";
-import { Button, Input, SimpleButton, AutoCompleteSelect, type AutoCompleteSelectOption } from "../../ui/Form";
+
+import { Button, Input, SimpleButton, MultiSelect } from "../../ui/Form";
 import Modal from "../modal/Modal";
 
 export default function ClientFilterModal({ isOpen, onClose, filters: initialFilters, onApply, onClear }: ClientFilterModalProps) {
@@ -109,11 +109,10 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
                     <label className={styles.filterLabel}>Estado (UF)</label>
 
                     {states.length > 0 ? (
-                        <AutoCompleteSelect
-                            isMulti
+                        <MultiSelect
                             value={localFilters.state ? localFilters.state.split(',').map(s => ({ value: s, label: s })) : []}
                             onChange={(newValue) => {
-                                const selectedValues = (newValue as MultiValue<AutoCompleteSelectOption>).map(v => v.value).join(',');
+                                const selectedValues = newValue.map(v => v.value).join(',');
                                 handleChange('state', selectedValues);
                             }}
                             options={states.map(state => ({ value: state, label: state }))}
@@ -131,11 +130,10 @@ export default function ClientFilterModal({ isOpen, onClose, filters: initialFil
                 <div>
                     <label className={styles.filterLabel}>Cidade</label>
                     {cities.length > 0 ? (
-                        <AutoCompleteSelect
-                            isMulti
+                        <MultiSelect
                             value={localFilters.city ? localFilters.city.split(',').map(c => ({ value: c, label: c })) : []}
                             onChange={(newValue) => {
-                                const selectedValues = (newValue as MultiValue<AutoCompleteSelectOption>).map(v => v.value).join(',');
+                                const selectedValues = newValue.map(v => v.value).join(',');
                                 handleChange('city', selectedValues);
                             }}
                             options={cities.map(city => ({ value: city, label: city }))}
