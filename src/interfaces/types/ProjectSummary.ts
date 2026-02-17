@@ -5,6 +5,7 @@ export default interface ProjectSummary {
   projectTitle: string;
   status: string;
  deadline: string | null;
+ createdAt?: string;
   systemType: 'ON_GRID' | 'OFF_GRID' | null;
   responsible: {
   id: number;

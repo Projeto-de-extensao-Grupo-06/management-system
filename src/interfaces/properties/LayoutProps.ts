@@ -4,6 +4,7 @@ export interface PageHeaderProps {
     title: string;
     count?: number;
     children?: ReactNode;
+    titleRight?: ReactNode;
 }
 
 export interface FilterBarProps {
