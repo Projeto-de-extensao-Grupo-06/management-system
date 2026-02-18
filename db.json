@@ -8,8 +8,14 @@
     }
   ],
   "material": [
-    { "id": 1, "name": "Notebook" },
-    { "id": 2, "name": "Mouse" }
+    {
+      "id": 1,
+      "name": "Notebook"
+    },
+    {
+      "id": 2,
+      "name": "Mouse"
+    }
   ],
   "clients": [
     {
@@ -90,7 +96,52 @@
       "status": "Inativo"
     }
   ],
-
+  "schedule": [
+    {
+      "id": "1",
+      "title": "Instalação",
+      "start": "2026-02-28",
+      "backgroundColor": "#FFEADD",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "INSTALLATION"
+      }
+    },
+    {
+      "id": "2",
+      "title": "Instalação",
+      "start": "2026-02-29",
+      "backgroundColor": "#FFEADD",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "INSTALLATION"
+      }
+    },
+    {
+      "id": "3",
+      "title": "Visita",
+      "start": "2026-02-18",
+      "backgroundColor": "#DDF3FF",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "VISIT"
+      }
+    },
+    {
+      "id": "4",
+      "title": "Lembrete",
+      "start": "2026-02-24",
+      "backgroundColor": "#FFF9C4",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "REMINDER"
+      }
+    }
+  ],
   "analysis_kpis": [
     {
       "mostExpensiveChannel": {
@@ -112,7 +163,6 @@
       }
     }
   ],
-
   "analysis_acquisition_channels": [
     {
       "name": "Site",
@@ -130,23 +180,33 @@
       "color": "#3b82f6"
     }
   ],
-
   "analysis_profit_cost_comparison": {
-    "months": ["JAN", "FEV", "MAR"],
+    "months": [
+      "JAN",
+      "FEV",
+      "MAR"
+    ],
     "series": [
       {
         "name": "Custo",
-        "data": [12000, 18000, 15000],
+        "data": [
+          12000,
+          18000,
+          15000
+        ],
         "color": "#ef4444"
       },
       {
         "name": "Lucro",
-        "data": [8000, 12000, 42000],
+        "data": [
+          8000,
+          12000,
+          42000
+        ],
         "color": "#22c55e"
       }
     ]
   },
-
   "analysis_projects_status": [
     {
       "status": "Em andamento",
@@ -164,7 +224,6 @@
       "color": "#9CA3AF"
     }
   ],
-
   "analysis_sales_funnel": [
     {
       "stage": "Visitas ao Site",
