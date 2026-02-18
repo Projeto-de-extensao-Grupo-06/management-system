@@ -17,7 +17,7 @@ export default function Analysis() {
   };
 
   return (
-    <>
+    <div className={styles.analysis_container}>
       <div className={styles.title_container}>
         <h1>Análises</h1>
         <AnalysisFilter onDateRangeChange={handleDateRangeChange} />
@@ -41,6 +41,6 @@ export default function Analysis() {
           <SalesFunnelGraph startDate={startDate} endDate={endDate} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

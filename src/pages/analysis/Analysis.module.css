@@ -7,6 +7,13 @@ h1 {
   margin: 0;
 }
 
+.analysis_container {
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
 .title_container {
   display: flex;
   justify-content: space-between;
@@ -22,12 +29,14 @@ h1 {
   flex-direction: column;
   align-items: flex-end;
   gap: 1rem;
+  max-width: 100%;
 }
 
 .filter_buttons {
   display: flex;
   gap: 0.8rem;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .filter_button {
@@ -64,6 +73,7 @@ h1 {
   padding: 0.5rem;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
 }
 
 .date_separator {
@@ -88,6 +98,7 @@ h1 {
   flex-direction: column;
   gap: 1rem;
   transition: transform 0.2s;
+  min-width: 0;
 }
 
 .kpi_container:hover {
@@ -139,6 +150,8 @@ h1 {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  min-width: 0;
+  /* Important for preventing grid overflow */
 }
 
 @media (max-width: 1200px) {
@@ -164,6 +177,8 @@ h1 {
     width: 100%;
     overflow-x: auto;
     padding-bottom: 0.5rem;
+    flex-wrap: nowrap;
+    /* Allow scroll on mobile */
   }
 
   .graphs {
