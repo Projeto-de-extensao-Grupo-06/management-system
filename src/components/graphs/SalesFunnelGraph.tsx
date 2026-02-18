@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import type SalesFunnel from "../../interfaces/types/SalesFunnel";
 import AnalysisService from "../../services/AnalysisService";
+import { getProjectStatusLabel } from "../../utils/mappers/StatusMapper";
 
 interface SalesFunnelGraphProps {
   startDate?: string;
@@ -68,7 +69,7 @@ export default function SalesFunnelGraph({ startDate, endDate }: SalesFunnelGrap
       },
     },
     xaxis: {
-      categories: funnel.map((item) => item.stage),
+      categories: funnel.map((item) => getProjectStatusLabel(item.stage)),
       labels: { show: false },
       axisBorder: { show: false },
       axisTicks: { show: false },

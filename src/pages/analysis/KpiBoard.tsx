@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import type Kpis from "../../interfaces/types/Kpis";
 import AnalysisService from "../../services/AnalysisService";
 import KpiCard from "../../components/ui/KpiCard";
+import { getChannelLabel } from "../../utils/mappers/StatusMapper";
 
 interface KpiBoardProps {
     startDate?: string;
@@ -32,10 +33,7 @@ export default function KpiBoard({ startDate, endDate }: KpiBoardProps) {
             .getKpis(start, end)
             .then((data: Kpis) => {
                 if (data) {
-                    const formattedChannel = data.mostCostlyChannel
-                        ? data.mostCostlyChannel.replace(/_/g, " ").toLowerCase()
-                            .replace(/\b\w/g, l => l.toUpperCase())
-                        : "N/A";
+                    const formattedChannel = getChannelLabel(data.mostCostlyChannel);
 
                     setKpi({ ...data, mostCostlyChannel: formattedChannel });
                 }

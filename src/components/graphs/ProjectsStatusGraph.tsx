@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import type ProjectStatus from "../../interfaces/types/ProjectStatus";
 import AnalysisService from "../../services/AnalysisService";
+import { getProjectStatusLabel } from "../../utils/mappers/StatusMapper";
 
 interface ProjectStatusGraphProps {
   startDate?: string;
@@ -74,7 +75,7 @@ export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatus
       },
     },
     xaxis: {
-      categories: projectStatus.map((p) => p.status),
+      categories: projectStatus.map((p) => getProjectStatusLabel(p.status)),
       labels: { show: false },
       axisBorder: { show: false },
       axisTicks: { show: false },
@@ -88,6 +89,9 @@ export default function ProjectStatusGraph({ startDate, endDate }: ProjectStatus
           fontWeight: 500,
           colors: ["#333"],
         },
+        formatter: (value: string | number) => {
+          return getProjectStatusLabel(value.toString());
+        }
       },
     },
     grid: {

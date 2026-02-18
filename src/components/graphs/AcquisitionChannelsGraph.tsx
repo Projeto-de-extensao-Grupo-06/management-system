@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import type AcquisitionChannel from "../../interfaces/types/AcquisitionChannel";
 import AnalysisService from "../../services/AnalysisService";
+import { getChannelLabel } from "../../utils/mappers/StatusMapper";
 
 interface AcquisitionChannelsGraphProps {
   startDate?: string;
@@ -76,7 +77,7 @@ export default function AcquisitionChannelsGraph({ startDate, endDate }: Acquisi
       },
     },
     xaxis: {
-      categories: channel.map((ch) => ch.name),
+      categories: channel.map((ch) => getChannelLabel(ch.name)),
       labels: { show: false },
       axisBorder: { show: false },
       axisTicks: { show: false },
