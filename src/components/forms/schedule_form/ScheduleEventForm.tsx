@@ -28,7 +28,7 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
         } = useForm<ScheduleSchemaType>({
             resolver: zodResolver(scheduleSchema),
             defaultValues: {
-                type: 'INSTALLATION',
+                type: 'TECHNICAL_VISIT',
                 start: '',
                 time: '',
                 clientName: '',
@@ -40,7 +40,7 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
         useEffect(() => {
             if (defaultValues) {
                 reset({
-                    type: 'INSTALLATION',
+                    type: 'TECHNICAL_VISIT',
                     start: '',
                     time: '',
                     clientName: '',
@@ -59,9 +59,9 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
         const typeValue = watch('type');
 
         const typeLabels: Record<string, string> = {
-            INSTALLATION: 'Instalação',
-            VISIT: 'Visita',
-            REMINDER: 'Lembrete',
+            TECHNICAL_VISIT: 'Visita Técnica',
+            INSTALL_VISIT: 'Visita de Instalação',
+            NOTE: 'Lembrete',
         };
 
         return (
@@ -80,9 +80,9 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
                             }
                             className={errors.type ? styles.inputError : ''}
                         >
-                            <SelectOption value="INSTALLATION" label="Instalação" />
-                            <SelectOption value="VISIT" label="Visita" />
-                            <SelectOption value="REMINDER" label="Lembrete" />
+                            <SelectOption value="TECHNICAL_VISIT" label="Visita Técnica" />
+                            <SelectOption value="INSTALL_VISIT" label="Visita de Instalação" />
+                            <SelectOption value="NOTE" label="Lembrete" />
                         </Select>
                     )}
                     {errors.type && <span className={styles.errorMessage}>{errors.type.message}</span>}
@@ -115,7 +115,7 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
                     {errors.time && <span className={styles.errorMessage}>{errors.time.message}</span>}
                 </div>
 
-                {typeValue !== 'REMINDER' && (
+                {typeValue !== 'NOTE' && (
                     <div className={styles.inputGroup}>
                         <label className={styles.fieldLabel}>Projeto vinculado:</label>
                         <Input

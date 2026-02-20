@@ -13,9 +13,9 @@ interface ScheduleKpiBoardProps {
 
 export default function ScheduleKpiBoard({ events }: ScheduleKpiBoardProps) {
     const completedVisits = 4;
-    const scheduledVisits = events.filter(e => e.extendedProps?.type === 'VISIT').length;
-    const scheduledInstallations = events.filter(e => e.extendedProps?.type === 'INSTALLATION').length;
-    const reminders = events.filter(e => e.extendedProps?.type === 'REMINDER').length;
+    const scheduledVisits = events.filter(e => e.extendedProps?.type === 'TECHNICAL_VISIT').length;
+    const scheduledInstallations = events.filter(e => e.extendedProps?.type === 'INSTALL_VISIT').length;
+    const reminders = events.filter(e => e.extendedProps?.type === 'NOTE').length;
 
     return (
         <>

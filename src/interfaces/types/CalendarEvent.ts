@@ -7,7 +7,7 @@ export default interface CalendarEvent {
     borderColor?: string;
     textColor?: string;
     extendedProps?: {
-        type: 'VISIT' | 'INSTALLATION' | 'REMINDER';
+        type: 'TECHNICAL_VISIT' | 'INSTALL_VISIT' | 'NOTE';
         description?: string;
         clientName?: string;
         time?: string;

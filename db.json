@@ -105,7 +105,7 @@
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "INSTALLATION",
+        "type": "INSTALL_VISIT",
         "clientName": "Diogo Amaral",
         "time": "10:00"
       }
@@ -116,7 +116,7 @@
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "INSTALLATION",
+        "type": "INSTALL_VISIT",
         "time": "14:30",
         "clientName": "Pedro Santos",
         "description": "Teste"
@@ -129,7 +129,7 @@
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "VISIT",
+        "type": "TECHNICAL_VISIT",
         "time": "19:30",
         "clientName": "Thiago Santos",
         "description": ""
@@ -144,7 +144,7 @@
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "INSTALLATION",
+        "type": "INSTALL_VISIT",
         "time": "18:00",
         "clientName": "Thiago Santos",
         "description": "Teste de criação"
@@ -158,7 +158,7 @@
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "VISIT",
+        "type": "TECHNICAL_VISIT",
         "time": "06:55",
         "clientName": "Thiago Santos",
         "description": "Teste"
@@ -172,7 +172,7 @@
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "REMINDER",
+        "type": "NOTE",
         "time": "20:10",
         "clientName": "",
         "description": "Comprar materiais"

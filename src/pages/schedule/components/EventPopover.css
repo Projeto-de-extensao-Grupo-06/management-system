@@ -36,15 +36,15 @@
     }
 }
 
-.event-popover--INSTALLATION {
+.event-popover--INSTALL_VISIT {
     background-color: #FFEADD;
 }
 
-.event-popover--VISIT {
+.event-popover--TECHNICAL_VISIT {
     background-color: #DDF3FF;
 }
 
-.event-popover--REMINDER {
+.event-popover--NOTE {
     background-color: #FFF9C4;
 }
 

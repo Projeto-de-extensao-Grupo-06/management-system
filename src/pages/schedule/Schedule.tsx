@@ -12,9 +12,9 @@ import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
 import ScheduleService from "../../services/ScheduleService";
 
 const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
-    INSTALLATION: { bg: "#FFEADD", text: "#555" },
-    VISIT: { bg: "#DDF3FF", text: "#555" },
-    REMINDER: { bg: "#FFF9C4", text: "#555" },
+    TECHNICAL_VISIT: { bg: "#DDF3FF", text: "#555" },
+    INSTALL_VISIT: { bg: "#FFEADD", text: "#555" },
+    NOTE: { bg: "#FFF9C4", text: "#555" },
 };
 
 const TYPE_TITLES: Record<string, string> = {
@@ -120,7 +120,7 @@ export default function Schedule() {
 
     const editDefaults: Partial<ScheduleSchemaType> | undefined = selectedEvent
         ? {
-            type: selectedEvent.extendedProps?.type ?? "REMINDER",
+            type: (selectedEvent.extendedProps?.type ?? 'NOTE') as ScheduleSchemaType['type'],
             start: selectedEvent.start ?? new Date().toISOString().split("T")[0],
             time: selectedEvent.extendedProps?.time ?? "",
             clientName: selectedEvent.extendedProps?.clientName ?? "",

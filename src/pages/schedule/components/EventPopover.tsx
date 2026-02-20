@@ -20,7 +20,7 @@ export default function EventPopover({ eventInfo, disabled = false }: EventPopov
     const time = extendedProps?.time as string | undefined;
     const clientName = extendedProps?.clientName as string | undefined;
     const description = extendedProps?.description as string | undefined;
-    const isReminder = type === 'REMINDER';
+    const isReminder = type === 'NOTE';
 
     const [coords, setCoords] = useState<PopoverCoords | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -51,7 +51,7 @@ export default function EventPopover({ eventInfo, disabled = false }: EventPopov
 
             {coords && !disabled && (
                 <div
-                    className={`event-popover event-popover--${type ?? "REMINDER"}`}
+                    className={`event-popover event-popover--${type ?? "NOTE"}`}
                     style={{
                         position: "fixed",
                         top: coords.top - 8,
