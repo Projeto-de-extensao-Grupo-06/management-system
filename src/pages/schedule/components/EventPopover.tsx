@@ -9,16 +9,24 @@ interface PopoverCoords {
     left: number;
 }
 
-export default function EventPopover({ eventInfo }: { eventInfo: EventContentArg }) {
+interface EventPopoverProps {
+    eventInfo: EventContentArg;
+    disabled?: boolean;
+}
+
+export default function EventPopover({ eventInfo, disabled = false }: EventPopoverProps) {
     const { title, extendedProps } = eventInfo.event;
     const type = extendedProps?.type as string | undefined;
     const time = extendedProps?.time as string | undefined;
     const clientName = extendedProps?.clientName as string | undefined;
+    const description = extendedProps?.description as string | undefined;
+    const isReminder = type === 'REMINDER';
 
     const [coords, setCoords] = useState<PopoverCoords | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     const handleMouseEnter = () => {
+        if (disabled) return;
         if (wrapperRef.current) {
             const rect = wrapperRef.current.getBoundingClientRect();
             setCoords({
@@ -41,7 +49,7 @@ export default function EventPopover({ eventInfo }: { eventInfo: EventContentArg
         >
             <span className="event-label">{title}</span>
 
-            {coords && (
+            {coords && !disabled && (
                 <div
                     className={`event-popover event-popover--${type ?? "REMINDER"}`}
                     style={{
@@ -62,12 +70,23 @@ export default function EventPopover({ eventInfo }: { eventInfo: EventContentArg
                         </div>
                     )}
 
-                    <div className="popover-row">
-                        <span className="popover-icon">
-                            <FontAwesomeIcon icon={faClipboard} />
-                        </span>
-                        <span>{clientName ?? "..."}</span>
-                    </div>
+                    {isReminder ? (
+                        description && (
+                            <div className="popover-row">
+                                <span className="popover-icon">
+                                    <FontAwesomeIcon icon={faClipboard} />
+                                </span>
+                                <span>{description}</span>
+                            </div>
+                        )
+                    ) : (
+                        <div className="popover-row">
+                            <span className="popover-icon">
+                                <FontAwesomeIcon icon={faClipboard} />
+                            </span>
+                            <span>{clientName ?? "..."}</span>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
