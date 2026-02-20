@@ -5,7 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import ptBrLocale from "@fullcalendar/core/locales/pt-br";
 import type { EventClickArg } from "@fullcalendar/core";
 import type { DateClickArg } from "@fullcalendar/interaction";
-import type CalendarEvent from "../../../interfaces/types/CalendarEvent";
+import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import EventPopover from "./EventPopover";
 import "./Calendar.css";
 

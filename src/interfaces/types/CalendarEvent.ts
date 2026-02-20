@@ -9,7 +9,7 @@ export default interface CalendarEvent {
     extendedProps?: {
         type: 'TECHNICAL_VISIT' | 'INSTALL_VISIT' | 'NOTE';
         description?: string;
-        clientName?: string;
+        projectId?: number;
         time?: string;
     };
 }

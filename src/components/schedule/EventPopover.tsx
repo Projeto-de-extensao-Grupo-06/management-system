@@ -15,12 +15,8 @@ interface EventPopoverProps {
 }
 
 export default function EventPopover({ eventInfo, disabled = false }: EventPopoverProps) {
-    const { title, extendedProps } = eventInfo.event;
-    const type = extendedProps?.type as string | undefined;
-    const time = extendedProps?.time as string | undefined;
-    const clientName = extendedProps?.clientName as string | undefined;
-    const description = extendedProps?.description as string | undefined;
-    const isReminder = type === 'NOTE';
+    const { title } = eventInfo.event;
+    const { type, description, time } = eventInfo.event.extendedProps || {};
 
     const [coords, setCoords] = useState<PopoverCoords | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -70,21 +66,12 @@ export default function EventPopover({ eventInfo, disabled = false }: EventPopov
                         </div>
                     )}
 
-                    {isReminder ? (
-                        description && (
-                            <div className="popover-row">
-                                <span className="popover-icon">
-                                    <FontAwesomeIcon icon={faClipboard} />
-                                </span>
-                                <span>{description}</span>
-                            </div>
-                        )
-                    ) : (
+                    {description && (
                         <div className="popover-row">
                             <span className="popover-icon">
                                 <FontAwesomeIcon icon={faClipboard} />
                             </span>
-                            <span>{clientName ?? "..."}</span>
+                            <span>{description}</span>
                         </div>
                     )}
                 </div>

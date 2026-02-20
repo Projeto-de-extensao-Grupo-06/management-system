@@ -1,14 +1,14 @@
 import {
     faTag,
     faClock,
-    faUser,
+    faCalendarDays,
     faNoteSticky,
     faPencil,
     faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Modal from '../../../components/dialogs/modal/Modal';
-import { Button } from '../../../components/ui/Form';
+import Modal from '../modal/Modal';
+import { Button } from '../../ui/Form';
 import type CalendarEvent from '../../../interfaces/types/CalendarEvent';
 import styles from './ScheduleDetailsModal.module.css';
 
@@ -21,9 +21,9 @@ interface ScheduleDetailsModalProps {
 }
 
 const TYPE_LABELS: Record<string, string> = {
-    INSTALLATION: 'Instalação',
-    VISIT: 'Visita',
-    REMINDER: 'Lembrete',
+    TECHNICAL_VISIT: 'Visita Técnica',
+    INSTALL_VISIT: 'Visita de Instalação',
+    NOTE: 'Lembrete',
 };
 
 export default function ScheduleDetailsModal({
@@ -35,10 +35,11 @@ export default function ScheduleDetailsModal({
 }: ScheduleDetailsModalProps) {
     if (!event) return null;
 
-    const type = event.extendedProps?.type ?? 'REMINDER';
+    const type = event.extendedProps?.type ?? 'NOTE';
     const time = event.extendedProps?.time;
-    const clientName = event.extendedProps?.clientName;
     const description = event.extendedProps?.description;
+    const startDate = event.start;
+    const endDate = event.end;
 
     const footer = (
         <div className={styles.footerRow}>
@@ -76,6 +77,13 @@ export default function ScheduleDetailsModal({
                     <span>{TYPE_LABELS[type] ?? type}</span>
                 </div>
 
+                <div className={styles.detailRow}>
+                    <span className={styles.detailIcon}>
+                        <FontAwesomeIcon icon={faCalendarDays} />
+                    </span>
+                    <span>{startDate} {endDate ? `até ${endDate}` : ''}</span>
+                </div>
+
                 {time && (
                     <div className={styles.detailRow}>
                         <span className={styles.detailIcon}>
@@ -85,22 +93,13 @@ export default function ScheduleDetailsModal({
                     </div>
                 )}
 
-                {clientName && (
-                    <div className={styles.detailRow}>
-                        <span className={styles.detailIcon}>
-                            <FontAwesomeIcon icon={faUser} />
-                        </span>
-                        <span>{clientName}</span>
-                    </div>
-                )}
-
                 {description !== undefined && (
                     <div className={styles.detailGroup}>
                         <div className={styles.detailRow}>
                             <span className={styles.detailIcon}>
                                 <FontAwesomeIcon icon={faNoteSticky} />
                             </span>
-                            <span className={styles.detailLabel}>Observação:</span>
+                            <span className={styles.detailLabel}>Descrição:</span>
                         </div>
                         <p className={styles.detailText}>{description || '—'}</p>
                     </div>

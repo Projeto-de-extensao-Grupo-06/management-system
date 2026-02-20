@@ -177,6 +177,48 @@
         "clientName": "",
         "description": "Comprar materiais"
       }
+    },
+    {
+      "id": "0d81",
+      "title": "undefined - Thomas",
+      "start": "2026-02-25",
+      "backgroundColor": "#DDF3FF",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "TECHNICAL_VISIT",
+        "time": "06:28",
+        "clientName": "Thomas",
+        "description": ""
+      }
+    },
+    {
+      "id": "1654",
+      "title": "Lembrete",
+      "start": "2026-02-22",
+      "backgroundColor": "#FFF9C4",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "NOTE",
+        "time": "07:32",
+        "clientName": "",
+        "description": "Teste"
+      }
+    },
+    {
+      "id": "c560",
+      "title": "Visita Técnica - efsfs",
+      "start": "2026-02-20",
+      "backgroundColor": "#DDF3FF",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "TECHNICAL_VISIT",
+        "time": "07:31",
+        "clientName": "efsfs",
+        "description": ""
+      }
     }
   ],
   "analysis_kpis": [

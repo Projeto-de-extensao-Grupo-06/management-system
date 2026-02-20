@@ -1,46 +1,105 @@
 import type { Schedule } from '../interfaces/types/Schedule';
 import api from './provider/api';
-import axios from 'axios';
 import type CalendarEvent from '../interfaces/types/CalendarEvent';
+import type { ScheduleSchemaType } from '../schemas/scheduleSchema';
+import useAuthStore from '../store/useAuthStore';
 
-const JSON_SERVER_URL = 'http://localhost:3000/schedule';
+const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
+  TECHNICAL_VISIT: { bg: '#DDF3FF', text: '#555' },
+  INSTALL_VISIT: { bg: '#FFEADD', text: '#555' },
+  NOTE: { bg: '#FFF9C4', text: '#555' },
+};
+
+const TYPE_TITLES: Record<string, string> = {
+  TECHNICAL_VISIT: 'Visita Técnica',
+  INSTALL_VISIT: 'Visita de Instalação',
+  NOTE: 'Lembrete',
+};
+
+function toCalendarEvent(s: Schedule): CalendarEvent {
+  const colors = TYPE_COLORS[s.type] ?? { bg: '#E5E7EB', text: '#555' };
+  const dateOnly = s.startDate ? s.startDate.substring(0, 10) : '';
+  const timeOnly = s.startDate ? s.startDate.substring(11, 16) : '';
+  const endDateOnly = s.endDate ? s.endDate.substring(0, 10) : undefined;
+
+  const title = s.description
+    ? `${TYPE_TITLES[s.type] ?? s.type} - ${s.description}`
+    : (TYPE_TITLES[s.type] ?? s.type);
+
+  return {
+    id: String(s.id),
+    title,
+    start: dateOnly,
+    end: endDateOnly,
+    backgroundColor: colors.bg,
+    textColor: colors.text,
+    borderColor: 'transparent',
+    extendedProps: {
+      type: s.type,
+      time: timeOnly,
+      projectId: s.projectId,
+      description: s.description ?? '',
+    },
+  };
+}
+
+function toISODateTime(date: string, time: string): string {
+  return `${date}T${time || '00:00'}:00`;
+}
 
 export default class ScheduleService {
-
   async listProjectSchedules(projectId: number): Promise<Schedule[]> {
-    const res = await api.get<Schedule[]>(
-      `/projects/${projectId}/schedules`
-    );
-
-    if (!res.data) {
-      return [];
-    }
-
-    return res.data;
+    const res = await api.get<Schedule[]>(`/projects/${projectId}/schedules`);
+    return res.data ?? [];
   }
 
   async getEvents(): Promise<CalendarEvent[]> {
     try {
-      const response = await axios.get<CalendarEvent[]>(JSON_SERVER_URL);
-      return response.data;
-    } catch (error) {
-      console.error('Erro ao buscar eventos do agendamento:', error);
+      const res = await api.get<Schedule[]>('/schedules');
+      return res.data.map(toCalendarEvent);
+    } catch (error: unknown) {
+      const status = (error as { response?: { status?: number } }).response?.status;
+      if (status === 204) return [];
+      console.error('Erro ao buscar eventos da agenda:', error);
       return [];
     }
   }
 
-  async createEvent(data: Omit<CalendarEvent, 'id'>): Promise<CalendarEvent> {
-    const response = await axios.post<CalendarEvent>(JSON_SERVER_URL, data);
-    return response.data;
+  async createEvent(data: ScheduleSchemaType): Promise<CalendarEvent> {
+    const coworkerId = useAuthStore.getState().user?.coworkerId;
+
+    const payload = {
+      title: TYPE_TITLES[data.type] ?? data.type,
+      description: data.description ?? '',
+      startDate: toISODateTime(data.start, data.time),
+      endDate: data.endDate ? toISODateTime(data.endDate, data.time) : undefined,
+      type: data.type,
+      projectId: data.projectId,
+      coworkerId,
+    };
+
+    const res = await api.post<Schedule>('/schedules', payload);
+    return toCalendarEvent(res.data);
   }
 
-  async updateEvent(id: string, data: Partial<CalendarEvent>): Promise<CalendarEvent> {
-    const response = await axios.patch<CalendarEvent>(`${JSON_SERVER_URL}/${id}`, data);
-    return response.data;
+  async updateEvent(id: string, data: ScheduleSchemaType): Promise<CalendarEvent> {
+    const coworkerId = useAuthStore.getState().user?.coworkerId;
+
+    const payload = {
+      title: TYPE_TITLES[data.type] ?? data.type,
+      description: data.description ?? '',
+      startDate: toISODateTime(data.start, data.time),
+      endDate: data.endDate ? toISODateTime(data.endDate, data.time) : undefined,
+      type: data.type,
+      projectId: data.projectId,
+      coworkerId,
+    };
+
+    const res = await api.patch<Schedule>(`/schedules/${id}`, payload);
+    return toCalendarEvent(res.data);
   }
 
   async deleteEvent(id: string): Promise<void> {
-    await axios.delete(`${JSON_SERVER_URL}/${id}`);
+    await api.delete(`/schedules/${id}`);
   }
 }
-

@@ -2,30 +2,20 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import styles from "./Schedule.module.css";
-import ScheduleKpiBoard from "./components/ScheduleKpiBoard";
-import Calendar from "./components/Calendar";
-import ScheduleDetailsModal from "./components/ScheduleDetailsModal";
-import ScheduleFormModal from "./components/ScheduleFormModal";
+import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
+import Calendar from "../../components/schedule/Calendar";
+import ScheduleDetailsModal from "../../components/dialogs/schedule/ScheduleDetailsModal";
+import ScheduleFormModal from "../../components/dialogs/schedule/ScheduleFormModal";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
 import ScheduleService from "../../services/ScheduleService";
+import SecureComponent from "../../components/security/SecureComponent";
 
-const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
-    TECHNICAL_VISIT: { bg: "#DDF3FF", text: "#555" },
-    INSTALL_VISIT: { bg: "#FFEADD", text: "#555" },
-    NOTE: { bg: "#FFF9C4", text: "#555" },
-};
-
-const TYPE_TITLES: Record<string, string> = {
-    INSTALLATION: "Instalação",
-    VISIT: "Visita",
-    REMINDER: "Lembrete",
-};
+const service = new ScheduleService();
 
 export default function Schedule() {
     const [events, setEvents] = useState<CalendarEvent[]>([]);
-    const service = new ScheduleService();
 
     const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -55,23 +45,7 @@ export default function Schedule() {
     };
 
     const handleCreate = async (data: ScheduleSchemaType) => {
-        const colors = TYPE_COLORS[data.type];
-        const newEvent: Omit<CalendarEvent, "id"> = {
-            title: data.clientName
-                ? `${TYPE_TITLES[data.type]} - ${data.clientName}`
-                : TYPE_TITLES[data.type],
-            start: data.start,
-            backgroundColor: colors.bg,
-            textColor: colors.text,
-            borderColor: "transparent",
-            extendedProps: {
-                type: data.type,
-                time: data.time,
-                clientName: data.clientName,
-                description: data.description,
-            },
-        };
-        await service.createEvent(newEvent);
+        await service.createEvent(data);
         await fetchEvents();
         setIsCreateOpen(false);
     };
@@ -83,22 +57,7 @@ export default function Schedule() {
 
     const handleEdit = async (data: ScheduleSchemaType) => {
         if (!selectedEvent) return;
-        const colors = TYPE_COLORS[data.type];
-        await service.updateEvent(selectedEvent.id, {
-            title: data.clientName
-                ? `${TYPE_TITLES[data.type]} - ${data.clientName}`
-                : TYPE_TITLES[data.type],
-            start: data.start,
-            backgroundColor: colors.bg,
-            textColor: colors.text,
-            borderColor: "transparent",
-            extendedProps: {
-                type: data.type,
-                time: data.time,
-                clientName: data.clientName,
-                description: data.description,
-            },
-        });
+        await service.updateEvent(selectedEvent.id, data);
         await fetchEvents();
         setIsEditOpen(false);
         setSelectedEvent(null);
@@ -122,21 +81,24 @@ export default function Schedule() {
         ? {
             type: (selectedEvent.extendedProps?.type ?? 'NOTE') as ScheduleSchemaType['type'],
             start: selectedEvent.start ?? new Date().toISOString().split("T")[0],
+            endDate: selectedEvent.end ?? "",
             time: selectedEvent.extendedProps?.time ?? "",
-            clientName: selectedEvent.extendedProps?.clientName ?? "",
+            projectId: selectedEvent.extendedProps?.projectId ?? null,
             description: selectedEvent.extendedProps?.description ?? "",
         }
         : undefined;
 
     return (
         <div className={styles.schedule_container}>
-            <div className={styles.title_container}>
-                <h1>Agenda de visitas</h1>
-                <button className={styles.schedule_btn} onClick={handleOpenCreate}>
-                    <FontAwesomeIcon icon={faPlus} />
-                    Agendar
-                </button>
-            </div>
+            <SecureComponent permissions={["SCHEDULE_WRITE"]}>
+                <div className={styles.title_container}>
+                    <h1>Agenda de visitas</h1>
+                    <button className={styles.schedule_btn} onClick={handleOpenCreate}>
+                        <FontAwesomeIcon icon={faPlus} />
+                        Agendar
+                    </button>
+                </div>
+            </SecureComponent>
 
             <div className={styles.kpis}>
                 <ScheduleKpiBoard events={events} />

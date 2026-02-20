@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 import { faSave, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Modal from '../../../components/dialogs/modal/Modal';
-import { Button } from '../../../components/ui/Form';
-import ScheduleEventForm from '../../../components/forms/schedule_form/ScheduleEventForm';
-import type { ScheduleFormRef } from '../../../components/forms/schedule_form/ScheduleEventForm';
+import Modal from "../modal/Modal";
+import { Button } from "../../ui/Form";
+import ScheduleEventForm from "../../forms/schedule_form/ScheduleEventForm";
+import type { ScheduleFormRef } from "../../forms/schedule_form/ScheduleEventForm";
 import type { ScheduleSchemaType } from '../../../schemas/scheduleSchema';
 
 interface ScheduleFormModalProps {

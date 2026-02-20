@@ -1,9 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
-import { useForm } from 'react-hook-form';
-import { Select, SelectOption, Input } from '../../ui/Form';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { Select, SelectOption, Input, AutoCompleteSelect } from '../../ui/Form';
 import type { ScheduleSchemaType } from '../../../schemas/scheduleSchema';
 import { scheduleSchema } from '../../../schemas/scheduleSchema';
+import ProjectsService from '../../../services/ProjectsService';
+import type { AutoCompleteSelectOption } from '../../ui/Form';
 import styles from './ScheduleEventForm.module.css';
 
 export interface ScheduleFormRef {
@@ -16,34 +18,57 @@ export interface ScheduleFormProps {
     readOnly?: boolean;
 }
 
+const projectsService = new ProjectsService();
+
 const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
     ({ onSubmit, defaultValues, readOnly = false }, ref) => {
+        const [projectOptions, setProjectOptions] = useState<AutoCompleteSelectOption[]>([]);
+
         const {
             register,
             handleSubmit,
             reset,
             setValue,
             watch,
+            control,
             formState: { errors },
         } = useForm<ScheduleSchemaType>({
             resolver: zodResolver(scheduleSchema),
             defaultValues: {
                 type: 'TECHNICAL_VISIT',
                 start: '',
+                endDate: '',
                 time: '',
-                clientName: '',
+                projectId: null,
                 description: '',
                 ...defaultValues,
             },
         });
 
         useEffect(() => {
+            const fetchProjects = async () => {
+                try {
+                    const data = await projectsService.getAllProjects(0, 100);
+                    const options = data.content.map(p => ({
+                        value: String(p.id),
+                        label: `${p.projectTitle} - ${p.client.firstName} ${p.client.lastName}`
+                    }));
+                    setProjectOptions(options);
+                } catch (err) {
+                    console.error("Erro ao buscar projetos:", err);
+                }
+            };
+            fetchProjects();
+        }, []);
+
+        useEffect(() => {
             if (defaultValues) {
                 reset({
                     type: 'TECHNICAL_VISIT',
                     start: '',
+                    endDate: '',
                     time: '',
-                    clientName: '',
+                    projectId: null,
                     description: '',
                     ...defaultValues,
                 });
@@ -90,7 +115,7 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
 
                 <div className={styles.inputGroup}>
                     <label className={styles.fieldLabel}>
-                        Data:<span className={styles.required}>*</span>
+                        Data de início:<span className={styles.required}>*</span>
                     </label>
                     <Input
                         type="date"
@@ -99,6 +124,17 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
                         {...register('start')}
                     />
                     {errors.start && <span className={styles.errorMessage}>{errors.start.message}</span>}
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.fieldLabel}>Data de término:</label>
+                    <Input
+                        type="date"
+                        disabled={readOnly}
+                        className={errors.endDate ? styles.inputError : ''}
+                        {...register('endDate')}
+                    />
+                    {errors.endDate && <span className={styles.errorMessage}>{errors.endDate.message}</span>}
                 </div>
 
                 <div className={styles.inputGroup}>
@@ -115,23 +151,38 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
                     {errors.time && <span className={styles.errorMessage}>{errors.time.message}</span>}
                 </div>
 
-                {typeValue !== 'NOTE' && (
-                    <div className={styles.inputGroup}>
-                        <label className={styles.fieldLabel}>Projeto vinculado:</label>
-                        <Input
-                            type="text"
-                            placeholder="Nome do cliente ou projeto"
-                            disabled={readOnly}
-                            {...register('clientName')}
+                <div className={styles.inputGroup}>
+                    <label className={styles.fieldLabel}>
+                        Projeto vinculado:
+                        {typeValue !== 'NOTE' && <span className={styles.required}>*</span>}
+                    </label>
+                    {readOnly ? (
+                        <div className={styles.readOnlyField}>
+                            {projectOptions.find(o => o.value === String(watch('projectId')))?.label ?? '—'}
+                        </div>
+                    ) : (
+                        <Controller
+                            name="projectId"
+                            control={control}
+                            render={({ field }) => (
+                                <AutoCompleteSelect
+                                    options={projectOptions}
+                                    value={projectOptions.find(o => o.value === String(field.value)) ?? null}
+                                    onChange={(option) => field.onChange(option ? Number(option.value) : null)}
+                                    placeholder="Selecione um projeto..."
+                                    isDisabled={readOnly}
+                                />
+                            )}
                         />
-                    </div>
-                )}
+                    )}
+                    {errors.projectId && <span className={styles.errorMessage}>{errors.projectId.message}</span>}
+                </div>
 
                 <div className={styles.inputGroup}>
-                    <label className={styles.fieldLabel}>Observação:</label>
+                    <label className={styles.fieldLabel}>Descrição:</label>
                     <textarea
                         className={styles.textarea}
-                        placeholder="Observação..."
+                        placeholder="Descrição do evento..."
                         disabled={readOnly}
                         {...register('description')}
                     />
