@@ -99,46 +99,53 @@
   "schedule": [
     {
       "id": "1",
-      "title": "Instalação",
+      "title": "Instalação - Diogo",
       "start": "2026-02-28",
       "backgroundColor": "#FFEADD",
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "INSTALLATION"
+        "type": "INSTALLATION",
+        "clientName": "Diogo Amaral",
+        "time": "10:00"
       }
     },
     {
       "id": "2",
-      "title": "Instalação",
-      "start": "2026-02-29",
+      "title": "Instalação - Pedro",
+      "start": "2026-02-26",
       "backgroundColor": "#FFEADD",
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "INSTALLATION"
+        "type": "INSTALLATION",
+        "clientName": "Pedro Santos",
+        "time": "14:30"
       }
     },
     {
       "id": "3",
-      "title": "Visita",
+      "title": "Visita - Amigo do Douglas",
       "start": "2026-02-18",
       "backgroundColor": "#DDF3FF",
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "VISIT"
+        "type": "VISIT",
+        "clientName": "Thiago Santos",
+        "time": "19:30"
       }
     },
     {
       "id": "4",
-      "title": "Lembrete",
+      "title": "Comprar materiais",
       "start": "2026-02-24",
       "backgroundColor": "#FFF9C4",
       "textColor": "#555",
       "borderColor": "transparent",
       "extendedProps": {
-        "type": "REMINDER"
+        "type": "REMINDER",
+        "time": "20:00"
       }
     }
   ],

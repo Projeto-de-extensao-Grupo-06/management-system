@@ -9,5 +9,7 @@ export default interface CalendarEvent {
     extendedProps?: {
         type: 'VISIT' | 'INSTALLATION' | 'REMINDER';
         description?: string;
+        clientName?: string;
+        time?: string;
     };
 }

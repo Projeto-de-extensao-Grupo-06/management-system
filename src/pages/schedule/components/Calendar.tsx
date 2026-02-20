@@ -4,6 +4,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import ptBrLocale from "@fullcalendar/core/locales/pt-br";
 import type CalendarEvent from "../../../interfaces/types/CalendarEvent";
+import EventPopover from "./EventPopover";
 import "./Calendar.css";
 
 interface CalendarProps {
@@ -28,7 +29,11 @@ export default function Calendar({ events }: CalendarProps) {
                 dayMaxEvents={true}
                 height="65vh"
                 contentHeight="auto"
+                eventContent={(eventInfo) => (
+                    <EventPopover eventInfo={eventInfo} />
+                )}
             />
         </div>
     );
 }
+
