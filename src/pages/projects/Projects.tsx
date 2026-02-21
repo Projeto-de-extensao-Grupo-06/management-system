@@ -267,63 +267,88 @@ export default function Projects() {
             <span>Filtros</span>
           </div>
 
+          <div style={{ width: "250px" }}>
+            <MultiSelect
+              styles={{
+                multiValueLabel: (base) => ({
+                  ...base,
+                  overflow: "visible",
+                  textOverflow: "unset",
+                  whiteSpace: "normal",
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  flexWrap: "wrap",
+                }),
+              }}
+              value={
+                statusFilter
+                  ? statusFilter.split(',').map(s => ({
+                    value: s,
+                    label: projectStatusLabel[s],
+                  }))
+                  : []
+              }
+              onChange={(newValue) => {
+                const selectedValues = newValue.map(v => v.value).join(',');
+                setStatusFilter(selectedValues);
+                setPage(0);
+              }}
+              options={Object.entries(projectStatusLabel).map(([status, label]) => ({
+                value: status,
+                label: label,
+              }))}
+              placeholder="Todos os status"
+            />
+          </div>
+          <div style={{ width: "250px" }}>
+            <MultiSelect
+              styles={{
+                multiValueLabel: (base) => ({
+                  ...base,
+                  overflow: "visible",
+                  textOverflow: "unset",
+                  whiteSpace: "normal",
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  flexWrap: "wrap",
+                }),
+              }}
+              value={
+                clientId
+                  ? [{
+                    value: clientId,
+                    label: (() => {
+                      const client = clients.find(
+                        c => c.id.toString() === clientId
+                      );
+                      return client
+                        ? `${client.firstName} ${client.lastName}`
+                        : '';
+                    })()
+                  }]
+                  : []
+              }
+              onChange={(newValue) => {
+                const lastSelected =
+                  newValue.length > 0
+                    ? newValue[newValue.length - 1].value
+                    : '';
 
-          <MultiSelect
-            value={
-              statusFilter
-                ? statusFilter.split(',').map(s => ({
-                  value: s,
-                  label: projectStatusLabel[s],
+                setClientId(lastSelected);
+                setPage(0);
+              }}
+              options={[
+                { value: '', label: 'Todos os clientes' },
+                ...clients.map(client => ({
+                  value: client.id.toString(),
+                  label: `${client.firstName} ${client.lastName}`,
                 }))
-                : []
-            }
-            onChange={(newValue) => {
-              const selectedValues = newValue.map(v => v.value).join(',');
-              setStatusFilter(selectedValues);
-              setPage(0);
-            }}
-            options={Object.entries(projectStatusLabel).map(([status, label]) => ({
-              value: status,
-              label: label,
-            }))}
-            placeholder="Todos os status"
-          />
-
-          <MultiSelect
-            value={
-              clientId
-                ? [{
-                  value: clientId,
-                  label: (() => {
-                    const client = clients.find(
-                      c => c.id.toString() === clientId
-                    );
-                    return client
-                      ? `${client.firstName} ${client.lastName}`
-                      : '';
-                  })()
-                }]
-                : []
-            }
-            onChange={(newValue) => {
-              const lastSelected =
-                newValue.length > 0
-                  ? newValue[newValue.length - 1].value
-                  : '';
-
-              setClientId(lastSelected);
-              setPage(0);
-            }}
-            options={[
-              { value: '', label: 'Todos os clientes' },
-              ...clients.map(client => ({
-                value: client.id.toString(),
-                label: `${client.firstName} ${client.lastName}`,
-              }))
-            ]}
-            placeholder="Todos os clientes"
-          />
-
+              ]}
+              placeholder="Todos os clientes"
+            />
+          </div>
 
           <div className={styles.searchBox}>
             <SearchInput

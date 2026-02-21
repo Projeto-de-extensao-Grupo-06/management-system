@@ -312,6 +312,7 @@ export function MultiSelect({
   onChange,
   placeholder = "Selecione...",
   isDisabled = false,
+  styles: externalStyles,
 }: MultiSelectProps) {
 
   const customStyles: StylesConfig<
@@ -352,7 +353,10 @@ export function MultiSelect({
       onChange={onChange}
       placeholder={placeholder}
       isDisabled={isDisabled}
-      styles={customStyles}
+       styles={{
+        ...customStyles,
+        ...externalStyles, 
+      }}
       isClearable
       isMulti={true}
     />
