@@ -1,7 +1,7 @@
-import type { Schedule } from '../interfaces/types/Schedule';
-import api from './provider/api';
 import type CalendarEvent from '../interfaces/types/CalendarEvent';
+import type { Schedule } from '../interfaces/types/Schedule';
 import type { ScheduleSchemaType } from '../schemas/scheduleSchema';
+import api from './provider/api';
 
 const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
   TECHNICAL_VISIT: { bg: '#DDF3FF', text: '#555' },
@@ -38,9 +38,16 @@ function toISODateTime(date: string, time: string): string {
 }
 
 export default class ScheduleService {
-  async listProjectSchedules(projectId: number): Promise<Schedule[]> {
-    const res = await api.get<Schedule[]>(`/projects/${projectId}/schedules`);
-    return res.data ?? [];
+   async listProjectSchedules(projectId: number): Promise<Schedule[]> {
+    const res = await api.get<Schedule[]>(
+      `/projects/${projectId}/schedules`
+    );
+
+    if(!res.data) {
+        return [];
+    }
+
+    return res.data;
   }
 
   async getEvents(): Promise<CalendarEvent[]> {
