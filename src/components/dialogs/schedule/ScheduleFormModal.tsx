@@ -52,7 +52,7 @@ export default function ScheduleFormModal({
         </div>
     );
 
-    const title = mode === 'create' ? 'Criar lembrete' : 'Editar lembrete';
+    const title = mode === 'create' ? 'Criar Agenda' : 'Editar Agenda';
 
     return (
         <Modal

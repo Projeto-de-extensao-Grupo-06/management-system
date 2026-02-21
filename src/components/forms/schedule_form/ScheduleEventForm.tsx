@@ -65,6 +65,7 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
             if (defaultValues) {
                 reset({
                     type: 'TECHNICAL_VISIT',
+                    title: '',
                     start: '',
                     endDate: '',
                     time: '',
@@ -93,7 +94,7 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
             <form className={styles.formContainer} onSubmit={(e) => e.preventDefault()}>
                 <div className={styles.inputGroup}>
                     <label className={styles.fieldLabel}>
-                        Tipo de lembrete:<span className={styles.required}>*</span>
+                        Tipo de Agenda:<span className={styles.required}>*</span>
                     </label>
                     {readOnly ? (
                         <div className={styles.readOnlyField}>{typeLabels[typeValue] ?? typeValue}</div>
@@ -111,6 +112,20 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
                         </Select>
                     )}
                     {errors.type && <span className={styles.errorMessage}>{errors.type.message}</span>}
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.fieldLabel}>
+                        Título:<span className={styles.required}>*</span>
+                    </label>
+                    <Input
+                        type="text"
+                        placeholder="Ex: Visita na casa do João"
+                        disabled={readOnly}
+                        className={errors.title ? styles.inputError : ''}
+                        {...register('title')}
+                    />
+                    {errors.title && <span className={styles.errorMessage}>{errors.title.message}</span>}
                 </div>
 
                 <div className={styles.inputGroup}>

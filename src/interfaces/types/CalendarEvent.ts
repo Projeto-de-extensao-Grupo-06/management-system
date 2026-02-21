@@ -8,6 +8,7 @@ export default interface CalendarEvent {
     textColor?: string;
     extendedProps?: {
         type: 'TECHNICAL_VISIT' | 'INSTALL_VISIT' | 'NOTE';
+        status?: 'MARKED' | 'IN_PROGRESS' | 'FINISHED';
         description?: string;
         projectId?: number;
         time?: string;

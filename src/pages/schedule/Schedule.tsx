@@ -79,6 +79,7 @@ export default function Schedule() {
 
     const editDefaults: Partial<ScheduleSchemaType> | undefined = selectedEvent
         ? {
+            title: selectedEvent.title,
             type: (selectedEvent.extendedProps?.type ?? 'NOTE') as ScheduleSchemaType['type'],
             start: selectedEvent.start ?? new Date().toISOString().split("T")[0],
             endDate: selectedEvent.end ?? "",

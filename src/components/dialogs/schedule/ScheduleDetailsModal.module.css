@@ -45,3 +45,26 @@
     width: 100%;
     justify-content: flex-end;
 }
+
+.statusBadge {
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.marked {
+    background-color: #E0E7FF;
+    color: #4338CA;
+}
+
+.in_progress {
+    background-color: #FEF3C7;
+    color: #B45309;
+}
+
+.finished {
+    background-color: #D1FAE5;
+    color: #047857;
+}

@@ -4,7 +4,7 @@ import {
     faCalendarDays,
     faNoteSticky,
     faPencil,
-    faTrash,
+    faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from '../modal/Modal';
@@ -26,6 +26,12 @@ const TYPE_LABELS: Record<string, string> = {
     NOTE: 'Lembrete',
 };
 
+const STATUS_LABELS: Record<string, string> = {
+    MARKED: 'Agendado',
+    IN_PROGRESS: 'Em Progresso',
+    FINISHED: 'Finalizado',
+};
+
 export default function ScheduleDetailsModal({
     isOpen,
     onClose,
@@ -36,6 +42,7 @@ export default function ScheduleDetailsModal({
     if (!event) return null;
 
     const type = event.extendedProps?.type ?? 'NOTE';
+    const status = event.extendedProps?.status;
     const time = event.extendedProps?.time;
     const description = event.extendedProps?.description;
     const startDate = event.start;
@@ -45,7 +52,7 @@ export default function ScheduleDetailsModal({
         <div className={styles.footerRow}>
             <Button
                 icon={<FontAwesomeIcon icon={faPencil} />}
-                text="Editar lembrete"
+                text="Editar"
                 type="button"
                 onClick={onEdit}
                 width="fit-content"
@@ -83,6 +90,17 @@ export default function ScheduleDetailsModal({
                     </span>
                     <span>{startDate} {endDate ? `até ${endDate}` : ''}</span>
                 </div>
+
+                {status && (
+                    <div className={styles.detailRow}>
+                        <span className={styles.detailIcon}>
+                            <FontAwesomeIcon icon={faClock} />
+                        </span>
+                        <span className={`${styles.statusBadge} ${styles[status.toLowerCase()]}`}>
+                            {STATUS_LABELS[status] ?? status}
+                        </span>
+                    </div>
+                )}
 
                 {time && (
                     <div className={styles.detailRow}>
