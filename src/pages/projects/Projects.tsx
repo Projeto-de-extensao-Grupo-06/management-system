@@ -13,7 +13,7 @@ import FilterBar from '../../components/layout/FilterBar';
 import PageHeader from '../../components/layout/PageHeader';
 import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
-import { Button, SearchInput} from '../../components/ui/Form';
+import { Button, SearchInput } from '../../components/ui/Form';
 
 import type Client from '../../interfaces/types/Client';
 import type ProjectSummary from '../../interfaces/types/ProjectSummary';
@@ -30,6 +30,7 @@ import ProjectCard from '../projects/components/ProjectCard';
 import Projectstyles from '../projects/Projects.module.css';
 import usePermissions from "../../hooks/usePermissions";
 import { MultiSelect } from '../../components/ui/Form';
+import { useNavigate } from 'react-router';
 
 export default function Projects() {
   const projectsService = useMemo(() => new ProjectsService(), []);
@@ -49,8 +50,8 @@ export default function Projects() {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const userPermissions = usePermissions();
-  const notificationCount = 5;
-  // mocado por enquanto
+  const [notificationCount, setNotificationCount] = useState(0);
+  const navigate = useNavigate();
 
 
   const [globalAlert, setGlobalAlert] =
@@ -119,6 +120,16 @@ export default function Projects() {
     fetchProjects();
   }, [fetchProjects]);
 
+  useEffect(() => {
+    projectsService
+      .getProjectLeads(undefined, undefined, 'Todos', '')
+      .then(data => {
+        setNotificationCount(data.length);
+      })
+      .catch(() => {
+        setNotificationCount(0);
+      });
+  }, [projectsService]);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const waitingContactCount = useMemo(() => {
@@ -195,7 +206,11 @@ export default function Projects() {
         title="Projetos"
         count={projects.length}
         titleRight={
-          <div className={Projectstyles.titleNotification}>
+          <div
+            className={Projectstyles.titleNotification}
+            onClick={() => navigate('/projetos/notificacoes')}
+            style={{ cursor: 'pointer' }}
+          >
             <FontAwesomeIcon icon={faBell as IconProp} />
             {notificationCount > 0 && (
               <span className={Projectstyles.notificationBadge}>
