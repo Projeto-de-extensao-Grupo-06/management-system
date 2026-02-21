@@ -1,0 +1,83 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fieldLabel {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-secondary, #0f4c0a);
+}
+
+.required {
+    color: var(--color-error, #dc2626);
+    margin-left: 2px;
+}
+
+.errorMessage {
+    color: var(--color-error, #dc2626);
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.inputError {
+    border-color: var(--color-error, #dc2626) !important;
+}
+
+.textarea {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    border: 0.0625rem solid var(--color-border);
+    border-radius: 0.375rem;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    font-weight: 500;
+}
+
+.textarea::placeholder {
+    color: var(--color-text-light);
+}
+
+.textarea:hover {
+    border-color: var(--color-text-light);
+    background-color: var(--color-background-alt);
+}
+
+.textarea:focus {
+    border-color: var(--color-primary);
+    background-color: var(--color-background);
+    box-shadow: 0 0 0 0.1875rem rgba(230, 126, 50, 0.1);
+}
+
+.textarea:disabled,
+.textarea[readonly] {
+    background-color: #f9fafb;
+    cursor: not-allowed;
+    color: var(--color-text-description);
+}
+
+.readOnlyField {
+    padding: 10px 12px;
+    background: #f9fafb;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--color-text-description);
+}

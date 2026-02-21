@@ -15,8 +15,8 @@ import Clients from "./pages/clients/Clients";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import NotFound from "./pages/shared/NotFound";
 import Projects from "./pages/projects/Projects";
+import Schedule from "./pages/schedule/Schedule";
 import ProjectNotifications from "./pages/projects/ProjectNotifications";
-
 import useAuthStore from "./store/useAuthStore";
 
 function App() {
@@ -43,6 +43,11 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route
+              path="/agenda"
+              element={<PermissionRoute permissions={["SCHEDULE_READ"]} element={<Schedule />} />}
+            />
+
+            <Route
               path="/clientes"
               element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients />} />}
             />
@@ -57,12 +62,16 @@ function App() {
               element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectDetails />} />}
             />
 
-            <Route path="/analise" element={<Analysis />}></Route>
+            <Route
+              path="/analise"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Analysis />} />}
+            />
 
             <Route
               path="/projetos"
               element={<PermissionRoute permissions={["PROJECT_READ"]} element={<Projects />} />}
             />
+
             <Route
               path="/projetos/notificacoes"
               element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}

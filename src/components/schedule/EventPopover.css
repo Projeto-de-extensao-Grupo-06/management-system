@@ -1,0 +1,82 @@
+.event-wrapper {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
+.event-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 2px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-popover {
+    z-index: 9999;
+    width: 220px;
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    animation: popoverFadeIn 0.15s ease-out;
+    pointer-events: none;
+}
+
+@keyframes popoverFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-95%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-100%);
+    }
+}
+
+.event-popover--INSTALL_VISIT {
+    background-color: #FFEADD;
+}
+
+.event-popover--TECHNICAL_VISIT {
+    background-color: #DDF3FF;
+}
+
+.event-popover--NOTE {
+    background-color: #FFF9C4;
+}
+
+.popover-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 0.75rem 0;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+.popover-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: #444;
+    margin-bottom: 0.4rem;
+}
+
+.popover-row:last-child {
+    margin-bottom: 0;
+}
+
+.popover-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}

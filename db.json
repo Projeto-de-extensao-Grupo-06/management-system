@@ -8,8 +8,14 @@
     }
   ],
   "material": [
-    { "id": 1, "name": "Notebook" },
-    { "id": 2, "name": "Mouse" }
+    {
+      "id": 1,
+      "name": "Notebook"
+    },
+    {
+      "id": 2,
+      "name": "Mouse"
+    }
   ],
   "clients": [
     {
@@ -90,7 +96,131 @@
       "status": "Inativo"
     }
   ],
-
+  "schedule": [
+    {
+      "id": "1",
+      "title": "Instalação - Diogo",
+      "start": "2026-02-28",
+      "backgroundColor": "#FFEADD",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "INSTALL_VISIT",
+        "clientName": "Diogo Amaral",
+        "time": "10:00"
+      }
+    },
+    {
+      "title": "Instalação - Pedro Santos",
+      "backgroundColor": "#FFEADD",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "INSTALL_VISIT",
+        "time": "14:30",
+        "clientName": "Pedro Santos",
+        "description": "Teste"
+      },
+      "id": "2"
+    },
+    {
+      "title": "Visita - Thiago Santos",
+      "backgroundColor": "#DDF3FF",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "TECHNICAL_VISIT",
+        "time": "19:30",
+        "clientName": "Thiago Santos",
+        "description": ""
+      },
+      "id": "3"
+    },
+    {
+      "id": "463e",
+      "title": "Instalação - Thiago Santos",
+      "start": "2026-02-20",
+      "backgroundColor": "#FFEADD",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "INSTALL_VISIT",
+        "time": "18:00",
+        "clientName": "Thiago Santos",
+        "description": "Teste de criação"
+      }
+    },
+    {
+      "id": "efea",
+      "title": "Visita - Thiago Santos",
+      "start": "2026-02-18",
+      "backgroundColor": "#DDF3FF",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "TECHNICAL_VISIT",
+        "time": "06:55",
+        "clientName": "Thiago Santos",
+        "description": "Teste"
+      }
+    },
+    {
+      "id": "264f",
+      "title": "Lembrete",
+      "start": "2026-02-20",
+      "backgroundColor": "#FFF9C4",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "NOTE",
+        "time": "20:10",
+        "clientName": "",
+        "description": "Comprar materiais"
+      }
+    },
+    {
+      "id": "0d81",
+      "title": "undefined - Thomas",
+      "start": "2026-02-25",
+      "backgroundColor": "#DDF3FF",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "TECHNICAL_VISIT",
+        "time": "06:28",
+        "clientName": "Thomas",
+        "description": ""
+      }
+    },
+    {
+      "id": "1654",
+      "title": "Lembrete",
+      "start": "2026-02-22",
+      "backgroundColor": "#FFF9C4",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "NOTE",
+        "time": "07:32",
+        "clientName": "",
+        "description": "Teste"
+      }
+    },
+    {
+      "id": "c560",
+      "title": "Visita Técnica - efsfs",
+      "start": "2026-02-20",
+      "backgroundColor": "#DDF3FF",
+      "textColor": "#555",
+      "borderColor": "transparent",
+      "extendedProps": {
+        "type": "TECHNICAL_VISIT",
+        "time": "07:31",
+        "clientName": "efsfs",
+        "description": ""
+      }
+    }
+  ],
   "analysis_kpis": [
     {
       "mostExpensiveChannel": {
@@ -112,7 +242,6 @@
       }
     }
   ],
-
   "analysis_acquisition_channels": [
     {
       "name": "Site",
@@ -130,23 +259,33 @@
       "color": "#3b82f6"
     }
   ],
-
   "analysis_profit_cost_comparison": {
-    "months": ["JAN", "FEV", "MAR"],
+    "months": [
+      "JAN",
+      "FEV",
+      "MAR"
+    ],
     "series": [
       {
         "name": "Custo",
-        "data": [12000, 18000, 15000],
+        "data": [
+          12000,
+          18000,
+          15000
+        ],
         "color": "#ef4444"
       },
       {
         "name": "Lucro",
-        "data": [8000, 12000, 42000],
+        "data": [
+          8000,
+          12000,
+          42000
+        ],
         "color": "#22c55e"
       }
     ]
   },
-
   "analysis_projects_status": [
     {
       "status": "Em andamento",
@@ -164,7 +303,6 @@
       "color": "#9CA3AF"
     }
   ],
-
   "analysis_sales_funnel": [
     {
       "stage": "Visitas ao Site",
