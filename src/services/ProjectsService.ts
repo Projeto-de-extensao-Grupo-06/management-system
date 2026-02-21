@@ -54,16 +54,16 @@ export default class ProjectsService {
   }
 
   async createManualProject(data: {
-  name: string;
-  description: string;
-  projectType: 'ON_GRID' | 'OFF_GRID';
-  status: string;
-  clientId: number;
-  responsibleId?: number;
-  addressId?: number;
-}) {
-  return api.post('/projects/manual', data);
-}
+    name: string;
+    description: string;
+    projectType: 'ON_GRID' | 'OFF_GRID';
+    status: string;
+    clientId: number;
+    responsibleId?: number;
+    addressId?: number;
+  }) {
+    return api.post('/projects/manual', data);
+  }
 
 
   async getAllCoworkers(
@@ -86,4 +86,15 @@ export default class ProjectsService {
 
     return response.data;
   }
+
+
+  async getProjectFiles(projectId: number) {
+    const response = await api.get(`/projects/${projectId}/files`);
+    return response.data;
+  }
+  async getProjectComments(projectId: number) {
+    const response = await api.get(`/projects/${projectId}/comments`)
+    return response.data.content
+  }
 }
+
