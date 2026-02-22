@@ -1,5 +1,5 @@
 import type { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { faBell } from '@fortawesome/free-regular-svg-icons'
 import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   faClock,
@@ -13,7 +13,7 @@ import FilterBar from '../../components/layout/FilterBar';
 import PageHeader from '../../components/layout/PageHeader';
 import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
-import { Button, SearchInput, Select, SelectOption } from '../../components/ui/Form';
+import { Button, SearchInput } from '../../components/ui/Form';
 
 import type Client from '../../interfaces/types/Client';
 import type ProjectSummary from '../../interfaces/types/ProjectSummary';
@@ -23,15 +23,14 @@ import ProjectsService from '../../services/ProjectsService';
 
 import { projectStatusLabel } from '../../utils/mappers/projectStatusLabel';
 // import {CreateProjectModal } from '../projects/components/CreateProjectModal';
-import kpistyles from '../analysis/Analysis.module.css';
+
 import styles from '../clients/Clients.module.css';
 import CreateProjectModal from '../projects/components/CreateProjectModal'
 import ProjectCard from '../projects/components/ProjectCard';
 import Projectstyles from '../projects/Projects.module.css';
-
-
-
-
+import usePermissions from "../../hooks/usePermissions";
+import { MultiSelect } from '../../components/ui/Form';
+import { useNavigate } from 'react-router';
 
 export default function Projects() {
   const projectsService = useMemo(() => new ProjectsService(), []);
@@ -43,14 +42,16 @@ export default function Projects() {
 
 
   const [searchTerm, setSearchTerm] = useState('');
+  // const [statusFilter, setStatusFilter] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [clientId, setClientId] = useState<string>('');
 
 
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const notificationCount = 5;
-  // mocado por enquanto
+  const userPermissions = usePermissions();
+  const [notificationCount, setNotificationCount] = useState(0);
+  const navigate = useNavigate();
 
 
   const [globalAlert, setGlobalAlert] =
@@ -62,11 +63,36 @@ export default function Projects() {
       page,
       20,
       searchTerm,
-      statusFilter ? [statusFilter] : [],
+      statusFilter ? statusFilter.split(',') : [],
       clientId ? Number(clientId) : undefined
     )
-      .then(data => {
-        setProjects(data?.content ?? []);
+      .then(async data => {
+        const baseProjects = data?.content ?? [];
+
+        const enrichedProjects = await Promise.all(
+          baseProjects.map(async (project) => {
+            try {
+              const [comments, files] = await Promise.all([
+                projectsService.getProjectComments(project.id),
+                projectsService.getProjectFiles(project.id)
+              ]);
+
+              return {
+                ...project,
+                commentCount: comments.length,
+                fileCount: files.length
+              };
+            } catch {
+              return {
+                ...project,
+                commentCount: 0,
+                fileCount: 0
+              };
+            }
+          })
+        );
+
+        setProjects(enrichedProjects);
         setTotalPages(data?.totalPages ?? 0);
       })
       .catch(() => {
@@ -94,6 +120,16 @@ export default function Projects() {
     fetchProjects();
   }, [fetchProjects]);
 
+  useEffect(() => {
+    projectsService
+      .getProjectLeads(undefined, undefined, 'Todos', '')
+      .then(data => {
+        setNotificationCount(data.length);
+      })
+      .catch(() => {
+        setNotificationCount(0);
+      });
+  }, [projectsService]);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const waitingContactCount = useMemo(() => {
@@ -170,7 +206,11 @@ export default function Projects() {
         title="Projetos"
         count={projects.length}
         titleRight={
-          <div className={Projectstyles.titleNotification}>
+          <div
+            className={Projectstyles.titleNotification}
+            onClick={() => navigate('/projetos/notificacoes')}
+            style={{ cursor: 'pointer' }}
+          >
             <FontAwesomeIcon icon={faBell as IconProp} />
             {notificationCount > 0 && (
               <span className={Projectstyles.notificationBadge}>
@@ -181,13 +221,15 @@ export default function Projects() {
         }
       >
         <div className={Projectstyles.headerActions}>
-          <Button
-            icon={<FontAwesomeIcon icon={faPlus} />}
-            text="Novo Projeto"
-            ariaLabel="Criar Projeto"
-            onClick={() => setIsCreateModalOpen(true)}
-            width="fit-content"
-          />
+          {userPermissions.includes("PROJECT_WRITE") && (
+            <Button
+              icon={<FontAwesomeIcon icon={faPlus} />}
+              text="Novo Projeto"
+              ariaLabel="Criar Projeto"
+              onClick={() => setIsCreateModalOpen(true)}
+              width="fit-content"
+            />
+          )}
 
         </div>
 
@@ -203,11 +245,11 @@ export default function Projects() {
 
 
 
-      <div className={kpistyles.kpis}>
+      <div className={Projectstyles.kpis}>
         {projectKpis.map((kpi, index) => (
-          <div key={index} className={kpistyles.kpi_container}>
-            <div className={kpistyles.kpi_content}>
-              <div className={kpistyles.kpi_icon}>
+          <div key={index} className={Projectstyles.kpi_container}>
+            <div className={Projectstyles.kpi_content}>
+              <div className={Projectstyles.kpi_icon}>
                 <FontAwesomeIcon icon={kpi.icon} color="#fff" />
               </div>
               <b>{kpi.label}</b>
@@ -225,36 +267,88 @@ export default function Projects() {
             <span>Filtros</span>
           </div>
 
+          <div style={{ width: "250px" }}>
+            <MultiSelect
+              styles={{
+                multiValueLabel: (base) => ({
+                  ...base,
+                  overflow: "visible",
+                  textOverflow: "unset",
+                  whiteSpace: "normal",
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  flexWrap: "wrap",
+                }),
+              }}
+              value={
+                statusFilter
+                  ? statusFilter.split(',').map(s => ({
+                    value: s,
+                    label: projectStatusLabel[s],
+                  }))
+                  : []
+              }
+              onChange={(newValue) => {
+                const selectedValues = newValue.map(v => v.value).join(',');
+                setStatusFilter(selectedValues);
+                setPage(0);
+              }}
+              options={Object.entries(projectStatusLabel).map(([status, label]) => ({
+                value: status,
+                label: label,
+              }))}
+              placeholder="Todos os status"
+            />
+          </div>
+          <div style={{ width: "250px" }}>
+            <MultiSelect
+              styles={{
+                multiValueLabel: (base) => ({
+                  ...base,
+                  overflow: "visible",
+                  textOverflow: "unset",
+                  whiteSpace: "normal",
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  flexWrap: "wrap",
+                }),
+              }}
+              value={
+                clientId
+                  ? [{
+                    value: clientId,
+                    label: (() => {
+                      const client = clients.find(
+                        c => c.id.toString() === clientId
+                      );
+                      return client
+                        ? `${client.firstName} ${client.lastName}`
+                        : '';
+                    })()
+                  }]
+                  : []
+              }
+              onChange={(newValue) => {
+                const lastSelected =
+                  newValue.length > 0
+                    ? newValue[newValue.length - 1].value
+                    : '';
 
-          <Select
-            value={statusFilter}
-            onChange={setStatusFilter}
-          >
-            <SelectOption value="" label="Todos os status" />
-
-            {Object.entries(projectStatusLabel).map(([status, label]) => (
-              <SelectOption
-                key={status}
-                value={status}
-                label={label}
-              />
-            ))}
-          </Select>
-          <Select
-            value={clientId}
-            onChange={setClientId}
-          >
-            <SelectOption value="" label="Todos os clientes" />
-
-            {clients.map(client => (
-              <SelectOption
-                key={client.id}
-                value={client.id.toString()}
-                label={`${client.firstName} ${client.lastName}`}
-              />
-            ))}
-          </Select>
-
+                setClientId(lastSelected);
+                setPage(0);
+              }}
+              options={[
+                { value: '', label: 'Todos os clientes' },
+                ...clients.map(client => ({
+                  value: client.id.toString(),
+                  label: `${client.firstName} ${client.lastName}`,
+                }))
+              ]}
+              placeholder="Todos os clientes"
+            />
+          </div>
 
           <div className={styles.searchBox}>
             <SearchInput
@@ -264,7 +358,7 @@ export default function Projects() {
             />
           </div>
         </div>
-      </FilterBar>
+      </FilterBar >
 
       <div className={Projectstyles.projectsGrid}>
         {projects.map(project => (
@@ -280,7 +374,7 @@ export default function Projects() {
         totalPages={totalPages}
         onPageChange={setPage}
       />
-    </div>
+    </div >
 
   );
 

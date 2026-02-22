@@ -1,4 +1,4 @@
-import type { MultiValue, SingleValue } from "react-select";
+import type { GroupBase, MultiValue, SingleValue, StylesConfig } from "react-select";
 
 export interface AutoCompleteSelectOption {
   value: string;
@@ -19,4 +19,9 @@ export interface MultiSelectProps {
   onChange: (value: MultiValue<AutoCompleteSelectOption>) => void;
   placeholder?: string;
   isDisabled?: boolean;
+    styles?: StylesConfig<
+    AutoCompleteSelectOption,
+    true,
+    GroupBase<AutoCompleteSelectOption>
+  >;
 }
