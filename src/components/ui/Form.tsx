@@ -353,9 +353,9 @@ export function MultiSelect({
       onChange={onChange}
       placeholder={placeholder}
       isDisabled={isDisabled}
-       styles={{
+      styles={{
         ...customStyles,
-        ...externalStyles, 
+        ...externalStyles,
       }}
       isClearable
       isMulti={true}

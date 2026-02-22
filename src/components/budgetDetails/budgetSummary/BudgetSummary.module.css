@@ -1,0 +1,211 @@
+.container {
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: rgba(0, 0, 0, 0.12) 1px 1px 10px;
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+.formRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 260px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ff6a00;
+}
+
+
+.input {
+    width: 100%;
+    max-width: 260px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+
+.discountContent {
+    gap: 12px;
+    display: flex;
+    align-items: center;
+}
+
+
+.subtotalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 16px;
+    margin-top: 10px;
+}
+
+.subtotalLabel {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.subtotalValue {
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+}
+
+.totalLabel {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.totalValue {
+    background: #0b5d1e;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+.actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.actions button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+.saveButton {
+    background: #0b5d1e;
+    color: white;
+}
+
+.buyListButton {
+    background: #9ca3af;
+    color: white;
+}
+
+.pdfButton {
+    background: #ff2d0a;
+    color: white;
+}
+
+.botButton {
+    background: #0f3ea8;
+    color: white;
+}
+
+
+@media (max-width: 1024px) {
+    .input {
+        max-width: 220px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .container {
+        padding: 18px;
+    }
+
+    .formRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .field {
+        min-width: 100%;
+    }
+
+    .discountContent {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .input {
+        max-width: 100%;
+    }
+
+    .subtotalRow,
+    .totalRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .subtotalValue,
+    .totalValue {
+        width: 100%;
+        text-align: center;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions button {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .header h2 {
+        font-size: 16px;
+    }
+
+    .subtotalValue,
+    .totalValue {
+        font-size: 18px;
+    }
+}
