@@ -10,6 +10,7 @@ import SecureComponent from "../../../security/SecureComponent";
 import { FileInput } from "../../../ui/Form";
 import FileUploadForm from "../../fileUploadForm/FileUploadForm";
 import styles from "./ProjectFiles.module.css";
+import axios from "axios";
 
 const fileService = new FilesService();
 
@@ -19,7 +20,6 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isHomologation, setIsHomologation] = useState(false);
     const [fileName, setFileName] = useState("");
-
 
     useEffect(() => {
         const loadFiles = async () => {
@@ -35,6 +35,36 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
 
     async function handleDownload(fileId: number) {
         await fileService.downloadFile(projectId, fileId);
+    }
+
+    function handleDelete(fileId: number) {
+        try {
+            Swal.fire({
+                icon: "question",
+                title: "Deseja mesmo deletar este arquivo?",
+                text: "O arquivo será excluído permanentemente.",
+                cancelButtonColor: "#1e5128",
+                showCancelButton: true,
+                showConfirmButton: true,
+                cancelButtonText: "Cancelar",
+                confirmButtonText: "Deletar",
+                confirmButtonColor: "#d22828"
+            })
+            .then(async (e) => {
+                if(e.isConfirmed) {
+                    await fileService.deleteFile(projectId, fileId);
+                }
+            });
+        } catch(e) {
+            if(axios.isAxiosError(e)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Erro ao deletar arquivo",
+                    text: "Se persistir consulte o suporte.",
+                    confirmButtonColor: "#1e5128"
+                })
+            }
+        }
     }
 
     async function handleUpload() {

@@ -37,26 +37,29 @@ export default class FilesService {
   }
 
 
-async uploadFile(
-  projectId: number,
-  file: File,
-  isHomologation: boolean
-): Promise<void> {
+  async uploadFile(
+    projectId: number,
+    file: File,
+    isHomologation: boolean
+  ): Promise<void> {
 
-  const formData = new FormData();
+    const formData = new FormData();
 
-  formData.append("files", file);
-  formData.append("isHomologation", String(isHomologation));
+    formData.append("files", file);
+    formData.append("isHomologation", String(isHomologation));
 
-  await api.post(
-    `/projects/${projectId}/files`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
-}
+    await api.post(
+      `/projects/${projectId}/files`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  }
 
+  async deleteFile(projectId: number, fileId: number): Promise<void> {
+    const deleteRequest = await api.delete(`/projects/${projectId}/files/${fileId}`);
+  }
 };
