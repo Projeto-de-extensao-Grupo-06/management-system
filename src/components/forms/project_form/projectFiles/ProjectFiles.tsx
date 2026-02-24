@@ -11,6 +11,7 @@ import { FileInput } from "../../../ui/Form";
 import FileUploadForm from "../../fileUploadForm/FileUploadForm";
 import styles from "./ProjectFiles.module.css";
 import axios from "axios";
+import { file } from "zod";
 
 const fileService = new FilesService();
 
@@ -21,17 +22,20 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
     const [isHomologation, setIsHomologation] = useState(false);
     const [fileName, setFileName] = useState("");
 
+
+    const loadFiles = async () => {
+        const files = await fileService.listProjectFiles(projectId);
+        
+        if (files) {
+            setFiles(files);
+        } else {
+            setFiles([]);
+        }
+    };
+
     useEffect(() => {
-        const loadFiles = async () => {
-            const files = await fileService.listProjectFiles(projectId);
-
-            if (files) {
-                setFiles(files);
-            }
-        };
-
         loadFiles();
-    }, [modalOpen]);
+    }, []);
 
     async function handleDownload(fileId: number) {
         await fileService.downloadFile(projectId, fileId);
@@ -54,7 +58,10 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
                 if(e.isConfirmed) {
                     await fileService.deleteFile(projectId, fileId);
                 }
-            });
+            })
+            .finally(() => {
+                loadFiles();
+            })
         } catch(e) {
             if(axios.isAxiosError(e)) {
                 Swal.fire({
@@ -104,6 +111,7 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
             setSelectedFile(null);
             setFileName("");
             setIsHomologation(false);
+            loadFiles();
 
         } catch (error) {
             console.error(error);
@@ -129,7 +137,7 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
             <div className={styles.form}>
                 <div className={styles.inputContainer}>
                     {files.map((file, key) => {
-                        return <FileInput key={key} fileName={file.originalFilename ?? ""} onDelete={() => { }} onDownload={() => handleDownload(file.id)} />
+                        return <FileInput key={key} fileName={file.originalFilename ?? ""} onDelete={() => handleDelete(file.id)} onDownload={() => handleDownload(file.id)} />
                     })}
 
                     <SecureComponent permissions={["PROJECT_UPDATE"]}>
