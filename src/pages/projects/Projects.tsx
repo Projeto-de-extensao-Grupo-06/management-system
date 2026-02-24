@@ -9,12 +9,15 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useNavigate } from 'react-router';
 import FilterBar from '../../components/layout/FilterBar';
 import PageHeader from '../../components/layout/PageHeader';
 import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
 import { Button, SearchInput } from '../../components/ui/Form';
 
+import { MultiSelect } from '../../components/ui/Form';
+import usePermissions from "../../hooks/usePermissions";
 import type Client from '../../interfaces/types/Client';
 import type ProjectSummary from '../../interfaces/types/ProjectSummary';
 import ClientsService from '../../services/ClientsService';
@@ -28,9 +31,6 @@ import styles from '../clients/Clients.module.css';
 import CreateProjectModal from '../projects/components/CreateProjectModal'
 import ProjectCard from '../projects/components/ProjectCard';
 import Projectstyles from '../projects/Projects.module.css';
-import usePermissions from "../../hooks/usePermissions";
-import { MultiSelect } from '../../components/ui/Form';
-import { useNavigate } from 'react-router';
 
 export default function Projects() {
   const projectsService = useMemo(() => new ProjectsService(), []);

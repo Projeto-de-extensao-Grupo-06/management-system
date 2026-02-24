@@ -5,9 +5,9 @@ import {
     faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
+import KpiCard from "../../components/ui/KpiCard";
 import type Kpis from "../../interfaces/types/Kpis";
 import AnalysisService from "../../services/AnalysisService";
-import KpiCard from "../../components/ui/KpiCard";
 import { getChannelLabel } from "../../utils/mappers/StatusMapper";
 
 interface KpiBoardProps {

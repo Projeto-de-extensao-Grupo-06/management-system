@@ -1,10 +1,10 @@
+import { faPaperclip, faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router';
+import type ProjectSummary from '../../../interfaces/types/ProjectSummary';
 import styles from '../ProjectCard.module.css';
 import ProjectStatusBadge from './ProjectStatusBadge';
-import type ProjectSummary from '../../../interfaces/types/ProjectSummary';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faCommentDots } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router';
 
 interface Props {
   project: ProjectSummary;

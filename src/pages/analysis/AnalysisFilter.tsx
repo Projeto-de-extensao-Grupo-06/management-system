@@ -1,7 +1,7 @@
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Input } from "../../components/ui/Form";
+import { Input, FilterButton } from "../../components/ui/Form";
 import styles from "./Analysis.module.css";
 
 interface AnalysisFilterProps {
@@ -45,7 +45,12 @@ export default function AnalysisFilter({ onDateRangeChange }: AnalysisFilterProp
     };
 
     useEffect(() => {
-        applyFilter("Este Mes");
+        const today = new Date();
+        const start = new Date(today.getFullYear(), today.getMonth(), 1);
+        const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const startStr = start.toISOString().split("T")[0];
+        const endStr = end.toISOString().split("T")[0];
+        onDateRangeChange(startStr, endStr);
     }, []);
 
     const handleCustomDateChange = (start: string, end: string) => {
@@ -56,24 +61,13 @@ export default function AnalysisFilter({ onDateRangeChange }: AnalysisFilterProp
         }
     };
 
-    const FilterButton = ({ label, value }: { label: string; value: string }) => {
-        const isActive = selectedFilter === value;
-        return (
-            <button
-                className={`${styles.filter_button} ${isActive ? styles.active : ""}`}
-                onClick={() => applyFilter(value)}
-            >
-                {label}
-            </button>
-        );
-    };
-
+    
     return (
         <div className={styles.filter_wrapper}>
             <div className={styles.filter_buttons}>
-                <FilterButton label="Este Mês" value="Este Mes" />
-                <FilterButton label="Este Trimestre" value="Este Trimestre" />
-                <FilterButton label="Este Ano" value="Este Ano" />
+                <FilterButton text="Este Mês" value="Este Mes" selected={selectedFilter} onClick={applyFilter} className={styles.filter_button} activeClassName={styles.active} />
+                <FilterButton text="Este Trimestre" value="Este Trimestre" selected={selectedFilter} onClick={applyFilter} className={styles.filter_button} activeClassName={styles.active} />
+                <FilterButton text="Este Ano" value="Este Ano" selected={selectedFilter} onClick={applyFilter} className={styles.filter_button} activeClassName={styles.active} />
 
                 <button
                     className={`${styles.filter_button} ${selectedFilter === "Selecionar Período" ? styles.active : ""}`}

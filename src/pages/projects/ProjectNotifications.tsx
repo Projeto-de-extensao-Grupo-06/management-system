@@ -2,15 +2,15 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
+import ConfirmationModal from '../../components/dialogs/modal/Modal';
+import ProjectNotificationFilterDialog from '../../components/dialogs/projects/ProjectNotificationFilterDialog';
 import FilterBar from '../../components/layout/FilterBar';
 import PageHeader from '../../components/layout/PageHeader';
+import ProjectNotificationTable from '../../components/tables/projects/ProjectNotificationTable';
 import { SearchInput, Select, SelectOption, SimpleButton } from '../../components/ui/Form';
 import type { ProjectNotification } from '../../interfaces/types/ProjectNotification';
 import ProjectsService from '../../services/ProjectsService';
-import ProjectNotificationFilterDialog from '../../components/dialogs/projects/ProjectNotificationFilterDialog';
-import ProjectNotificationTable from '../../components/tables/projects/ProjectNotificationTable';
 import styles from './ProjectNotifications.module.css';
-import ConfirmationModal from '../../components/dialogs/modal/Modal';
 
 export default function ProjectNotifications() {
     const navigate = useNavigate();
@@ -29,7 +29,6 @@ export default function ProjectNotifications() {
     const projectsService = useMemo(() => new ProjectsService(), []);
 
     useEffect(() => {
-        setLoading(true);
         const formattedStartDate = startDate ? `${startDate}T00:00:00` : undefined;
         const formattedEndDate = endDate ? `${endDate}T23:59:59` : undefined;
 

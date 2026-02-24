@@ -7,9 +7,9 @@ import {
     faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Modal from '../modal/Modal';
-import { Button } from '../../ui/Form';
 import type CalendarEvent from '../../../interfaces/types/CalendarEvent';
+import { Button } from '../../ui/Form';
+import Modal from '../modal/Modal';
 import styles from './ScheduleDetailsModal.module.css';
 
 interface ScheduleDetailsModalProps {

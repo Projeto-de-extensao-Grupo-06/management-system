@@ -1,16 +1,16 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import styles from "./Schedule.module.css";
-import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
-import Calendar from "../../components/schedule/Calendar";
 import ScheduleDetailsModal from "../../components/dialogs/schedule/ScheduleDetailsModal";
 import ScheduleFormModal from "../../components/dialogs/schedule/ScheduleFormModal";
+import Calendar from "../../components/schedule/Calendar";
+import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
+import SecureComponent from "../../components/security/SecureComponent";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
 import ScheduleService from "../../services/ScheduleService";
-import SecureComponent from "../../components/security/SecureComponent";
+import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
 
@@ -25,14 +25,15 @@ export default function Schedule() {
 
     const anyModalOpen = isDetailsOpen || isCreateOpen || isEditOpen;
 
-    useEffect(() => {
-        fetchEvents();
-    }, []);
-
-    const fetchEvents = async () => {
+    async function fetchEvents() {
         const data = await service.getEvents();
         setEvents(data);
-    };
+    }
+
+    useEffect(() => {
+        const t = setTimeout(() => { fetchEvents(); }, 0);
+        return () => clearTimeout(t);
+    }, []);
 
     const handleOpenCreate = () => {
         setCreateDefaults(scheduleDefaultValues());

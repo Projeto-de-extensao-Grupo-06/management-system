@@ -4,8 +4,8 @@ import {
     faWrench,
     faNoteSticky,
 } from "@fortawesome/free-solid-svg-icons";
-import KpiCard from "../ui/KpiCard";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
+import KpiCard from "../ui/KpiCard";
 
 interface ScheduleKpiBoardProps {
     events: CalendarEvent[];

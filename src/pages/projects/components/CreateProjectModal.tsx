@@ -1,27 +1,25 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
-import styles from '../Projects.module.css';
-
-import { Button, Input } from '../../../components/ui/Form';
-
-import ClientsService from '../../../services/ClientsService';
-import ProjectsService from '../../../services/ProjectsService';
-import AddressService from '../../../services/AddressService';
-
-import type Client from '../../../interfaces/types/Client';
-import type { Address } from '../../../interfaces/types/Client';
-
-import { ProjectStatus } from '../../../interfaces/enum/ProjectStatus';
-import type { ProjectStatusType } from '../../../interfaces/enum/ProjectStatus';
-import { projectStatusLabel } from '../../../utils/mappers/projectStatusLabel';
 
 import { useForm, FormProvider } from 'react-hook-form';
-import AddressForm from '../../../components/forms/client_form/partials/AddressForm';
-import ClientForm from '../../../components/forms/client_form/ClientForm';
-import type { ClientFormRef } from '../../../interfaces/properties/FormProps';
-
 import Modal from '../../../components/dialogs/modal/Modal';
-import { formatAddress } from '../../../utils/AddressUtils';
+import ClientForm from '../../../components/forms/client_form/ClientForm';
+import AddressForm from '../../../components/forms/client_form/partials/AddressForm';
+import { Button, Input } from '../../../components/ui/Form';
+
 import usePermissions from "../../../hooks/usePermissions";
+import { ProjectStatus } from '../../../interfaces/enum/ProjectStatus';
+import type { ProjectStatusType } from '../../../interfaces/enum/ProjectStatus';
+import type { ClientFormRef } from '../../../interfaces/properties/FormProps';
+import type Client from '../../../interfaces/types/Client';
+import type { Address } from '../../../interfaces/types/Client';
+import AddressService from '../../../services/AddressService';
+import ClientsService from '../../../services/ClientsService';
+import ProjectsService from '../../../services/ProjectsService';
+
+import { formatAddress } from '../../../utils/AddressUtils';
+import { projectStatusLabel } from '../../../utils/mappers/projectStatusLabel';
+
+import styles from '../Projects.module.css';
 
 interface Props {
   open: boolean;
@@ -87,12 +85,11 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
   useEffect(() => {
 
     if (isSelectingClient) {
-      setIsSelectingClient(false);
       return;
     }
 
     if (clientSearch.length < 2) {
-      setClients([]);
+      setTimeout(() => setClients([]), 0);
       return;
     }
 
@@ -110,12 +107,11 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
   useEffect(() => {
 
     if (isSelectingResponsible) {
-      setIsSelectingResponsible(false);
       return;
     }
 
     if (responsibleSearch.length < 2) {
-      setResponsibles([]);
+      setTimeout(() => setResponsibles([]), 0);
       return;
     }
 
@@ -350,6 +346,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                       setClients([]);
 
                       setErrors(prev => ({ ...prev, client: '' }));
+                      setTimeout(() => setIsSelectingClient(false), 0);
                     }}
                   >
                     {client.firstName} {client.lastName}
@@ -439,6 +436,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                       setResponsibles([]);
 
                       setErrors(prev => ({ ...prev, responsible: '' }));
+                      setTimeout(() => setIsSelectingResponsible(false), 0);
                     }}
                   >
                     {responsible.firstName} {responsible.lastName}

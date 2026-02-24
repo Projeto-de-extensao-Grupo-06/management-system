@@ -1,5 +1,5 @@
-import styles from '../ProjectStatusBadge.module.css';
 import { projectStatusLabel } from '../../../utils/mappers/projectStatusLabel';
+import styles from '../ProjectStatusBadge.module.css';
 
 interface Props {
   status: string;
