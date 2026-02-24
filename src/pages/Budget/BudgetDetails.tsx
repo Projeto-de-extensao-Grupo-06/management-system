@@ -4,8 +4,11 @@ import MaterialList from "../../components/budgetDetails/materialListSection/Mat
 import PageHeader from "../../components/layout/PageHeader";
 import type { Budget } from "../../interfaces/types/Budget";
 import BudgetService from "../../services/BudgetService";
+import BudgetParameters from "../../components/budgetDetails/budgetParameters/BudgetParameters";
 
 const budgetService = new BudgetService();
+
+import styles from "./BudgetDetails.module.css";
 
 export default function BudgetDetails() {
     const [budget, setBudget] = useState<Budget | null>(null);
@@ -31,8 +34,19 @@ export default function BudgetDetails() {
     return (
         <>
             <PageHeader title="Gerenciar Orçamento" />
-            <MaterialList materials={budget?.materials ?? []} />
-            <BudgetSummary budget={budget} />
+
+            <div className={styles.layout}>
+                
+                <div className={styles.left}>
+                    <MaterialList materials={budget?.materials ?? []} />
+                    <BudgetSummary budget={budget} />
+                </div>
+
+                <div className={styles.right}>
+                    <BudgetParameters />
+                </div>
+
+            </div>
         </>
     );
 }
