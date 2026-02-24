@@ -12,6 +12,7 @@ import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
+import Config from "./pages/config/Config";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import NotFound from "./pages/shared/NotFound";
 import Projects from "./pages/projects/Projects";
@@ -67,6 +68,8 @@ function App() {
               path="/projetos/notificacoes"
               element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}
             />
+
+            <Route path="/configuracoes" element={<Config />} />
 
           </Route>
         </Route>
