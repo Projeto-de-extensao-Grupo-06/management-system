@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router';
 import ProjectCard from '../../components/cards/ProjectCard';
 import CreateProjectModal from '../../components/dialogs/projects/CreateProjectModal';
 import FilterBar from '../../components/layout/FilterBar';
-import PageHeader from '../../components/layout/PageHeader';
+import PageLayout from '../../components/layout/PageLayout';
 import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
 import { Button, SearchInput } from '../../components/ui/Form';
@@ -194,21 +194,15 @@ export default function Projects() {
 
 
   return (
-    <div className={Projectstyles.container}>
-      {globalAlert && (
-        <div className={styles.alertWrapper}>
-          <Alert message={globalAlert.message} type={globalAlert.type} />
-        </div>
-      )}
-
-      <PageHeader
-        title="Projetos"
-        count={projects.length}
-        titleRight={
+    <PageLayout
+      title="Projetos"
+      titleAccessory={
+        <>
+          <span className={styles.count}>({projects.length})</span>
           <div
             className={Projectstyles.titleNotification}
             onClick={() => navigate('/projetos/notificacoes')}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', marginLeft: '1rem' }}
           >
             <FontAwesomeIcon icon={faBell as IconProp} />
             {notificationCount > 0 && (
@@ -217,33 +211,34 @@ export default function Projects() {
               </span>
             )}
           </div>
-        }
-      >
-        <div className={Projectstyles.headerActions}>
-          {userPermissions.includes("PROJECT_WRITE") && (
-            <Button
-              icon={<FontAwesomeIcon icon={faPlus} />}
-              text="Novo Projeto"
-              ariaLabel="Criar Projeto"
-              onClick={() => setIsCreateModalOpen(true)}
-              width="fit-content"
-            />
-          )}
-
+        </>
+      }
+      rightActions={
+        userPermissions.includes("PROJECT_WRITE") ? (
+          <Button
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            text="Novo Projeto"
+            ariaLabel="Criar Projeto"
+            onClick={() => setIsCreateModalOpen(true)}
+            width="fit-content"
+          />
+        ) : undefined
+      }
+    >
+      {globalAlert && (
+        <div className={styles.alertWrapper}>
+          <Alert message={globalAlert.message} type={globalAlert.type} />
         </div>
+      )}
 
-        <CreateProjectModal
-          open={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onSuccess={() => {
-            fetchProjects();
-            setIsCreateModalOpen(false);
-          }}
-        />
-      </PageHeader>
-
-
-
+      <CreateProjectModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          fetchProjects();
+          setIsCreateModalOpen(false);
+        }}
+      />
       <div className={Projectstyles.kpis}>
         {projectKpis.map((kpi, index) => (
           <div key={index} className={Projectstyles.kpi_container}>
@@ -373,7 +368,7 @@ export default function Projects() {
         totalPages={totalPages}
         onPageChange={setPage}
       />
-    </div >
+    </PageLayout>
 
   );
 

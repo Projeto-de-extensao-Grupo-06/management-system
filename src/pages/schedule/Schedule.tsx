@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
 import ScheduleDetailsModal from "../../components/dialogs/schedule/ScheduleDetailsModal";
 import ScheduleFormModal from "../../components/dialogs/schedule/ScheduleFormModal";
+import PageLayout from "../../components/layout/PageLayout";
 import Calendar from "../../components/schedule/Calendar";
 import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
 import SecureComponent from "../../components/security/SecureComponent";
@@ -90,16 +91,17 @@ export default function Schedule() {
         : undefined;
 
     return (
-        <div className={styles.schedule_container}>
-            <SecureComponent permissions={["SCHEDULE_WRITE"]}>
-                <div className={styles.title_container}>
-                    <h1>Agenda de visitas</h1>
+        <PageLayout
+            title="Agenda de visitas"
+            rightActions={
+                <SecureComponent permissions={["SCHEDULE_WRITE"]}>
                     <button className={styles.schedule_btn} onClick={handleOpenCreate}>
                         <FontAwesomeIcon icon={faPlus} />
                         Agendar
                     </button>
-                </div>
-            </SecureComponent>
+                </SecureComponent>
+            }
+        >
 
             <div className={styles.kpis}>
                 <ScheduleKpiBoard events={events} />
@@ -138,6 +140,6 @@ export default function Schedule() {
                 defaultValues={editDefaults}
                 mode="edit"
             />
-        </div>
+        </PageLayout>
     );
 }

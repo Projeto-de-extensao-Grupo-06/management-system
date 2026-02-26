@@ -76,9 +76,7 @@
   width: 100%;
 }
 
-.container {
-  padding: 0rem 2rem 2rem 2rem;
-}
+
 
 .modalHeader {
   display: flex;
@@ -181,9 +179,7 @@ select.input {
     gap: 1.5rem;
   }
 
-  .container {
-    padding: 0rem 1.5rem 2rem 1.5rem;
-  }
+
 }
 
 @media (max-width: 768px) {
@@ -198,9 +194,7 @@ select.input {
     padding: 20px;
   }
 
-  .container {
-    padding: 0rem 1rem 1.5rem 1rem;
-  }
+
 
   .titleNotification {
     margin-left: 4px;
@@ -220,20 +214,20 @@ select.input {
     border-radius: 12px;
   }
 
-  .container {
-    padding: 0.5rem 1rem 1.5rem 1rem;
-  }
+
 
   .titleNotification {
     margin-left: 2px;
   }
-  
+
 }
+
 .greenTitle {
   color: #2e7d32;
   cursor: pointer;
   margin: 0;
 }
+
 .greenLink {
   color: #16a34a;
   cursor: pointer;
@@ -243,6 +237,7 @@ select.input {
 .greenLink:hover {
   text-decoration: underline;
 }
+
 .editClient {
   color: #22c55e;
   cursor: pointer;
@@ -250,6 +245,7 @@ select.input {
   display: inline-block;
   margin-top: 8px;
 }
+
 .errorText {
   color: #d32f2f;
   font-size: 13px;
@@ -383,13 +379,13 @@ h1 {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
     margin-top: 0.9rem;
-    margin-bottom: 2.4rem; 
+    margin-bottom: 2.4rem;
   }
 
   .kpi_container {
     padding: 0.9rem;
     border-radius: 8px;
-    min-height: 110px; 
+    min-height: 110px;
   }
 
   .kpi_content {
@@ -421,7 +417,7 @@ h1 {
     width: 100%;
     max-width: none;
     overflow: visible;
-    margin-bottom: 1.5rem; 
+    margin-bottom: 1.5rem;
   }
 
   .kpi_container {
@@ -449,7 +445,7 @@ h1 {
     margin: 0;
   }
 
-  
+
   .kpi_content b {
     display: -webkit-box;
     -webkit-line-clamp: 3;

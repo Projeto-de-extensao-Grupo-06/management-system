@@ -253,8 +253,8 @@
 }
 
 .file-input-wrapper input {
-  flex: 1;                 /* ocupa o espaço disponível */
-  min-width: 0;            /* ESSENCIAL para não quebrar flex */
+  flex: 1;
+  min-width: 0; 
   height: 48px;
   padding: 0 16px;
 
@@ -267,7 +267,7 @@
   outline: none;
 
   overflow: hidden;
-  text-overflow: ellipsis; /* corta nome grande */
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -276,7 +276,8 @@
 }
 
 .btn {
-  flex-shrink: 0;          /* botão nunca encolhe */
+  flex-shrink: 0;
+  /* botão nunca encolhe */
   width: 48px;
   height: 48px;
 
@@ -309,3 +310,20 @@
   background-color: #dc2626;
 }
 
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.back-button:hover {
+  color: var(--color-primary);
+}

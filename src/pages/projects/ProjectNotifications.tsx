@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import ConfirmationModal from '../../components/dialogs/modal/Modal';
 import ProjectNotificationFilterDialog from '../../components/dialogs/projects/ProjectNotificationFilterDialog';
 import FilterBar from '../../components/layout/FilterBar';
-import PageHeader from '../../components/layout/PageHeader';
+import PageLayout from '../../components/layout/PageLayout';
 import ProjectNotificationTable from '../../components/tables/projects/ProjectNotificationTable';
 import { SearchInput, Select, SelectOption, SimpleButton } from '../../components/ui/Form';
 import type { ProjectNotification } from '../../interfaces/types/ProjectNotification';
@@ -104,8 +104,11 @@ export default function ProjectNotifications() {
     );
 
     return (
-        <div className={styles.container}>
-            <PageHeader title="Notificações" count={filteredNotifications.length} />
+        <PageLayout
+            title="Notificações"
+            titleAccessory={<span className={styles.count}>({filteredNotifications.length})</span>}
+            backButton={true}
+        >
 
             <FilterBar>
                 <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
@@ -159,6 +162,6 @@ export default function ProjectNotifications() {
             >
                 <p>Tem certeza que deseja dispensar esta notificação? O projeto será arquivado.</p>
             </ConfirmationModal>
-        </div>
+        </PageLayout>
     );
 }

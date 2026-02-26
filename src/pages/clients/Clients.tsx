@@ -6,7 +6,7 @@ import ClientFilterModal from '../../components/dialogs/client_filter_dialog/Cli
 import Modal from '../../components/dialogs/modal/Modal';
 import ClientForm from '../../components/forms/client_form/ClientForm';
 import FilterBar from '../../components/layout/FilterBar';
-import PageHeader from '../../components/layout/PageHeader';
+import PageLayout from '../../components/layout/PageLayout';
 import SecureComponent from '../../components/security/SecureComponent';
 import ClientTable from '../../components/tables/client_table/ClientTable';
 import { Pagination } from '../../components/tables/pagination/Pagination';
@@ -15,6 +15,7 @@ import { Button, SearchInput, Select, SelectOption, SimpleButton } from '../../c
 import useClients from '../../hooks/useClients';
 import type { ModalRef } from '../../interfaces/properties/DialogProps';
 import type { ClientFormRef } from '../../interfaces/properties/FormProps';
+import type { ClientSchemaType } from '../../schemas/clientSchema';
 import styles from "./Clients.module.css";
 
 export default function Clients() {
@@ -64,7 +65,7 @@ export default function Clients() {
     formRef.current?.submit();
   }
 
-  const onFormSubmit = (data: any) => {
+  const onFormSubmit = (data: ClientSchemaType) => {
     setModalMessage(null);
     setGlobalAlert(null);
 
@@ -133,7 +134,21 @@ export default function Clients() {
   );
 
   return (
-    <div className={styles.container}>
+    <PageLayout
+      title="Clientes"
+      titleAccessory={<span className={styles.count}>({totalElements})</span>}
+      rightActions={
+        <SecureComponent permissions={["CLIENT_WRITE"]}>
+          <Button
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            text="Cadastrar Cliente"
+            ariaLabel="Cadastrar Cliente"
+            onClick={handleAddClient}
+            width="fit-content"
+          />
+        </SecureComponent>
+      }
+    >
       {globalAlert && !isCreateModalOpen && (
         <div className={styles.alertWrapper}>
           <Alert message={globalAlert.message} type={globalAlert.type} />
@@ -181,18 +196,6 @@ export default function Clients() {
         onClear={handleClearFilters}
       />
 
-      <PageHeader title="Clientes" count={totalElements}>
-        <SecureComponent permissions={["CLIENT_WRITE"]}>
-          <Button
-            icon={<FontAwesomeIcon icon={faPlus} />}
-            text="Cadastrar Cliente"
-            ariaLabel="Cadastrar Cliente"
-            onClick={handleAddClient}
-            width="fit-content"
-          />
-        </SecureComponent>
-      </PageHeader>
-
       <FilterBar>
         <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
           <SimpleButton
@@ -231,6 +234,6 @@ export default function Clients() {
         totalPages={totalPages}
         onPageChange={setPage}
       />
-    </div>
+    </PageLayout>
   );
 }

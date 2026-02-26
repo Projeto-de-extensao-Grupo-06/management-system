@@ -7,23 +7,6 @@ h1 {
   margin: 0;
 }
 
-.analysis_container {
-  width: 100%;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.title_container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
 .filter_wrapper {
   display: flex;
   flex-direction: column;
