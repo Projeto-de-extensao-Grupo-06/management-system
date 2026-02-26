@@ -2,7 +2,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-import ConfirmationModal from '../../components/dialogs/modal/Modal';
+import Swal from 'sweetalert2';
 import ProjectNotificationFilterDialog from '../../components/dialogs/projects/ProjectNotificationFilterDialog';
 import FilterBar from '../../components/layout/FilterBar';
 import PageLayout from '../../components/layout/PageLayout';
@@ -22,9 +22,6 @@ export default function ProjectNotifications() {
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [projectToDelete, setProjectToDelete] = useState<number | null>(null);
 
     const projectsService = useMemo(() => new ProjectsService(), []);
 
@@ -57,22 +54,38 @@ export default function ProjectNotifications() {
     };
 
     const handleDismiss = (id: number) => {
-        setProjectToDelete(id);
-        setIsDeleteModalOpen(true);
-    };
-
-    const handleConfirmDismiss = async () => {
-        if (!projectToDelete) return;
-
-        try {
-            await projectsService.deleteProject(projectToDelete);
-            setFilteredNotifications(prev => prev.filter(n => n.projectId !== projectToDelete));
-            setIsDeleteModalOpen(false);
-            setProjectToDelete(null);
-        } catch (error) {
-            console.error('Error dismissing notification:', error);
-            alert('Erro ao dispensar notificação.');
-        }
+        Swal.fire({
+            title: 'Confirmar Exclusão',
+            text: 'Tem certeza que deseja dispensar esta notificação? O projeto será arquivado.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#ccc',
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                projectsService.deleteProject(id)
+                    .then(() => {
+                        setFilteredNotifications(prev => prev.filter(n => n.projectId !== id));
+                        Swal.fire({
+                            title: 'Arquivado!',
+                            text: 'A notificação foi dispensada com sucesso.',
+                            icon: 'success',
+                            confirmButtonColor: 'var(--color-primary)'
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Error dismissing notification:', error);
+                        Swal.fire({
+                            title: 'Erro!',
+                            text: 'Erro ao dispensar operação.',
+                            icon: 'error',
+                            confirmButtonColor: 'var(--color-primary)'
+                        });
+                    });
+            }
+        });
     };
 
     const handleApplyFilters = (start: string, end: string) => {
@@ -84,24 +97,6 @@ export default function ProjectNotifications() {
         setStartDate('');
         setEndDate('');
     };
-
-    const deleteModalFooter = (
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', width: '100%' }}>
-            <SimpleButton
-                text="Cancelar"
-                ariaLabel="Cancelar exclusão"
-                onClick={() => setIsDeleteModalOpen(false)}
-                width="fit-content"
-            />
-            <SimpleButton
-                text="Confirmar"
-                ariaLabel="Confirmar exclusão"
-                onClick={handleConfirmDismiss}
-                width="fit-content"
-                style={{ backgroundColor: '#ef4444', color: 'white', border: 'none' }}
-            />
-        </div>
-    );
 
     return (
         <PageLayout
@@ -152,16 +147,6 @@ export default function ProjectNotifications() {
                 onApply={handleApplyFilters}
                 onClear={handleClearFilters}
             />
-
-            <ConfirmationModal
-                isOpen={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
-                title="Confirmar Exclusão"
-                footer={deleteModalFooter}
-                maxWidth="500px"
-            >
-                <p>Tem certeza que deseja dispensar esta notificação? O projeto será arquivado.</p>
-            </ConfirmationModal>
         </PageLayout>
     );
 }

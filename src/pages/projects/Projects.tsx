@@ -19,6 +19,7 @@ import { Alert } from '../../components/ui/Alert';
 import { Button, SearchInput } from '../../components/ui/Form';
 
 import { MultiSelect } from '../../components/ui/Form';
+import KpiCard from '../../components/ui/KpiCard';
 import usePermissions from "../../hooks/usePermissions";
 import type Client from '../../interfaces/types/Client';
 import type ProjectSummary from '../../interfaces/types/ProjectSummary';
@@ -241,15 +242,12 @@ export default function Projects() {
       />
       <div className={Projectstyles.kpis}>
         {projectKpis.map((kpi, index) => (
-          <div key={index} className={Projectstyles.kpi_container}>
-            <div className={Projectstyles.kpi_content}>
-              <div className={Projectstyles.kpi_icon}>
-                <FontAwesomeIcon icon={kpi.icon} color="#fff" />
-              </div>
-              <b>{kpi.label}</b>
-            </div>
-            <p className={styles.kpi_value}>{kpi.value}</p>
-          </div>
+          <KpiCard
+            key={index}
+            title={kpi.label}
+            value={kpi.value}
+            icon={kpi.icon}
+          />
         ))}
       </div>
 
