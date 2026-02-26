@@ -1,0 +1,75 @@
+.badge {
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.new {
+    background-color: var(--color-status-new);
+    color: #fff;
+}
+
+.pre_budget {
+    background-color: var(--color-status-pre-budget);
+    color: #fff;
+}
+
+.client_awaiting_contact {
+    background-color: var(--color-status-client-awaiting-contact);
+    color: #000;
+}
+
+.awaiting_retry {
+    background-color: var(--color-status-awaiting-retry);
+    color: #000;
+}
+
+.retrying {
+    background-color: var(--color-status-retrying);
+    color: #fff;
+}
+
+.negotiation_failed {
+    background-color: var(--color-status-negotiation-failed);
+    color: #fff;
+}
+
+.scheduled_technical_visit {
+    background-color: var(--color-status-scheduled-technical-visit);
+    color: #fff;
+}
+
+.technical_visit_completed {
+    background-color: var(--color-status-technical-visit-completed);
+    color: #fff;
+}
+
+.final_budget {
+    background-color: var(--color-status-final-budget);
+    color: #fff;
+}
+
+.awaiting_materials {
+    background-color: var(--color-status-awaiting-materials);
+    color: #000;
+}
+
+.scheduled_installing_visit {
+    background-color: var(--color-status-scheduled-installing-visit);
+    color: #fff;
+}
+
+.installed {
+    background-color: var(--color-status-installed);
+    color: #fff;
+}
+
+.completed {
+    background-color: var(--color-status-completed);
+    color: #fff;
+}

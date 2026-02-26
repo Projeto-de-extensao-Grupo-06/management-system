@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router';
 import type ProjectSummary from '../../interfaces/types/ProjectSummary';
-import ProjectCard from '../../pages/projects/components/ProjectCard';
-import styles from '../../pages/clients/Clients.module.css';
+import styles from '../../pages/projects/Projects.module.css';
+import ProjectCard from '../cards/ProjectCard';
+
 
 interface ProjectGridProps {
     projects: ProjectSummary[];

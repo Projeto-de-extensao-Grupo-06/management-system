@@ -33,6 +33,32 @@ html {
   --color-warning-bg: #fffff0;
   --color-warning-border: #fefcbf;
 
+  --color-info: #3182ce;
+  --color-info-bg: #ebf8ff;
+  --color-info-border: #bee3f8;
+
+  --color-neutral: #718096;
+  --color-neutral-bg: #f7fafc;
+  --color-neutral-border: #e2e8f0;
+
+  --color-purple: #805ad5;
+  --color-purple-bg: #faf5ff;
+  --color-purple-border: #e9d8fd;
+
+  --color-status-new: #1565C0;
+  --color-status-pre-budget: #42A5F5;
+  --color-status-client-awaiting-contact: #FDD835;
+  --color-status-awaiting-retry: #BDBDBD;
+  --color-status-retrying: #FB8C00;
+  --color-status-negotiation-failed: #D32F2F;
+  --color-status-scheduled-technical-visit: #8E24AA;
+  --color-status-technical-visit-completed: #795548;
+  --color-status-final-budget: #0288D1;
+  --color-status-awaiting-materials: #FFB300;
+  --color-status-scheduled-installing-visit: #558B2F;
+  --color-status-installed: #43A047;
+  --color-status-completed: #1B5E20;
+
   --color-text: #374151;
   --color-text-dark: #111827;
   --color-text-light: #9ca3af;

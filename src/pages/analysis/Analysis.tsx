@@ -1,10 +1,10 @@
 import { useState } from "react";
-import styles from "./Analysis.module.css";
-import AnalysisFilter from "./AnalysisFilter";
 import AcquisitionChannelsGraph from "../../components/graphs/AcquisitionChannelsGraph";
 import CostProfitGraph from "../../components/graphs/CostProfitGraph";
 import ProjectStatusGraph from "../../components/graphs/ProjectsStatusGraph";
 import SalesFunnelGraph from "../../components/graphs/SalesFunnelGraph";
+import styles from "./Analysis.module.css";
+import AnalysisFilter from "./AnalysisFilter";
 import KpiBoard from "./KpiBoard";
 
 export default function Analysis() {

@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Select, SelectOption, Input, AutoCompleteSelect } from '../../ui/Form';
 import type { ScheduleSchemaType } from '../../../schemas/scheduleSchema';
 import { scheduleSchema } from '../../../schemas/scheduleSchema';
 import ProjectsService from '../../../services/ProjectsService';
+import { Select, SelectOption, Input, AutoCompleteSelect } from '../../ui/Form';
 import type { AutoCompleteSelectOption } from '../../ui/Form';
 import styles from './ScheduleEventForm.module.css';
 

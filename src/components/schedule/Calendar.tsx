@@ -1,10 +1,10 @@
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import ptBrLocale from "@fullcalendar/core/locales/pt-br";
 import type { EventClickArg } from "@fullcalendar/core";
+import ptBrLocale from "@fullcalendar/core/locales/pt-br";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import type { DateClickArg } from "@fullcalendar/interaction";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import EventPopover from "./EventPopover";
 import "./Calendar.css";

@@ -1,10 +1,12 @@
-import styles from '../ProjectCard.module.css';
-import ProjectStatusBadge from './ProjectStatusBadge';
-import type ProjectSummary from '../../../interfaces/types/ProjectSummary';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { useNavigate } from 'react-router';
+import type ProjectSummary from '../../interfaces/types/ProjectSummary';
+import { getProjectStatusLabel, getProjectStatusVariant } from '../../utils/mappers/StatusMapper';
+import Badge from '../ui/Badge';
+
+import styles from './ProjectCard.module.css';
 
 interface Props {
   project: ProjectSummary;
@@ -26,7 +28,9 @@ export default function ProjectCard({ project }: Props) {
           {project.projectTitle}
         </h3>
 
-        <ProjectStatusBadge status={project.status} />
+        <Badge variant={getProjectStatusVariant(project.status)}>
+          {getProjectStatusLabel(project.status)}
+        </Badge>
       </div>
 
       {/* BODY */}
@@ -53,8 +57,8 @@ export default function ProjectCard({ project }: Props) {
           {project.systemType === 'ON_GRID'
             ? 'On-Grid'
             : project.systemType === 'OFF_GRID'
-            ? 'Off-Grid'
-            : '-'}
+              ? 'Off-Grid'
+              : '-'}
         </div>
       </div>
 

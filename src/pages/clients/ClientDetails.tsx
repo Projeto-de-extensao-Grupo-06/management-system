@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import ClientForm from '../../components/forms/client_form/ClientForm';
+import ProjectGrid from '../../components/layout/ProjectGrid';
 import SecureComponent from '../../components/security/SecureComponent';
 import { Alert } from '../../components/ui/Alert';
 import { Button } from '../../components/ui/Form';
@@ -10,10 +11,9 @@ import useClients from '../../hooks/useClients';
 import type { ClientFormRef } from '../../interfaces/properties/FormProps';
 import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
+import type ProjectSummary from '../../interfaces/types/ProjectSummary';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientsService from '../../services/ClientsService';
-import type ProjectSummary from '../../interfaces/types/ProjectSummary';
-import ProjectGrid from '../../components/layout/ProjectGrid';
 import styles from './Clients.module.css';
 
 export default function ClientDetails() {

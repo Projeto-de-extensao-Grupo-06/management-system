@@ -8,6 +8,25 @@ interface AnalysisFilterProps {
     onDateRangeChange: (startDate: string, endDate: string) => void;
 }
 
+interface FilterButtonProps {
+    label: string;
+    value: string;
+    selectedFilter: string;
+    applyFilter: (filter: string) => void;
+}
+
+const FilterButton = ({ label, value, selectedFilter, applyFilter }: FilterButtonProps) => {
+    const isActive = selectedFilter === value;
+    return (
+        <button
+            className={`${styles.filter_button} ${isActive ? styles.active : ""}`}
+            onClick={() => applyFilter(value)}
+        >
+            {label}
+        </button>
+    );
+};
+
 export default function AnalysisFilter({ onDateRangeChange }: AnalysisFilterProps) {
     const [selectedFilter, setSelectedFilter] = useState("Este Mes");
     const [customStart, setCustomStart] = useState("");
@@ -45,7 +64,14 @@ export default function AnalysisFilter({ onDateRangeChange }: AnalysisFilterProp
     };
 
     useEffect(() => {
-        applyFilter("Este Mes");
+        const today = new Date();
+        const start = new Date(today.getFullYear(), today.getMonth(), 1);
+        const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        onDateRangeChange(
+            start.toISOString().split("T")[0],
+            end.toISOString().split("T")[0]
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleCustomDateChange = (start: string, end: string) => {
@@ -56,24 +82,12 @@ export default function AnalysisFilter({ onDateRangeChange }: AnalysisFilterProp
         }
     };
 
-    const FilterButton = ({ label, value }: { label: string; value: string }) => {
-        const isActive = selectedFilter === value;
-        return (
-            <button
-                className={`${styles.filter_button} ${isActive ? styles.active : ""}`}
-                onClick={() => applyFilter(value)}
-            >
-                {label}
-            </button>
-        );
-    };
-
     return (
         <div className={styles.filter_wrapper}>
             <div className={styles.filter_buttons}>
-                <FilterButton label="Este Mês" value="Este Mes" />
-                <FilterButton label="Este Trimestre" value="Este Trimestre" />
-                <FilterButton label="Este Ano" value="Este Ano" />
+                <FilterButton label="Este Mês" value="Este Mes" selectedFilter={selectedFilter} applyFilter={applyFilter} />
+                <FilterButton label="Este Trimestre" value="Este Trimestre" selectedFilter={selectedFilter} applyFilter={applyFilter} />
+                <FilterButton label="Este Ano" value="Este Ano" selectedFilter={selectedFilter} applyFilter={applyFilter} />
 
                 <button
                     className={`${styles.filter_button} ${selectedFilter === "Selecionar Período" ? styles.active : ""}`}
