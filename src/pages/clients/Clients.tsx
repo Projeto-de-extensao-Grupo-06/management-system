@@ -136,7 +136,7 @@ export default function Clients() {
   return (
     <PageLayout
       title="Clientes"
-      titleAccessory={<span className={styles.count}>({totalElements})</span>}
+      titleAccessory={<span className={styles.count}>({totalElements ? totalElements : 0})</span>}
       rightActions={
         <SecureComponent permissions={["CLIENT_WRITE"]}>
           <Button

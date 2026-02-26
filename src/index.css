@@ -85,6 +85,11 @@ html {
   --font-size-2xl: 24px;
   --font-size-3xl: 28px;
   --font-size-4xl: 32px;
+
+  --border-radius-sm: 0.25rem;
+  --border-radius-base: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --border-radius-full: 9999px;
 }
 
 body {

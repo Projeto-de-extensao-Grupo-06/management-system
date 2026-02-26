@@ -7,6 +7,7 @@ import PageLayout from "../../components/layout/PageLayout";
 import Calendar from "../../components/schedule/Calendar";
 import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
 import SecureComponent from "../../components/security/SecureComponent";
+import { Button } from "../../components/ui/Form";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
@@ -95,10 +96,12 @@ export default function Schedule() {
             title="Agenda de visitas"
             rightActions={
                 <SecureComponent permissions={["SCHEDULE_WRITE"]}>
-                    <button className={styles.schedule_btn} onClick={handleOpenCreate}>
-                        <FontAwesomeIcon icon={faPlus} />
-                        Agendar
-                    </button>
+                    <Button
+                        icon={<FontAwesomeIcon icon={faPlus} />}
+                        text="Agendar"
+                        onClick={handleOpenCreate}
+                        width="fit-content"
+                    />
                 </SecureComponent>
             }
         >
