@@ -199,7 +199,7 @@
 
 .content {
   margin-left: 70px;
-  padding: 40px;
+  padding: 15px 40px 40px;
   flex: 1;
   background: var(--color-background-input);
   min-height: 100vh;

@@ -7,8 +7,8 @@
 .pageHeader {
     display: flex;
     flex-direction: column;
-    padding: 1.875rem 0;
-    margin-bottom: 0.4rem;
+    padding: 1.25rem 0;
+    margin-bottom: 1rem;
 }
 
 .backButtonWrapper {
