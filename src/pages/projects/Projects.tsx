@@ -57,6 +57,13 @@ export default function Projects() {
   const [globalAlert, setGlobalAlert] =
     useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
+  const [kpiData, setKpiData] = useState({
+    upcomingDeadlines: 0,
+    awaitingContact: 0,
+    recentProjects: 0,
+    stagnantProjects: 0
+  });
+
 
   const fetchProjects = useCallback(() => {
     projectsService.getAllProjects(
@@ -129,66 +136,34 @@ export default function Projects() {
       .catch(() => {
         setNotificationCount(0);
       });
+
+    projectsService
+      .getProjectKpis()
+      .then(data => setKpiData(data))
+      .catch(console.error);
   }, [projectsService]);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const waitingContactCount = useMemo(() => {
-    return projects.filter(
-      project => project.status === 'CLIENT_AWAITING_CONTACT'
-    ).length;
-  }, [projects]);
-
-  const nearDeadlineCount = useMemo(() => {
-    const today = new Date();
-    const sevenDaysLater = new Date();
-    sevenDaysLater.setDate(today.getDate() + 7);
-
-    return projects.filter(project => {
-      if (!project.deadline) return false;
-
-      const deadlineDate = new Date(project.deadline);
-
-      return (
-        deadlineDate >= today &&
-        deadlineDate <= sevenDaysLater &&
-        project.status !== 'COMPLETED' &&
-        project.status !== 'NEGOTIATION_FAILED'
-      );
-    }).length;
-  }, [projects]);
-
-  const recentProjectsCount = useMemo(() => {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-    return projects.filter(project => {
-      if (!project.createdAt) return false;
-
-      const createdDate = new Date(project.createdAt);
-      return createdDate >= sevenDaysAgo;
-    }).length;
-  }, [projects]);
-
 
   const projectKpis = [
     {
       label: 'Próximos do Prazo',
-      value: nearDeadlineCount,
+      value: kpiData.upcomingDeadlines,
       icon: faClock,
     },
     {
       label: 'Projetos Estagnados',
-      value: 7,
+      value: kpiData.stagnantProjects,
       icon: faTriangleExclamation,
     },
     {
       label: 'Cliente Aguardando Contato',
-      value: waitingContactCount,
+      value: kpiData.awaitingContact,
       icon: faPhone,
     },
     {
       label: 'Projetos Recentes',
-      value: recentProjectsCount,
+      value: kpiData.recentProjects,
       icon: faPlus,
     },
   ];
@@ -240,132 +215,134 @@ export default function Projects() {
           setIsCreateModalOpen(false);
         }}
       />
-      <div className={Projectstyles.kpis}>
-        {projectKpis.map((kpi, index) => (
-          <KpiCard
-            key={index}
-            title={kpi.label}
-            value={kpi.value}
-            icon={kpi.icon}
-          />
-        ))}
-      </div>
-
-      <FilterBar>
-        <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <FontAwesomeIcon icon={faFilter} />
-            <span>Filtros</span>
-          </div>
-
-          <div style={{ width: "250px" }}>
-            <MultiSelect
-              styles={{
-                multiValueLabel: (base) => ({
-                  ...base,
-                  overflow: "visible",
-                  textOverflow: "unset",
-                  whiteSpace: "normal",
-                }),
-                valueContainer: (base) => ({
-                  ...base,
-                  flexWrap: "wrap",
-                }),
-              }}
-              value={
-                statusFilter
-                  ? statusFilter.split(',').map(s => ({
-                    value: s,
-                    label: projectStatusLabel[s],
-                  }))
-                  : []
-              }
-              onChange={(newValue) => {
-                const selectedValues = newValue.map(v => v.value).join(',');
-                setStatusFilter(selectedValues);
-                setPage(0);
-              }}
-              options={Object.entries(projectStatusLabel).map(([status, label]) => ({
-                value: status,
-                label: label,
-              }))}
-              placeholder="Todos os status"
+      <div className={Projectstyles.projectsSection}>
+        <div className={Projectstyles.kpis}>
+          {projectKpis.map((kpi, index) => (
+            <KpiCard
+              key={index}
+              title={kpi.label}
+              value={kpi.value}
+              icon={kpi.icon}
             />
-          </div>
-          <div style={{ width: "250px" }}>
-            <MultiSelect
-              styles={{
-                multiValueLabel: (base) => ({
-                  ...base,
-                  overflow: "visible",
-                  textOverflow: "unset",
-                  whiteSpace: "normal",
-                }),
-                valueContainer: (base) => ({
-                  ...base,
-                  flexWrap: "wrap",
-                }),
-              }}
-              value={
-                clientId
-                  ? [{
-                    value: clientId,
-                    label: (() => {
-                      const client = clients.find(
-                        c => c.id.toString() === clientId
-                      );
-                      return client
-                        ? `${client.firstName} ${client.lastName}`
-                        : '';
-                    })()
-                  }]
-                  : []
-              }
-              onChange={(newValue) => {
-                const lastSelected =
-                  newValue.length > 0
-                    ? newValue[newValue.length - 1].value
-                    : '';
-
-                setClientId(lastSelected);
-                setPage(0);
-              }}
-              options={[
-                { value: '', label: 'Todos os clientes' },
-                ...clients.map(client => ({
-                  value: client.id.toString(),
-                  label: `${client.firstName} ${client.lastName}`,
-                }))
-              ]}
-              placeholder="Todos os clientes"
-            />
-          </div>
-
-          <div className={styles.searchBox}>
-            <SearchInput
-              value={searchTerm}
-              onChange={setSearchTerm}
-              placeholder="Buscar por título do projeto"
-            />
-          </div>
+          ))}
         </div>
-      </FilterBar >
 
-      <div className={Projectstyles.projectsGrid}>
-        {projects.map(project => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-          />
-        ))}
+        <FilterBar>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <FontAwesomeIcon icon={faFilter} />
+              <span>Filtros</span>
+            </div>
+
+            <div style={{ width: "250px" }}>
+              <MultiSelect
+                styles={{
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    overflow: "visible",
+                    textOverflow: "unset",
+                    whiteSpace: "normal",
+                  }),
+                  valueContainer: (base) => ({
+                    ...base,
+                    flexWrap: "wrap",
+                  }),
+                }}
+                value={
+                  statusFilter
+                    ? statusFilter.split(',').map(s => ({
+                      value: s,
+                      label: projectStatusLabel[s],
+                    }))
+                    : []
+                }
+                onChange={(newValue) => {
+                  const selectedValues = newValue.map(v => v.value).join(',');
+                  setStatusFilter(selectedValues);
+                  setPage(0);
+                }}
+                options={Object.entries(projectStatusLabel).map(([status, label]) => ({
+                  value: status,
+                  label: label,
+                }))}
+                placeholder="Todos os status"
+              />
+            </div>
+            <div style={{ width: "250px" }}>
+              <MultiSelect
+                styles={{
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    overflow: "visible",
+                    textOverflow: "unset",
+                    whiteSpace: "normal",
+                  }),
+                  valueContainer: (base) => ({
+                    ...base,
+                    flexWrap: "wrap",
+                  }),
+                }}
+                value={
+                  clientId
+                    ? [{
+                      value: clientId,
+                      label: (() => {
+                        const client = clients.find(
+                          c => c.id.toString() === clientId
+                        );
+                        return client
+                          ? `${client.firstName} ${client.lastName}`
+                          : '';
+                      })()
+                    }]
+                    : []
+                }
+                onChange={(newValue) => {
+                  const lastSelected =
+                    newValue.length > 0
+                      ? newValue[newValue.length - 1].value
+                      : '';
+
+                  setClientId(lastSelected);
+                  setPage(0);
+                }}
+                options={[
+                  { value: '', label: 'Todos os clientes' },
+                  ...clients.map(client => ({
+                    value: client.id.toString(),
+                    label: `${client.firstName} ${client.lastName}`,
+                  }))
+                ]}
+                placeholder="Todos os clientes"
+              />
+            </div>
+
+            <div className={styles.searchBox}>
+              <SearchInput
+                value={searchTerm}
+                onChange={setSearchTerm}
+                placeholder="Buscar por título do projeto"
+              />
+            </div>
+          </div>
+        </FilterBar >
+
+        <div className={Projectstyles.projectsGrid}>
+          {projects.map(project => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+            />
+          ))}
+        </div>
+
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
-
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
     </PageLayout>
 
   );

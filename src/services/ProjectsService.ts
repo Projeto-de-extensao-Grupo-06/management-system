@@ -4,6 +4,11 @@ import type ProjectSummary from '../interfaces/types/ProjectSummary';
 import api from './provider/api';
 
 export default class ProjectsService {
+  async getProjectKpis(): Promise<{ upcomingDeadlines: number, awaitingContact: number, recentProjects: number, stagnantProjects: number }> {
+    const response = await api.get('/projects/kpis');
+    return response.data;
+  }
+
   async getProjectLeads(
     minDate?: string,
     maxDate?: string,
