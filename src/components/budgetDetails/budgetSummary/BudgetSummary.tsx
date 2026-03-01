@@ -1,19 +1,16 @@
-import { useState } from "react";
+import React from "react";
 import type { Budget } from "../../../interfaces/types/Budget";
 import TogglePercentAmountAndMock from "../partials/TogglePercentAmountAndMock";
-import type { DiscountType } from "../partials/TogglePercentAmountAndMock";
 import styles from "./BudgetSummary.module.css";
 
 interface Props {
-    budget: Budget | null;
+    budget: Budget;
+    setBudget: React.Dispatch<React.SetStateAction<Budget>>
+    editing: boolean;
+    setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function BudgetSummary({ budget }: Props) {
-
-    const [discountType, setDiscountType] = useState<DiscountType>(
-        (budget?.discountType as DiscountType) ?? "AMOUNT"
-    );
-
+export default function BudgetSummary({ budget, editing, setEditing, setBudget }: Props) {
     function formatCurrency(value?: number) {
         if (!value) return "R$ 0,00";
 
@@ -37,20 +34,43 @@ export default function BudgetSummary({ budget }: Props) {
                     <div className={styles.discountContent}>
                         <input
                             className={styles.input}
-                            type="number"
-                            value={budget?.discount ?? 0}
-                            readOnly
+                            type="text"
+                            value={budget.discount}
+                            onChange={(e) =>
+                                setBudget((prev) => {
+                                    const value = e.target.value;
+
+                                    const numberRegex = /^\d*\.?\d*$/;
+
+                                    if (!numberRegex.test(value)) {
+                                        return prev;
+                                    }
+
+                                    return {
+                                        ...prev,
+                                        discount: value === "" ? 0 : Number(value),
+                                    };
+                                })
+                            }
+                            disabled={!editing}
                         />
 
                         <TogglePercentAmountAndMock
-                            onChange={(v) => setDiscountType(v)}
-                            value={discountType}
+                            onChange={(v) => {
+                                setBudget((prev) => {
+                                    return {
+                                        ...prev,
+                                        discountType: v
+                                    }
+                                })
+                            }}
+                            value={budget.discountType}
+                            editing={editing}
                         />
                     </div>
                 </div>
             </div>
 
-            {/* SUBTOTAL */}
             <div className={styles.subtotalRow}>
                 <span className={styles.subtotalLabel}>Subtotal</span>
 
@@ -59,7 +79,6 @@ export default function BudgetSummary({ budget }: Props) {
                 </div>
             </div>
 
-            {/* PREÇO FINAL */}
             <div className={styles.totalRow}>
                 <span className={styles.totalLabel}>Preço Final</span>
 
@@ -69,7 +88,7 @@ export default function BudgetSummary({ budget }: Props) {
             </div>
 
             <div className={styles.actions}>
-                <button className={styles.saveButton}>Salvar</button>
+                <button className={styles.saveButton} onClick={() => setEditing(!editing)}>{editing ? "Salvar" : "Editar"}</button>
 
                 <button className={styles.buyListButton}>
                     Gerar Lista de Compras

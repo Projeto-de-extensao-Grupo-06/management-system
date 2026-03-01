@@ -6,11 +6,13 @@ export type DiscountType = "AMOUNT" | "PERCENT" | "MOCK_TOTAL";
 interface Props {
     value?: DiscountType;
     onChange?: (value: DiscountType) => void;
+    editing: boolean;
 }
 
 export default function TogglePercentAmountAndMock({
     value = "AMOUNT",
-    onChange
+    onChange,
+    editing
 }: Props) {
 
     const [selected, setSelected] = useState<DiscountType>(value);
@@ -21,7 +23,7 @@ export default function TogglePercentAmountAndMock({
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={{ pointerEvents: editing ? "auto" : "none" }}>
             <div
                 className={`${styles.option} ${selected === "AMOUNT" ? styles.active : ""}`}
                 onClick={() => handleSelect("AMOUNT")}

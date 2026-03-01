@@ -1,4 +1,4 @@
-export type ValueType = "AMOUNT" | "PERCENTAGE";
+export type ValueType = "AMOUNT" | "PERCENT";
 
 export interface Budget {
   id: number;

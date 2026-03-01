@@ -1,33 +1,100 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router";
+import BudgetParameters from "../../components/budgetDetails/budgetParameters/BudgetParameters";
 import BudgetSummary from "../../components/budgetDetails/budgetSummary/BudgetSummary";
 import MaterialList from "../../components/budgetDetails/materialListSection/MaterialList";
 import PageHeader from "../../components/layout/PageHeader";
 import type { Budget } from "../../interfaces/types/Budget";
 import BudgetService from "../../services/BudgetService";
-import BudgetParameters from "../../components/budgetDetails/budgetParameters/BudgetParameters";
+import { calculateBudgetTotals } from "../../utils/budgetCalc";
+import styles from "./BudgetDetails.module.css";
 
 const budgetService = new BudgetService();
 
-import styles from "./BudgetDetails.module.css";
 
 export default function BudgetDetails() {
-    const [budget, setBudget] = useState<Budget | null>(null);
+    const [budget, setBudget] = useState<Budget>({
+        id: 0,
+        totalCost: 0,
+        subtotal: 0,
+        discount: 0,
+        discountType: "AMOUNT",
+        finalBudget: false,
+        materials: [],
+        fixedParameters: [],
+        personalizedParameters: []
+    });
     const [loading, setLoading] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
+    const isFirstRender = useRef(true);
 
-    const projectId = 1;
+    const { id } = useParams();
+    const projectId = Number(id);
 
     useEffect(() => {
         async function load() {
             try {
                 const data = await budgetService.getProjectBudget(projectId);
-                setBudget(data);
+                if (data) {
+                    setBudget(data);
+                }
             } finally {
                 setLoading(false);
             }
         }
 
         load();
-    }, []);
+    }, [budget?.id]);
+
+    async function updateBudget() {
+        await budgetService.patchBudget(projectId, budget);
+    }
+
+    async function updateFixedParameters() {
+        await budgetService.patchFixed(projectId, budget.fixedParameters);
+    }
+
+    async function updatePersonalizedParameters() {
+        const budgetSaved = await budgetService.patchPersonalized(projectId, budget.personalizedParameters);
+        console.log(budgetSaved.personalizedParameters)
+
+        setBudget(prev => {
+            return {
+                ...prev,
+                personalizedParameters: budgetSaved.personalizedParameters
+            }
+        });
+    }
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        if (!isEditing) {
+            updateBudget();
+            updateFixedParameters();
+            updatePersonalizedParameters();
+        }
+
+
+    }, [isEditing]);
+
+    useEffect(() => {
+        const updatedBudget = calculateBudgetTotals(budget);
+
+        if (
+            updatedBudget.totalCost !== budget.totalCost ||
+            updatedBudget.subtotal !== budget.subtotal
+        ) {
+            setBudget(prev => ({
+                ...prev,
+                totalCost: updatedBudget.totalCost,
+                subtotal: updatedBudget.subtotal
+            }));
+        }
+    }, [budget.discount, budget.discountType, budget.fixedParameters, budget.personalizedParameters]);
 
     if (loading) return <>Carregando...</>;
 
@@ -36,14 +103,13 @@ export default function BudgetDetails() {
             <PageHeader title="Gerenciar Orçamento" />
 
             <div className={styles.layout}>
-                
                 <div className={styles.left}>
                     <MaterialList materials={budget?.materials ?? []} />
-                    <BudgetSummary budget={budget} />
+                    <BudgetSummary budget={budget} setBudget={setBudget} editing={isEditing} setEditing={setIsEditing} />
                 </div>
 
                 <div className={styles.right}>
-                    <BudgetParameters />
+                    <BudgetParameters projectId={projectId} setBudget={setBudget} editing={isEditing} budget={budget} />
                 </div>
 
             </div>
