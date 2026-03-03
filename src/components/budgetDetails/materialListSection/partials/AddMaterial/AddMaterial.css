@@ -3,3 +3,26 @@
     flex-direction: column;
     gap: 20px;
 }
+
+.urlList {
+    margin-top: 10px;
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+.urlListItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.url {
+    color: #0b5d1e;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.addButton {
+    font-weight: bold;
+    width: 20%;
+}

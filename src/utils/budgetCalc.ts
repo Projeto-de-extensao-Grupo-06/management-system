@@ -20,7 +20,7 @@ export function calculateBudgetTotals(budget: Budget): Budget {
     .reduce((sum, p) => sum + safe(p.value), 0);
 
   const totalPercentFixed = fixed
-    .filter(p => p.valueType === "PERCENTAGE")
+    .filter(p => p.valueType === "PERCENT")
     .reduce((sum, p) => sum + safe(p.value), 0);
 
   const totalAmountPersonalized = personalized
@@ -28,7 +28,7 @@ export function calculateBudgetTotals(budget: Budget): Budget {
     .reduce((sum, p) => sum + safe(p.value), 0);
 
   const totalPercentPersonalized = personalized
-    .filter(p => p.type === "PERCENTAGE")
+    .filter(p => p.type === "PERCENT")
     .reduce((sum, p) => sum + safe(p.value), 0);
 
   let subtotal =

@@ -13,7 +13,7 @@ export default class MaterialService {
   }
 
   async listMaterialUrls(materialId: number): Promise<MaterialUrl[]> {
-    const res = await api.get<MaterialUrl[]>(`/materialsUrls/material/${materialId}`);
+    const res = await api.get<MaterialUrl[]>(`/materialUrls/material/${materialId}`);
     if(res.status === 204) {
         return [];
     }

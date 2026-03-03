@@ -41,6 +41,7 @@ export default function AddMaterial() {
         {searchMaterial.map((value, index) => {
           return (
             <ExpandMaterial
+              materialId={value.id}
               name={value.name}
               description={value.description}
               key={index}
