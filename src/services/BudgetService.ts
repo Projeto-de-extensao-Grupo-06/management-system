@@ -1,4 +1,4 @@
-import { type Budget } from "../interfaces/types/Budget";
+import { type Budget, type BudgetMaterial, type FixedParameter, type PersonalizedParameter } from "../interfaces/types/Budget";
 import { type ValueType } from "../interfaces/types/Budget";
 import api from "./provider/api";
 
@@ -24,23 +24,23 @@ export default class BudgetService {
     return data;
   }
 
-  async patchBudget(projectId: number, body: any) {
+  async patchBudget(projectId: number, body: Budget) {
     await api.patch(`/projects/${projectId}/budget`, body);
   }
 
-  async patchMaterials(projectId: number, materials: any[]) {
+  async patchMaterials(projectId: number, materials: BudgetMaterial[]) {
     await api.patch(`/projects/${projectId}/budget/material`, {
       materials,
     });
   }
 
-  async patchFixed(projectId: number, fixedParamaters: any[]) {
+  async patchFixed(projectId: number, fixedParamaters: FixedParameter[]) {
     await api.patch(`/projects/${projectId}/budget/parameters/fixed`, {
       fixedParamaters,
     });
   }
 
-  async patchPersonalized(projectId: number, personalizedParameters: any[]): Promise<Budget> {
+  async patchPersonalized(projectId: number, personalizedParameters: PersonalizedParameter[]): Promise<Budget> {
     const budget = await api.patch<Budget>(`/projects/${projectId}/budget/parameters/personalized`, {
       personalizedParameters,
     });

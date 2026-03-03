@@ -56,7 +56,6 @@ export default function BudgetDetails() {
 
     async function updatePersonalizedParameters() {
         const budgetSaved = await budgetService.patchPersonalized(projectId, budget.personalizedParameters);
-        console.log(budgetSaved.personalizedParameters)
 
         setBudget(prev => {
             return {
@@ -64,6 +63,10 @@ export default function BudgetDetails() {
                 personalizedParameters: budgetSaved.personalizedParameters
             }
         });
+    }
+
+    async function updateMaterials() {
+        await budgetService.patchMaterials(projectId, budget.materials);
     }
 
     useEffect(() => {
@@ -76,6 +79,7 @@ export default function BudgetDetails() {
             updateBudget();
             updateFixedParameters();
             updatePersonalizedParameters();
+            updateMaterials();
         }
 
 
@@ -94,7 +98,7 @@ export default function BudgetDetails() {
                 subtotal: updatedBudget.subtotal
             }));
         }
-    }, [budget.discount, budget.discountType, budget.fixedParameters, budget.personalizedParameters]);
+    }, [budget.discount, budget.discountType, budget.fixedParameters, budget.personalizedParameters, budget.materials]);
 
     if (loading) return <>Carregando...</>;
 
@@ -104,7 +108,7 @@ export default function BudgetDetails() {
 
             <div className={styles.layout}>
                 <div className={styles.left}>
-                    <MaterialList materials={budget?.materials ?? []} />
+                    <MaterialList editing={isEditing} setBudget={setBudget} materials={budget?.materials ?? []} />
                     <BudgetSummary budget={budget} setBudget={setBudget} editing={isEditing} setEditing={setIsEditing} />
                 </div>
 
