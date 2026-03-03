@@ -55,4 +55,8 @@ export default class BudgetService {
   async deletePersonalizedParameter(projectId: number, personalizedParameterId: number) {
     await api.delete(`/budgets/${projectId}/parameters/personalized/${personalizedParameterId}`);
   }
+
+  async deleteMaterialUrl(projectId: number, materialUrlId: number) {
+    await api.delete(`/budgets/${projectId}/materials/${materialUrlId}`);
+  }
 }

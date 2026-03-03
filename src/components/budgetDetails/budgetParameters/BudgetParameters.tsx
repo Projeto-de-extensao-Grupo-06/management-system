@@ -126,7 +126,6 @@ export default function BudgetParameters({ budget, editing, setBudget, projectId
   }
 
   function removeCost(id: number) {
-    console.log("Deletanto o ID: ", id)
     if (id > 0) {
       parametersService.deletePersonalizedParameter(projectId, id)
     }

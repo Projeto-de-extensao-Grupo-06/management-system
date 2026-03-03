@@ -10,7 +10,7 @@ import LoginLayout from "./layouts/login_layout/LoginLayout";
 import Analysis from "./pages/analysis/Analysis";
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
-import BudgetDetails from "./pages/Budget/BudgetDetails";
+import BudgetDetails from "./pages/budget/BudgetDetails";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import ProjectDetails from "./pages/projects/ProjectDetails";

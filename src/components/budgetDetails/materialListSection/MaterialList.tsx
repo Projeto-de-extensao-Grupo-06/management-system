@@ -1,17 +1,39 @@
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 import type { Budget, BudgetMaterial } from "../../../interfaces/types/Budget";
+import BudgetService from "../../../services/BudgetService";
+import Modal from "../../dialogs/modal/Modal";
 import { Button } from "../../ui/Form";
 import styles from "./MaterialList.module.css";
+import AddMaterial from "./partials/AddMaterial/AddMaterial";
 import MaterialCard from "./partials/MaterialCard";
+
+const budgetService = new BudgetService();
 
 interface MaterialListProps {
     materials: BudgetMaterial[];
     setBudget: React.Dispatch<React.SetStateAction<Budget>>;
     editing: boolean;
+    projectId: number;
 }
 
-export default function MaterialList({ materials, setBudget, editing }: MaterialListProps) {
+export default function MaterialList({ materials, setBudget, editing, projectId }: MaterialListProps) {
+    const [isModalOpen, setModalOpen] = useState(false);
+
+
+  function removeMaterial(material: BudgetMaterial) {
+    if (material.materialUrlId > 0) {
+      budgetService.deleteMaterialUrl(projectId, material.materialUrlId)
+    }
+
+    setBudget((prev) => {
+        const copy = { ...prev };
+        copy.materials = copy.materials.filter((m) => m.materialUrlId !== material.materialUrlId);
+        return copy;
+    })
+  }
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -20,11 +42,15 @@ export default function MaterialList({ materials, setBudget, editing }: Material
                     <h2>Lista de Materiais</h2>
                 </div>
 
-                <Button
-                    className={styles.addButton}
-                    text="Adicionar Material"
-                    icon={<FontAwesomeIcon icon={faAdd} />}
-                />
+                {
+                    editing && 
+                    <Button
+                        className={styles.addButton}
+                        text="Adicionar Material"
+                        icon={<FontAwesomeIcon icon={faAdd} />}
+                        onClick={() => setModalOpen(true)}
+                    />
+                }
             </div>
 
             <div>
@@ -43,14 +69,16 @@ export default function MaterialList({ materials, setBudget, editing }: Material
                                 ),
                             }))
                         }
-                        onDelete={() => setBudget((prev) => {
-                            const copy = { ...prev };
-                            copy.materials = copy.materials.filter((m) => m.materialUrlId !== material.materialUrlId);
-                            return copy;
-                        })}
+                        onDelete={() => removeMaterial(material)}
                     />
                 ))}
+
+                {materials.length === 0 && <span>Nenhum material adicionado</span>}
             </div>
+
+            <Modal isOpen={isModalOpen} title="Adicionar Material" onClose={() => setModalOpen(false)} maxWidth="80%">
+                <AddMaterial></AddMaterial>
+            </Modal>
         </div>
     );
 }

@@ -108,7 +108,7 @@ export default function BudgetDetails() {
 
             <div className={styles.layout}>
                 <div className={styles.left}>
-                    <MaterialList editing={isEditing} setBudget={setBudget} materials={budget?.materials ?? []} />
+                    <MaterialList projectId={projectId} editing={isEditing} setBudget={setBudget} materials={budget?.materials ?? []} />
                     <BudgetSummary budget={budget} setBudget={setBudget} editing={isEditing} setEditing={setIsEditing} />
                 </div>
 
