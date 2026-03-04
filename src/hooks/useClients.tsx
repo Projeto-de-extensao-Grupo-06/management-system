@@ -41,13 +41,18 @@ export default function useClients(): UseClientsReturn {
             filters.startDate,
             filters.endDate
         )
-            .then((data: Page<Client>) => {
-                console.log('Response data:', data);
-                console.log('Total Pages:', data.totalPages, 'Total Elements:', data.totalElements);
-                setClients(data.content);
-                const total = data.totalPages || Math.ceil(data.totalElements / (data.pageable?.pageSize || 20));
-                setTotalPages(total);
-                setTotalElements(data.totalElements);
+            .then((resData: Page<Client>) => {
+                const data = resData as any;
+                const pageMeta = data.page || data;
+
+                const totalElementsCount = pageMeta.totalElements ?? data.totalElements ?? 0;
+                const totalPagesCount = pageMeta.totalPages ?? data.totalPages ?? Math.ceil(totalElementsCount / (pageMeta.size ?? data.pageable?.pageSize ?? 20));
+
+                console.log('Total Pages:', totalPagesCount, 'Total Elements:', totalElementsCount);
+
+                setClients(data.content || []);
+                setTotalPages(totalPagesCount);
+                setTotalElements(totalElementsCount);
             })
             .catch(() => {
                 setError('Erro ao carregar clientes.');
@@ -91,7 +96,6 @@ export default function useClients(): UseClientsReturn {
             const axiosError = e as AxiosError<{ message: string, validationErrors?: { field: string, message: string }[], errors?: string[] }>;
             let errorMsg = '';
 
-            // Tratar erro 409 (Conflito - duplicação)
             if (axiosError.response?.status === 409) {
                 const responseData = axiosError.response.data;
                 const message = responseData?.message || '';

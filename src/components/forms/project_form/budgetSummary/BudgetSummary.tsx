@@ -1,6 +1,7 @@
 import { faDollarSign, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router";
 import type { Budget } from "../../../../interfaces/types/Budget";
 import BudgetService from "../../../../services/BudgetService";
 import SecureComponent from "../../../security/SecureComponent";
@@ -12,6 +13,7 @@ interface BudgetSummaryProps {
 
 export default function BudgetSummary({ projectId }: BudgetSummaryProps) {
     const budgetService = useMemo(() => new BudgetService(), []);
+    const navigate = useNavigate();
 
     const [budget, setBudget] = useState<Budget | null>(null);
     const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ export default function BudgetSummary({ projectId }: BudgetSummaryProps) {
     }, [projectId, budgetService]);
 
     function handleManage() {
-        // TODO: implementar navegação para criar/gerenciar orçamento
+        navigate(`/projetos/${projectId}/orcamento`)
     }
 
     function handleDownload() {

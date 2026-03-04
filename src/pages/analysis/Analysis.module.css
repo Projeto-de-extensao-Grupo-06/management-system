@@ -7,23 +7,6 @@ h1 {
   margin: 0;
 }
 
-.analysis_container {
-  width: 100%;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.title_container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
 .filter_wrapper {
   display: flex;
   flex-direction: column;
@@ -39,31 +22,6 @@ h1 {
   max-width: 100%;
 }
 
-.filter_button {
-  padding: 0.8rem 1.5rem;
-  background-color: var(--color-background);
-  color: #333;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: var(--font-family-primary);
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.filter_button:hover {
-  background-color: #f0f0f0;
-}
-
-.filter_button.active {
-  background-color: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
-}
 
 .custom_date_inputs {
   display: flex;
@@ -71,7 +29,7 @@ h1 {
   gap: 0.5rem;
   background-color: var(--color-background);
   padding: 0.5rem;
-  border-radius: 8px;
+  border-radius: var(--border-radius-lg);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
 }
@@ -92,7 +50,7 @@ h1 {
 .kpi_container {
   padding: 1.5rem;
   background-color: var(--color-background);
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
@@ -129,7 +87,7 @@ h1 {
   width: 3rem;
   height: 3rem;
   background-color: var(--color-primary);
-  border-radius: 10px;
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,7 +105,7 @@ h1 {
 
 .graph_container {
   background-color: var(--color-background);
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   min-width: 0;

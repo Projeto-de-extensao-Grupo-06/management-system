@@ -1,6 +1,6 @@
 import VLibras from "@moreiraste/react-vlibras";
 import type { ReactNode } from 'react';
-import logo from '../../assets/logo-solarize.png';
+import logo from '../../assets/logo-SolarWay.png';
 import styles from './AuthLayout.module.css';
 
 interface AuthLayoutProps {
@@ -19,7 +19,7 @@ export default function AuthLayout({ children, title }: AuthLayoutProps) {
                 <div className={styles.logoContainer}>
                     <img
                         src={logo}
-                        alt="Solarize Energia Solar"
+                        alt="SolarWay Energia Solar"
                         className={styles.logo}
                     />
                 </div>

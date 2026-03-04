@@ -10,16 +10,15 @@ import usePermissions from "../../../hooks/usePermissions";
 import { ProjectStatus } from '../../../interfaces/enum/ProjectStatus';
 import type { ProjectStatusType } from '../../../interfaces/enum/ProjectStatus';
 import type { ClientFormRef } from '../../../interfaces/properties/FormProps';
-import type Client from '../../../interfaces/types/Client';
 import type { Address } from '../../../interfaces/types/Client';
+import type Client from '../../../interfaces/types/Client';
+import styles from '../../../pages/projects/Projects.module.css';
 import AddressService from '../../../services/AddressService';
 import ClientsService from '../../../services/ClientsService';
 import ProjectsService from '../../../services/ProjectsService';
 
 import { formatAddress } from '../../../utils/AddressUtils';
 import { projectStatusLabel } from '../../../utils/mappers/projectStatusLabel';
-
-import styles from '../Projects.module.css';
 
 interface Props {
   open: boolean;
@@ -44,7 +43,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
   const [clients, setClients] = useState<Client[]>([]);
   const [clientId, setClientId] = useState<number | null>(null);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  const [isSelectingClient, setIsSelectingClient] = useState(false);
+  const isSelectingClient = useRef(false);
 
   const [editClient, setEditClient] = useState(false);
   const clientFormRef = useRef<ClientFormRef>(null);
@@ -52,7 +51,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
   const [responsibleSearch, setResponsibleSearch] = useState('');
   const [responsibles, setResponsibles] = useState<any[]>([]);
   const [responsibleId, setResponsibleId] = useState<number | null>(null);
-  const [isSelectingResponsible, setIsSelectingResponsible] = useState(false);
+  const isSelectingResponsible = useRef(false);
 
   const [address, setAddress] = useState<Address | null>(null);
   const [addressId, setAddressId] = useState<number | null>(null);
@@ -84,12 +83,12 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
 
   useEffect(() => {
 
-    if (isSelectingClient) {
+    if (isSelectingClient.current) {
+      isSelectingClient.current = false;
       return;
     }
 
     if (clientSearch.length < 2) {
-      setTimeout(() => setClients([]), 0);
       return;
     }
 
@@ -106,12 +105,12 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
 
   useEffect(() => {
 
-    if (isSelectingResponsible) {
+    if (isSelectingResponsible.current) {
+      isSelectingResponsible.current = false;
       return;
     }
 
     if (responsibleSearch.length < 2) {
-      setTimeout(() => setResponsibles([]), 0);
       return;
     }
 
@@ -314,6 +313,9 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
               value={clientSearch}
               onChange={(e) => {
                 setClientSearch(e.target.value);
+                if (e.target.value.length < 2) {
+                  setClients([]);
+                }
                 setClientId(null);
                 setSelectedClient(null);
                 setAddress(null);
@@ -339,14 +341,14 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                     key={client.id}
                     className={styles.autocompleteItem}
                     onMouseDown={() => {
-                      setIsSelectingClient(true);
+                      isSelectingClient.current = true;
                       setClientSearch(`${client.firstName} ${client.lastName}`);
                       setClientId(client.id);
                       setSelectedClient(client);
                       setClients([]);
 
                       setErrors(prev => ({ ...prev, client: '' }));
-                      setTimeout(() => setIsSelectingClient(false), 0);
+                      setTimeout(() => isSelectingClient.current = false, 0);
                     }}
                   >
                     {client.firstName} {client.lastName}
@@ -364,38 +366,38 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                 Cadastrar novo cliente
               </span>
             )}
- 
-           {userPermissions.includes("CLIENT_WRITE") && (
-            <Modal
-              isOpen={editClient}
-              title="Cadastrar Cliente"
-              onClose={() => setEditClient(false)}
-            >
-              <ClientForm
-                ref={clientFormRef}
-                onSubmit={async (data) => {
-                  try {
-                    const created = await clientsService.createClient(data);
 
-                    setClientId(created.id);
-                    setSelectedClient(created);
-                    setClientSearch(`${created.firstName} ${created.lastName}`);
-                    setErrors(prev => ({ ...prev, client: '' }));
+            {userPermissions.includes("CLIENT_WRITE") && (
+              <Modal
+                isOpen={editClient}
+                title="Cadastrar Cliente"
+                onClose={() => setEditClient(false)}
+              >
+                <ClientForm
+                  ref={clientFormRef}
+                  onSubmit={async (data) => {
+                    try {
+                      const created = await clientsService.createClient(data);
 
-                    setEditClient(false);
-                  } catch (error: any) {
-                    console.error("Erro ao criar cliente:", error.response?.data);
-                  }
-                }}
-              />
+                      setClientId(created.id);
+                      setSelectedClient(created);
+                      setClientSearch(`${created.firstName} ${created.lastName}`);
+                      setErrors(prev => ({ ...prev, client: '' }));
 
-              <Button
-                style={{ marginTop: "30px" }}
-                text="Salvar"
-                onClick={() => clientFormRef.current?.submit()}
-              />
+                      setEditClient(false);
+                    } catch (error: any) {
+                      console.error("Erro ao criar cliente:", error.response?.data);
+                    }
+                  }}
+                />
+
+                <Button
+                  style={{ marginTop: "30px" }}
+                  text="Salvar"
+                  onClick={() => clientFormRef.current?.submit()}
+                />
               </Modal>
-)}
+            )}
           </div>
 
           {/* Responsável */}
@@ -405,6 +407,9 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
               value={responsibleSearch}
               onChange={(e) => {
                 setResponsibleSearch(e.target.value);
+                if (e.target.value.length < 2) {
+                  setResponsibles([]);
+                }
                 setResponsibleId(null);
 
 
@@ -428,7 +433,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                     key={responsible.id}
                     className={styles.autocompleteItem}
                     onMouseDown={() => {
-                      setIsSelectingResponsible(true);
+                      isSelectingResponsible.current = true;
                       setResponsibleSearch(
                         `${responsible.firstName} ${responsible.lastName}`
                       );
@@ -436,7 +441,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                       setResponsibles([]);
 
                       setErrors(prev => ({ ...prev, responsible: '' }));
-                      setTimeout(() => setIsSelectingResponsible(false), 0);
+                      setTimeout(() => isSelectingResponsible.current = false, 0);
                     }}
                   >
                     {responsible.firstName} {responsible.lastName}
