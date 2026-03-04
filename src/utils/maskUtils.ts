@@ -29,3 +29,46 @@ export function unformatValue(value: string | undefined): string {
     if (!value) return '';
     return value.replace(/\D/g, '');
 }
+
+export function formatCurrencyBR(value: string | number) {
+  if (!value) return "";
+
+  const stringValue = String(value).replace(/^0+/, '') || '0';
+  
+  const cleaned = stringValue.replace(/[^\d.,]/g, '').replace(',', '.');
+  const num = parseFloat(cleaned);
+  
+  if (isNaN(num)) return "";
+  
+  return num.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+export function formatPercentageBR(value: string | number) {
+  if (!value) return "";
+  
+  const stringValue = String(value).replace(/[^\d.,]/g, '').replace(',', '.');
+  const num = parseFloat(stringValue);
+  
+  if (isNaN(num)) return "";
+  
+  return (num / 100).toLocaleString("pt-BR", {
+    style: "percent",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+export function parseCurrencyToNumber(value: string): number {
+  const cleaned = value.replace(/[^\d.,]/g, '').replace(',', '.');
+  return parseFloat(cleaned) || 0;
+}
+
+export function parsePercentageToNumber(value: string): number {
+  const cleaned = value.replace(/[^\d.,]/g, '').replace(',', '.');
+  return parseFloat(cleaned) || 0;
+}

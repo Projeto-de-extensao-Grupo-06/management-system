@@ -1,11 +1,11 @@
-export type ValueType = "AMOUNT" | "PERCENTAGE";
+export type ValueType = "AMOUNT" | "PERCENT";
 
 export interface Budget {
   id: number;
   totalCost: number;
   subtotal: number;
   discount: number;
-  discountType: "PERCENTAGE" | "AMOUNT" | "MOCK_TOTAL";
+  discountType: "PERCENT" | "AMOUNT" | "MOCK_TOTAL";
   finalBudget: boolean;
   materials: BudgetMaterial[];
   fixedParameters: FixedParameter[];

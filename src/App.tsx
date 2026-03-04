@@ -10,6 +10,7 @@ import LoginLayout from "./layouts/login_layout/LoginLayout";
 import Analysis from "./pages/analysis/Analysis";
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
+import BudgetDetails from "./pages/budget/BudgetDetails";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
@@ -78,6 +79,10 @@ function App() {
               element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}
             />
 
+            <Route
+              path="/projetos/:id/orcamento"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetDetails />} />}
+            />
             <Route path="/configuracoes" element={<Config />} />
 
           </Route>

@@ -1,0 +1,171 @@
+.container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.123) 1px 1px 10px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.icon {
+    font-size: 18px;
+}
+
+.addButton {
+    background: #0b5d1e;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+    width: 200px;
+}
+
+.addButton:hover {
+    background: #094a18;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    padding: 16px;
+    margin-bottom: 12px;
+
+    overflow: hidden;
+}
+
+.gridHeader {
+    display: grid;
+    grid-template-columns:
+        minmax(0,2fr)
+        minmax(0,1fr)
+        minmax(0,1.5fr)
+        minmax(0,1fr)
+        24px;
+
+    font-size: 13px;
+    font-weight: 600;
+    color: #ff6a00;
+    margin-bottom: 8px;
+}
+
+.gridContent {
+    display: grid;
+    grid-template-columns:
+        minmax(0,2fr)
+        minmax(0,1fr)
+        minmax(0,1.5fr)
+        minmax(0,1fr)
+        24px;
+
+    align-items: center;
+    gap: 8px;
+}
+
+.gridContent > * {
+    min-width: 0;
+}
+
+.gridContent span,
+.gridContent a {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+
+.input {
+    width: 100%;
+    max-width: 80px;
+    min-width: 0;
+
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+}
+
+.deleteIcon {
+    color: #ff3b30;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+@media (max-width: 1024px) {
+    .gridHeader,
+    .gridContent {
+        grid-template-columns:
+            minmax(0,2fr)
+            minmax(0,1fr)
+            minmax(0,1.2fr)
+            minmax(0,1fr)
+            20px;
+    }
+
+    .addButton {
+        width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .addButton {
+        width: 100%;
+    }
+
+    .gridHeader {
+        display: none;
+    }
+
+    .gridContent {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .input {
+        max-width: 100%;
+    }
+
+    .deleteIcon {
+        justify-self: flex-end;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .container {
+        padding: 14px;
+    }
+
+    .card {
+        padding: 14px;
+    }
+
+    .title h2 {
+        font-size: 16px;
+    }
+
+    .gridContent {
+        gap: 10px;
+    }
+}

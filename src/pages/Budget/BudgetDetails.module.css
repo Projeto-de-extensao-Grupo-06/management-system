@@ -1,0 +1,45 @@
+.layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+
+    align-items: stretch;
+
+    height: calc(100vh - 252px);
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+}
+
+.left,
+.right {
+    min-height: 0;
+}
+
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .left {
+        display: contents;
+    }
+
+    .summary {
+        order: 3;
+    }
+
+    .right {
+        order: 2;
+    }
+}
