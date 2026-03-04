@@ -24,3 +24,22 @@
 .right {
     min-height: 0;
 }
+
+@media (max-width: 1024px) {
+    .layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .left {
+        display: contents;
+    }
+
+    .summary {
+        order: 3;
+    }
+
+    .right {
+        order: 2;
+    }
+}

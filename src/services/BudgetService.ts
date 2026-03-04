@@ -1,4 +1,9 @@
-import { type Budget, type BudgetMaterial, type FixedParameter, type PersonalizedParameter } from "../interfaces/types/Budget";
+import {
+  type Budget,
+  type BudgetMaterial,
+  type FixedParameter,
+  type PersonalizedParameter,
+} from "../interfaces/types/Budget";
 import { type ValueType } from "../interfaces/types/Budget";
 import api from "./provider/api";
 
@@ -8,6 +13,14 @@ export interface FixedParameterDefinition {
 }
 
 export default class BudgetService {
+  async createProjectBudget(projectId: number, budget: Budget): Promise<Budget | null> {
+    try {
+      const res = await api.post<Budget>(`/projects/${projectId}/budget`, budget);
+      return res.data;
+    } catch {
+      return null;
+    }
+  }
 
   async getProjectBudget(projectId: number): Promise<Budget | null> {
     try {
@@ -40,20 +53,36 @@ export default class BudgetService {
     });
   }
 
-  async patchPersonalized(projectId: number, personalizedParameters: PersonalizedParameter[]): Promise<Budget> {
-    const budget = await api.patch<Budget>(`/projects/${projectId}/budget/parameters/personalized`, {
-      personalizedParameters,
-    });
+  async patchPersonalized(
+    projectId: number,
+    personalizedParameters: PersonalizedParameter[],
+  ): Promise<Budget> {
+    const budget = await api.patch<Budget>(
+      `/projects/${projectId}/budget/parameters/personalized`,
+      {
+        personalizedParameters,
+      },
+    );
 
     return budget.data;
   }
 
-  async deleteFixed(projectId: number, fixedParameterName: string): Promise<void> {
-    await api.delete(`/budgets/${projectId}/parameters/fixed/${fixedParameterName}`);
+  async deleteFixed(
+    projectId: number,
+    fixedParameterName: string,
+  ): Promise<void> {
+    await api.delete(
+      `/budgets/${projectId}/parameters/fixed/${fixedParameterName}`,
+    );
   }
 
-  async deletePersonalizedParameter(projectId: number, personalizedParameterId: number) {
-    await api.delete(`/budgets/${projectId}/parameters/personalized/${personalizedParameterId}`);
+  async deletePersonalizedParameter(
+    projectId: number,
+    personalizedParameterId: number,
+  ) {
+    await api.delete(
+      `/budgets/${projectId}/parameters/personalized/${personalizedParameterId}`,
+    );
   }
 
   async deleteMaterialUrl(projectId: number, materialUrlId: number) {

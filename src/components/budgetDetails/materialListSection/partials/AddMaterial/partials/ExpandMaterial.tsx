@@ -1,9 +1,9 @@
 import { faCaretUp, faCaretDown, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import type { BudgetMaterial } from "../../../../../../interfaces/types/Budget";
 import type { MaterialUrl } from "../../../../../../interfaces/types/Material";
 import MaterialService from "../../../../../../services/MaterialsService";
-import type { BudgetMaterial } from "../../../../../../interfaces/types/Budget";
 
 interface ExpandMaterialProps {
     materialId: number;

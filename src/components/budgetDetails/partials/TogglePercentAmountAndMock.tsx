@@ -14,7 +14,6 @@ export default function TogglePercentAmountAndMock({
     onChange,
     editing
 }: Props) {
-
     const [selected, setSelected] = useState<DiscountType>(value);
 
     function handleSelect(v: DiscountType) {

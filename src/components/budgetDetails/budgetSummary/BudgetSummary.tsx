@@ -20,6 +20,10 @@ export default function BudgetSummary({ budget, editing, setEditing, setBudget }
         });
     }
 
+    if(budget.id === 0) {
+        return <span>Carregando...</span>
+    }
+
     return (
         <div className={styles.container}>
 
