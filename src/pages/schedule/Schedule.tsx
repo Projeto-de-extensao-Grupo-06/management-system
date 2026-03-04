@@ -1,16 +1,18 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import styles from "./Schedule.module.css";
-import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
-import Calendar from "../../components/schedule/Calendar";
+import { useCallback, useEffect, useState } from "react";
 import ScheduleDetailsModal from "../../components/dialogs/schedule/ScheduleDetailsModal";
 import ScheduleFormModal from "../../components/dialogs/schedule/ScheduleFormModal";
+import PageLayout from "../../components/layout/PageLayout";
+import Calendar from "../../components/schedule/Calendar";
+import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
+import SecureComponent from "../../components/security/SecureComponent";
+import { Button } from "../../components/ui/Form";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
 import ScheduleService from "../../services/ScheduleService";
-import SecureComponent from "../../components/security/SecureComponent";
+import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
 
@@ -25,14 +27,14 @@ export default function Schedule() {
 
     const anyModalOpen = isDetailsOpen || isCreateOpen || isEditOpen;
 
-    useEffect(() => {
-        fetchEvents();
-    }, []);
-
-    const fetchEvents = async () => {
+    const fetchEvents = useCallback(async () => {
         const data = await service.getEvents();
         setEvents(data);
-    };
+    }, []);
+
+    useEffect(() => {
+        service.getEvents().then(data => setEvents(data));
+    }, []);
 
     const handleOpenCreate = () => {
         setCreateDefaults(scheduleDefaultValues());
@@ -90,16 +92,19 @@ export default function Schedule() {
         : undefined;
 
     return (
-        <div className={styles.schedule_container}>
-            <SecureComponent permissions={["SCHEDULE_WRITE"]}>
-                <div className={styles.title_container}>
-                    <h1>Agenda de visitas</h1>
-                    <button className={styles.schedule_btn} onClick={handleOpenCreate}>
-                        <FontAwesomeIcon icon={faPlus} />
-                        Agendar
-                    </button>
-                </div>
-            </SecureComponent>
+        <PageLayout
+            title="Agenda de visitas"
+            rightActions={
+                <SecureComponent permissions={["SCHEDULE_WRITE"]}>
+                    <Button
+                        icon={<FontAwesomeIcon icon={faPlus} />}
+                        text="Agendar"
+                        onClick={handleOpenCreate}
+                        width="fit-content"
+                    />
+                </SecureComponent>
+            }
+        >
 
             <div className={styles.kpis}>
                 <ScheduleKpiBoard events={events} />
@@ -138,6 +143,6 @@ export default function Schedule() {
                 defaultValues={editDefaults}
                 mode="edit"
             />
-        </div>
+        </PageLayout>
     );
 }

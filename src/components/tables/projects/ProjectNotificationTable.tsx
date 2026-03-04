@@ -1,11 +1,11 @@
 import { faComment, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Table from '../../tables/Table';
-import { IconButton } from '../../ui/Form';
 import { ProjectStatus } from '../../../interfaces/enum/ProjectStatus';
 import type { ProjectNotification } from '../../../interfaces/types/ProjectNotification';
 import styles from '../../../pages/projects/ProjectNotifications.module.css';
 import SecureComponent from '../../security/SecureComponent';
+import Table from '../../tables/Table';
+import { IconButton } from '../../ui/Form';
 
 interface ProjectNotificationTableProps {
     notifications: ProjectNotification[];

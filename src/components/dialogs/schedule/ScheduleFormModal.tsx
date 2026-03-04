@@ -1,11 +1,11 @@
-import { useRef } from 'react';
 import { faSave, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Modal from "../modal/Modal";
-import { Button } from "../../ui/Form";
+import { useRef } from 'react';
+import type { ScheduleSchemaType } from '../../../schemas/scheduleSchema';
 import ScheduleEventForm from "../../forms/schedule_form/ScheduleEventForm";
 import type { ScheduleFormRef } from "../../forms/schedule_form/ScheduleEventForm";
-import type { ScheduleSchemaType } from '../../../schemas/scheduleSchema';
+import { Button } from "../../ui/Form";
+import Modal from "../modal/Modal";
 
 interface ScheduleFormModalProps {
     isOpen: boolean;

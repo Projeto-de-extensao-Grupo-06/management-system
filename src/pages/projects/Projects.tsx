@@ -10,13 +10,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router';
+import ProjectCard from '../../components/cards/ProjectCard';
+import CreateProjectModal from '../../components/dialogs/projects/CreateProjectModal';
 import FilterBar from '../../components/layout/FilterBar';
-import PageHeader from '../../components/layout/PageHeader';
+import PageLayout from '../../components/layout/PageLayout';
 import { Pagination } from '../../components/tables/pagination/Pagination';
 import { Alert } from '../../components/ui/Alert';
 import { Button, SearchInput } from '../../components/ui/Form';
 
 import { MultiSelect } from '../../components/ui/Form';
+import KpiCard from '../../components/ui/KpiCard';
 import usePermissions from "../../hooks/usePermissions";
 import type Client from '../../interfaces/types/Client';
 import type ProjectSummary from '../../interfaces/types/ProjectSummary';
@@ -25,11 +28,8 @@ import ProjectsService from '../../services/ProjectsService';
 
 
 import { projectStatusLabel } from '../../utils/mappers/projectStatusLabel';
-// import {CreateProjectModal } from '../projects/components/CreateProjectModal';
-
 import styles from '../clients/Clients.module.css';
-import CreateProjectModal from '../projects/components/CreateProjectModal'
-import ProjectCard from '../projects/components/ProjectCard';
+
 import Projectstyles from '../projects/Projects.module.css';
 
 export default function Projects() {
@@ -56,6 +56,13 @@ export default function Projects() {
 
   const [globalAlert, setGlobalAlert] =
     useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  const [kpiData, setKpiData] = useState({
+    upcomingDeadlines: 0,
+    awaitingContact: 0,
+    recentProjects: 0,
+    stagnantProjects: 0
+  });
 
 
   const fetchProjects = useCallback(() => {
@@ -129,87 +136,49 @@ export default function Projects() {
       .catch(() => {
         setNotificationCount(0);
       });
+
+    projectsService
+      .getProjectKpis()
+      .then(data => setKpiData(data))
+      .catch(console.error);
   }, [projectsService]);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const waitingContactCount = useMemo(() => {
-    return projects.filter(
-      project => project.status === 'CLIENT_AWAITING_CONTACT'
-    ).length;
-  }, [projects]);
-
-  const nearDeadlineCount = useMemo(() => {
-    const today = new Date();
-    const sevenDaysLater = new Date();
-    sevenDaysLater.setDate(today.getDate() + 7);
-
-    return projects.filter(project => {
-      if (!project.deadline) return false;
-
-      const deadlineDate = new Date(project.deadline);
-
-      return (
-        deadlineDate >= today &&
-        deadlineDate <= sevenDaysLater &&
-        project.status !== 'COMPLETED' &&
-        project.status !== 'NEGOTIATION_FAILED'
-      );
-    }).length;
-  }, [projects]);
-
-  const recentProjectsCount = useMemo(() => {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-    return projects.filter(project => {
-      if (!project.createdAt) return false;
-
-      const createdDate = new Date(project.createdAt);
-      return createdDate >= sevenDaysAgo;
-    }).length;
-  }, [projects]);
-
 
   const projectKpis = [
     {
       label: 'Próximos do Prazo',
-      value: nearDeadlineCount,
+      value: kpiData.upcomingDeadlines,
       icon: faClock,
     },
     {
       label: 'Projetos Estagnados',
-      value: 7,
+      value: kpiData.stagnantProjects,
       icon: faTriangleExclamation,
     },
     {
       label: 'Cliente Aguardando Contato',
-      value: waitingContactCount,
+      value: kpiData.awaitingContact,
       icon: faPhone,
     },
     {
       label: 'Projetos Recentes',
-      value: recentProjectsCount,
+      value: kpiData.recentProjects,
       icon: faPlus,
     },
   ];
 
 
   return (
-    <div className={Projectstyles.container}>
-      {globalAlert && (
-        <div className={styles.alertWrapper}>
-          <Alert message={globalAlert.message} type={globalAlert.type} />
-        </div>
-      )}
-
-      <PageHeader
-        title="Projetos"
-        count={projects.length}
-        titleRight={
+    <PageLayout
+      title="Projetos"
+      titleAccessory={
+        <>
+          <span className={styles.count}>({projects.length})</span>
           <div
             className={Projectstyles.titleNotification}
             onClick={() => navigate('/projetos/notificacoes')}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', marginLeft: '1rem' }}
           >
             <FontAwesomeIcon icon={faBell as IconProp} />
             {notificationCount > 0 && (
@@ -218,163 +187,163 @@ export default function Projects() {
               </span>
             )}
           </div>
-        }
-      >
-        <div className={Projectstyles.headerActions}>
-          {userPermissions.includes("PROJECT_WRITE") && (
-            <Button
-              icon={<FontAwesomeIcon icon={faPlus} />}
-              text="Novo Projeto"
-              ariaLabel="Criar Projeto"
-              onClick={() => setIsCreateModalOpen(true)}
-              width="fit-content"
-            />
-          )}
-
-        </div>
-
-        <CreateProjectModal
-          open={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onSuccess={() => {
-            fetchProjects();
-            setIsCreateModalOpen(false);
-          }}
-        />
-      </PageHeader>
-
-
-
-      <div className={Projectstyles.kpis}>
-        {projectKpis.map((kpi, index) => (
-          <div key={index} className={Projectstyles.kpi_container}>
-            <div className={Projectstyles.kpi_content}>
-              <div className={Projectstyles.kpi_icon}>
-                <FontAwesomeIcon icon={kpi.icon} color="#fff" />
-              </div>
-              <b>{kpi.label}</b>
-            </div>
-            <p className={styles.kpi_value}>{kpi.value}</p>
-          </div>
-        ))}
-      </div>
-
-      <FilterBar>
-        <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <FontAwesomeIcon icon={faFilter} />
-            <span>Filtros</span>
-          </div>
-
-          <div style={{ width: "250px" }}>
-            <MultiSelect
-              styles={{
-                multiValueLabel: (base) => ({
-                  ...base,
-                  overflow: "visible",
-                  textOverflow: "unset",
-                  whiteSpace: "normal",
-                }),
-                valueContainer: (base) => ({
-                  ...base,
-                  flexWrap: "wrap",
-                }),
-              }}
-              value={
-                statusFilter
-                  ? statusFilter.split(',').map(s => ({
-                    value: s,
-                    label: projectStatusLabel[s],
-                  }))
-                  : []
-              }
-              onChange={(newValue) => {
-                const selectedValues = newValue.map(v => v.value).join(',');
-                setStatusFilter(selectedValues);
-                setPage(0);
-              }}
-              options={Object.entries(projectStatusLabel).map(([status, label]) => ({
-                value: status,
-                label: label,
-              }))}
-              placeholder="Todos os status"
-            />
-          </div>
-          <div style={{ width: "250px" }}>
-            <MultiSelect
-              styles={{
-                multiValueLabel: (base) => ({
-                  ...base,
-                  overflow: "visible",
-                  textOverflow: "unset",
-                  whiteSpace: "normal",
-                }),
-                valueContainer: (base) => ({
-                  ...base,
-                  flexWrap: "wrap",
-                }),
-              }}
-              value={
-                clientId
-                  ? [{
-                    value: clientId,
-                    label: (() => {
-                      const client = clients.find(
-                        c => c.id.toString() === clientId
-                      );
-                      return client
-                        ? `${client.firstName} ${client.lastName}`
-                        : '';
-                    })()
-                  }]
-                  : []
-              }
-              onChange={(newValue) => {
-                const lastSelected =
-                  newValue.length > 0
-                    ? newValue[newValue.length - 1].value
-                    : '';
-
-                setClientId(lastSelected);
-                setPage(0);
-              }}
-              options={[
-                { value: '', label: 'Todos os clientes' },
-                ...clients.map(client => ({
-                  value: client.id.toString(),
-                  label: `${client.firstName} ${client.lastName}`,
-                }))
-              ]}
-              placeholder="Todos os clientes"
-            />
-          </div>
-
-          <div className={styles.searchBox}>
-            <SearchInput
-              value={searchTerm}
-              onChange={setSearchTerm}
-              placeholder="Buscar por título do projeto"
-            />
-          </div>
-        </div>
-      </FilterBar >
-
-      <div className={Projectstyles.projectsGrid}>
-        {projects.map(project => (
-          <ProjectCard
-            key={project.id}
-            project={project}
+        </>
+      }
+      rightActions={
+        userPermissions.includes("PROJECT_WRITE") ? (
+          <Button
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            text="Novo Projeto"
+            ariaLabel="Criar Projeto"
+            onClick={() => setIsCreateModalOpen(true)}
+            width="fit-content"
           />
-        ))}
-      </div>
+        ) : undefined
+      }
+    >
+      {globalAlert && (
+        <div className={styles.alertWrapper}>
+          <Alert message={globalAlert.message} type={globalAlert.type} />
+        </div>
+      )}
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
+      <CreateProjectModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          fetchProjects();
+          setIsCreateModalOpen(false);
+        }}
       />
-    </div >
+      <div className={Projectstyles.projectsSection}>
+        <div className={Projectstyles.kpis}>
+          {projectKpis.map((kpi, index) => (
+            <KpiCard
+              key={index}
+              title={kpi.label}
+              value={kpi.value}
+              icon={kpi.icon}
+            />
+          ))}
+        </div>
+
+        <FilterBar>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <FontAwesomeIcon icon={faFilter} />
+              <span>Filtros</span>
+            </div>
+
+            <div style={{ width: "250px" }}>
+              <MultiSelect
+                styles={{
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    overflow: "visible",
+                    textOverflow: "unset",
+                    whiteSpace: "normal",
+                  }),
+                  valueContainer: (base) => ({
+                    ...base,
+                    flexWrap: "wrap",
+                  }),
+                }}
+                value={
+                  statusFilter
+                    ? statusFilter.split(',').map(s => ({
+                      value: s,
+                      label: projectStatusLabel[s],
+                    }))
+                    : []
+                }
+                onChange={(newValue) => {
+                  const selectedValues = newValue.map(v => v.value).join(',');
+                  setStatusFilter(selectedValues);
+                  setPage(0);
+                }}
+                options={Object.entries(projectStatusLabel).map(([status, label]) => ({
+                  value: status,
+                  label: label,
+                }))}
+                placeholder="Todos os status"
+              />
+            </div>
+            <div style={{ width: "250px" }}>
+              <MultiSelect
+                styles={{
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    overflow: "visible",
+                    textOverflow: "unset",
+                    whiteSpace: "normal",
+                  }),
+                  valueContainer: (base) => ({
+                    ...base,
+                    flexWrap: "wrap",
+                  }),
+                }}
+                value={
+                  clientId
+                    ? [{
+                      value: clientId,
+                      label: (() => {
+                        const client = clients.find(
+                          c => c.id.toString() === clientId
+                        );
+                        return client
+                          ? `${client.firstName} ${client.lastName}`
+                          : '';
+                      })()
+                    }]
+                    : []
+                }
+                onChange={(newValue) => {
+                  const lastSelected =
+                    newValue.length > 0
+                      ? newValue[newValue.length - 1].value
+                      : '';
+
+                  setClientId(lastSelected);
+                  setPage(0);
+                }}
+                options={[
+                  { value: '', label: 'Todos os clientes' },
+                  ...clients.map(client => ({
+                    value: client.id.toString(),
+                    label: `${client.firstName} ${client.lastName}`,
+                  }))
+                ]}
+                placeholder="Todos os clientes"
+              />
+            </div>
+
+            <div className={styles.searchBox}>
+              <SearchInput
+                value={searchTerm}
+                onChange={setSearchTerm}
+                placeholder="Buscar por título do projeto"
+              />
+            </div>
+          </div>
+        </FilterBar >
+
+        <div className={Projectstyles.projectsGrid}>
+          {projects.map(project => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+            />
+          ))}
+        </div>
+
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      </div>
+    </PageLayout>
 
   );
 

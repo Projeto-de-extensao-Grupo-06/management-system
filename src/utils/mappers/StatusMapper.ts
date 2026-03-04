@@ -1,3 +1,4 @@
+import type { BadgeVariant } from "../../components/ui/Badge";
 import { ProjectStatus } from "../../interfaces/enum/ProjectStatus";
 
 export const ProjectStatusLabel: Record<string, string> = {
@@ -25,6 +26,27 @@ export const AcquisitionChannelLabel: Record<string, string> = {
 
 export function getProjectStatusLabel(status: string): string {
     return ProjectStatusLabel[status] || status;
+}
+
+export const ProjectStatusVariant: Record<string, BadgeVariant> = {
+    [ProjectStatus.NEW]: "new",
+    [ProjectStatus.PRE_BUDGET]: "pre_budget",
+    [ProjectStatus.CLIENT_AWAITING_CONTACT]: "client_awaiting_contact",
+    [ProjectStatus.AWAITING_RETRY]: "awaiting_retry",
+    [ProjectStatus.RETRYING]: "retrying",
+    [ProjectStatus.SCHEDULED_TECHNICAL_VISIT]: "scheduled_technical_visit",
+    [ProjectStatus.TECHNICAL_VISIT_COMPLETED]: "technical_visit_completed",
+    [ProjectStatus.FINAL_BUDGET]: "final_budget",
+    [ProjectStatus.AWAITING_MATERIALS]: "awaiting_materials",
+    [ProjectStatus.SCHEDULED_INSTALLING_VISIT]: "scheduled_installing_visit",
+    [ProjectStatus.INSTALLED]: "installed",
+    [ProjectStatus.COMPLETED]: "completed",
+    [ProjectStatus.NEGOTIATION_FAILED]: "negotiation_failed",
+    [ProjectStatus.CONTACT_NOT_REQUESTED]: "awaiting_retry"
+};
+
+export function getProjectStatusVariant(status: string): BadgeVariant {
+    return ProjectStatusVariant[status] || "awaiting_retry";
 }
 
 export function getChannelLabel(channel: string): string {

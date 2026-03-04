@@ -1,7 +1,7 @@
 import { useState } from "react";
+import styles from "../../../pages/projects/ProjectNotifications.module.css";
 import { Button, Input, SimpleButton } from "../../ui/Form";
 import Modal from "../modal/Modal";
-import styles from "../../../pages/projects/ProjectNotifications.module.css";
 
 interface ProjectNotificationFilterDialogProps {
     isOpen: boolean;

@@ -1,8 +1,10 @@
-import { faArrowLeft, faSave, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import ClientForm from '../../components/forms/client_form/ClientForm';
+import PageLayout from '../../components/layout/PageLayout';
+import ProjectGrid from '../../components/layout/ProjectGrid';
 import SecureComponent from '../../components/security/SecureComponent';
 import { Alert } from '../../components/ui/Alert';
 import { Button } from '../../components/ui/Form';
@@ -10,15 +12,13 @@ import useClients from '../../hooks/useClients';
 import type { ClientFormRef } from '../../interfaces/properties/FormProps';
 import type Client from '../../interfaces/types/Client';
 import type Project from '../../interfaces/types/Project';
+import type ProjectSummary from '../../interfaces/types/ProjectSummary';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
 import ClientsService from '../../services/ClientsService';
-import type ProjectSummary from '../../interfaces/types/ProjectSummary';
-import ProjectGrid from '../../components/layout/ProjectGrid';
 import styles from './Clients.module.css';
 
 export default function ClientDetails() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const location = useLocation();
     const { updateClient } = useClients();
     const formRef = useRef<ClientFormRef>(null);
@@ -105,23 +105,12 @@ export default function ClientDetails() {
     } : {};
 
     return (
-        <div className={styles.container}>
-            {alert && (
-                <div style={{ marginBottom: '1rem' }}>
-                    <Alert message={alert.message} type={alert.type} />
-                </div>
-            )}
-
-            <div className={styles.header}>
-                <div>
-                    <button onClick={() => navigate(-1)} className={styles.backButton}>
-                        <FontAwesomeIcon icon={faArrowLeft} /> Voltar
-                    </button>
-                    <h1 className={styles.title}>Detalhes do Cliente</h1>
-                </div>
-
-                {isEditing ? (
-                    <div className={styles.headerActions}>
+        <PageLayout
+            title="Detalhes do Cliente"
+            backButton={true}
+            rightActions={
+                isEditing ? (
+                    <>
                         <Button
                             text="Cancelar"
                             width="fit-content"
@@ -136,7 +125,7 @@ export default function ClientDetails() {
                             width="fit-content"
                             ariaLabel="Salvar Dados"
                         />
-                    </div>
+                    </>
                 ) : (
                     <SecureComponent permissions={["CLIENT_UPDATE"]}>
                         <Button
@@ -147,9 +136,14 @@ export default function ClientDetails() {
                             ariaLabel="Editar Dados"
                         />
                     </SecureComponent>
-
-                )}
-            </div>
+                )
+            }
+        >
+            {alert && (
+                <div style={{ marginBottom: '1rem' }}>
+                    <Alert message={alert.message} type={alert.type} />
+                </div>
+            )}
 
             <ClientForm
                 ref={formRef}
@@ -167,6 +161,6 @@ export default function ClientDetails() {
                     />
                 </div>
             </SecureComponent>
-        </div>
+        </PageLayout>
     );
 }

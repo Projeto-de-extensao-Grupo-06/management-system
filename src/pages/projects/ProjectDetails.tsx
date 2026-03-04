@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import ActionRequired from "../../components/actionRequired/ActionRequired";
 import BudgetSummary from "../../components/forms/project_form/budgetSummary/BudgetSummary";
@@ -7,13 +7,13 @@ import GeneralInfoForm from "../../components/forms/project_form/generalInfo/Gen
 import NextSchedules from "../../components/forms/project_form/nextSchedules/NextSchedules";
 import ProjectObservation from "../../components/forms/project_form/observation/ProjectObservation";
 import ProjectFiles from "../../components/forms/project_form/projectFiles/ProjectFiles";
-import PageHeader from "../../components/layout/PageHeader";
+import PageLayout from "../../components/layout/PageLayout";
 import type { ProjectDetails } from "../../interfaces/types/ProjectDetails";
 import ProjectService from "../../services/ProjectService";
 import styles from "./ProjectDetails.module.css";
 
 export default function ProjectDetails() {
-    const projectService = new ProjectService();
+    const projectService = useMemo(() => new ProjectService(), []);
     const { id } = useParams();
     const [project, setProject] = useState<ProjectDetails | null>(null);
 
@@ -29,15 +29,17 @@ export default function ProjectDetails() {
         }
 
         loadProject();
-    }, [id]);
+    }, [id, projectService]);
 
     if (!project) {
         return null;
     }
 
     return (
-        <>
-            <PageHeader title="Detalhes de Projeto" />
+        <PageLayout
+            title="Detalhes de Projeto"
+            backButton={true}
+        >
 
             {/* MOBILE */}
             <div className={styles.mobileLayout}>
@@ -73,7 +75,7 @@ export default function ProjectDetails() {
                     </div>
                 </div>
             </div>
-        </>
+        </PageLayout>
     );
 
 }

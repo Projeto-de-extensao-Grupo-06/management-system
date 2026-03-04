@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 
-import logo from "../../assets/logo-solarize.png";
+import logo from "../../assets/logo-SolarWay.png";
 import authService from "../../services/AuthService";
 
 import useAuthStore from "../../store/useAuthStore";
@@ -124,7 +124,7 @@ export default function AppLayout() {
 
           <div className={styles.logo}>
             <div className={styles.logoImage}>
-              <img src={logo} alt="Solarize Logo" />
+              <img src={logo} alt="SolarWay Logo" />
             </div>
           </div>
         </div>

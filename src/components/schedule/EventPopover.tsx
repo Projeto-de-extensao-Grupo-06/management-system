@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
 import { faClock, faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { EventContentArg } from "@fullcalendar/core";
+import { useState, useRef } from "react";
 import "./EventPopover.css";
 
 interface PopoverCoords {

@@ -1,7 +1,8 @@
 import './components.css';
-import { faEye, faEyeSlash, faMagnifyingGlass, faFileDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faMagnifyingGlass, faFileDownload, faTrash, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { forwardRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import type { GroupBase, StylesConfig } from 'react-select';
 import ReactSelect from "react-select";
 import type BaseInputProps from '../../interfaces/properties/BaseInputProps';
@@ -372,12 +373,29 @@ export function FileInput({ fileName, onDelete, onDownload }: FileInputProps) {
       <button className="btn btn-download" onClick={onDownload}>
         <FontAwesomeIcon icon={faFileDownload} size='lg' />
       </button>
-
       <SecureComponent permissions={["PROJECT_UPDATE"]}>
         <button className="btn btn-delete" onClick={onDelete}>
           <FontAwesomeIcon icon={faTrash} size='lg' />
         </button>
       </SecureComponent>
     </div>
+  );
+}
+
+export function BackButton({ onClick }: { onClick?: () => void }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(-1);
+    }
+  };
+
+  return (
+    <button className="back-button" onClick={handleClick} type="button">
+      <FontAwesomeIcon icon={faArrowLeft} /> Voltar
+    </button>
   );
 }
