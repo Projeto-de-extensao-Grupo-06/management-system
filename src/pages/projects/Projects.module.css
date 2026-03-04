@@ -289,9 +289,7 @@ h1 {
 .kpis {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .graphs {
