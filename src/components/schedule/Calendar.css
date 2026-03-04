@@ -86,3 +86,8 @@
 .fc-timeGridWeek-button {
     display: none !important;
 }
+
+.fc-daygrid-day:hover {
+    background-color: #f3f4f6 !important;
+    cursor: pointer;
+}

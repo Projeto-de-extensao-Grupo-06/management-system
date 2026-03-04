@@ -348,6 +348,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                       setClients([]);
 
                       setErrors(prev => ({ ...prev, client: '' }));
+                      setTimeout(() => isSelectingClient.current = false, 0);
                     }}
                   >
                     {client.firstName} {client.lastName}
@@ -440,6 +441,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                       setResponsibles([]);
 
                       setErrors(prev => ({ ...prev, responsible: '' }));
+                      setTimeout(() => isSelectingResponsible.current = false, 0);
                     }}
                   >
                     {responsible.firstName} {responsible.lastName}

@@ -45,6 +45,34 @@ export function SimpleButton({ text, icon, type = "submit", onClick, disabled = 
   );
 }
 
+export function FilterButton({
+  text,
+  value,
+  selected,
+  onClick,
+  className,
+  activeClassName,
+}: {
+  text: string;
+  value: string;
+  selected: string;
+  onClick: (value: string) => void;
+  className?: string;
+  activeClassName?: string;
+}) {
+  const isActive = selected === value;
+  const combined = `${className ?? ''} ${isActive && activeClassName ? activeClassName : ''}`.trim();
+
+  return (
+    <Button
+      text={text}
+      type="button"
+      onClick={() => onClick(value)}
+      className={combined}
+    />
+  );
+}
+
 export function IconButton({ functionality = "edit", icon, type = "submit", onClick, disabled = false, ariaLabel, title }: IconButtonProps) {
   return (
     <button
