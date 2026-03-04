@@ -1,15 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Material } from "../../../../../interfaces/types/Material";
+import type { Material, MaterialUrl } from "../../../../../interfaces/types/Material";
 import MaterialService from "../../../../../services/MaterialsService";
 import FilterBar from "../../../../layout/FilterBar";
 import Table from "../../../../tables/Table";
 import { Input } from "../../../../ui/Form";
 import "./AddMaterial.css";
 import ExpandMaterial from "./partials/ExpandMaterial";
+import type { Budget, BudgetMaterial } from "../../../../../interfaces/types/Budget";
+import { budgetService } from "../../MaterialList";
 
 const materialsService = new MaterialService();
 
-export default function AddMaterial() {
+interface AddMaterialProps {
+  materials: BudgetMaterial[];
+  setBudget: React.Dispatch<React.SetStateAction<Budget>>;
+  projectId: number;
+}
+
+export default function AddMaterial({ materials, setBudget, projectId }: AddMaterialProps) {
   const [materialsList, setMaterialsList] = useState<Material[]>([]);
   const [search, setSearch] = useState("");
 
@@ -26,6 +34,16 @@ export default function AddMaterial() {
     return materialsList.filter((m) => m.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
   }, [search, materialsList]);
 
+  function removeMaterial(material: MaterialUrl) {
+    budgetService.deleteMaterialUrl(projectId, material.id);
+
+    setBudget((prev) => {
+      const copy = { ...prev };
+      copy.materials = copy.materials.filter((m) => m.materialUrlId !== material.id);
+      return copy;
+    })
+  }
+
   return (
     <div className="addMaterialContainer">
       <FilterBar>
@@ -41,6 +59,23 @@ export default function AddMaterial() {
         {searchMaterial.map((value, index) => {
           return (
             <ExpandMaterial
+              onAddMaterial={(materialUrl) => {
+                setBudget(prev => {
+                  const newMaterials = {
+                    ...prev, materials: [...prev.materials, {
+                      materialUrlId: materialUrl.id,
+                      name: value.name,
+                      url: materialUrl.url,
+                      unitPrice: materialUrl.price,
+                      quantity: 1
+                    }]
+                  };
+
+                  return newMaterials;
+                });
+              }}
+              onRemoveMaterial={removeMaterial}
+              budgetMaterials={materials}
               materialId={value.id}
               name={value.name}
               description={value.description}

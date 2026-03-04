@@ -5,7 +5,10 @@
     margin-top: 24px;
 
     align-items: stretch;
+
+    height: calc(100vh - 252px);
 }
+
 .left {
     display: flex;
     flex-direction: column;
@@ -15,4 +18,9 @@
 .right {
     display: flex;
     flex-direction: column;
+}
+
+.left,
+.right {
+    min-height: 0;
 }

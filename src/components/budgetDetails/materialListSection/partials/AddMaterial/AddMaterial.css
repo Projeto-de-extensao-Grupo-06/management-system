@@ -25,4 +25,5 @@
 .addButton {
     font-weight: bold;
     width: 20%;
+    cursor: pointer;
 }

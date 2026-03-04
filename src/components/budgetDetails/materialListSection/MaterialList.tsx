@@ -9,7 +9,7 @@ import styles from "./MaterialList.module.css";
 import AddMaterial from "./partials/AddMaterial/AddMaterial";
 import MaterialCard from "./partials/MaterialCard";
 
-const budgetService = new BudgetService();
+export const budgetService = new BudgetService();
 
 interface MaterialListProps {
     materials: BudgetMaterial[];
@@ -22,17 +22,15 @@ export default function MaterialList({ materials, setBudget, editing, projectId 
     const [isModalOpen, setModalOpen] = useState(false);
 
 
-  function removeMaterial(material: BudgetMaterial) {
-    if (material.materialUrlId > 0) {
-      budgetService.deleteMaterialUrl(projectId, material.materialUrlId)
-    }
+    function removeMaterial(material: BudgetMaterial) {
+        budgetService.deleteMaterialUrl(projectId, material.materialUrlId);
 
-    setBudget((prev) => {
-        const copy = { ...prev };
-        copy.materials = copy.materials.filter((m) => m.materialUrlId !== material.materialUrlId);
-        return copy;
-    })
-  }
+        setBudget((prev) => {
+            const copy = { ...prev };
+            copy.materials = copy.materials.filter((m) => m.materialUrlId !== material.materialUrlId);
+            return copy;
+        })
+    }
 
     return (
         <div className={styles.container}>
@@ -43,7 +41,7 @@ export default function MaterialList({ materials, setBudget, editing, projectId 
                 </div>
 
                 {
-                    editing && 
+                    editing &&
                     <Button
                         className={styles.addButton}
                         text="Adicionar Material"
@@ -77,7 +75,7 @@ export default function MaterialList({ materials, setBudget, editing, projectId 
             </div>
 
             <Modal isOpen={isModalOpen} title="Adicionar Material" onClose={() => setModalOpen(false)} maxWidth="80%">
-                <AddMaterial></AddMaterial>
+                <AddMaterial projectId={projectId} materials={materials} setBudget={setBudget}></AddMaterial>
             </Modal>
         </div>
     );

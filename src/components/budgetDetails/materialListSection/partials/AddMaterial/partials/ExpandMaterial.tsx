@@ -1,19 +1,22 @@
-import { faCaretUp, faCaretDown, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faCaretUp, faCaretDown, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import MaterialService from "../../../../../../services/MaterialsService";
 import type { MaterialUrl } from "../../../../../../interfaces/types/Material";
-import { Button } from "../../../../../ui/Form";
+import MaterialService from "../../../../../../services/MaterialsService";
+import type { BudgetMaterial } from "../../../../../../interfaces/types/Budget";
 
 interface ExpandMaterialProps {
     materialId: number;
     name: string;
     description: string | null;
+    budgetMaterials: BudgetMaterial[];
+    onAddMaterial?: (materialUrl: MaterialUrl) => void;
+    onRemoveMaterial?: (materialUrl: MaterialUrl) => void;
 }
 
 const materialService = new MaterialService();
 
-export default function ExpandMaterial({ materialId, name, description }: ExpandMaterialProps) {
+export default function ExpandMaterial({ materialId, name, description, budgetMaterials, onAddMaterial, onRemoveMaterial }: ExpandMaterialProps) {
     const [isExpand, setExpand] = useState(false);
     const [urls, setUrls] = useState<MaterialUrl[]>([]);
     const [loadingUrls, setLoadingUrls] = useState(false);
@@ -39,35 +42,45 @@ export default function ExpandMaterial({ materialId, name, description }: Expand
             <a href={u.url} className="url" target="_blank" rel="noopener noreferrer">
                 {u.url}
             </a>
-            
-            {/* <Button className="addButton" icon={<FontAwesomeIcon icon={faAdd} />} text="Adicionar" /> */}
+
+            {
+                budgetMaterials.some(m => m.materialUrlId === u.id) ? (
+                    <span className="addButton" onClick={() => onRemoveMaterial && onRemoveMaterial(u)}><FontAwesomeIcon icon={faMinusCircle} /> Remover</span>
+
+                ) : (
+                    <span className="addButton" onClick={() => onAddMaterial && onAddMaterial(u)}><FontAwesomeIcon icon={faPlusCircle} /> Adicionar</span>
+                )
+            }
         </li>
     ));
 
     return (
-        <>
-            <tr>
-                <td>{name}</td>
-                <td>{description}</td>
-                <td onClick={handleExpand}>
-                    <FontAwesomeIcon
-                        icon={isExpand ? faCaretDown : faCaretUp}
-                        size="xl"
-                        cursor="pointer"
-                    />
-                </td>
-            </tr>
-            {isExpand && (
-                <td colSpan={3}>
-                    {loadingUrls ? (
-                        <p>Carregando URLs...</p>
-                    ) : urls.length > 0 ? (
-                        <ul className="urlList">{urlsList}</ul>
-                    ) : (
-                        <p>Nenhuma URL encontrada para este material.</p>
-                    )}
-                </td>
-            )}
-        </>
-    );
+  <>
+    <tr>
+      <td>{name}</td>
+      <td>{description}</td>
+      <td onClick={handleExpand}>
+        <FontAwesomeIcon
+          icon={isExpand ? faCaretDown : faCaretUp}
+          size="xl"
+          cursor="pointer"
+        />
+      </td>
+    </tr>
+
+    {isExpand && (
+      <tr>
+        <td colSpan={3}>
+          {loadingUrls ? (
+            <>Carregando URLs...</>
+          ) : urls.length > 0 ? (
+            <ul className="urlList">{urlsList}</ul>
+          ) : (
+            <>Nenhuma URL encontrada para este material.</>
+          )}
+        </td>
+      </tr>
+    )}
+  </>
+);
 }
