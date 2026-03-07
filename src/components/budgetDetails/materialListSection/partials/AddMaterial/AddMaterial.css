@@ -27,3 +27,10 @@
     width: 20%;
     cursor: pointer;
 }
+
+
+.materialPrice {
+    font-weight: bold;
+    color: #DD7428;
+    font-size: medium;
+}

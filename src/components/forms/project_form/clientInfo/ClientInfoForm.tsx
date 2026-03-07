@@ -42,7 +42,7 @@ export default function ClientInfoForm({ project }: ClientInfoFormProps) {
 
     useEffect(() => {
         const loadClient = async () => {
-            const client = await clientService.getClientById(project.addressId);
+            const client = await clientService.getClientById(project.clientId);
             setClient(client);
             const address = await addressService.getAddressById(project.addressId);
             setAddress(address);
@@ -107,7 +107,7 @@ export default function ClientInfoForm({ project }: ClientInfoFormProps) {
 
             <div className={styles.form}>
                 <div className={styles.inputContainer}>
-                    <label className={styles.inputLabel}>Nome do projeto:</label>
+                    <label className={styles.inputLabel}>Nome do Cliente:</label>
                     <Input disabled={true} value={client?.name ?? ""} />
                 </div>
                 <div className={styles.inputContainer}>

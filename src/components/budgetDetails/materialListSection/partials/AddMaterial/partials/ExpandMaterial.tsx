@@ -43,6 +43,8 @@ export default function ExpandMaterial({ materialId, name, description, budgetMa
                 {u.url}
             </a>
 
+            <span className="materialPrice">{u.price.toLocaleString("pt-br", { style: "currency", currency: "BRL" })}</span>
+
             {
                 budgetMaterials.some(m => m.materialUrlId === u.id) ? (
                     <span className="addButton" onClick={() => onRemoveMaterial && onRemoveMaterial(u)}><FontAwesomeIcon icon={faMinusCircle} /> Remover</span>
