@@ -18,7 +18,6 @@ import ClientsService from '../../../services/ClientsService';
 import ProjectsService from '../../../services/ProjectsService';
 
 import { formatAddress } from '../../../utils/AddressUtils';
-import { projectStatusLabel } from '../../../utils/mappers/projectStatusLabel';
 
 interface Props {
   open: boolean;
@@ -57,6 +56,10 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
   const [addressId, setAddressId] = useState<number | null>(null);
   const [editAddress, setEditAddress] = useState(false);
   const [addressType, setAddressType] = useState<string>("");
+  const [showResponsibles, setShowResponsibles] = useState(false);
+  const [showClients, setShowClients] = useState(false);
+  const responsibleRef = useRef<HTMLDivElement | null>(null);
+  const clientRef = useRef<HTMLDivElement | null>(null);
   const userPermissions = usePermissions();
   type ProjectErrors = {
     projectName?: string;
@@ -83,46 +86,58 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
 
   useEffect(() => {
 
+    if (!showClients) return;
+
     if (isSelectingClient.current) {
       isSelectingClient.current = false;
       return;
     }
 
-    if (clientSearch.length < 2) {
-      return;
-    }
-
     const delay = setTimeout(() => {
+
+      const search = clientSearch.length < 2 ? "" : clientSearch;
+
       clientsService
-        .getAllClients(0, 10, clientSearch)
+        .getAllClients(0, 10, search)
         .then(res => setClients(res.content))
         .catch(() => setClients([]));
+
     }, 300);
 
     return () => clearTimeout(delay);
 
-  }, [clientSearch, clientsService]);
+  }, [clientSearch, clientsService, showClients]);
 
   useEffect(() => {
+
+    if (!showResponsibles) return;
 
     if (isSelectingResponsible.current) {
       isSelectingResponsible.current = false;
       return;
     }
 
-    if (responsibleSearch.length < 2) {
-      return;
-    }
+    const normalize = (text: string) =>
+      text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
 
     const delay = setTimeout(() => {
       projectsService
         .getAllCoworkers(0, 100)
         .then((res: any[]) => {
-          const filtered = res.filter((coworker) =>
-            `${coworker.firstName} ${coworker.lastName}`
-              .toLowerCase()
-              .includes(responsibleSearch.toLowerCase())
-          );
+
+          const search = normalize(responsibleSearch);
+
+          const filtered =
+            search === ""
+              ? res
+              : res.filter((coworker) =>
+                normalize(`${coworker.firstName} ${coworker.lastName}`)
+                  .includes(search)
+              );
+
           setResponsibles(filtered);
         })
         .catch(() => setResponsibles([]));
@@ -130,7 +145,33 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
 
     return () => clearTimeout(delay);
 
-  }, [responsibleSearch, projectsService]);
+  }, [responsibleSearch, projectsService, showResponsibles]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+
+      if (
+        responsibleRef.current &&
+        !responsibleRef.current.contains(event.target as Node)
+      ) {
+        setShowResponsibles(false);
+      }
+
+      if (
+        clientRef.current &&
+        !clientRef.current.contains(event.target as Node)
+      ) {
+        setShowClients(false);
+      }
+
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const useClientAddress = () => {
     if (!selectedClient?.mainAddress) return;
@@ -193,7 +234,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
       name: projectName,
       description: "",
       projectType: projectType as 'ON_GRID' | 'OFF_GRID',
-      status,
+      status: ProjectStatus.NEW,
       clientId: clientId!,
       responsibleId: responsibleId ?? undefined,
       addressId: addressId ?? undefined
@@ -288,34 +329,20 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
             )}
           </div>
 
-          {/* Status */}
-          <div className={styles.field}>
-            <label>Status</label>
-            <select
-              className={styles.input}
-              value={status}
-              onChange={(e) =>
-                setStatus(e.target.value as ProjectStatusType)
-              }
-            >
-              {Object.values(ProjectStatus).map((statusValue) => (
-                <option key={statusValue} value={statusValue}>
-                  {projectStatusLabel[statusValue]}
-                </option>
-              ))}
-            </select>
-          </div>
 
           {/* Cliente */}
-          <div className={styles.field}>
+          <div className={styles.field} ref={clientRef}>
             <label>Cliente</label>
             <Input
               value={clientSearch}
+              onFocus={() => setShowClients(true)}
               onChange={(e) => {
                 setClientSearch(e.target.value);
+
                 if (e.target.value.length < 2) {
                   setClients([]);
                 }
+
                 setClientId(null);
                 setSelectedClient(null);
                 setAddress(null);
@@ -334,7 +361,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
               </span>
             )}
 
-            {clients.length > 0 && (
+            {showClients && clients.length > 0 && (
               <div className={styles.autocompleteList}>
                 {clients.map(client => (
                   <div
@@ -342,12 +369,16 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                     className={styles.autocompleteItem}
                     onMouseDown={() => {
                       isSelectingClient.current = true;
+
                       setClientSearch(`${client.firstName} ${client.lastName}`);
                       setClientId(client.id);
                       setSelectedClient(client);
+
                       setClients([]);
+                      setShowClients(false);
 
                       setErrors(prev => ({ ...prev, client: '' }));
+
                       setTimeout(() => isSelectingClient.current = false, 0);
                     }}
                   >
@@ -401,17 +432,15 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
           </div>
 
           {/* Responsável */}
-          <div className={styles.field}>
+          <div className={styles.field} ref={responsibleRef}>
             <label>Responsável</label>
+
             <Input
               value={responsibleSearch}
+              onFocus={() => setShowResponsibles(true)}
               onChange={(e) => {
                 setResponsibleSearch(e.target.value);
-                if (e.target.value.length < 2) {
-                  setResponsibles([]);
-                }
                 setResponsibleId(null);
-
 
                 if (errors.responsible) {
                   setErrors(prev => ({ ...prev, responsible: '' }));
@@ -420,13 +449,7 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
               placeholder="Digite o nome do responsável"
             />
 
-            {errors.responsible && (
-              <span className={styles.errorText}>
-                {errors.responsible}
-              </span>
-            )}
-
-            {responsibles.length > 0 && (
+            {showResponsibles && responsibles.length > 0 && (
               <div className={styles.autocompleteList}>
                 {responsibles.map((responsible) => (
                   <div
@@ -434,14 +457,18 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                     className={styles.autocompleteItem}
                     onMouseDown={() => {
                       isSelectingResponsible.current = true;
+
                       setResponsibleSearch(
                         `${responsible.firstName} ${responsible.lastName}`
                       );
                       setResponsibleId(responsible.id);
+
                       setResponsibles([]);
+                      setShowResponsibles(false);
 
                       setErrors(prev => ({ ...prev, responsible: '' }));
-                      setTimeout(() => isSelectingResponsible.current = false, 0);
+
+                      setTimeout(() => (isSelectingResponsible.current = false), 0);
                     }}
                   >
                     {responsible.firstName} {responsible.lastName}
@@ -449,6 +476,13 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
                 ))}
               </div>
             )}
+
+            {errors.responsible && (
+              <span className={styles.errorText}>
+                {errors.responsible}
+              </span>
+            )}
+
           </div>
 
           {/* Endereço */}
