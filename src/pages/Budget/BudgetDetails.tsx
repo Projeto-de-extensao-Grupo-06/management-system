@@ -132,6 +132,7 @@ export default function BudgetDetails() {
               setBudget={setBudget}
               editing={isEditing}
               setEditing={setIsEditing}
+              projectId={projectId}
             />
           </div>
         </div>
