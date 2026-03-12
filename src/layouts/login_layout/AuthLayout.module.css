@@ -1,7 +1,7 @@
 .container {
     min-height: 100vh;
     min-height: 100dvh;
-    width: 100vw;
+    width: 100%;
 
     background-image: url("../../assets/login-background-quality.jpg");
     background-size: cover;

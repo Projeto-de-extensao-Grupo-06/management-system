@@ -10,3 +10,25 @@
   display: flex;
   align-items: center;
 }
+
+.dropdown {
+  position: relative;
+}
+
+.filterLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .dropdown {
+    width: 100% !important;
+  }
+  
+  .searchBox {
+    max-width: none;
+    width: 100%;
+    margin-left: 0 !important;
+  }
+}

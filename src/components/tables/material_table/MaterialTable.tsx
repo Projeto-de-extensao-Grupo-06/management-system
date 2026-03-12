@@ -48,7 +48,7 @@ export default function MaterialTable({ materials, onEdit, onDelete, onRowClick 
                     onClick={() => onRowClick && onRowClick(material.id)}
                     className={onRowClick ? styles.clickableRow : styles.defaultCursor}
                 >
-                    <td>{material.name}</td>
+                    <td className={styles.wrappingCell}>{material.name}</td>
                     <td>{getMetricLabel(material.metric)}</td>
                     <td style={{ textAlign: 'center' }}>
                         <div className={styles.linkInfo} style={{ justifyContent: 'center' }}>

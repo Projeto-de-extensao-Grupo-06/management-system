@@ -24,3 +24,10 @@
     color: var(--secondary);
     font-weight: 500;
 }
+
+.wrappingCell {
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-width: 250px;
+    line-height: 1.4;
+}

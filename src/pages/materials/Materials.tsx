@@ -144,7 +144,7 @@ export default function Materials() {
       }
     >
       <FilterBar>
-        <div style={{ display: 'flex', gap: '1rem', width: '100%', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '1rem', width: '100%', alignItems: 'center', flexWrap: 'wrap' }}>
           <FontAwesomeIcon icon={faFilter} style={{ color: "var(--secondary)" }} />
           <span style={{ fontWeight: 600, color: "var(--secondary)" }}>Filtro:</span>
           <div className={styles.dropdown} style={{ width: '200px' }}>

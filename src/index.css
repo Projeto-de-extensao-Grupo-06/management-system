@@ -99,6 +99,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: var(--color-text);
   background-color: var(--color-background-alt);
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 #root,
