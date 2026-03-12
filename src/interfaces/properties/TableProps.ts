@@ -22,7 +22,7 @@ export interface PaginationProps {
 }
 
 export interface TableProps {
-    headers: string[];
+    headers: React.ReactNode[];
     children?: React.ReactNode;
     isEmpty?: boolean;
     emptyMessage?: string;

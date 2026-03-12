@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useForm, Controller } from "react-hook-form";
 import type { Material } from "../../../interfaces/types/Material";
 import { materialSchema, type MaterialSchemaType } from "../../../schemas/materialSchema";
@@ -13,14 +13,16 @@ export interface MaterialFormRef {
 export interface MaterialFormProps {
   onSubmit: (data: MaterialSchemaType) => void;
   initialData?: Material | null;
+  readOnly?: boolean;
 }
 
 const MaterialForm = forwardRef<MaterialFormRef, MaterialFormProps>(
-  ({ onSubmit, initialData }, ref) => {
+  ({ onSubmit, initialData, readOnly = false }, ref) => {
     const {
       register,
       handleSubmit,
       control,
+      reset,
       formState: { errors },
     } = useForm<MaterialSchemaType>({
       resolver: zodResolver(materialSchema),
@@ -30,6 +32,14 @@ const MaterialForm = forwardRef<MaterialFormRef, MaterialFormProps>(
         metric: initialData?.metric || "UNIT",
       },
     });
+
+    useEffect(() => {
+      reset({
+        name: initialData?.name || "",
+        description: initialData?.description || "",
+        metric: initialData?.metric || "UNIT",
+      });
+    }, [initialData, reset]);
 
     useImperativeHandle(ref, () => ({
       submit: () => {
@@ -46,6 +56,7 @@ const MaterialForm = forwardRef<MaterialFormRef, MaterialFormProps>(
           <Input
             id="name"
             placeholder="Ex: Inversor..."
+            disabled={readOnly}
             {...register("name")}
           />
           {errors.name && (
@@ -65,6 +76,7 @@ const MaterialForm = forwardRef<MaterialFormRef, MaterialFormProps>(
                 id="metric"
                 value={field.value}
                 onChange={field.onChange}
+                disabled={readOnly}
               >
                 <SelectOption value="UNIT" label="Unidade" />
                 <SelectOption value="METER" label="Metro" />
@@ -85,6 +97,7 @@ const MaterialForm = forwardRef<MaterialFormRef, MaterialFormProps>(
             id="description"
             className={styles.textarea}
             placeholder="Descrição do material..."
+            disabled={readOnly}
             {...register("description")}
           />
           {errors.description && (

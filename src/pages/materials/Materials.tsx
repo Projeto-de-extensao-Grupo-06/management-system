@@ -16,6 +16,7 @@ export default function Materials() {
   const [materials, setMaterials] = useState<MaterialWithLinks[]>([]);
   const [filteredMaterials, setFilteredMaterials] = useState<MaterialWithLinks[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [metricFilter, setMetricFilter] = useState("Todos");
   
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
@@ -49,19 +50,31 @@ export default function Materials() {
   }, []);
 
   useEffect(() => {
-    if (!searchTerm) {
-      setFilteredMaterials(materials);
-      return;
+    let filtered = materials;
+    if (searchTerm) {
+      filtered = filtered.filter((m) =>
+        m.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
-    const filtered = materials.filter((m) =>
-      m.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    if (metricFilter !== "Todos") {
+      filtered = filtered.filter((m) => m.metric === metricFilter);
+    }
     setFilteredMaterials(filtered);
     setPage(1);
-  }, [searchTerm, materials]);
+  }, [searchTerm, metricFilter, materials]);
 
   const handleSearchChange = (val: string) => {
     setSearchTerm(val);
+  };
+
+  const uniqueMetrics = Array.from(new Set(materials.map(m => m.metric)));
+  const getMetricLabel = (metric: string) => {
+    switch (metric) {
+      case 'UNIT': return 'Unidade';
+      case 'METER': return 'Metro';
+      case 'CENTIMETER': return 'Centímetro';
+      default: return metric;
+    }
   };
 
   const handleAddMaterial = () => {
@@ -70,6 +83,10 @@ export default function Materials() {
 
   const handleEdit = (id: number) => {
     dialogRef.current?.openEdit(id);
+  };
+
+  const handleView = (id: number) => {
+    dialogRef.current?.openView(id);
   };
 
   const handleDelete = (id: number) => {
@@ -131,8 +148,11 @@ export default function Materials() {
           <FontAwesomeIcon icon={faFilter} style={{ color: "var(--secondary)" }} />
           <span style={{ fontWeight: 600, color: "var(--secondary)" }}>Filtro:</span>
           <div className={styles.dropdown} style={{ width: '200px' }}>
-            <Select value={"Todos"} onChange={() => {}}>
+            <Select value={metricFilter} onChange={(val) => setMetricFilter(val)}>
               <SelectOption value="Todos" label="Todos os itens" />
+              {uniqueMetrics.map(metric => (
+                <SelectOption key={metric} value={metric} label={getMetricLabel(metric)} />
+              ))}
             </Select>
           </div>
 
@@ -150,7 +170,7 @@ export default function Materials() {
         materials={currentMaterials}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        onRowClick={handleEdit}
+        onRowClick={handleView}
       />
 
       <Pagination

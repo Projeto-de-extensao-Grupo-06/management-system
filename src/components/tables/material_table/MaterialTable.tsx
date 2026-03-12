@@ -32,8 +32,8 @@ export default function MaterialTable({ materials, onEdit, onDelete, onRowClick 
     const headers = [
         'Nome do Item',
         'Métrica/Unidade',
-        'Links de Compra',
-        ...(canManage ? ['Ações'] : [])
+        <div style={{ textAlign: 'center' }}>Links de Compra</div>,
+        ...(canManage ? [<div style={{ textAlign: 'center' }}>Ações</div>] : [])
     ];
 
     return (
@@ -50,15 +50,15 @@ export default function MaterialTable({ materials, onEdit, onDelete, onRowClick 
                 >
                     <td>{material.name}</td>
                     <td>{getMetricLabel(material.metric)}</td>
-                    <td>
-                        <div className={styles.linkInfo}>
+                    <td style={{ textAlign: 'center' }}>
+                        <div className={styles.linkInfo} style={{ justifyContent: 'center' }}>
                             <FontAwesomeIcon icon={faLink} />
                             <span>{material.linksCount !== undefined ? `${material.linksCount} Link(s)` : 'Links...'}</span>
                         </div>
                     </td>
                     <SecureComponent permissions={["BUDGET_UPDATE", "BUDGET_DELETE"]}>
-                        <td>
-                            <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
+                        <td style={{ textAlign: 'center' }}>
+                            <div className={styles.actions} style={{ justifyContent: 'center' }} onClick={(e) => e.stopPropagation()}>
                                 <SecureComponent permissions={["BUDGET_UPDATE"]}>
                                     <IconButton
                                         onClick={() => onEdit(material.id)}

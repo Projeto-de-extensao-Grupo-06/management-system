@@ -1,6 +1,7 @@
-import { faPlus, faLink, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faLink, faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import usePermissions from "../../../hooks/usePermissions";
 import type { Material, MaterialUrl } from "../../../interfaces/types/Material";
 import type { MaterialSchemaType } from "../../../schemas/materialSchema";
 import type { MaterialUrlSchemaType } from "../../../schemas/materialUrlSchema";
@@ -14,6 +15,7 @@ import styles from "./MaterialDialog.module.css";
 export interface MaterialDialogRef {
   openCreate: () => void;
   openEdit: (materialId: number) => void;
+  openView: (materialId: number) => void;
   close: () => void;
 }
 
@@ -24,8 +26,11 @@ export interface MaterialDialogProps {
 
 const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
   ({ onMaterialCreated, onMaterialUpdated }, ref) => {
+    const permissions = usePermissions();
+    const canManage = permissions.includes("BUDGET_UPDATE");
+
     const [isOpen, setIsOpen] = useState(false);
-    const [mode, setMode] = useState<"CREATE" | "EDIT" | "LINK_CREATE">("CREATE");
+    const [mode, setMode] = useState<"CREATE" | "EDIT" | "READ" | "LINK_CREATE">("CREATE");
     const [currentMaterialId, setCurrentMaterialId] = useState<number | null>(null);
     const [materialData, setMaterialData] = useState<Material | null>(null);
     const [links, setLinks] = useState<MaterialUrl[]>([]);
@@ -58,6 +63,13 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
       },
       openEdit: async (materialId: number) => {
         setMode("EDIT");
+        setCurrentMaterialId(materialId);
+        setErrorMsg(null);
+        setIsOpen(true);
+        loadMaterialData(materialId);
+      },
+      openView: async (materialId: number) => {
+        setMode("READ");
         setCurrentMaterialId(materialId);
         setErrorMsg(null);
         setIsOpen(true);
@@ -132,6 +144,20 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
           </div>
         );
       }
+      if (mode === "READ") {
+        return (
+          <div className={styles.footerRow}>
+            {canManage && (
+              <Button
+                text="Editar"
+                icon={<FontAwesomeIcon icon={faPen} />}
+                onClick={() => setMode("EDIT")}
+                width="fit-content"
+              />
+            )}
+          </div>
+        );
+      }
       return (
         <div className={styles.footerRow}>
           <SimpleButton text="Cancelar" onClick={() => setIsOpen(false)} />
@@ -148,6 +174,7 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
     const renderTitle = () => {
       if (mode === "CREATE") return "Criar Material";
       if (mode === "LINK_CREATE") return "Adicionar Link";
+      if (mode === "READ") return materialData?.name ? `Detalhes: ${materialData.name}` : "Detalhes do Material";
       return materialData?.name ? `Editar: ${materialData.name}` : "Editar Material";
     };
 
@@ -160,7 +187,7 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
         ) : (
           <div className={styles.dualPane}>
             <div className={styles.formPane}>
-              <MaterialForm ref={materialFormRef} onSubmit={handleMaterialSubmit} initialData={materialData} />
+              <MaterialForm ref={materialFormRef} onSubmit={handleMaterialSubmit} initialData={materialData} readOnly={mode === "READ"} />
             </div>
             
             <div className={styles.linksPane}>
@@ -170,12 +197,12 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
                   text="Add Link"
                   icon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={() => setMode("LINK_CREATE")}
-                  disabled={mode === "CREATE"} // Só pode add link se já existe (id não nulo)
+                  disabled={mode === "CREATE" || mode === "READ"}
                   width="fit-content"
                 />
               </div>
               {mode === "CREATE" && <p className={styles.infoText}>Crie o material primeiro para adicionar links.</p>}
-              {mode === "EDIT" && (
+              {(mode === "EDIT" || mode === "READ") && (
                 <div className={styles.linksList}>
                   {links.length === 0 ? (
                     <p className={styles.infoText}>Nenhum link cadastrado.</p>
@@ -188,12 +215,14 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
                         <span className={styles.linkPrice}>
                           R$ {link.price.toFixed(2)}
                         </span>
-                        <IconButton
-                          icon={<FontAwesomeIcon icon={faTrashCan} />}
-                          functionality="delete"
-                          onClick={() => handleDeleteLink(link.id)}
-                          ariaLabel="Excluir Link"
-                        />
+                        {mode === "EDIT" && (
+                          <IconButton
+                            icon={<FontAwesomeIcon icon={faTrashCan} />}
+                            functionality="delete"
+                            onClick={() => handleDeleteLink(link.id)}
+                            ariaLabel="Excluir Link"
+                          />
+                        )}
                       </div>
                     ))
                   )}
