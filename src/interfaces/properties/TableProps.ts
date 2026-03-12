@@ -1,7 +1,15 @@
 import type Client from '../types/Client';
+import type { Material } from '../types/Material';
 
 export interface ClientTableProps {
     clients: Client[];
+    onEdit: (id: number) => void;
+    onDelete: (id: number) => void;
+    onRowClick?: (id: number) => void;
+}
+
+export interface MaterialTableProps {
+    materials: (Material & { linksCount?: number })[];
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
     onRowClick?: (id: number) => void;

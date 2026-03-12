@@ -1,0 +1,26 @@
+.clickableRow {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clickableRow:hover {
+    background-color: var(--hover-color, #f5f5f5);
+}
+
+.defaultCursor {
+    cursor: default;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.linkInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--secondary);
+    font-weight: 500;
+}

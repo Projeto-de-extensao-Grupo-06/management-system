@@ -1,0 +1,112 @@
+.dualPane {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .dualPane {
+    grid-template-columns: 1fr 1fr;
+    min-height: 400px;
+  }
+}
+
+.formPane {
+  display: flex;
+  flex-direction: column;
+}
+
+.linksPane {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-color, #eee);
+  padding-left: 2rem;
+}
+
+@media (max-width: 767px) {
+  .linksPane {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--border-color, #eee);
+    padding-top: 2rem;
+  }
+}
+
+.linksHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.linksHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--secondary);
+}
+
+.infoText {
+  color: #666;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.linksList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.linkCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color, #eee);
+  border-radius: 8px;
+  background-color: #fafafa;
+  gap: 0.5rem;
+}
+
+.linkAnchor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px;
+}
+
+.linkAnchor:hover {
+  text-decoration: underline;
+}
+
+.linkPrice {
+  font-weight: 600;
+  color: #333;
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
+.footerRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.errorBanner {
+  background-color: #fde4e4;
+  color: #d32f2f;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  text-align: center;
+}

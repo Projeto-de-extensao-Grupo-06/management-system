@@ -427,3 +427,16 @@ export function BackButton({ onClick }: { onClick?: () => void }) {
     </button>
   );
 }
+
+export const TextArea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(({ className, ...props }, ref) => {
+  return (
+    <div className="input-container">
+      <textarea
+        {...props}
+        ref={ref}
+        className={`input ${className || ''}`}
+        style={{ minHeight: '100px', resize: 'vertical', ...props.style }}
+      />
+    </div>
+  );
+});
