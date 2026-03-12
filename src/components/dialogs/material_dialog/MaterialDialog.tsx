@@ -112,6 +112,7 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
         });
         await loadMaterialData(currentMaterialId);
         setMode("EDIT");
+        onMaterialUpdated();
       } catch (err) {
         setErrorMsg(err instanceof Error ? err.message : "Erro ao adicionar link.");
       }
@@ -121,7 +122,10 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
       setErrorMsg(null);
       try {
         await materialService.deleteMaterialUrl(linkId);
-        if (currentMaterialId) await loadMaterialData(currentMaterialId);
+        if (currentMaterialId) {
+            await loadMaterialData(currentMaterialId);
+            onMaterialUpdated();
+        }
       } catch {
         setErrorMsg("Erro ao deletar link.");
       }
