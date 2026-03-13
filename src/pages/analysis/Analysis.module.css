@@ -109,7 +109,6 @@ h1 {
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   min-width: 0;
-  /* Important for preventing grid overflow */
 }
 
 @media (max-width: 1200px) {
@@ -136,7 +135,6 @@ h1 {
     overflow-x: auto;
     padding-bottom: 0.5rem;
     flex-wrap: nowrap;
-    /* Allow scroll on mobile */
   }
 
   .graphs {
