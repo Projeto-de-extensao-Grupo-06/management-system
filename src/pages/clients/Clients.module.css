@@ -29,6 +29,7 @@
   border-radius: var(--border-radius-lg);
   box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .filters {
@@ -36,6 +37,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .filterButton {
@@ -129,6 +131,7 @@
 .tableWrapper {
   overflow-x: auto;
   padding: 0;
+  margin-top: 0.5rem;
 }
 
 .table {
@@ -345,6 +348,10 @@
   .gridAddress {
     grid-template-columns: 1fr;
   }
+
+   .projectsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -354,22 +361,5 @@
 
   .table {
     min-width: 50rem;
-  }
-}
-
-.projectsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.projectsSection {
-  margin-top: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .projectsGrid {
-    grid-template-columns: 1fr;
   }
 }
