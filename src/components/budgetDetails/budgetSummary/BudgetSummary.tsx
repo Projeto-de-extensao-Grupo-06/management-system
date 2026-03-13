@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import ProposalPage from "../../pdf/ProposalPage";
-import type { Budget } from "../../../interfaces/types/Budget";
-import TogglePercentAmountAndMock from "../partials/TogglePercentAmountAndMock";
-import styles from "./BudgetSummary.module.css";
-import Modal from "../../dialogs/modal/Modal";
-import ProjectService from "../../../services/ProjectService";
-import ClientsService from "../../../services/ClientsService";
-import { CoworkerService } from "../../../services/CoworkerService";
-import AddressService from "../../../services/AddressService";
-import { formatAddress } from "../../../utils/AddressUtils";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import type { Budget } from "../../../interfaces/types/Budget";
+import AddressService from "../../../services/AddressService";
+import ClientsService from "../../../services/ClientsService";
+import { CoworkerService } from "../../../services/CoworkerService";
+import ProjectService from "../../../services/ProjectService";
+import { formatAddress } from "../../../utils/AddressUtils";
+import Modal from "../../dialogs/modal/Modal";
+import ProposalPage from "../../pdf/ProposalPage";
+import TogglePercentAmountAndMock from "../partials/TogglePercentAmountAndMock";
+import styles from "./BudgetSummary.module.css";
 
 interface Props {
     budget: Budget;

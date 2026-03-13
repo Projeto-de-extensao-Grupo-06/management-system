@@ -1,6 +1,7 @@
 import { faFile, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2"
 import type { ProjectFilesProps } from "../../../../interfaces/properties/ProjectFilesProps";
 import type { ProjectFile } from "../../../../interfaces/types/File";
@@ -10,8 +11,6 @@ import SecureComponent from "../../../security/SecureComponent";
 import { FileInput } from "../../../ui/Form";
 import FileUploadForm from "../../fileUploadForm/FileUploadForm";
 import styles from "./ProjectFiles.module.css";
-import axios from "axios";
-import { file } from "zod";
 
 const fileService = new FilesService();
 
@@ -23,19 +22,14 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
     const [fileName, setFileName] = useState("");
 
 
-    const loadFiles = async () => {
-        const files = await fileService.listProjectFiles(projectId);
-        
-        if (files) {
-            setFiles(files);
-        } else {
-            setFiles([]);
-        }
-    };
+    const loadFiles = useCallback(async () => {
+        const result = await fileService.listProjectFiles(projectId);
+        setFiles(result ?? []);
+    }, [projectId]);
 
     useEffect(() => {
         loadFiles();
-    }, []);
+    }, [loadFiles]);
 
     async function handleDownload(fileId: number) {
         await fileService.downloadFile(projectId, fileId);

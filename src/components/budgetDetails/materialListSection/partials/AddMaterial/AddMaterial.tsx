@@ -5,9 +5,9 @@ import FilterBar from "../../../../layout/FilterBar";
 import Table from "../../../../tables/Table";
 import { Input } from "../../../../ui/Form";
 import "./AddMaterial.css";
+import { budgetService } from "../../MaterialList";
 import ExpandMaterial from "./partials/ExpandMaterial";
 import type { Budget, BudgetMaterial } from "../../../../../interfaces/types/Budget";
-import { budgetService } from "../../MaterialList";
 
 const materialsService = new MaterialService();
 

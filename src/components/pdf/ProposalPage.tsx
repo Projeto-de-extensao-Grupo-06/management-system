@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { forwardRef } from "react";
 import "./proposal.css";
 import logo from "../../assets/logo-SolarWay.png";
 import type { Budget } from "../../interfaces/types/Budget";
-import { forwardRef } from "react";
 
 interface ProposalPageProps {
   budget: Budget;
@@ -17,7 +16,7 @@ interface ProposalPageProps {
   installEmail: string;
 }
 
-export default forwardRef<HTMLDivElement, ProposalPageProps>(({ budget, projectId, consultantName, consultantEmail, clientName, clientDoc, clientPhone, installCity, installAddress, installEmail }, ref) => {
+const ProposalPage = forwardRef<HTMLDivElement, ProposalPageProps>(function ProposalPage({ budget, projectId, consultantName, consultantEmail, clientName, clientDoc, clientPhone, installCity, installAddress, installEmail }, ref) {
   const DATE = new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
   const VALID_UNTIL_DATE = new Date();
   VALID_UNTIL_DATE.setDate(VALID_UNTIL_DATE.getDate() + 15);
@@ -262,3 +261,5 @@ export default forwardRef<HTMLDivElement, ProposalPageProps>(({ budget, projectI
     </div>
   );
 });
+
+export default ProposalPage;

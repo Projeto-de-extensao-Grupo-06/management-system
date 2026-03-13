@@ -60,6 +60,6 @@ export default class FilesService {
   }
 
   async deleteFile(projectId: number, fileId: number): Promise<void> {
-    const deleteRequest = await api.delete(`/projects/${projectId}/files/${fileId}`);
+    await api.delete(`/projects/${projectId}/files/${fileId}`);
   }
 };

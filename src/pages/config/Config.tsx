@@ -11,9 +11,9 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import FilterBar from "../../components/layout/FilterBar";
 import PageHeader from "../../components/layout/PageHeader";
+import { SearchInput } from "../../components/ui/Form";
 import clientStyles from "../clients/Clients.module.css";
 import styles from "./Config.module.css";
-import { SearchInput } from "../../components/ui/Form";
 
 export default function Config() {
   const navigate = useNavigate();
