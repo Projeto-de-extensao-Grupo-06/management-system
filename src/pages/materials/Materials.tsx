@@ -11,7 +11,7 @@ import PageLayout from "../../components/layout/PageLayout";
 import MaterialModal, {
   type MaterialModalData,
 } from "../../components/materials/MaterialModal";
-import type { BudgetMaterial } from "../../interfaces/types/Budget";
+import type { BudgetMaterial, ValueType } from "../../interfaces/types/Budget";
 import BudgetService from "../../services/BudgetService";
 import ClientsService from "../../services/ClientsService";
 import ProjectService from "../../services/ProjectService";
@@ -27,6 +27,10 @@ interface MockProjectResponse {
   clientId?: number;
   budget?: {
     materials?: BudgetMaterial[];
+    subtotal?: number;
+    totalCost?: number;
+    discount?: number;
+    discountType?: ValueType | "MOCK_TOTAL";
   };
 }
 
@@ -67,6 +71,10 @@ function buildPurchaseMessage(
   materials: BudgetMaterial[],
   clientName: string,
   projectName: string,
+  subtotal: number,
+  totalCost: number,
+  discount: number,
+  discountType: ValueType | "MOCK_TOTAL",
 ): string {
   const lines: string[] = [];
 
@@ -95,7 +103,14 @@ function buildPurchaseMessage(
     lines.push("");
   });
 
-  lines.push(`*Total estimado: ${formatCurrency(total)}*`);
+  const discountLabel =
+    discountType === "PERCENT"
+      ? `${discount.toLocaleString("pt-BR")} % (${formatCurrency((subtotal * discount) / 100)})`
+      : formatCurrency(discount);
+
+  lines.push(`Subtotal bruto: ${formatCurrency(subtotal || total)}`);
+  lines.push(`Desconto aplicado: ${discountLabel}`);
+  lines.push(`*Total final com desconto: ${formatCurrency(totalCost || total)}*`);
 
   return lines.join("\n");
 }
@@ -125,6 +140,10 @@ export default function Materials() {
   const [loading, setLoading] = useState(true);
   const [materials, setMaterials] = useState<BudgetMaterial[]>([]);
   const [projectName, setProjectName] = useState("Projeto Solarway");
+  const [budgetSubtotal, setBudgetSubtotal] = useState(0);
+  const [budgetTotalCost, setBudgetTotalCost] = useState(0);
+  const [budgetDiscount, setBudgetDiscount] = useState(0);
+  const [budgetDiscountType, setBudgetDiscountType] = useState<ValueType | "MOCK_TOTAL">("AMOUNT");
   const [clientName, setClientName] = useState("cliente");
   const [clientPhone, setClientPhone] = useState("");
   const [message, setMessage] = useState("");
@@ -165,6 +184,10 @@ export default function Materials() {
 
         if (budget && active) {
           setMaterials(budget.materials);
+          setBudgetSubtotal(budget.subtotal);
+          setBudgetTotalCost(budget.totalCost);
+          setBudgetDiscount(budget.discount);
+          setBudgetDiscountType(budget.discountType);
         }
 
         if (project?.name && active) {
@@ -201,6 +224,10 @@ export default function Materials() {
       if (active) {
         setProjectName(projectData.name || "Projeto Solarway");
         setMaterials(projectData.budget?.materials ?? []);
+        setBudgetSubtotal(projectData.budget?.subtotal ?? 0);
+        setBudgetTotalCost(projectData.budget?.totalCost ?? 0);
+        setBudgetDiscount(projectData.budget?.discount ?? 0);
+        setBudgetDiscountType(projectData.budget?.discountType ?? "AMOUNT");
       }
 
       if (!projectData.clientId) {
@@ -277,8 +304,25 @@ export default function Materials() {
       return "";
     }
 
-    return buildPurchaseMessage(materials, clientName, projectName);
-  }, [hasMaterials, materials, clientName, projectName]);
+    return buildPurchaseMessage(
+      materials,
+      clientName,
+      projectName,
+      budgetSubtotal,
+      budgetTotalCost,
+      budgetDiscount,
+      budgetDiscountType
+    );
+  }, [
+    hasMaterials,
+    materials,
+    clientName,
+    projectName,
+    budgetSubtotal,
+    budgetTotalCost,
+    budgetDiscount,
+    budgetDiscountType
+  ]);
 
   const messageToUse = message || generatedMessage;
 
