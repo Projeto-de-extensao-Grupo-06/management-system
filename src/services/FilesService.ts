@@ -2,9 +2,13 @@ import type { ProjectFile } from '../interfaces/types/File';
 import api from './provider/api';
   
 export default class FilesService {
-  async listProjectFiles(projectId: number): Promise<ProjectFile[] | null> {
-    const res = await api.get<ProjectFile[]>(`/projects/${projectId}/files`);
-    return res.data;
+  async listProjectFiles(projectId: number): Promise<ProjectFile[]> {
+    try {
+      const res = await api.get<ProjectFile[]>(`/projects/${projectId}/files`);
+      return Array.isArray(res.data) ? res.data : [];
+    } catch {
+      return [];
+    }
   }
 
   async downloadFile(projectId: number, fileId: number): Promise<void> {

@@ -24,7 +24,7 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
 
     const loadFiles = useCallback(async () => {
         const result = await fileService.listProjectFiles(projectId);
-        setFiles(result ?? []);
+        setFiles(Array.isArray(result) ? result : []);
     }, [projectId]);
 
     useEffect(() => {
