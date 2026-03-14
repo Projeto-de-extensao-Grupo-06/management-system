@@ -1,7 +1,7 @@
-import { 
-  faUsers, 
-  faCog, 
-  faBell, 
+import {
+  faUsers,
+  faCog,
+  faBell,
   faUser,
   faCalculator,
   faFolder,

@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import BudgetParameters from "../../components/budgetDetails/budgetParameters/BudgetParameters";
 import BudgetSummary from "../../components/budgetDetails/budgetSummary/BudgetSummary";
 import MaterialList from "../../components/budgetDetails/materialListSection/MaterialList";
-import PageHeader from "../../components/layout/PageHeader";
+import PageLayout from "../../components/layout/PageLayout";
 import type { Budget } from "../../interfaces/types/Budget";
 import BudgetService from "../../services/BudgetService";
 import { calculateBudgetTotals } from "../../utils/budgetCalc";
@@ -115,9 +115,7 @@ export default function BudgetDetails() {
   if (loading) return <>Carregando...</>;
 
   return (
-    <>
-      <PageHeader title="Gerenciar Orçamento" />
-
+    <PageLayout title="Gerenciar Orçamento" backButton={true}>
       <div className={styles.layout}>
         <div className={styles.left}>
           <MaterialList
@@ -146,6 +144,6 @@ export default function BudgetDetails() {
           />
         </div>
       </div>
-    </>
+    </PageLayout>
   );
 }
