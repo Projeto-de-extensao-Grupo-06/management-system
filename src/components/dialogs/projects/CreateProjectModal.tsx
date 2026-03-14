@@ -8,7 +8,6 @@ import { Button, Input } from '../../../components/ui/Form';
 
 import usePermissions from "../../../hooks/usePermissions";
 import { ProjectStatus } from '../../../interfaces/enum/ProjectStatus';
-import type { ProjectStatusType } from '../../../interfaces/enum/ProjectStatus';
 import type { ClientFormRef } from '../../../interfaces/properties/FormProps';
 import type { Address } from '../../../interfaces/types/Client';
 import type Client from '../../../interfaces/types/Client';
@@ -35,8 +34,6 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
   const [projectType, setProjectType] =
     useState<'ON_GRID' | 'OFF_GRID' | null>(null);
 
-  const [status, setStatus] =
-    useState<ProjectStatusType>(ProjectStatus.NEW);
 
   const [clientSearch, setClientSearch] = useState('');
   const [clients, setClients] = useState<Client[]>([]);
@@ -250,7 +247,6 @@ export default function CreateProjectModal({ open, onClose, onSuccess }: Props) 
       setAddressId(null);
       setAddress(null);
       setErrors({});
-      setStatus('NEW');
       setClientSearch('');
       setSelectedClient(null);
       setResponsibleSearch('');
