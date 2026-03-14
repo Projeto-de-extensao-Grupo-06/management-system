@@ -73,9 +73,11 @@ function buildPurchaseMessage(
   lines.push(`Olá, ${clientName || "cliente"}!`);
   lines.push("");
   lines.push(
-    `Aqui é da *Solarway* sobre o projeto *${projectName || "sem nome"}*.`,
+    `Aqui é da Solarway sobre o projeto ${projectName || "sem nome"}.`,
   );
+  lines.push("");
   lines.push("Você precisa comprar os seguintes materiais:");
+  lines.push("");
   lines.push(`Data: ${new Intl.DateTimeFormat("pt-BR").format(new Date())}`);
   lines.push("");
 

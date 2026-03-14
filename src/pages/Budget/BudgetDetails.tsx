@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import BudgetParameters from "../../components/budgetDetails/budgetParameters/BudgetParameters";
 import BudgetSummary from "../../components/budgetDetails/budgetSummary/BudgetSummary";
 import MaterialList from "../../components/budgetDetails/materialListSection/MaterialList";
@@ -26,6 +26,7 @@ export default function BudgetDetails() {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const isFirstRender = useRef(true);
+  const navigate = useNavigate();
 
   const { id } = useParams();
   const projectId = Number(id);
@@ -37,11 +38,14 @@ export default function BudgetDetails() {
         if (data) {
           setBudget(data);
         } else {
-            const newBudget = await budgetService.createProjectBudget(projectId, budget);
-            
-            if(newBudget) {
-                setBudget(newBudget);
-            }
+          const newBudget = await budgetService.createProjectBudget(
+            projectId,
+            budget,
+          );
+
+          if (newBudget) {
+            setBudget(newBudget);
+          }
         }
       } finally {
         setLoading(false);
@@ -133,6 +137,7 @@ export default function BudgetDetails() {
               editing={isEditing}
               setEditing={setIsEditing}
               projectId={projectId}
+              onGenerateBuyList={() => navigate(`/projetos/${projectId}/materiais`)}
             />
           </div>
         </div>
