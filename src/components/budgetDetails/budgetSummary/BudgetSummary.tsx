@@ -54,7 +54,9 @@ export default function BudgetSummary({ budget, editing, setEditing, setBudget, 
 
     useEffect(() => {
         if (modalOpen) {
-            handleBudgetPdfData();
+            void (async () => {
+                await handleBudgetPdfData();
+            })();
         }
     }, [modalOpen]);
 

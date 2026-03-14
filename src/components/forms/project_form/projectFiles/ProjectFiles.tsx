@@ -28,7 +28,9 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
     }, [projectId]);
 
     useEffect(() => {
-        loadFiles();
+        void (async () => {
+            await loadFiles();
+        })();
     }, [loadFiles]);
 
     async function handleDownload(fileId: number) {
