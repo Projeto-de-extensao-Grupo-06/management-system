@@ -90,6 +90,14 @@ function App() {
               path="/projetos/:id/orcamento"
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetDetails />} />}
             />
+            <Route
+              path="/projetos/:id/materiais"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
+            />
+            <Route
+              path="/materiais"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
+            />
             <Route path="/configuracoes" element={<Config />} />
             
           </Route>

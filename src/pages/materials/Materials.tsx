@@ -17,7 +17,7 @@ export default function Materials() {
   const [filteredMaterials, setFilteredMaterials] = useState<MaterialWithLinks[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [metricFilter, setMetricFilter] = useState("Todos");
-  
+
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -179,7 +179,7 @@ export default function Materials() {
         onPageChange={setPage}
       />
 
-      <MaterialDialog 
+      <MaterialDialog
         ref={dialogRef}
         onMaterialCreated={loadData}
         onMaterialUpdated={loadData}
