@@ -15,7 +15,7 @@ import type { BudgetMaterial, ValueType } from "../../interfaces/types/Budget";
 import BudgetService from "../../services/BudgetService";
 import ClientsService from "../../services/ClientsService";
 import ProjectService from "../../services/ProjectService";
-import styles from "./Materials.module.css";
+import styles from "./BudgetMaterials.module.css";
 
 const budgetService = new BudgetService();
 const projectService = new ProjectService();
@@ -133,7 +133,7 @@ function copyFallback(text: string): boolean {
   return successful;
 }
 
-export default function Materials() {
+export default function BudgetMaterials() {
   const { id } = useParams();
   const navigate = useNavigate();
 
