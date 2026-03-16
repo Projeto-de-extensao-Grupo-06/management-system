@@ -16,6 +16,7 @@ import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import Materials from "./pages/materials/Materials";
+import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import ProjectNotifications from "./pages/projects/ProjectNotifications";
 import Projects from "./pages/projects/Projects";
@@ -92,7 +93,7 @@ function App() {
             />
             <Route
               path="/projetos/:id/materiais"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetMaterials />} />}
             />
             <Route
               path="/materiais"
