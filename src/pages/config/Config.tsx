@@ -1,7 +1,7 @@
-import { 
-  faUsers, 
-  faCog, 
-  faBell, 
+import {
+  faUsers,
+  faCog,
+  faBell,
   faUser,
   faCalculator,
   faFolder,
@@ -9,11 +9,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import FilterBar from "../../components/layout/FilterBar";
-import PageHeader from "../../components/layout/PageHeader";
+import PageLayout from "../../components/layout/PageLayout";
+import { SearchInput } from "../../components/ui/Form";
 import clientStyles from "../clients/Clients.module.css";
 import styles from "./Config.module.css";
-import { SearchInput } from "../../components/ui/Form";
 
 export default function Config() {
   const navigate = useNavigate();
@@ -83,21 +82,18 @@ export default function Config() {
   }, [configOptions, searchTerm]);
 
   return (
-    <div className={styles.container}>
-      <PageHeader title="Configurações" />
-
-      <FilterBar>
-        <div style={{ display: "flex", gap: "1rem", width: "100%" }}>
-          <div className={clientStyles.searchBox}>
-            <SearchInput
-              value={searchTerm}
-              onChange={setSearchTerm}
-              placeholder="Buscar configurações"
-            />
-          </div>
+    <PageLayout
+      title="Configurações"
+      rightActions={
+        <div className={clientStyles.searchBox}>
+          <SearchInput
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="Buscar configurações"
+          />
         </div>
-      </FilterBar>
-
+      }
+    >
       <div className={styles.configGrid}>
         {filteredOptions.map((option) => (
           <div
@@ -115,6 +111,6 @@ export default function Config() {
           </div>
         ))}
       </div>
-    </div>
+    </PageLayout>
   );
 }

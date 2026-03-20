@@ -3,7 +3,7 @@ import styles from '../../pages/clients/Clients.module.css'; // Reusing styles
 
 export default function FilterBar({ children }: FilterBarProps) {
     return (
-        <div className={`${styles.filters} ${styles.card}`}>
+        <div className={`${styles.filters} ${styles.card}`} style={{ marginBottom: '1.5rem' }}>
             {children}
         </div>
     );

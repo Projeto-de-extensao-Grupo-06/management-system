@@ -190,6 +190,7 @@
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   transition: all 0.2s ease;
+  min-height: 2.75rem;
 }
 
 .select:hover {
