@@ -48,7 +48,6 @@ export default function ExpandMaterial({ materialId, name, description, budgetMa
             {
                 budgetMaterials.some(m => m.materialUrlId === u.id) ? (
                     <span className="addButton" onClick={() => onRemoveMaterial && onRemoveMaterial(u)}><FontAwesomeIcon icon={faMinusCircle} /> Remover</span>
-
                 ) : (
                     <span className="addButton" onClick={() => onAddMaterial && onAddMaterial(u)}><FontAwesomeIcon icon={faPlusCircle} /> Adicionar</span>
                 )

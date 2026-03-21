@@ -126,6 +126,7 @@ export default function BudgetDetails() {
             projectId={projectId}
             editing={isEditing}
             setBudget={setBudget}
+            budget={budget}
             materials={budget?.materials ?? []}
           />
           <div className={styles.summary}>

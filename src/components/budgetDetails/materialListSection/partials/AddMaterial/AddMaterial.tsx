@@ -14,10 +14,11 @@ const materialsService = new MaterialService();
 interface AddMaterialProps {
   materials: BudgetMaterial[];
   setBudget: React.Dispatch<React.SetStateAction<Budget>>;
+  budget: Budget;
   projectId: number;
 }
 
-export default function AddMaterial({ materials, setBudget, projectId }: AddMaterialProps) {
+export default function AddMaterial({ materials, setBudget, budget, projectId }: AddMaterialProps) {
   const [materialsList, setMaterialsList] = useState<Material[]>([]);
   const [search, setSearch] = useState("");
 
@@ -35,7 +36,7 @@ export default function AddMaterial({ materials, setBudget, projectId }: AddMate
   }, [search, materialsList]);
 
   function removeMaterial(material: MaterialUrl) {
-    budgetService.deleteMaterialUrl(projectId, material.id);
+    budgetService.deleteMaterialUrl(budget.id, material.id);
 
     setBudget((prev) => {
       const copy = { ...prev };

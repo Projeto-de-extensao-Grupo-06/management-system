@@ -127,7 +127,7 @@ export default function BudgetParameters({ budget, editing, setBudget, projectId
 
   function removeCost(id: number) {
     if (id > 0) {
-      parametersService.deletePersonalizedParameter(projectId, id)
+      parametersService.deletePersonalizedParameter(budget.id, id);
     }
     setExtraCosts((prev) => prev.filter((c) => c.id !== id));
   }

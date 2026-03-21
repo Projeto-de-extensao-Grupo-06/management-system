@@ -14,16 +14,17 @@ export const budgetService = new BudgetService();
 interface MaterialListProps {
     materials: BudgetMaterial[];
     setBudget: React.Dispatch<React.SetStateAction<Budget>>;
+    budget: Budget;
     editing: boolean;
     projectId: number;
 }
 
-export default function MaterialList({ materials, setBudget, editing, projectId }: MaterialListProps) {
+export default function MaterialList({ materials, setBudget, budget, editing, projectId }: MaterialListProps) {
     const [isModalOpen, setModalOpen] = useState(false);
 
 
     function removeMaterial(material: BudgetMaterial) {
-        budgetService.deleteMaterialUrl(projectId, material.materialUrlId);
+        budgetService.deleteMaterialUrl(budget.id, material.materialUrlId);
         
         setBudget((prev) => {
             const copy = { ...prev };
@@ -75,7 +76,7 @@ export default function MaterialList({ materials, setBudget, editing, projectId 
             </div>
 
             <Modal isOpen={isModalOpen} title="Adicionar Material" onClose={() => setModalOpen(false)} maxWidth="80%">
-                <AddMaterial projectId={projectId} materials={materials} setBudget={setBudget}></AddMaterial>
+                <AddMaterial budget={budget} projectId={projectId} materials={materials} setBudget={setBudget}></AddMaterial>
             </Modal>
         </div>
     );
