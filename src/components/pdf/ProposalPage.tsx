@@ -127,7 +127,7 @@ const ProposalPage = forwardRef<HTMLDivElement, ProposalPageProps>(function Prop
 
       <div className="body">
 
-        <div className="section">
+        <div className="section noBreak">
           <div className="section-header">
             <div className="section-num">1</div>
             <div>
@@ -171,7 +171,7 @@ const ProposalPage = forwardRef<HTMLDivElement, ProposalPageProps>(function Prop
           </table>
         </div>
 
-        <div className="section">
+        <div className="section noBreak">
           <div className="section-header">
             <div className="section-num">2</div>
             <div>
@@ -203,7 +203,7 @@ const ProposalPage = forwardRef<HTMLDivElement, ProposalPageProps>(function Prop
           </div>
         </div>
 
-        <div className="summary">
+        <div className="summary noBreak">
           <div>
             <div className="summary-label">Investimento Total do Projeto</div>
             <div className="summary-total"><span>R$</span> {budget.subtotal.toLocaleString("pt-BR", { currency: "BRL", minimumFractionDigits: 2 })}</div>

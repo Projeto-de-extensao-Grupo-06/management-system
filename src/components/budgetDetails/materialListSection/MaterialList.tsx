@@ -24,7 +24,7 @@ export default function MaterialList({ materials, setBudget, editing, projectId 
 
     function removeMaterial(material: BudgetMaterial) {
         budgetService.deleteMaterialUrl(projectId, material.materialUrlId);
-
+        
         setBudget((prev) => {
             const copy = { ...prev };
             copy.materials = copy.materials.filter((m) => m.materialUrlId !== material.materialUrlId);

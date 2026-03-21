@@ -72,11 +72,14 @@ export default function ExpandMaterial({ materialId, name, description, budgetMa
 
     {isExpand && (
       <tr>
-        <td colSpan={3}>
+        <td className="urlListRow" colSpan={3}>
           {loadingUrls ? (
             <>Carregando URLs...</>
           ) : urls.length > 0 ? (
-            <ul className="urlList">{urlsList}</ul>
+            <>
+              <span className="title">Fornecedores</span>
+              <ul className="urlList">{urlsList}</ul>
+            </>
           ) : (
             <>Nenhuma URL encontrada para este material.</>
           )}
