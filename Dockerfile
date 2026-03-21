@@ -1,18 +1,20 @@
-# Estágio único usando Node
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copia os arquivos de dependência e instala
 COPY package*.json ./
 RUN npm install
 
-# Copia o restante do código fonte e faz o build da aplicação
 COPY . .
 RUN npm run build
 
-RUN npm install -g serve
+FROM nginx:alpine
 
-EXPOSE 3000
+ENV NGINX_ENVSUBST_FILTER=BACKEND_URL
 
-# Comando para servir a pasta "dist" (onde o vite gera o build)
-CMD ["serve", "-s", "dist", "-l", "3000"]
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
