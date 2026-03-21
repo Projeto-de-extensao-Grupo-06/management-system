@@ -1,0 +1,19 @@
+.actionsModal button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.pdfButtonDownload {
+    background: #ff2d0a;
+    color: white;
+}
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

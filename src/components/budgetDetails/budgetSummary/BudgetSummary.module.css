@@ -122,47 +122,6 @@
     transition: 0.2s;
 }
 
-.actionsModal button {
-    border: none;
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.modalContent {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
-.saveButton {
-    background: #0b5d1e;
-    color: white;
-}
-
-.buyListButton {
-    background: #9ca3af;
-    color: white;
-}
-
-.pdfButton {
-    background: #ff2d0a;
-    color: white;
-}
-
-.pdfButtonDownload {
-    background: #ff2d0a;
-    color: white;
-}
-
-.botButton {
-    background: #0f3ea8;
-    color: white;
-}
-
 
 @media (max-width: 1024px) {
     .input {
@@ -283,3 +242,23 @@
     transform: rotate(-360deg);
   }
 }  
+
+.saveButton {
+    background: #0b5d1e;
+    color: white;
+}
+
+.buyListButton {
+    background: #9ca3af;
+    color: white;
+}
+
+.pdfButton {
+    background: #ff2d0a;
+    color: white;
+}
+
+.botButton {
+    background: #0f3ea8;
+    color: white;
+}

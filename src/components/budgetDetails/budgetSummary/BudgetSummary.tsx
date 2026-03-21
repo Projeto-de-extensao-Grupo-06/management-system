@@ -11,6 +11,7 @@ import Modal from "../../dialogs/modal/Modal";
 import ProposalPage from "../../pdf/ProposalPage";
 import TogglePercentAmountAndMock from "../partials/TogglePercentAmountAndMock";
 import styles from "./BudgetSummary.module.css";
+import PdfModal from "../../pdfModal/PdfModal";
 
 interface Props {
     budget: Budget;
@@ -35,43 +36,6 @@ export default function BudgetSummary({
     onGenerateBuyList,
 }: Props) {
     const [modalOpen, setModalOpen] = useState(false);
-    const [clientName, setClientName] = useState<string | null>(null);
-    const [clientPhone, setClientPhone] = useState<string | null>(null);
-    const [clientDoc, setClientDoc] = useState<string | null>(null);
-    const [installEmail, setInstallEmail] = useState<string | null>(null);
-    const [installAddress, setInstallAddress] = useState<string | null>(null);
-    const [installCity, setInstallCity] = useState<string | null>(null);
-    const [consultantName, setConsultantName] = useState<string | null>(null);
-    const [consultantEmail, setConsultantEmail] = useState<string | null>(null);
-
-    async function handleBudgetPdfData() {
-        const project = await projectsService.getProjectById(projectId.toString());
-        const client = await clientsService.getClientById(project?.clientId || 0);
-        const consultant = await coworkerService.getCoworkerById(
-            project?.coworkerId || 0,
-        );
-        const address = await addressService.getAddressById(
-            project?.addressId || 0,
-        );
-
-        setClientName(client?.name);
-        setClientPhone(client?.phone);
-        setClientDoc(client?.documentNumber);
-        setInstallEmail(client?.email);
-        setInstallAddress(formatAddress(address));
-        setInstallCity(address?.city);
-        setConsultantName(consultant?.firstName + " " + consultant?.lastName);
-        setConsultantEmail(consultant?.email);
-    }
-
-    useEffect(() => {
-        if (modalOpen) {
-            void (async () => {
-                await handleBudgetPdfData();
-            })();
-        }
-    }, [modalOpen]);
-
 
     function formatCurrency(value?: number) {
         if (!value) return "R$ 0,00";
@@ -81,12 +45,6 @@ export default function BudgetSummary({
             currency: "BRL",
         });
     }
-
-    const pdfRef = useRef(null);
-    const handleBudgetPdfDownload = useReactToPrint({
-        contentRef: pdfRef,
-        documentTitle: "proposta",
-    });
 
     if (budget.id === 0) {
         return <span>Carregando...</span>;
@@ -183,51 +141,12 @@ export default function BudgetSummary({
                 }
             </div>
 
-            <Modal
-                isOpen={modalOpen}
-                title="Download de Orçamento em PDF"
-                onClose={() => setModalOpen(false)}
-            >
-                <div className={styles.modalContent}>
-                    {clientName &&
-                        clientPhone &&
-                        clientDoc &&
-                        installEmail &&
-                        installAddress &&
-                        installCity &&
-                        consultantName &&
-                        consultantEmail ? (
-                        <>
-                            <div className={styles.actionsModal}>
-                                <button
-                                    className={styles.pdfButtonDownload}
-                                    onClick={() => handleBudgetPdfDownload()}
-                                >
-                                    Baixar PDF
-                                </button>
-                            </div>
-                            <ProposalPage
-                                ref={pdfRef}
-                                clientName={clientName}
-                                clientPhone={clientPhone}
-                                clientDoc={clientDoc}
-                                installEmail={installEmail}
-                                installAddress={installAddress}
-                                installCity={installCity}
-                                projectId={projectId}
-                                consultantName={consultantName}
-                                consultantEmail={consultantEmail}
-                                budget={budget}
-                            />
-                        </>
-                    ) : (
-                        <div className={styles.loaderContainer}>
-                            <span className={styles.loader}></span>
-                            <span>Gerando PDF...</span>
-                        </div>
-                    )}
-                </div>
-            </Modal>
+            <PdfModal 
+                projectId={projectId} 
+                budget={budget} 
+                modalOpen={modalOpen} 
+                setModalOpen={setModalOpen} 
+            />
         </div>
     );
 }
