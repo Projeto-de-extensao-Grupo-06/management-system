@@ -1,5 +1,6 @@
 import type Client from '../types/Client';
 import type { Material } from '../types/Material';
+import type BudgetParameterConfig from '../../components/budgetDetails/budgetParameters/BudgetParameterConfig'
 
 export interface ClientTableProps {
     clients: Client[];
@@ -27,4 +28,11 @@ export interface TableProps {
     isEmpty?: boolean;
     emptyMessage?: string;
     className?: string;
+}
+
+export interface BudgetParameterTableProps {
+    parameters: BudgetParameterConfig[];
+    onEdit: (id: number) => void;
+    onDelete: (id: number) => void;
+    onRowClick?: (id: number) => void;
 }

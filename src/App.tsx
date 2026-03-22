@@ -22,6 +22,7 @@ import Projects from "./pages/projects/Projects";
 import Schedule from "./pages/schedule/Schedule";
 import NotFound from "./pages/shared/NotFound";
 import useAuthStore from "./store/useAuthStore";
+import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -91,7 +92,11 @@ function App() {
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetDetails />} />}
             />
             <Route path="/configuracoes" element={<Config />} />
-            
+
+            <Route
+              path="/configuracoes/parametros-orcamento"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameters />} />}
+            />
           </Route>
         </Route>
       </Routes>
