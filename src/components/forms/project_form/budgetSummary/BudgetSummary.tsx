@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import type { Budget } from "../../../../interfaces/types/Budget";
 import BudgetService from "../../../../services/BudgetService";
+import PdfModal from "../../../pdfModal/PdfModal";
 import SecureComponent from "../../../security/SecureComponent";
 import styles from "./BudgetSummary.module.css";
 
@@ -12,6 +13,8 @@ interface BudgetSummaryProps {
 }
 
 export default function BudgetSummary({ projectId }: BudgetSummaryProps) {
+    const [modalOpen, setModalOpen] = useState(false);
+
     const budgetService = useMemo(() => new BudgetService(), []);
     const navigate = useNavigate();
 
@@ -35,10 +38,6 @@ export default function BudgetSummary({ projectId }: BudgetSummaryProps) {
 
     function handleManage() {
         navigate(`/projetos/${projectId}/orcamento`)
-    }
-
-    function handleDownload() {
-        // TODO: implementar download do PDF
     }
 
     if (loading) {
@@ -101,13 +100,20 @@ export default function BudgetSummary({ projectId }: BudgetSummaryProps) {
                         {budget && (
                             <button
                                 className={styles.downloadButton}
-                                onClick={handleDownload}
+                                onClick={() => setModalOpen(true)}
                             >
                                 Baixar PDF
                             </button>
                         )}
                     </div>
                 </div>
+
+                <PdfModal
+                    projectId={projectId}
+                    budget={budget!}
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                />
             </div>
         </SecureComponent>
 

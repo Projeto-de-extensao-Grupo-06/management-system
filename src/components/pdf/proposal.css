@@ -24,6 +24,11 @@
     size: A4;
   }
 
+  .noBreak {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
   body {
     font-family: 'IBM Plex Sans', sans-serif;
     background: #edeeed;
@@ -758,4 +763,3 @@
     }
 
   }
-

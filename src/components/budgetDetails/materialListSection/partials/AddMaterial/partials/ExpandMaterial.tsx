@@ -48,7 +48,6 @@ export default function ExpandMaterial({ materialId, name, description, budgetMa
             {
                 budgetMaterials.some(m => m.materialUrlId === u.id) ? (
                     <span className="addButton" onClick={() => onRemoveMaterial && onRemoveMaterial(u)}><FontAwesomeIcon icon={faMinusCircle} /> Remover</span>
-
                 ) : (
                     <span className="addButton" onClick={() => onAddMaterial && onAddMaterial(u)}><FontAwesomeIcon icon={faPlusCircle} /> Adicionar</span>
                 )
@@ -72,11 +71,14 @@ export default function ExpandMaterial({ materialId, name, description, budgetMa
 
     {isExpand && (
       <tr>
-        <td colSpan={3}>
+        <td className="urlListRow" colSpan={3}>
           {loadingUrls ? (
             <>Carregando URLs...</>
           ) : urls.length > 0 ? (
-            <ul className="urlList">{urlsList}</ul>
+            <>
+              <span className="title">Fornecedores</span>
+              <ul className="urlList">{urlsList}</ul>
+            </>
           ) : (
             <>Nenhuma URL encontrada para este material.</>
           )}

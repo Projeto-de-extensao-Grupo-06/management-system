@@ -9,6 +9,7 @@ import BudgetService from "../../services/BudgetService";
 import { calculateBudgetTotals } from "../../utils/budgetCalc";
 import styles from "./BudgetDetails.module.css";
 
+
 const budgetService = new BudgetService();
 
 export default function BudgetDetails() {
@@ -126,6 +127,7 @@ export default function BudgetDetails() {
             projectId={projectId}
             editing={isEditing}
             setBudget={setBudget}
+            budget={budget}
             materials={budget?.materials ?? []}
           />
           <div className={styles.summary}>
