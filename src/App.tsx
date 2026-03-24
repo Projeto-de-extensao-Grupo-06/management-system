@@ -24,6 +24,10 @@ import Schedule from "./pages/schedule/Schedule";
 import NotFound from "./pages/shared/NotFound";
 import useAuthStore from "./store/useAuthStore";
 import InternalServerError from "./pages/shared/InternalServerError";
+import NotImplemented from "./pages/shared/NotImplemented";
+import BadGateway from "./pages/shared/BadGateway";
+import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
+import GatewayTimeout from "./pages/shared/GatewayTimeout";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -40,6 +44,10 @@ function App() {
           <Route path="/" element={<Login />} />
 
           <Route path="/internal-server-error" element={<InternalServerError />} />
+          <Route path="/not-implemented" element={<NotImplemented />} />
+          <Route path="/bad-gateway" element={<BadGateway />} />
+          <Route path="/service-unavailable" element={<ServiceUnavailable />} />
+          <Route path="/gateway-timeout" element={<GatewayTimeout />} />
           <Route path="*" element={<NotFound />}></Route>
         </Route>
 
