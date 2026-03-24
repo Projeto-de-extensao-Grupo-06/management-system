@@ -17,6 +17,11 @@ import styles from "./Schedule.module.css";
 const service = new ScheduleService();
 
 export default function Schedule() {
+
+  useEffect(() => {
+  document.title = "Agenda | SolarWay";
+}, []);
+
     const [events, setEvents] = useState<CalendarEvent[]>([]);
 
     const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);

@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route} from "react-router";
 //import ProposalPage from "./components/pdf/ProposalPage";
 import PermissionRoute from "./components/security/PermissionsRoute";
 import ProtectedRoute from "./components/security/ProtectedRoute";

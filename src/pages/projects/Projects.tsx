@@ -33,6 +33,11 @@ import styles from '../clients/Clients.module.css';
 import Projectstyles from '../projects/Projects.module.css';
 
 export default function Projects() {
+
+  useEffect(() => {
+  document.title = "Projetos | SolarWay";
+}, []);
+
   const projectsService = useMemo(() => new ProjectsService(), []);
   const clientsService = useMemo(() => new ClientsService(), []);
 

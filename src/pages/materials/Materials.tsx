@@ -13,6 +13,11 @@ import MaterialService from '../../services/MaterialsService';
 import styles from "./Materials.module.css";
 
 export default function Materials() {
+
+  useEffect(() => {
+  document.title = "Materiais | SolarWay";
+}, []);
+
   const [materials, setMaterials] = useState<MaterialWithLinks[]>([]);
   const [filteredMaterials, setFilteredMaterials] = useState<MaterialWithLinks[]>([]);
   const [searchTerm, setSearchTerm] = useState("");

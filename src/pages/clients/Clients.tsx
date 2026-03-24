@@ -1,6 +1,6 @@
 import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router';
 import ClientFilterModal from '../../components/dialogs/client_filter_dialog/ClientFilterDialog';
 import Modal from '../../components/dialogs/modal/Modal';
@@ -19,6 +19,11 @@ import type { ClientSchemaType } from '../../schemas/clientSchema';
 import styles from "./Clients.module.css";
 
 export default function Clients() {
+
+  useEffect(() => {
+  document.title = "Clientes | SolarWay";
+}, []);
+
   const navigate = useNavigate();
   const {
     clients,

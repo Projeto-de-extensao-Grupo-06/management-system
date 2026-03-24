@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AcquisitionChannelsGraph from "../../components/graphs/AcquisitionChannelsGraph";
 import CostProfitGraph from "../../components/graphs/CostProfitGraph";
 import ProjectStatusGraph from "../../components/graphs/ProjectsStatusGraph";
@@ -9,6 +9,11 @@ import AnalysisFilter from "./AnalysisFilter";
 import KpiBoard from "./KpiBoard";
 
 export default function Analysis() {
+  
+  useEffect(() => {
+  document.title = "Análises | SolarWay";
+}, []);
+
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
