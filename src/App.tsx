@@ -23,6 +23,7 @@ import Projects from "./pages/projects/Projects";
 import Schedule from "./pages/schedule/Schedule";
 import NotFound from "./pages/shared/NotFound";
 import useAuthStore from "./store/useAuthStore";
+import InternalServerError from "./pages/shared/InternalServerError";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -38,6 +39,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Login />} />
 
+          <Route path="/internal-server-error" element={<InternalServerError />} />
           <Route path="*" element={<NotFound />}></Route>
         </Route>
 

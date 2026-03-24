@@ -19,6 +19,11 @@ api.interceptors.response.use(
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
+
+    if (error.response?.status === 500) {
+      window.location.href = '/internal-server-error';
+    }
+  
     return Promise.reject(error);
   }
 );
