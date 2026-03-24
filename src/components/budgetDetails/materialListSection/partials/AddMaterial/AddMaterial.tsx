@@ -18,7 +18,7 @@ interface AddMaterialProps {
   projectId: number;
 }
 
-export default function AddMaterial({ materials, setBudget, budget, projectId }: AddMaterialProps) {
+export default function AddMaterial({ materials, setBudget, budget }: AddMaterialProps) {
   const [materialsList, setMaterialsList] = useState<Material[]>([]);
   const [search, setSearch] = useState("");
 

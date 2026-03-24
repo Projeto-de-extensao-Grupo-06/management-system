@@ -21,7 +21,7 @@ interface BudgetParametersProps {
   projectId: number;
 }
 
-export default function BudgetParameters({ budget, editing, setBudget, projectId }: BudgetParametersProps) {
+export default function BudgetParameters({ budget, editing, setBudget }: BudgetParametersProps) {
   const [fixedCosts, setFixedCosts] = useState<CostItem[]>([]);
   const [extraCosts, setExtraCosts] = useState<CostItem[]>(() => {
     if (!budget) return [];

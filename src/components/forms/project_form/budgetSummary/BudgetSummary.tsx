@@ -4,9 +4,9 @@ import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import type { Budget } from "../../../../interfaces/types/Budget";
 import BudgetService from "../../../../services/BudgetService";
+import PdfModal from "../../../pdfModal/PdfModal";
 import SecureComponent from "../../../security/SecureComponent";
 import styles from "./BudgetSummary.module.css";
-import PdfModal from "../../../pdfModal/PdfModal";
 
 interface BudgetSummaryProps {
     projectId: number;

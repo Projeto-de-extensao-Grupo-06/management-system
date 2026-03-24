@@ -1,17 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
+import React, { useState } from "react";
 import type { Budget } from "../../../interfaces/types/Budget";
-import AddressService from "../../../services/AddressService";
-import ClientsService from "../../../services/ClientsService";
-import { CoworkerService } from "../../../services/CoworkerService";
-import ProjectService from "../../../services/ProjectService";
-import { formatAddress } from "../../../utils/AddressUtils";
-import Modal from "../../dialogs/modal/Modal";
-import ProposalPage from "../../pdf/ProposalPage";
+import PdfModal from "../../pdfModal/PdfModal";
 import TogglePercentAmountAndMock from "../partials/TogglePercentAmountAndMock";
 import styles from "./BudgetSummary.module.css";
-import PdfModal from "../../pdfModal/PdfModal";
 
 interface Props {
     budget: Budget;
@@ -21,11 +12,6 @@ interface Props {
     projectId: number;
     onGenerateBuyList: () => void;
 }
-
-const projectsService = new ProjectService();
-const clientsService = new ClientsService();
-const coworkerService = new CoworkerService();
-const addressService = new AddressService();
 
 export default function BudgetSummary({
     budget,
