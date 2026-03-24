@@ -7,7 +7,7 @@ import {
   faFolder,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import PageLayout from "../../components/layout/PageLayout";
 import { SearchInput } from "../../components/ui/Form";
@@ -15,6 +15,11 @@ import clientStyles from "../clients/Clients.module.css";
 import styles from "./Config.module.css";
 
 export default function Config() {
+
+  useEffect(() => {
+  document.title = "Configurações | SolarWay";
+}, []);
+
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
