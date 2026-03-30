@@ -2,8 +2,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import type { BudgetParameterSchemaType } from '../../../../schemas/budgetParameterSchema';
-import { Input, Select, SelectOption, SimpleButton, TextArea } from '../../../ui/Form';
-import styles from '../BudgetParameters.module.css';
+import { Button, Input, Select, SelectOption, SimpleButton, TextArea } from '../../../ui/Form';
+import styles from '../../../forms/budget_parameter_form/BudgetParameterForm.module.css';
 
 interface BudgetParameterFieldsProps {
     readOnly?: boolean;
@@ -68,7 +68,7 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                 {errors.fixed_value && <span className={styles.error}>{errors.fixed_value.message}</span>}
             </div>
 
-            <div className={styles.fieldGroup}>
+            {/* <div className={styles.fieldGroup}>
                 <label className={styles.label}>Status *</label>
                 <Select
                     value={watch('status') ?? 'ATIVO'}
@@ -79,18 +79,25 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                     <SelectOption value="INATIVO" label="Inativo" />
                 </Select>
                 {errors.status && <span className={styles.error}>{errors.status.message}</span>}
-            </div>
+            </div> */}
 
             <div className={styles.fieldGroup}>
-                <label className={styles.checkboxLabel}>
+                <div className={styles.checkboxRow}>
                     <input
                         type="checkbox"
+                        id="is_pr_budget"
                         {...register('is_pre_budget')}
                         disabled={readOnly}
                         className={styles.checkbox}
                     />
-                    Usar no Pré-orçamento (Bot)
-                </label>
+                    <label htmlFor="is_pre_budget" className={styles.checkboxLabel}>
+                        Usar no Pré-orçamento
+                    </label>
+                </div>
+
+                <span className={styles.checkboxHint}>
+                    Se ativado, este parâmetro será utilizado pelo bot para cálculo automática.
+                </span>
             </div>
 
             {isPreBudget && (
@@ -98,12 +105,13 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                     <div className={styles.optionsHeader}>
                         <h4 className={styles.optionsTitle}>Opções do Parâmetro</h4>
                         {!readOnly && (
-                            <SimpleButton
+                            <Button
                                 icon={<FontAwesomeIcon icon={faPlus} />}
                                 text="Adicionar Opção"
                                 ariaLabel="Adicionar opção"
                                 type="button"
                                 onClick={() => append({ type: '', addition_tax: 0, fixed_cost: 0 })}
+                                width="fit-content"
                             />
                         )}
                     </div>

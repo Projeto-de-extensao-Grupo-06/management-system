@@ -1,4 +1,4 @@
-import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 import Modal from '../../components/dialogs/modal/Modal';
@@ -155,26 +155,28 @@ export default function BudgetParameters() {
             )}
 
             <FilterBar>
-                <div style={{ display: 'flex', gap: '1rem', width: '100%', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.9rem', color: '#555', whiteSpace: 'nowrap' }}>
-                        <FontAwesomeIcon icon={faFilter} style={{ marginRight: '0.4rem' }} />
-                        Filtro:
-                    </span>
+                <div className={styles.filterRow}>
+                    <div className={styles.filterGroup}>
+                        <span className={styles.filterLabel}>
+                            <FontAwesomeIcon icon={faFilter} />
+                            Filtro:
+                        </span>
 
-                    <div style={{ width: '200px' }}>
-                        <Select value={typeFilter} onChange={handleTypeChange}>
-                            <SelectOption value="Todos" label="Todos os tipos" />
-                            <SelectOption value="true" label="Pré-orçamento" />
-                            <SelectOption value="false" label="Custo Adicional" />
-                        </Select>
-                    </div>
+                        <div className={styles.filterSelect}>
+                            <Select value={typeFilter} onChange={handleTypeChange}>
+                                <SelectOption value="Todos" label="Todos os tipos" />
+                                <SelectOption value="true" label="Pré-orçamento" />
+                                <SelectOption value="false" label="Custo Adicional" />
+                            </Select>
+                        </div>
 
-                    <div style={{ width: '200px' }}>
-                        <Select value={statusFilter} onChange={handleStatusChange}>
-                            <SelectOption value="Todos" label="Todos os status" />
-                            <SelectOption value="ATIVO" label="Ativo" />
-                            <SelectOption value="INATIVO" label="Inativo" />
-                        </Select>
+                        <div className={styles.filterSelect}>
+                            <Select value={statusFilter} onChange={handleStatusChange}>
+                                <SelectOption value="Todos" label="Todos os status" />
+                                <SelectOption value="ATIVO" label="Ativo" />
+                                <SelectOption value="INATIVO" label="Inativo" />
+                            </Select>
+                        </div>
                     </div>
 
                     <div className={styles.searchBox}>

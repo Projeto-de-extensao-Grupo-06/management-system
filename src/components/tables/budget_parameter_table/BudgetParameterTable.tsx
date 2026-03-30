@@ -13,7 +13,9 @@ export default function BudgetParameterTable({
     onDelete,
     onRowClick,
 }: BudgetParameterTableProps) {
+
     const permissions = usePermissions();
+
     const canManage =
         permissions.includes('BUDGET_UPDATE') ||
         permissions.includes('BUDGET_DELETE');
@@ -32,6 +34,7 @@ export default function BudgetParameterTable({
             headers={headers}
             isEmpty={parameters.length === 0}
             emptyMessage="Nenhum parâmetro de orçamento encontrado."
+            className={styles.customTable}
         >
             {parameters.map((param) => (
                 <tr
@@ -40,26 +43,50 @@ export default function BudgetParameterTable({
                     className={onRowClick ? styles.clickableRow : styles.defaultCursor}
                 >
                     <td>{param.name}</td>
+
                     <td>{param.metric}</td>
+
                     <td>
-                        <span className={param.is_pre_budget ? styles.badgePreBudget : styles.badgeAdditional}>
-                            {param.is_pre_budget ? 'Pré-orçamento' : 'Custo Adicional'}
+                        <span
+                            className={
+                                param.is_pre_budget
+                                    ? styles.badgePreBudget
+                                    : styles.badgeAdditional
+                            }
+                        >
+                            {param.is_pre_budget
+                                ? 'Pré-orçamento'
+                                : 'Custo Adicional'}
                         </span>
                     </td>
+
                     <td>
                         {param.fixed_value.toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
                         })}
                     </td>
+
                     <td>
-                        <span className={param.status === 'ATIVO' ? styles.statusATIVO : styles.statusINATIVO}>
-                            {param.status === 'ATIVO' ? 'Ativo' : 'Inativo'}
+                        <span
+                            className={
+                                param.status === 'ATIVO'
+                                    ? styles.statusATIVO
+                                    : styles.statusINATIVO
+                            }
+                        >
+                            {param.status === 'ATIVO'
+                                ? 'Ativo'
+                                : 'Inativo'}
                         </span>
                     </td>
-                    <SecureComponent permissions={['BUDGET_UPDATE', 'BUDGET_DELETE']}>
+
+                    {canManage && (
                         <td>
-                            <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
+                            <div
+                                className={styles.actions}
+                                onClick={(e) => e.stopPropagation()}
+                            >
                                 <SecureComponent permissions={['BUDGET_UPDATE']}>
                                     <IconButton
                                         onClick={() => onEdit(param.id)}
@@ -68,6 +95,7 @@ export default function BudgetParameterTable({
                                         functionality="edit"
                                     />
                                 </SecureComponent>
+
                                 <SecureComponent permissions={['BUDGET_DELETE']}>
                                     <IconButton
                                         onClick={() => onDelete(param.id)}
@@ -78,7 +106,7 @@ export default function BudgetParameterTable({
                                 </SecureComponent>
                             </div>
                         </td>
-                    </SecureComponent>
+                    )}
                 </tr>
             ))}
         </Table>
