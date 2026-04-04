@@ -15,6 +15,7 @@ import BudgetDetails from "./pages/Budget/BudgetDetails";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
+import ResetPassword from "./pages/config/resetPassword/ResetPassword";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
@@ -100,6 +101,7 @@ function App() {
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
             />
             <Route path="/configuracoes" element={<Config />} />
+            <Route path="/configuracoes/redefinir-senha" element={<ResetPassword />} />
             
           </Route>
         </Route>
