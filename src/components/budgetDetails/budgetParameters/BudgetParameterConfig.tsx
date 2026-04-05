@@ -1,8 +1,8 @@
 export interface ParameterOption{
     id: number;
     type: string;
-    addition_tax: number;
-    fixed_cost: number;
+    additionTax: number;
+    fixedCost: number;
 }
 
 export default interface BudgetParameter {
@@ -10,8 +10,8 @@ export default interface BudgetParameter {
     name: string;
     description?: string;
     metric: string;
-    is_pre_budget: boolean;
-    fixed_value: number;
+    isPreBudget: boolean;
+    fixedValue: number;
     status: 'ATIVO' | 'INATIVO';
     options?: ParameterOption[];
 }

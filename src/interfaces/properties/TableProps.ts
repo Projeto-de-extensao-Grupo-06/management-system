@@ -34,5 +34,6 @@ export interface BudgetParameterTableProps {
     parameters: BudgetParameterConfig[];
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
+    onActivate: (id: number) => void;
     onRowClick?: (id: number) => void;
 }

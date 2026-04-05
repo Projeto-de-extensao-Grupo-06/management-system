@@ -23,6 +23,7 @@ import Schedule from "./pages/schedule/Schedule";
 import NotFound from "./pages/shared/NotFound";
 import useAuthStore from "./store/useAuthStore";
 import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
+import BudgetParameterDetails from './pages/budget_parameters/BudgetParameterDetails';
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -96,6 +97,10 @@ function App() {
             <Route
               path="/configuracoes/parametros-orcamento"
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameters />} />}
+            />
+            <Route
+              path="/configuracoes/parametros-orcamento/:id"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameterDetails />} />}
             />
           </Route>
         </Route>

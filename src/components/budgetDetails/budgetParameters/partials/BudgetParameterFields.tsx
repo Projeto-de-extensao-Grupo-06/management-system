@@ -2,7 +2,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import type { BudgetParameterSchemaType } from '../../../../schemas/budgetParameterSchema';
-import { Button, Input, Select, SelectOption, SimpleButton, TextArea } from '../../../ui/Form';
+import { Button, Input, Select, SelectOption, TextArea } from '../../../ui/Form';
 import styles from '../../../forms/budget_parameter_form/BudgetParameterForm.module.css';
 
 interface BudgetParameterFieldsProps {
@@ -21,7 +21,7 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
         name: 'options',
     });
 
-    const isPreBudget = watch('is_pre_budget');
+    const isPreBudget = watch('isPreBudget');
 
     return (
         <>
@@ -47,25 +47,44 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
 
             <div className={styles.fieldGroup}>
                 <label className={styles.label}>Métrica *</label>
-                <Input
-                    {...register('metric')}
-                    placeholder="Ex: %, R$/h, un"
-                    readOnly={readOnly}
-                />
+                <Select
+                    value={watch('metric') ?? ''}
+                    onChange={(val) => setValue('metric', val)}
+                    disabled={readOnly}
+                >
+                    <SelectOption value="" label="Selecione uma métrica" />
+                    <SelectOption value="%" label="% (Percentual)" />
+                    <SelectOption value="R$" label="R$ (Valor fixo)" />
+                    <SelectOption value="R$/h" label="R$/h (Valor por hora)" />
+                    <SelectOption value="R$/m²" label="R$/m² (Valor por metro quadrado)" />
+                    <SelectOption value="R$/kWp" label="R$/kWp (Valor por quilowatt-pico)" />
+                    <SelectOption value="un" label="un (Unidade)" />
+                    <SelectOption value="kWp" label="kWp (Quilowatt-pico)" />
+                    <SelectOption value="kWh" label="kWh (Quilowatt-hora)" />
+                    <SelectOption value="m²" label="m² (Metro quadrado)" />
+                    <SelectOption value="km" label="km (Quilômetro)" />
+                    <SelectOption value="h" label="h (Hora)" />
+                    <SelectOption value="dia" label="dia (Diária)" />
+                </Select>
                 {errors.metric && <span className={styles.error}>{errors.metric.message}</span>}
             </div>
 
             <div className={styles.fieldGroup}>
                 <label className={styles.label}>Valor Base *</label>
                 <Input
-                    {...register('fixed_value', { valueAsNumber: true })}
+                    {...register('fixedValue', { valueAsNumber: true })}
                     type="number"
                     step="0.01"
                     min="0"
                     placeholder="Ex: 150.00"
                     readOnly={readOnly}
+                    onKeyDown={(e) => {
+                        if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                            e.preventDefault();
+                        }
+                    }}
                 />
-                {errors.fixed_value && <span className={styles.error}>{errors.fixed_value.message}</span>}
+                {errors.fixedValue && <span className={styles.error}>{errors.fixedValue.message}</span>}
             </div>
 
             {/* <div className={styles.fieldGroup}>
@@ -86,7 +105,7 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                     <input
                         type="checkbox"
                         id="is_pr_budget"
-                        {...register('is_pre_budget')}
+                        {...register('isPreBudget')}
                         disabled={readOnly}
                         className={styles.checkbox}
                     />
@@ -139,31 +158,41 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                             <div className={styles.fieldGroup}>
                                 <label className={styles.label}>Taxa de Adição (0 a 1)</label>
                                 <Input
-                                    {...register(`options.${index}.addition_tax`, { valueAsNumber: true })}
+                                    {...register(`options.${index}.additionTax`, { valueAsNumber: true })}
                                     type="number"
                                     step="0.01"
                                     min="0"
                                     max="1"
                                     placeholder="Ex: 0.08 para 8%"
                                     readOnly={readOnly}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                 />
-                                {errors.options?.[index]?.addition_tax && (
-                                    <span className={styles.error}>{errors.options[index].addition_tax?.message}</span>
+                                {errors.options?.[index]?.additionTax && (
+                                    <span className={styles.error}>{errors.options[index].additionTax?.message}</span>
                                 )}
                             </div>
 
                             <div className={styles.fieldGroup}>
                                 <label className={styles.label}>Custo Fixo (R$)</label>
                                 <Input
-                                    {...register(`options.${index}.fixed_cost`, { valueAsNumber: true })}
+                                    {...register(`options.${index}.fixedCost`, { valueAsNumber: true })}
                                     type="number"
                                     step="0.01"
                                     min="0"
                                     placeholder="Ex: 500.00"
                                     readOnly={readOnly}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                 />
-                                {errors.options?.[index]?.fixed_cost && (
-                                    <span className={styles.error}>{errors.options[index].fixed_cost?.message}</span>
+                                {errors.options?.[index]?.fixedCost && (
+                                    <span className={styles.error}>{errors.options[index].fixedCost?.message}</span>
                                 )}
                             </div>
 

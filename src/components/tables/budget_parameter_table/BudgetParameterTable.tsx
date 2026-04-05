@@ -1,4 +1,4 @@
-import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrashCan, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import usePermissions from '../../../hooks/usePermissions';
 import type { BudgetParameterTableProps } from '../../../interfaces/properties/TableProps';
@@ -11,6 +11,7 @@ export default function BudgetParameterTable({
     parameters,
     onEdit,
     onDelete,
+    onActivate,
     onRowClick,
 }: BudgetParameterTableProps) {
 
@@ -49,19 +50,19 @@ export default function BudgetParameterTable({
                     <td>
                         <span
                             className={
-                                param.is_pre_budget
+                                param.isPreBudget
                                     ? styles.badgePreBudget
                                     : styles.badgeAdditional
                             }
                         >
-                            {param.is_pre_budget
+                            {param.isPreBudget
                                 ? 'Pré-orçamento'
                                 : 'Custo Adicional'}
                         </span>
                     </td>
 
                     <td>
-                        {param.fixed_value.toLocaleString('pt-BR', {
+                        {param.fixedValue.toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
                         })}
@@ -81,12 +82,14 @@ export default function BudgetParameterTable({
                         </span>
                     </td>
 
+
                     {canManage && (
                         <td>
                             <div
                                 className={styles.actions}
                                 onClick={(e) => e.stopPropagation()}
                             >
+                            
                                 <SecureComponent permissions={['BUDGET_UPDATE']}>
                                     <IconButton
                                         onClick={() => onEdit(param.id)}
@@ -96,16 +99,26 @@ export default function BudgetParameterTable({
                                     />
                                 </SecureComponent>
 
+                   
                                 <SecureComponent permissions={['BUDGET_DELETE']}>
                                     <IconButton
-                                        onClick={() => onDelete(param.id)}
-                                        icon={<FontAwesomeIcon icon={faTrashCan} />}
-                                        ariaLabel="Desativar"
-                                        functionality="delete"
+                                        onClick={() =>
+                                            param.status === 'ATIVO'
+                                                ? onDelete(param.id)
+                                                : onActivate(param.id)
+                                        }
+                                        icon={
+                                            <FontAwesomeIcon
+                                                icon={param.status === 'ATIVO' ? faTrashCan : faCircleCheck}
+                                            />
+                                        }
+                                        ariaLabel={param.status === 'ATIVO' ? 'Desativar' : 'Ativar'}
+                                        functionality={param.status === 'ATIVO' ? 'delete' : 'edit'}
                                     />
                                 </SecureComponent>
                             </div>
                         </td>
+
                     )}
                 </tr>
             ))}

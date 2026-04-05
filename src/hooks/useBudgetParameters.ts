@@ -1,61 +1,88 @@
-import { useState } from 'react';
+import type { AxiosError } from 'axios';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type BudgetParameter from '../interfaces/types/BudgetParameter';
+import type { Page } from '../interfaces/types/Page';
+import type { BudgetParameterSchemaType } from '../schemas/budgetParameterSchema';
+import BudgetParameterService from '../services/BudgetParameterService';
 
 export default function useBudgetParameters() {
-    const [parameters] = useState<BudgetParameter[]>([
-    {
-        id: 1,
-        name: 'Tipo de Telhado',
-        description: 'Define o material do telhado',
-        metric: 'un',
-        is_pre_budget: true,
-        fixed_value: 0,
-        status: 'ATIVO',
-        options: [
-            { id: 1, type: 'Cerâmico', addition_tax: 0.08, fixed_cost: 500 },
-            { id: 2, type: 'Metálico', addition_tax: 0.12, fixed_cost: 800 },
-        ],
-    },
-    {
-        id: 2,
-        name: 'Mão de Obra',
-        description: 'Custo por hora de mão de obra',
-        metric: 'R$/h',
-        is_pre_budget: false,
-        fixed_value: 150,
-        status: 'ATIVO',
-    },
-    {
-        id: 3,
-        name: 'Deslocamento',
-        description: 'Custo de deslocamento da equipe',
-        metric: 'km',
-        is_pre_budget: false,
-        fixed_value: 2.5,
-        status: 'INATIVO',
-    },
-]);
+    const [parameters, setParameters] = useState<BudgetParameter[]>([]);
     const [page, setPage] = useState(0);
-    const [totalPages] = useState(0);
-    const [totalElements] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState('Todos');
     const [statusFilter, setStatusFilter] = useState('Todos');
+    const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-    const handleSearchChange = (term: string) => {
+    const service = useMemo(() => new BudgetParameterService(), []);
+
+    useEffect(() => {
+        service
+            .getAll(page, 30, searchTerm, typeFilter, statusFilter)
+            .then((resData: Page<BudgetParameter>) => {
+                const data = resData as any;
+                const pageMeta = data.page || data;
+                const totalElementsCount = pageMeta.totalElements ?? data.totalElements ?? 0;
+                const totalPagesCount = pageMeta.totalPages ?? data.totalPages ?? 0;
+
+                setParameters(data.content || []);
+                setTotalPages(totalPagesCount);
+                setTotalElements(totalElementsCount);
+            })
+            .catch(() => setParameters([]));
+    }, [service, page, searchTerm, typeFilter, statusFilter, refetchTrigger]);
+
+    const handleSearchChange = useCallback((term: string) => {
         setSearchTerm(term);
         setPage(0);
-    };
+    }, []);
 
-    const handleTypeChange = (value: string) => {
+    const handleTypeChange = useCallback((value: string) => {
         setTypeFilter(value);
         setPage(0);
-    };
+    }, []);
 
-    const handleStatusChange = (value: string) => {
+    const handleStatusChange = useCallback((value: string) => {
         setStatusFilter(value);
         setPage(0);
-    };
+    }, []);
+
+    const createParameter = useCallback(async (data: BudgetParameterSchemaType): Promise<void> => {
+        try {
+            await service.create(data);
+            setRefetchTrigger(prev => prev + 1);
+        } catch (e) {
+            const axiosError = e as AxiosError<{ message: string }>;
+            throw new Error(axiosError.response?.data?.message || 'Erro ao criar parâmetro.');
+        }
+    }, [service]);
+
+    const deleteParameter = useCallback(async (id: number): Promise<void> => {
+        try {
+            await service.deactivate(id);
+            setRefetchTrigger(prev => prev + 1);
+        } catch (e) {
+            const axiosError = e as AxiosError<{ message: string }>;
+            throw new Error(axiosError.response?.data?.message || 'Erro ao desativar parâmetro.');
+        }
+    }, [service]);
+
+    const activateParameter = useCallback(async (id: number): Promise<void> => {
+        try {
+            await service.activate(id);
+            setRefetchTrigger(prev => prev + 1);
+        } catch (e) {
+            const axiosError = e as AxiosError<{ message: string }>;
+            const msg = axiosError.response?.data?.message;
+
+            if (msg === 'This parameter is already active.') {
+                throw new Error('Este parâmetro já está ativo.');
+            }
+
+            throw new Error('Erro ao ativar parâmetro.');
+        }
+    }, [service]);
 
     return {
         parameters,
@@ -69,5 +96,8 @@ export default function useBudgetParameters() {
         handleSearchChange,
         handleTypeChange,
         handleStatusChange,
+        createParameter,
+        deleteParameter,
+        activateParameter,
     };
 }

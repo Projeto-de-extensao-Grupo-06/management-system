@@ -1,4 +1,4 @@
-import { faFilter, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 import Modal from '../../components/dialogs/modal/Modal';
@@ -15,8 +15,10 @@ import type { ModalRef } from '../../interfaces/properties/DialogProps';
 import type { BudgetParameterFormRef } from '../../interfaces/properties/FormProps';
 import type { BudgetParameterSchemaType } from '../../schemas/budgetParameterSchema';
 import styles from './BudgetParameters.module.css';
+import { useNavigate } from 'react-router';
 
 export default function BudgetParameters() {
+    const navigate = useNavigate();
     const {
         parameters,
         page,
@@ -29,6 +31,9 @@ export default function BudgetParameters() {
         handleTypeChange,
         handleStatusChange,
         setPage,
+        createParameter,
+        deleteParameter,
+        activateParameter,
     } = useBudgetParameters();
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -53,10 +58,16 @@ export default function BudgetParameters() {
         setModalErrorMessage(null);
         setGlobalAlert(null);
 
-        console.log('createParameter:', data);
-        setIsCreateModalOpen(false);
-        setGlobalAlert({ message: 'Parâmetro cadastrado com sucesso!', type: 'success' });
-        setTimeout(() => setGlobalAlert(null), 5000);
+        createParameter(data)
+            .then(() => {
+                setIsCreateModalOpen(false);
+                setGlobalAlert({ message: 'Parâmetro cadastrado com sucesso!', type: 'success' });
+                setTimeout(() => setGlobalAlert(null), 5000);
+            })
+            .catch((e: Error) => {
+                setModalErrorMessage(e.message);
+                modalRef.current?.scrollToTop();
+            });
     };
 
     const handleDelete = (id: number) => {
@@ -67,10 +78,16 @@ export default function BudgetParameters() {
     const confirmDelete = () => {
         if (deleteParameterId === null) return;
 
-        console.log('deleteParameter:', deleteParameterId);
-        setGlobalAlert({ message: 'Parâmetro desativado com sucesso!', type: 'success' });
-        setTimeout(() => setGlobalAlert(null), 5000);
-        setIsDeleteModalOpen(false);
+        deleteParameter(deleteParameterId)
+            .then(() => {
+                setGlobalAlert({ message: 'Parâmetro desativado com sucesso!', type: 'success' });
+                setTimeout(() => setGlobalAlert(null), 5000);
+                setIsDeleteModalOpen(false);
+            })
+            .catch((e: Error) => {
+                setGlobalAlert({ message: e.message, type: 'error' });
+                setIsDeleteModalOpen(false);
+            });
     };
 
     const createModalFooter = (
@@ -99,7 +116,19 @@ export default function BudgetParameters() {
                 style={{ backgroundColor: '#d32f2f' }}
             />
         </div>
-    );
+
+    )
+    const handleActivate = (id: number) => {
+        activateParameter(id)
+            .then(() => {
+                setGlobalAlert({ message: 'Parâmetro ativado com sucesso!', type: 'success' });
+                setTimeout(() => setGlobalAlert(null), 5000);
+            })
+            .catch((e: Error) => {
+                setGlobalAlert({ message: e.message, type: 'error' });
+            });
+    };;
+
 
     return (
         <PageLayout
@@ -191,8 +220,10 @@ export default function BudgetParameters() {
 
             <BudgetParameterTable
                 parameters={parameters}
-                onEdit={(id) => console.log('edit:', id)}
+                onEdit={(id) => navigate(`/configuracoes/parametros-orcamento/${id}`, { state: { edit: true } })}
                 onDelete={handleDelete}
+                onActivate={handleActivate}
+                onRowClick={(id) => navigate(`/configuracoes/parametros-orcamento/${id}`, { state: { edit: false } })}
             />
 
             <Pagination
