@@ -5,6 +5,7 @@ import styles from "./PageLayout.module.css";
 interface PageLayoutProps {
     title: string;
     backButton?: boolean;
+    topLeftActions?: ReactNode;
     titleAccessory?: ReactNode;
     leftActions?: ReactNode;
     rightActions?: ReactNode;
@@ -16,6 +17,7 @@ interface PageLayoutProps {
 export default function PageLayout({
     title,
     backButton,
+    topLeftActions,
     titleAccessory,
     leftActions,
     rightActions,
@@ -29,6 +31,11 @@ export default function PageLayout({
                 {backButton && (
                     <div className={styles.backButtonWrapper}>
                         <BackButton />
+                    </div>
+                )}
+                {topLeftActions && (
+                    <div className={styles.topLeftActionsWrapper}>
+                        {topLeftActions}
                     </div>
                 )}
                 <div className={styles.headerMain}>

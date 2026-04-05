@@ -15,6 +15,7 @@ import BudgetDetails from "./pages/Budget/BudgetDetails";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
+import CoworkersManagementPage from "./pages/coworkers/CoworkersManagementPage";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
@@ -99,8 +100,9 @@ function App() {
               path="/materiais"
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
             />
+            <Route path="/configuracoes/colaboradores" element={<CoworkersManagementPage />} />
             <Route path="/configuracoes" element={<Config />} />
-            
+
           </Route>
         </Route>
       </Routes>

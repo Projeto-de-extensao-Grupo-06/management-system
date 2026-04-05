@@ -16,6 +16,12 @@
     align-items: center;
 }
 
+.topLeftActionsWrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
 .headerMain {
     display: flex;
     justify-content: space-between;
