@@ -21,13 +21,13 @@ import ProjectDetails from "./pages/projects/ProjectDetails";
 import ProjectNotifications from "./pages/projects/ProjectNotifications";
 import Projects from "./pages/projects/Projects";
 import Schedule from "./pages/schedule/Schedule";
-import NotFound from "./pages/shared/NotFound";
-import useAuthStore from "./store/useAuthStore";
-import InternalServerError from "./pages/shared/InternalServerError";
-import NotImplemented from "./pages/shared/NotImplemented";
 import BadGateway from "./pages/shared/BadGateway";
-import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
 import GatewayTimeout from "./pages/shared/GatewayTimeout";
+import InternalServerError from "./pages/shared/InternalServerError";
+import NotFound from "./pages/shared/NotFound";
+import NotImplemented from "./pages/shared/NotImplemented";
+import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
+import useAuthStore from "./store/useAuthStore";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
