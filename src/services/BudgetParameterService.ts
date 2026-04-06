@@ -1,7 +1,7 @@
-import api from "./provider/api";
 import type BudgetParameter from '../interfaces/types/BudgetParameter';
-import type { BudgetParameterSchemaType } from '../schemas/budgetParameterSchema';
 import type { Page } from '../interfaces/types/Page';
+import type { BudgetParameterSchemaType } from '../schemas/budgetParameterSchema';
+import api from "./provider/api";
 
 export default class BudgetParameterService {
     async getAll(

@@ -1,6 +1,6 @@
+import type BudgetParameterConfig from '../../components/budgetDetails/budgetParameters/BudgetParameterConfig'
 import type Client from '../types/Client';
 import type { Material } from '../types/Material';
-import type BudgetParameterConfig from '../../components/budgetDetails/budgetParameters/BudgetParameterConfig'
 
 export interface ClientTableProps {
     clients: Client[];

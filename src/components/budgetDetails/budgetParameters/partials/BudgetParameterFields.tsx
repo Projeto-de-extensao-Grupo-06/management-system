@@ -1,9 +1,9 @@
-import { useFieldArray, useFormContext } from 'react-hook-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import type { BudgetParameterSchemaType } from '../../../../schemas/budgetParameterSchema';
-import { Button, Input, Select, SelectOption, TextArea } from '../../../ui/Form';
 import styles from '../../../forms/budget_parameter_form/BudgetParameterForm.module.css';
+import { Button, Input, Select, SelectOption, TextArea } from '../../../ui/Form';
 
 interface BudgetParameterFieldsProps {
     readOnly?: boolean;

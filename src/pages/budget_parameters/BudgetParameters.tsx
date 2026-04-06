@@ -1,6 +1,7 @@
 import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import Modal from '../../components/dialogs/modal/Modal';
 import BudgetParameterForm from '../../components/forms/budget_parameter_form/BudgetParameterForm';
 import FilterBar from '../../components/layout/FilterBar';
@@ -15,7 +16,6 @@ import type { ModalRef } from '../../interfaces/properties/DialogProps';
 import type { BudgetParameterFormRef } from '../../interfaces/properties/FormProps';
 import type { BudgetParameterSchemaType } from '../../schemas/budgetParameterSchema';
 import styles from './BudgetParameters.module.css';
-import { useNavigate } from 'react-router';
 
 export default function BudgetParameters() {
     const navigate = useNavigate();

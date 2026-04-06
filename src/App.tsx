@@ -12,6 +12,8 @@ import Analysis from "./pages/analysis/Analysis";
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import BudgetDetails from "./pages/Budget/BudgetDetails";
+import BudgetParameterDetails from './pages/budget_parameters/BudgetParameterDetails';
+import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
@@ -22,8 +24,6 @@ import Projects from "./pages/projects/Projects";
 import Schedule from "./pages/schedule/Schedule";
 import NotFound from "./pages/shared/NotFound";
 import useAuthStore from "./store/useAuthStore";
-import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
-import BudgetParameterDetails from './pages/budget_parameters/BudgetParameterDetails';
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
