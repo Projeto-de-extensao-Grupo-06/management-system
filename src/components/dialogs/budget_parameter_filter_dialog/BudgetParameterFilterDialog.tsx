@@ -31,16 +31,16 @@ export default function BudgetParameterFilterModal({
      const footer = (
         <>
             <SimpleButton
-                text="Limpar Filtros"
-                ariaLabel="Limpar filtros"
+                text='Limpar Filtros'
+                ariaLabel='Limpar filtros'
                 onClick={handleClear}
-                width="fit-content"
+                width='fit-content'
             />
             <Button
-                text="Aplicar Filtros"
-                ariaLabel="Aplicar filtros"
+                text='Aplicar Filtros'
+                ariaLabel='Aplicar filtros'
                 onClick={handleApply}
-                width="fit-content"
+                width='fit-content'
             />
         </>
     );
@@ -49,9 +49,9 @@ export default function BudgetParameterFilterModal({
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title="Filtrar Parâmetros"
+            title='Filtrar Parâmetros'
             footer={footer}
-            maxWidth="450px"
+            maxWidth='450px'
         >
             <div className={styles.filterModalContainer}>
                 <div>
@@ -60,9 +60,9 @@ export default function BudgetParameterFilterModal({
                         value={localFilters.isPreBudget}
                         onChange={(value) => handleChange('isPreBudget', value)}
                     >
-                        <SelectOption value="Todos" label="Todos" />
-                        <SelectOption value="true" label="Pré-orçamento (Bot)" />
-                        <SelectOption value="false" label="Custo Adicional (Manual)" />
+                        <SelectOption value='Todos' label='Todos' />
+                        <SelectOption value='true' label='Pré-orçamento (Bot)' />
+                        <SelectOption value='false' label='Custo Adicional (Manual)' />
                     </Select>
                 </div>
 
@@ -72,9 +72,9 @@ export default function BudgetParameterFilterModal({
                         value={localFilters.status}
                         onChange={(value) => handleChange('status', value)}
                     >
-                        <SelectOption value="Todos" label="Todos" />
-                        <SelectOption value="ATIVO" label="Ativo" />
-                        <SelectOption value="INATIVO" label="Inativo" />
+                        <SelectOption value='Todos' label='Todos' />
+                        <SelectOption value='ATIVO' label='Ativo' />
+                        <SelectOption value='INATIVO' label='Inativo' />
                     </Select>
                 </div>
             </div>
