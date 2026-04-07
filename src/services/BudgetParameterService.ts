@@ -38,14 +38,14 @@ export default class BudgetParameterService {
 
     async create(data: BudgetParameterSchemaType): Promise<BudgetParameter> {
         const response = await api.post('/budget-parameters', data);
-        const p = response.data;
-        return { ...p, status: p.active ? 'ATIVO' : 'INATIVO' };
+        const parameter = response.data;
+        return { ...parameter, status: parameter.active ? 'ATIVO' : 'INATIVO' };
     }
 
     async update(id: number, data: BudgetParameterSchemaType): Promise<BudgetParameter> {
         const response = await api.put(`/budget-parameters/${id}`, data);
-        const p = response.data;
-        return { ...p, status: p.active ? 'ATIVO' : 'INATIVO' };
+        const parameter = response.data;
+        return { ...parameter, status: parameter.active ? 'ATIVO' : 'INATIVO' };
     }
 
     async deactivate(id: number): Promise<void> {
