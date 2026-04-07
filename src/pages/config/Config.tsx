@@ -57,7 +57,7 @@ export default function Config() {
       title: "Meu Perfil",
       description: "Edite informações pessoais",
       icon: faUser,
-      path: "/configuracoes/configPerfil",
+      path: "/configuracoes/config-perfil",
     },
     {
       id: 6,
