@@ -18,7 +18,6 @@ import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
-import ResetPassword from "./pages/config/resetPassword/ResetPassword";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
