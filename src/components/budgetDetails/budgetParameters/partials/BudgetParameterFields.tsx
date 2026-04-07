@@ -115,7 +115,7 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                 </div>
 
                 <span className={styles.checkboxHint}>
-                    Se ativado, este parâmetro será utilizado pelo bot para cálculo automática.
+                    Se ativado, este parâmetro será utilizado pelo bot para cálculo automático.
                 </span>
             </div>
 
