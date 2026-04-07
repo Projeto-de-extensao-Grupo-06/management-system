@@ -21,7 +21,7 @@ export default function BudgetParameterDetails() {
 
     const numericId = Number(id);
     const { parameter, loading, alert, setAlert, updateParameter } =
-        useBudgetParameterDetail(Number.isFinite(numericId) && numericId > 0 ? numericId : NaN);
+        useBudgetParameterDetail(numericId);
 
     const handleSave = () => {
         formRef.current?.submit();
