@@ -12,6 +12,8 @@ import Analysis from "./pages/analysis/Analysis";
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import BudgetDetails from "./pages/Budget/BudgetDetails";
+import BudgetParameterDetails from './pages/budget_parameters/BudgetParameterDetails';
+import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
@@ -100,7 +102,15 @@ function App() {
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
             />
             <Route path="/configuracoes" element={<Config />} />
-            
+
+            <Route
+              path="/configuracoes/parametros-orcamento"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameters />} />}
+            />
+            <Route
+              path="/configuracoes/parametros-orcamento/:id"
+              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameterDetails />} />}
+            />
           </Route>
         </Route>
       </Routes>

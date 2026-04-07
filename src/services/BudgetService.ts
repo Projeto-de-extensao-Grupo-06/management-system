@@ -26,8 +26,9 @@ export default class BudgetService {
     try {
       const res = await api.get<Budget>(`/projects/${projectId}/budget`);
       return res.data;
-    } catch (error: any) {
-      if (error.response?.status === 404) return null;
+    } catch (error: unknown) {
+      const err = error as { response?: { status: number } };
+      if (err.response?.status === 404) return null;
       throw error;
     }
   }

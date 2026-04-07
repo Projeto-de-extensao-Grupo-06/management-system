@@ -69,6 +69,22 @@
         padding: 0.5rem;
     }
 
+    .headerLeft {
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .pageTitle {
+        font-size: 1.5rem;
+        gap: 0.25rem;
+        line-height: 1.2;
+        flex-wrap: wrap;
+    }
+
+    .titleAccessory {
+        margin-left: 0;
+    }
+
     .headerMain {
         flex-direction: column;
         align-items: flex-start;
