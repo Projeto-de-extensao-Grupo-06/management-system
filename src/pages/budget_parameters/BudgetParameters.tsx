@@ -127,7 +127,7 @@ export default function BudgetParameters() {
             .catch((e: Error) => {
                 setGlobalAlert({ message: e.message, type: 'error' });
             });
-    };;
+    };
 
 
     return (
