@@ -104,12 +104,12 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                 <div className={styles.checkboxRow}>
                     <input
                         type="checkbox"
-                        id="is_pr_budget"
+                        id="isPreBudget"
                         {...register('isPreBudget')}
                         disabled={readOnly}
                         className={styles.checkbox}
                     />
-                    <label htmlFor="is_pre_budget" className={styles.checkboxLabel}>
+                    <label htmlFor="isPreBudget" className={styles.checkboxLabel}>
                         Usar no Pré-orçamento
                     </label>
                 </div>
