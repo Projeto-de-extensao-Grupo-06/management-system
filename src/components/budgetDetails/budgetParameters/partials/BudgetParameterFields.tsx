@@ -129,7 +129,7 @@ export default function BudgetParameterFields({ readOnly }: BudgetParameterField
                                 text="Adicionar Opção"
                                 ariaLabel="Adicionar opção"
                                 type="button"
-                                onClick={() => append({ type: '', addition_tax: 0, fixed_cost: 0 })}
+                                onClick={() => append({ type: '', additionTax: 0, fixedCost: 0 })}
                                 width="fit-content"
                             />
                         )}

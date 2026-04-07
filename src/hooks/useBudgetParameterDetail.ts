@@ -12,8 +12,14 @@ export default function useBudgetParameterDetail(id: number) {
     const service = useMemo(() => new BudgetParameterService(), []);
 
     useEffect(() => {
-        if (!id) return;
+        if (!Number.isFinite(id) || id <= 0) {
+            setParameter(null);
+            setAlert({ message: 'Parâmetro inválido.', type: 'error' });
+            setLoading(false);
+            return;
+        }
 
+        setLoading(true);
         service.getById(id)
             .then((data) => setParameter(data))
             .catch(() => setAlert({ message: 'Erro ao carregar parâmetro.', type: 'error' }))

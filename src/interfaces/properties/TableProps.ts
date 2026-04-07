@@ -1,4 +1,4 @@
-import type BudgetParameterConfig from '../../components/budgetDetails/budgetParameters/BudgetParameterConfig'
+import type BudgetParameter from '../types/BudgetParameter'
 import type Client from '../types/Client';
 import type { Material } from '../types/Material';
 
@@ -31,7 +31,7 @@ export interface TableProps {
 }
 
 export interface BudgetParameterTableProps {
-    parameters: BudgetParameterConfig[];
+    parameters: BudgetParameter[];
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
     onActivate: (id: number) => void;

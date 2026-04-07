@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import type { Resolver } from 'react-hook-form';
 import type { BudgetParameterFormProps, BudgetParameterFormRef } from '../../../interfaces/properties/FormProps';
 import { budgetParameterSchema, type BudgetParameterSchemaType } from '../../../schemas/budgetParameterSchema';
 import BudgetParameterFields from '../../budgetDetails/budgetParameters/partials/BudgetParameterFields';
@@ -10,8 +11,8 @@ import styles from './BudgetParameterForm.module.css';
 
 const BudgetParameterForm = forwardRef<BudgetParameterFormRef, BudgetParameterFormProps>(
     ({ onSubmit, defaultValues, readOnly }, ref) => {
-        const methods = useForm({
-            resolver: zodResolver(budgetParameterSchema) as any,
+        const methods = useForm<BudgetParameterSchemaType>({
+            resolver: zodResolver(budgetParameterSchema) as Resolver<BudgetParameterSchemaType>,
             defaultValues: {
                 name: '',
                 description: '',
@@ -33,7 +34,7 @@ const BudgetParameterForm = forwardRef<BudgetParameterFormRef, BudgetParameterFo
         }, [defaultValues, reset]);
 
         useImperativeHandle(ref, () => ({
-            submit: () => handleSubmit((data) => onSubmit(data as unknown as BudgetParameterSchemaType))(),
+            submit: () => handleSubmit((data) => onSubmit(data as BudgetParameterSchemaType))(),
         }));
 
         return (

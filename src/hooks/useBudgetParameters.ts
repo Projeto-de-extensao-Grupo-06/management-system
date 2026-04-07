@@ -30,7 +30,11 @@ export default function useBudgetParameters() {
                 setTotalPages(totalPagesCount);
                 setTotalElements(totalElementsCount);
             })
-            .catch(() => setParameters([]));
+            .catch(() => {
+                setParameters([]);
+                setTotalPages(0);
+                setTotalElements(0);
+            });
     }, [service, page, searchTerm, typeFilter, statusFilter, refetchTrigger]);
 
     const handleSearchChange = useCallback((term: string) => {

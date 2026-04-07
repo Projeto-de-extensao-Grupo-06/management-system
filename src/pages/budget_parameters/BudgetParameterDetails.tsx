@@ -19,8 +19,9 @@ export default function BudgetParameterDetails() {
 
     const [isEditing, setIsEditing] = useState(location.state?.edit || false);
 
+    const numericId = Number(id);
     const { parameter, loading, alert, setAlert, updateParameter } =
-        useBudgetParameterDetail(Number(id));
+        useBudgetParameterDetail(Number.isFinite(numericId) && numericId > 0 ? numericId : NaN);
 
     const handleSave = () => {
         formRef.current?.submit();

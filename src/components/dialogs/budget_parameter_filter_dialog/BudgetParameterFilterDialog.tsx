@@ -1,8 +1,8 @@
-import { useState } from "react";
-import type { BudgetParameterFilterModalProps, BudgetParameterFilterState } from "../../../interfaces/properties/DialogProps";
-import styles from "../../../pages/budget_parameters/BudgetParameters.module.css";
-import { Button, Select, SelectOption, SimpleButton } from "../../ui/Form";
-import Modal from "../modal/Modal";
+import { useState } from 'react'
+import type { BudgetParameterFilterModalProps, BudgetParameterFilterState } from '../../../interfaces/properties/DialogProps'
+import styles from '../../../pages/budget_parameters/BudgetParameters.module.css'
+import { Button, Select, SelectOption, SimpleButton } from '../../ui/Form'
+import Modal from '../modal/Modal'
 
 export default function BudgetParameterFilterModal({
     isOpen,
