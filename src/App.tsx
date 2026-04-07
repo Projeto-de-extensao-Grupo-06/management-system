@@ -101,7 +101,7 @@ function App() {
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
             />
             <Route path="/configuracoes" element={<Config />} />
-            <Route path="/configuracoes/configPerfil" element={<ConfigPerfil />} />
+            <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
             <Route path="/configuracoes/redefinir-senha" element={<ForgetPassword />} />
             
           </Route>
