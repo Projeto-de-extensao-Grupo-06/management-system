@@ -17,6 +17,7 @@ import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
+import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
@@ -112,6 +113,9 @@ function App() {
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
             />
             <Route path="/configuracoes" element={<Config />} />
+            <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
+            <Route path="/configuracoes/redefinir-senha" element={<ForgetPassword />} />
+            
 
             <Route
               path="/configuracoes/parametros-orcamento"
