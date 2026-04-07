@@ -10,7 +10,7 @@ export default function InternalServerError() {
       <h1 className={styles.errorCode}>500</h1>
       <h2 className={styles.title}>Oops! Ocorreu um erro!</h2>
       <p className={styles.description}>
-        Fique tranquilo, estamos cientes e trabalhanod na correção deste problema.
+        Fique tranquilo, estamos cientes e trabalhando na correção deste problema.
       </p>
 
       <Button text="Voltar para a página anterior" onClick={() => navigate(-1)} />
