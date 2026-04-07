@@ -27,3 +27,16 @@ export interface ClientFilterModalProps {
     onApply: (filters: ClientFilterState) => void;
     onClear: () => void;
 }
+
+export interface BudgetParameterFilterState {
+    isPreBudget: string;
+    status: string;
+}
+
+export interface BudgetParameterFilterModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    filters: BudgetParameterFilterState;
+    onApply: (filters: BudgetParameterFilterState) => void;
+    onClear: () => void;
+}

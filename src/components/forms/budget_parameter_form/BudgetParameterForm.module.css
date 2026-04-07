@@ -1,0 +1,112 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+
+.card {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.sectionTitle {
+    display: none;
+}
+
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; 
+    margin-bottom: 1.25rem; 
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #333);
+}
+
+.error {
+    font-size: 0.78rem;
+    color: #d32f2f;
+}
+
+
+.checkboxRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkboxLabel {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #333);
+    cursor: pointer;
+}
+
+.checkboxHint {
+    font-size: 0.78rem;
+    color: var(--color-text-secondary, #777);
+    margin-top: 2px;
+}
+
+.checkbox {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    accent-color: var(--color-primary, #0C3900);
+}
+
+
+.optionsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border, #e0e0e0);
+    margin-top: 2rem;
+}
+
+.optionsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.optionsTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary, #333);
+    margin-bottom: 0.5rem;
+}
+
+.optionsEmpty {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary, #666);
+}
+
+.optionRow {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+.removeOptionBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #d32f2f;
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    transition: opacity 0.2s;
+}
+
+.removeOptionBtn:hover {
+    opacity: 0.7;
+}
