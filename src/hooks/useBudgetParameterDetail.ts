@@ -13,13 +13,15 @@ export default function useBudgetParameterDetail(id: number) {
 
     useEffect(() => {
         if (!Number.isFinite(id) || id <= 0) {
-            setParameter(null);
-            setAlert({ message: 'Parâmetro inválido.', type: 'error' });
-            setLoading(false);
+            Promise.resolve().then(() => {
+                setParameter(null);
+                setAlert({ message: 'Parâmetro inválido.', type: 'error' });
+                setLoading(false);
+            });
             return;
         }
 
-        setLoading(true);
+        Promise.resolve().then(() => setLoading(true));
         service.getById(id)
             .then((data) => setParameter(data))
             .catch(() => setAlert({ message: 'Erro ao carregar parâmetro.', type: 'error' }))

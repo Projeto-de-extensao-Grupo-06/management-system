@@ -3,6 +3,10 @@ import type { Page } from '../interfaces/types/Page';
 import type { BudgetParameterSchemaType } from '../schemas/budgetParameterSchema';
 import api from "./provider/api";
 
+interface RawBudgetParameter extends Omit<BudgetParameter, 'status'> {
+    active: boolean;
+}
+
 export default class BudgetParameterService {
     async getAll(
         page: number,
@@ -19,7 +23,7 @@ export default class BudgetParameterService {
         const response = await api.get('/budget-parameters', { params });
         const data = response.data;
 
-        const content = data.content.map((p: any) => ({
+        const content = data.content.map((p: RawBudgetParameter) => ({
             ...p,
             status: p.active ? 'ATIVO' : 'INATIVO',
         }));
@@ -28,7 +32,7 @@ export default class BudgetParameterService {
     }
 
     async getById(id: number): Promise<BudgetParameter> {
-        const response = await api.get(`/budget-parameters/${id}`);
+        const response = await api.get<RawBudgetParameter>(`/budget-parameters/${id}`);
         const p = response.data;
         return {
             ...p,
@@ -37,13 +41,13 @@ export default class BudgetParameterService {
     }
 
     async create(data: BudgetParameterSchemaType): Promise<BudgetParameter> {
-        const response = await api.post('/budget-parameters', data);
+        const response = await api.post<RawBudgetParameter>('/budget-parameters', data);
         const parameter = response.data;
         return { ...parameter, status: parameter.active ? 'ATIVO' : 'INATIVO' };
     }
 
     async update(id: number, data: BudgetParameterSchemaType): Promise<BudgetParameter> {
-        const response = await api.put(`/budget-parameters/${id}`, data);
+        const response = await api.put<RawBudgetParameter>(`/budget-parameters/${id}`, data);
         const parameter = response.data;
         return { ...parameter, status: parameter.active ? 'ATIVO' : 'INATIVO' };
     }
