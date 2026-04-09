@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route} from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 //import ProposalPage from "./components/pdf/ProposalPage";
 import PermissionRoute from "./components/security/PermissionsRoute";
 import ProtectedRoute from "./components/security/ProtectedRoute";
@@ -15,7 +15,7 @@ import BudgetDetails from "./pages/Budget/BudgetDetails";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
-import CoworkersManagementPage from "./pages/coworkers/CoworkersManagementPage";
+import Coworkers from "./pages/coworkers/Coworkers";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
@@ -43,66 +43,123 @@ function App() {
         </Route>
 
         <Route element={<ForgetPasswordLayout />}>
-          <Route path="/esqueci-senha" element={< ForgetPassword />} />
+          <Route path="/esqueci-senha" element={<ForgetPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route
               path="/agenda"
-              element={<PermissionRoute permissions={["SCHEDULE_READ"]} element={<Schedule />} />}
+              element={
+                <PermissionRoute
+                  permissions={["SCHEDULE_READ"]}
+                  element={<Schedule />}
+                />
+              }
             />
 
             <Route
               path="/clientes"
-              element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients />} />}
+              element={
+                <PermissionRoute
+                  permissions={["CLIENT_READ"]}
+                  element={<Clients />}
+                />
+              }
             />
 
             <Route
               path="/clientes/:id"
-              element={<PermissionRoute permissions={["CLIENT_READ"]} element={<ClientDetails />} />}
+              element={
+                <PermissionRoute
+                  permissions={["CLIENT_READ"]}
+                  element={<ClientDetails />}
+                />
+              }
             />
 
             <Route
               path="/materiais"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<Materials />}
+                />
+              }
             />
 
             <Route
               path="/projetos/:id"
-              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectDetails />} />}
+              element={
+                <PermissionRoute
+                  permissions={["PROJECT_READ"]}
+                  element={<ProjectDetails />}
+                />
+              }
             />
 
             <Route
               path="/analise"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Analysis />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<Analysis />}
+                />
+              }
             />
 
             <Route
               path="/projetos"
-              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<Projects />} />}
+              element={
+                <PermissionRoute
+                  permissions={["PROJECT_READ"]}
+                  element={<Projects />}
+                />
+              }
             />
 
             <Route
               path="/projetos/notificacoes"
-              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}
+              element={
+                <PermissionRoute
+                  permissions={["PROJECT_READ"]}
+                  element={<ProjectNotifications />}
+                />
+              }
             />
 
             <Route
               path="/projetos/:id/orcamento"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetDetails />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetDetails />}
+                />
+              }
             />
             <Route
               path="/projetos/:id/materiais"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetMaterials />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetMaterials />}
+                />
+              }
             />
             <Route
               path="/materiais"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<Materials />}
+                />
+              }
             />
-            <Route path="/configuracoes/colaboradores" element={<CoworkersManagementPage />} />
+            <Route
+              path="/configuracoes/colaboradores"
+              element={<Coworkers />}
+            />
             <Route path="/configuracoes" element={<Config />} />
-
           </Route>
         </Route>
       </Routes>

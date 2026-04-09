@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import usePermissions from "../../../../hooks/usePermissions";
 import type { AutoCompleteSelectOption } from "../../../../interfaces/properties/ReactSelectFormProps";
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
-import { CoworkerService } from "../../../../services/CoworkerService";
+import CoworkerService from "../../../../services/CoworkerService";
 import ProjectService from "../../../../services/ProjectService";
 import { Select, SelectOption, Input, AutoCompleteSelect } from "../../../ui/Form";
 import styles from "./GeneralInfo.module.css";

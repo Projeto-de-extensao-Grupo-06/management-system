@@ -1,0 +1,107 @@
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card {
+  background: var(--color-background);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.sectionTitle {
+  color: var(--color-secondary);
+  font-size: 18px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+}
+
+.inputError {
+  border-color: var(--color-error) !important;
+}
+
+.inputError:focus {
+  box-shadow: 0 0 0 3px var(--color-error-border) !important;
+}
+
+.errorMessage {
+  color: var(--color-error);
+  font-size: var(--font-size-xs);
+  margin-top: -4px;
+  margin-left: 2px;
+}
+
+.required {
+  color: var(--color-error);
+  margin-left: 2px;
+}
+
+.readOnlyField {
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--color-text-description);
+}
+
+.documentTypeContainer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.toggleGroup {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-top: 24px;
+}
+
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-dark);
+}
+
+@media (max-width: 768px) {
+  .gridTwo {
+    grid-template-columns: 1fr;
+  }
+}
