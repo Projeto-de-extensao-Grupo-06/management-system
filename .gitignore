@@ -25,3 +25,11 @@ dist-ssr
 
 .env
 .env.dev
+
+# E2E Testing
+e2e/venv/
+e2e/.env
+e2e/report.html
+e2e/*.png
+e2e/__pycache__/
+.pytest_cache/

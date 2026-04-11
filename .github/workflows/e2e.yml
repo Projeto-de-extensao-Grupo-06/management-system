@@ -1,0 +1,48 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main, feat/e2e-tests ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout management-system
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r e2e/requirements.txt
+          playwright install --with-deps
+
+      - name: Start services (Docker Compose)
+        run: |
+          # Note: In a real scenario, we might need to checkout the docker-composes repo
+          # For this demonstration, we assume the necessary docker-compose is available or simplified
+          docker compose up -d
+        continue-on-error: true
+
+      - name: Run E2E Tests
+        env:
+          BASE_URL: http://localhost:80
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          HEADLESS: "true"
+        run: |
+          pytest e2e/tests --html=report.html --self-contained-html
+
+      - name: Upload Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-report
+          path: report.html
