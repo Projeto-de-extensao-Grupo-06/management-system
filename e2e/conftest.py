@@ -37,8 +37,11 @@ def pytest_runtest_makereport(item, call):
         page = item.funcargs.get("page") or item.funcargs.get("authenticated_page")
         if page:
             import os
-            screenshot_dir = os.path.join("e2e", "reports", "screenshots")
+            # Define report directory relative to this conftest.py file
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            screenshot_dir = os.path.join(base_dir, "reports", "screenshots")
             os.makedirs(screenshot_dir, exist_ok=True)
             
             name = item.nodeid.replace("::", "_").replace("/", "_")
-            page.screenshot(path=os.path.join(screenshot_dir, f"{name}.png"))
+            screenshot_path = os.path.join(screenshot_dir, f"{name}.png")
+            page.screenshot(path=screenshot_path)
