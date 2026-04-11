@@ -36,5 +36,9 @@ def pytest_runtest_makereport(item, call):
     if report.when == "call" and report.failed:
         page = item.funcargs.get("page") or item.funcargs.get("authenticated_page")
         if page:
+            import os
+            screenshot_dir = os.path.join("e2e", "reports", "screenshots")
+            os.makedirs(screenshot_dir, exist_ok=True)
+            
             name = item.nodeid.replace("::", "_").replace("/", "_")
-            page.screenshot(path=f"{name}.png")
+            page.screenshot(path=os.path.join(screenshot_dir, f"{name}.png"))
