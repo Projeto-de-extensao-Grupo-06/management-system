@@ -24,14 +24,17 @@ export default function ClientFilterModal({
   const { getAddressLookup } = useAddress();
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const fetchLookup = async () => {
       const data = await getAddressLookup();
       if (data) {
         setLookupData(data);
       }
     };
+
     fetchLookup();
-  }, []);
+  }, [getAddressLookup, isOpen]);
 
   const states = lookupData.map((item) => item.state).sort();
 
