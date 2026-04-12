@@ -1,0 +1,236 @@
+.budgetParametersPage {
+    padding: 1rem;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    background: var(--color-background);
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-background);
+}
+
+.customTable .table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.table thead {
+    border-bottom: 2px solid var(--color-background-alt);
+}
+
+.table th,
+.table td {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.875rem;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.table th {
+    font-weight: 600;
+}
+
+
+.customTable th:nth-child(1),
+.customTable td:nth-child(1) {
+    width: 15%;
+    text-align: left;
+}
+
+.customTable th:nth-child(2),
+.customTable td:nth-child(2) {
+    width: 6%;
+    text-align: center;
+}
+
+
+.customTable th:nth-child(3),
+.customTable td:nth-child(3) {
+    width: 18%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+.customTable th:nth-child(4),
+.customTable td:nth-child(4) {
+    width: 11%;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+
+.customTable th:nth-child(5),
+.customTable td:nth-child(5) {
+    width: 10%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+.customTable th:nth-child(6),
+.customTable td:nth-child(6) {
+    width: 9%;
+    text-align: center;
+}
+
+
+.badgePreBudget,
+.badgeAdditional,
+.statusATIVO,
+.statusINATIVO {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badgePreBudget {
+    color: #1565c0;
+    background-color: #e3f2fd;
+}
+
+.badgeAdditional {
+    color: #6a1b9a;
+    background-color: #f3e5f5;
+}
+
+.statusATIVO {
+    color: #2e7d32;
+    background-color: #e8f5e9;
+}
+
+.statusINATIVO {
+    color: #c62828;
+    background-color: #ffebee;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+
+.table tbody tr {
+    border-bottom: 1px solid var(--color-background-alt);
+    transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background: var(--color-background-alt);
+}
+
+/* CURSOR */
+.clickableRow {
+    cursor: pointer;
+}
+
+.defaultCursor {
+    cursor: default;
+}
+
+
+.filterRow {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.filterGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.filterLabel {
+    font-size: 0.9rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.filterSelect {
+    width: 180px;
+}
+
+.searchBox {
+    position: relative;
+    flex: 1;
+    min-width: 280px;
+}
+.card {
+    background-color: #fff;
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.cancelButton {
+    background-color: #ccc;
+    color: #333;
+}
+
+.count {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .filterRow {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .filterGroup {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: end;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .filterLabel {
+        grid-column: 1 / -1;
+    }
+
+    .filterSelect {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .filterSelect :global(.select) {
+        font-size: 0.875rem;
+        min-height: 2.5rem;
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+        line-height: 1.2;
+    }
+
+    .filterSelect :global(.select) option {
+        font-size: 0.8125rem;
+    }
+
+    .searchBox {
+        width: 100%;
+        min-width: unset;
+    }
+
+}

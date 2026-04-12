@@ -1,5 +1,6 @@
 import type { BudgetParameterSchemaType } from '../../schemas/budgetParameterSchema';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
+import type { PermissionProfileSchemaType } from '../../schemas/permissionProfileSchema';
 export interface ClientFormRef {
     submit: () => void;
 }
@@ -18,4 +19,13 @@ export interface BudgetParameterFormProps {
 
 export interface BudgetParameterFormRef {
     submit: () => void;
+}
+export interface PermissionProfileFormRef {
+    submit: () => void;
+}
+
+export interface PermissionProfileFormProps {
+    onSubmit: (data: PermissionProfileSchemaType) => void;
+    defaultValues?: Partial<PermissionProfileSchemaType>;
+    readOnly?: boolean;
 }

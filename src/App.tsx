@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route} from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 //import ProposalPage from "./components/pdf/ProposalPage";
 import PermissionRoute from "./components/security/PermissionsRoute";
 import ProtectedRoute from "./components/security/ProtectedRoute";
@@ -32,6 +32,7 @@ import NotFound from "./pages/shared/NotFound";
 import NotImplemented from "./pages/shared/NotImplemented";
 import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
 import useAuthStore from "./store/useAuthStore";
+import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -116,7 +117,7 @@ function App() {
             <Route path="/configuracoes" element={<Config />} />
             <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
             <Route path="/configuracoes/redefinir-senha" element={<ResetPassword />} />
-            
+
 
             <Route
               path="/configuracoes/parametros-orcamento"
@@ -128,6 +129,15 @@ function App() {
             />
           </Route>
         </Route>
+        <Route
+          path="/configuracoes/perfis-permissao"
+          element={
+            <PermissionRoute
+              permissions={["PROJECT_READ"]}
+              element={<PermissionProfiles />}
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
