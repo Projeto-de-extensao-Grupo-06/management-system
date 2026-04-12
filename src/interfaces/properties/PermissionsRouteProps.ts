@@ -1,7 +1,7 @@
 import type { JSX } from "react";
 
-type Modules = "CLIENT" | "PROJECT" | "BUDGET" | "SCHEDULE";
-type Actions = "READ" | "WRITE" | "UPDATE" | "DELETE";
+type Modules = "CLIENT" | "PROJECT" | "BUDGET" | "SCHEDULE" | "ROLE";
+type Actions = "READ" | "WRITE" | "UPDATE" | "DELETE" | "ADMIN";
 export type Permissions = `${Modules}_${Actions}`;
 
 export interface PermissionRouteProps {
