@@ -328,3 +328,21 @@
 .back-button:hover {
   color: var(--color-primary);
 }
+.input:read-only {
+    background-color: var(--color-background-alt);
+    color: var(--color-text-light);
+    cursor: default;
+    border-color: var(--color-border);
+}
+
+.input:read-only:hover {
+    background-color: var(--color-background-alt);
+    border-color: var(--color-border);
+}
+
+.select:disabled {
+    background-color: var(--color-background-alt);
+    color: var(--color-text-light);
+    cursor: default;
+    opacity: 1;
+}

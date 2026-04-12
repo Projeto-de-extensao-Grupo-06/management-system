@@ -38,13 +38,14 @@ interface SendCodeStepProps {
 interface ChangePasswordStepProps {
     step: Steps;
     message: string;
-    clearSteps: () => void;
-    clearEmail: () => void;
-    clearTime: () => void;
+    clearSteps?: () => void;
+    clearEmail?: () => void;
+    clearTime?: () => void;
     password: string;
     setPassword: React.Dispatch<React.SetStateAction<string>>;
     handlePasswordChange: (e: React.FormEvent) => void;
     messageType: "error" | "success" | "warning" | undefined;
+    hideLoginLink?: boolean;
 }
 
 
@@ -76,7 +77,7 @@ export function SendCodeStep({ message, step, otpCode, requestNewCode, timeToReq
     );
 }
 
-export function ChangePasswordStep({ message, step, clearEmail, clearSteps, clearTime, password, setPassword, handlePasswordChange, messageType }: ChangePasswordStepProps) {
+export function ChangePasswordStep({ message, step, clearEmail, clearSteps, clearTime, password, setPassword, handlePasswordChange, messageType, hideLoginLink }: ChangePasswordStepProps) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordValid, setPasswordValid] = useState(false);
 
@@ -109,7 +110,9 @@ export function ChangePasswordStep({ message, step, clearEmail, clearSteps, clea
             <span className={styles.infoText}>Deve conter pelo menos 8 caracteres (Letras, números ou símbolos)</span>
             <Button text="Alterar Senha" disabled={!isPasswordEqualsPasswordConfirm || passwordChanged} />
 
-            <Link className={styles.loginLink} to="/login" onClick={() => { clearSteps(); clearEmail(); clearTime(); }}>Voltar para a tela de login</Link>
+            {!hideLoginLink && (
+                <Link className={styles.loginLink} to="/login" onClick={() => { clearSteps?.(); clearEmail?.(); clearTime?.(); }}>Voltar para a tela de login</Link>
+            )}
         </form>
     );
 }

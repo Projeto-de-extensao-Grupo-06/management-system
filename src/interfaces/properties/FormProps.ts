@@ -1,6 +1,6 @@
 import type { ClientSchemaType } from "../../schemas/clientSchema";
 import type { CoworkerSchemaType } from "../../schemas/coworkerSchema";
-
+import type { BudgetParameterSchemaType } from "../../schemas/budgetParameterSchema";
 export interface ClientFormRef {
   submit: () => void;
 }
@@ -19,4 +19,14 @@ export interface CoworkerFormProps {
   onSubmit: (data: CoworkerSchemaType) => void;
   defaultValues?: Partial<CoworkerSchemaType>;
   readOnly?: boolean;
+}
+
+export interface BudgetParameterFormProps {
+  onSubmit: (data: BudgetParameterSchemaType) => void;
+  defaultValues?: Partial<BudgetParameterSchemaType>;
+  readOnly?: boolean;
+}
+
+export interface BudgetParameterFormRef {
+  submit: () => void;
 }

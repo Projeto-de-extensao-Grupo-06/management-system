@@ -12,17 +12,25 @@ import Analysis from "./pages/analysis/Analysis";
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import BudgetDetails from "./pages/Budget/BudgetDetails";
+import BudgetParameterDetails from "./pages/budget_parameters/BudgetParameterDetails";
+import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import Coworkers from "./pages/coworkers/Coworkers";
+import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
 import ProjectNotifications from "./pages/projects/ProjectNotifications";
 import Projects from "./pages/projects/Projects";
 import Schedule from "./pages/schedule/Schedule";
+import BadGateway from "./pages/shared/BadGateway";
+import GatewayTimeout from "./pages/shared/GatewayTimeout";
+import InternalServerError from "./pages/shared/InternalServerError";
 import NotFound from "./pages/shared/NotFound";
+import NotImplemented from "./pages/shared/NotImplemented";
+import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
 import useAuthStore from "./store/useAuthStore";
 
 function App() {
@@ -39,6 +47,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Login />} />
 
+          <Route
+            path="/internal-server-error"
+            element={<InternalServerError />}
+          />
+          <Route path="/not-implemented" element={<NotImplemented />} />
+          <Route path="/bad-gateway" element={<BadGateway />} />
+          <Route path="/service-unavailable" element={<ServiceUnavailable />} />
+          <Route path="/gateway-timeout" element={<GatewayTimeout />} />
           <Route path="*" element={<NotFound />}></Route>
         </Route>
 
@@ -160,6 +176,33 @@ function App() {
               element={<Coworkers />}
             />
             <Route path="/configuracoes" element={<Config />} />
+            <Route
+              path="/configuracoes/config-perfil"
+              element={<ConfigPerfil />}
+            />
+            <Route
+              path="/configuracoes/redefinir-senha"
+              element={<ForgetPassword />}
+            />
+
+            <Route
+              path="/configuracoes/parametros-orcamento"
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetParameters />}
+                />
+              }
+            />
+            <Route
+              path="/configuracoes/parametros-orcamento/:id"
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetParameterDetails />}
+                />
+              }
+            />
           </Route>
         </Route>
       </Routes>

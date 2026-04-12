@@ -22,6 +22,27 @@ api.interceptors.response.use(
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
+
+    if (error.response?.status === 500) {
+      window.location.href = '/internal-server-error';
+    }
+
+    if (error.response?.status === 501) {
+      window.location.href = '/not-implemented';
+    }
+
+    if (error.response?.status === 502) {
+      window.location.href = '/bad-gateway';
+    }
+
+    if (error.response?.status === 503) {
+      window.location.href = '/service-unavailable';
+    }
+
+    if (error.response?.status === 504) {
+      window.location.href = '/gateway-timeout';
+    }
+
     return Promise.reject(error);
   }
 );

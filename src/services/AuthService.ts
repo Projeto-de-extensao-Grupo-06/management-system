@@ -23,4 +23,8 @@ export default class authService {
   async changePasswordWithToken(password: ChangePasswordWithToken) {
     await api.patch("/auth/change-password/token", password);
   }
+
+  async changePasswordAuthenticated(password: ChangePasswordWithToken) {
+    await api.patch("/auth/change-password", password);
+  }
 };

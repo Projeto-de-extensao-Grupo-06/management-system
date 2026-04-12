@@ -1,5 +1,6 @@
-import type Client from "../types/Client";
 import type { Coworker } from "../types/Coworker";
+import type BudgetParameter from "../types/BudgetParameter";
+import type Client from "../types/Client";
 import type { Material } from "../types/Material";
 
 export interface ClientTableProps {
@@ -35,4 +36,12 @@ export interface TableProps {
   isEmpty?: boolean;
   emptyMessage?: string;
   className?: string;
+}
+
+export interface BudgetParameterTableProps {
+  parameters: BudgetParameter[];
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
+  onActivate: (id: number) => void;
+  onRowClick?: (id: number) => void;
 }
