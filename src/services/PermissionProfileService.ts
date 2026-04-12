@@ -59,13 +59,13 @@ export default class PermissionProfileService {
         },
     ];
 
-    // return {
-    //     content: mock,
-    //     totalElements: mock.length,
-    //     totalPages: 1,
-    //     size: 10,
-    //     number: 0,
-    // };
+    return {
+        content: mock,
+        totalElements: mock.length,
+        totalPages: 1,
+        size: 10,
+        number: 0,
+    };
 }
 
     async getById(id: number): Promise<PermissionProfile> {
