@@ -3,7 +3,10 @@ import type { CoworkerFormRef } from "../../interfaces/properties/FormProps";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import type { ModalRef } from "../../interfaces/properties/DialogProps";
-import type { CoworkerSchemaType } from "../../schemas/coworkerSchema";
+import type {
+  CoworkerEditSchemaType,
+  CoworkerSchemaType,
+} from "../../schemas/coworkerSchema";
 import {
   Button,
   SearchInput,
@@ -21,6 +24,7 @@ import Modal from "../../components/dialogs/modal/Modal";
 import { Pagination } from "../../components/tables/pagination/Pagination";
 import CoworkerTable from "../../components/tables/coworker_table/CoworkerTable";
 import CoworkerForm from "../../components/forms/coworker_form/CoworkerForm";
+import type { Coworker } from "../../interfaces/types/Coworker";
 import styles from "./Coworkers.module.css";
 
 export default function Coworkers() {
@@ -42,24 +46,76 @@ export default function Coworkers() {
     handleStatusChange,
     handleApplyFilters,
     createCoworker,
+    updateCoworker,
     deleteCoworker,
   } = useCoworkers();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const formRef = useRef<CoworkerFormRef>(null);
   const modalRef = useRef<ModalRef>(null);
+  const editFormRef = useRef<CoworkerFormRef>(null);
+  const editModalRef = useRef<ModalRef>(null);
 
   const [globalAlert, setGlobalAlert] = useState<{
     message: string;
     type: "success" | "error";
   } | null>(null);
   const [modalTypeMessage, setModalMessage] = useState<string | null>(null);
+  const [editModalMessage, setEditModalMessage] = useState<string | null>(null);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteCoworkerId, setDeleteCoworkerId] = useState<number | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedCoworker, setSelectedCoworker] = useState<Coworker | null>(null);
+
+  const mapPermissionGroupToFormValue = (role?: string | null) => {
+    const normalizedRole = role?.trim().toLowerCase() ?? "";
+
+    if (normalizedRole.includes("admin")) {
+      return "Admin";
+    }
+
+    if (normalizedRole.includes("tecn")) {
+      return "Tecnico";
+    }
+
+    if (normalizedRole.includes("secret")) {
+      return "Secretaria";
+    }
+
+    return "";
+  };
+
+  const getEditFormDefaultValues = (coworker: Coworker | null) => {
+    if (!coworker) {
+      return undefined;
+    }
+
+    return {
+      firstName: coworker.firstName,
+      secondName: coworker.lastName,
+      email: coworker.email,
+      phone: coworker.phone,
+      permissionGroupRole: mapPermissionGroupToFormValue(
+        coworker.permissionGroupRole,
+      ),
+    };
+  };
 
   const handleEdit = (id: number) => {
-    navigate(`/coworkers/${id}`, { state: { edit: true } });
+    const coworkerToEdit = coworkers.find((coworker) => coworker.id === id);
+
+    if (!coworkerToEdit) {
+      setGlobalAlert({
+        message: "Não foi possível localizar o colaborador selecionado.",
+        type: "error",
+      });
+      return;
+    }
+
+    setEditModalMessage(null);
+    setSelectedCoworker(coworkerToEdit);
+    setIsEditModalOpen(true);
   };
 
   const handleRowClick = (id: number) => {
@@ -75,6 +131,10 @@ export default function Coworkers() {
     formRef.current?.submit();
   };
 
+  const handleEditSubmit = () => {
+    editFormRef.current?.submit();
+  };
+
   const onFormSubmit = (data: CoworkerSchemaType) => {
     setModalMessage(null);
     setGlobalAlert(null);
@@ -83,7 +143,7 @@ export default function Coworkers() {
       .then(() => {
         setIsCreateModalOpen(false);
         setGlobalAlert({
-          message: "Coworker cadastrado com sucesso!",
+          message: "Colaborador cadastrado com sucesso!",
           type: "success",
         });
         setTimeout(() => setGlobalAlert(null), 5000);
@@ -91,6 +151,37 @@ export default function Coworkers() {
       .catch((e: Error) => {
         setModalMessage(e.message);
         modalRef.current?.scrollToTop();
+      });
+  };
+
+  const onEditFormSubmit = (data: CoworkerEditSchemaType) => {
+    if (!selectedCoworker) {
+      return;
+    }
+
+    const permissionGroupRole =
+      data.permissionGroupRole ||
+      mapPermissionGroupToFormValue(selectedCoworker.permissionGroupRole);
+
+    setEditModalMessage(null);
+    setGlobalAlert(null);
+
+    updateCoworker(selectedCoworker.id, {
+      ...data,
+      permissionGroupRole,
+    })
+      .then(() => {
+        setIsEditModalOpen(false);
+        setSelectedCoworker(null);
+        setGlobalAlert({
+          message: "Colaborador atualizado com sucesso!",
+          type: "success",
+        });
+        setTimeout(() => setGlobalAlert(null), 5000);
+      })
+      .catch((e: Error) => {
+        setEditModalMessage(e.message);
+        editModalRef.current?.scrollToTop();
       });
   };
 
@@ -109,7 +200,7 @@ export default function Coworkers() {
     deleteCoworker(deleteCoworkerId)
       .then(() => {
         setGlobalAlert({
-          message: "Coworker removido com sucesso!",
+          message: "Colaborador removido com sucesso!",
           type: "success",
         });
         setTimeout(() => setGlobalAlert(null), 5000);
@@ -156,6 +247,15 @@ export default function Coworkers() {
     </div>
   );
 
+  const editModalFooter = (
+    <Button
+      text="Salvar"
+      ariaLabel="Salvar edição do colaborador"
+      onClick={handleEditSubmit}
+      width="fit-content"
+    />
+  );
+
   return (
     <PageLayout
       title="Colaboradores"
@@ -176,7 +276,7 @@ export default function Coworkers() {
         </SecureComponent>
       }
     >
-      {globalAlert && !isCreateModalOpen && (
+      {globalAlert && !isCreateModalOpen && !isEditModalOpen && (
         <div className={styles.alertWrapper}>
           <Alert message={globalAlert.message} type={globalAlert.type} />
         </div>
@@ -196,6 +296,31 @@ export default function Coworkers() {
             </div>
           )}
           <CoworkerForm ref={formRef} onSubmit={onFormSubmit} />
+        </Modal>
+      )}
+
+      {isEditModalOpen && selectedCoworker && (
+        <Modal
+          ref={editModalRef}
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setSelectedCoworker(null);
+          }}
+          title="Editar Colaborador"
+          footer={editModalFooter}
+        >
+          {editModalMessage && (
+            <div style={{ marginBottom: "1rem" }}>
+              <Alert message={editModalMessage} type="error" />
+            </div>
+          )}
+          <CoworkerForm
+            ref={editFormRef}
+            onSubmit={onEditFormSubmit}
+            mode="edit"
+            defaultValues={getEditFormDefaultValues(selectedCoworker)}
+          />
         </Modal>
       )}
 
@@ -228,9 +353,8 @@ export default function Coworkers() {
             >
               <SelectOption value="Todos" label="Todos os perfis" />
               <SelectOption value="Admin" label="Admin" />
-              <SelectOption value="Vendedor" label="Vendedor" />
               <SelectOption value="Tecnico" label="Tecnico" />
-              <SelectOption value="Suporte" label="Suporte" />
+              <SelectOption value="Secretaria" label="Secretaria" />
             </Select>
           </div>
 
