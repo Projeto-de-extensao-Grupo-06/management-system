@@ -1,5 +1,8 @@
 import type { ClientSchemaType } from "../../schemas/clientSchema";
-import type { CoworkerSchemaType } from "../../schemas/coworkerSchema";
+import type {
+  CoworkerEditSchemaType,
+  CoworkerSchemaType,
+} from "../../schemas/coworkerSchema";
 import type Client from "./Client";
 import type { Coworker } from "./Coworker";
 
@@ -56,6 +59,9 @@ export interface UseCoworkersReturn {
   handleApplyFilters: (newFilters: CoworkerFilters) => void;
   handleClearFilters: () => void;
   createCoworker: (data: CoworkerSchemaType) => Promise<void>;
-  updateCoworker: (id: number, data: CoworkerSchemaType) => Promise<Coworker>;
+  updateCoworker: (
+    id: number,
+    data: CoworkerEditSchemaType,
+  ) => Promise<Coworker>;
   deleteCoworker: (id: number) => Promise<void>;
 }
