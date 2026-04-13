@@ -1,21 +1,36 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
-import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 import type {
+  CoworkerFormData,
   CoworkerFormProps,
   CoworkerFormRef,
 } from "../../../interfaces/properties/FormProps";
-import type { CoworkerSchemaType } from "../../../schemas/coworkerSchema";
-import { coworkerSchema } from "../../../schemas/coworkerSchema";
-import { Input, PasswordInput, PhoneInput, Select, SelectOption } from "../../ui/Form";
+import {
+  coworkerEditSchema,
+  coworkerSchema,
+} from "../../../schemas/coworkerSchema";
+import {
+  Input,
+  PasswordInput,
+  PhoneInput,
+  Select,
+  SelectOption,
+} from "../../ui/Form";
 import styles from "./CoworkerForm.module.css";
 
 interface BasicInfoFormProps {
+  mode: "create" | "edit";
   readOnly?: boolean;
 }
 
-function CoworkerBasicInfoForm({ readOnly }: BasicInfoFormProps) {
-  const { control, watch } = useFormContext<CoworkerSchemaType>();
+function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
+  const { control, watch } = useFormContext<CoworkerFormData>();
   const formValues = watch();
 
   if (readOnly) {
@@ -54,12 +69,16 @@ function CoworkerBasicInfoForm({ readOnly }: BasicInfoFormProps) {
               {formValues.permissionGroupRole || "-"}
             </div>
           </div>
-          <div>
-            <label className={styles.fieldLabel}>Senha:</label>
-            <div className={styles.readOnlyField}>
-              {formValues.password ? "••••••••" : "-"}
+          {mode === "create" && (
+            <div>
+              <label className={styles.fieldLabel}>Senha:</label>
+              <div className={styles.readOnlyField}>
+                {"password" in formValues && formValues.password
+                  ? "••••••••"
+                  : "-"}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     );
@@ -180,9 +199,8 @@ function CoworkerBasicInfoForm({ readOnly }: BasicInfoFormProps) {
                 >
                   <SelectOption value="" label="Selecione um perfil" />
                   <SelectOption value="Admin" label="Admin" />
-                  <SelectOption value="Vendedor" label="Vendedor" />
                   <SelectOption value="Tecnico" label="Tecnico" />
-                  <SelectOption value="Suporte" label="Suporte" />
+                  <SelectOption value="Secretaria" label="Secretaria" />
                 </Select>
                 {error && (
                   <span className={styles.errorMessage}>{error.message}</span>
@@ -192,43 +210,45 @@ function CoworkerBasicInfoForm({ readOnly }: BasicInfoFormProps) {
           />
         </div>
 
-        <div className={styles.inputGroup}>
-          <label htmlFor="password" className={styles.fieldLabel}>
-            Senha <span className={styles.required}>*</span>
-          </label>
-          <Controller
-            name="password"
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-              <>
-                <PasswordInput
-                  placeholder="Digite a senha"
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-                {error && (
-                  <span className={styles.errorMessage}>{error.message}</span>
-                )}
-              </>
-            )}
-          />
-        </div>
+        {mode === "create" && (
+          <div className={styles.inputGroup}>
+            <label htmlFor="password" className={styles.fieldLabel}>
+              Senha <span className={styles.required}>*</span>
+            </label>
+            <Controller
+              name="password"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <PasswordInput
+                    placeholder="Digite a senha"
+                    value={"password" in field ? field.value : ""}
+                    onChange={field.onChange}
+                  />
+                  {error && (
+                    <span className={styles.errorMessage}>{error.message}</span>
+                  )}
+                </>
+              )}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 const CoworkerForm = forwardRef<CoworkerFormRef, CoworkerFormProps>(
-  ({ onSubmit, defaultValues, readOnly }, ref) => {
-    const methods = useForm<CoworkerSchemaType>({
-      resolver: zodResolver(coworkerSchema),
+  ({ onSubmit, defaultValues, readOnly, mode = "create" }, ref) => {
+    const methods = useForm<CoworkerFormData>({
+      resolver: zodResolver(mode === "edit" ? coworkerEditSchema : coworkerSchema),
       defaultValues: {
         firstName: "",
         secondName: "",
         email: "",
         phone: "",
-        password: "",
         permissionGroupRole: "",
+        ...(mode === "create" ? { password: "" } : {}),
         ...defaultValues,
       },
     });
@@ -236,14 +256,20 @@ const CoworkerForm = forwardRef<CoworkerFormRef, CoworkerFormProps>(
     const { handleSubmit, reset } = methods;
 
     useEffect(() => {
-      if (defaultValues) {
-        reset(defaultValues);
-      }
-    }, [defaultValues, reset]);
+      reset({
+        firstName: "",
+        secondName: "",
+        email: "",
+        phone: "",
+        permissionGroupRole: "",
+        ...(mode === "create" ? { password: "" } : {}),
+        ...defaultValues,
+      });
+    }, [defaultValues, mode, reset]);
 
     useImperativeHandle(ref, () => ({
       submit: () => {
-        handleSubmit(onSubmit)();
+        handleSubmit((data) => onSubmit(data))();
       },
     }));
 
@@ -252,7 +278,7 @@ const CoworkerForm = forwardRef<CoworkerFormRef, CoworkerFormProps>(
         <div className={styles.formContainer}>
           <div className={styles.card}>
             <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
-            <CoworkerBasicInfoForm readOnly={readOnly} />
+            <CoworkerBasicInfoForm mode={mode} readOnly={readOnly} />
           </div>
         </div>
       </FormProvider>
