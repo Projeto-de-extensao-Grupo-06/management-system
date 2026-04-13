@@ -24,7 +24,7 @@ jobs:
           pip install -r e2e/requirements.txt
           playwright install --with-deps
 
-      - name: Checkout docker-composes
+      - name: Checkout infrastructure
         uses: actions/checkout@v4
         with:
           repository: Projeto-de-extensao-Grupo-06/infrastructure
@@ -36,10 +36,10 @@ jobs:
           docker network create solarway_network || true
           
           # Setup environment variable defaults
-          cp docker-composes/.env.example docker-composes/.env
+          cp infrastructure/.env.example infrastructure/.env
           
           echo "Starting Database..."
-          cd docker-composes/services/db
+          cd infrastructure/services/db
           docker compose --env-file ../../.env up -d
           
           echo "Starting Backend Monolith..."
