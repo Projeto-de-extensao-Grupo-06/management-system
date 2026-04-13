@@ -19,6 +19,7 @@ import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import Coworkers from "./pages/coworkers/Coworkers";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
+import ResetPassword from "./pages/config/resetPassword/ResetPassword";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
@@ -176,6 +177,7 @@ function App() {
               element={<Coworkers />}
             />
             <Route path="/configuracoes" element={<Config />} />
+<<<<<<< HEAD
             <Route
               path="/configuracoes/config-perfil"
               element={<ConfigPerfil />}
@@ -184,6 +186,11 @@ function App() {
               path="/configuracoes/redefinir-senha"
               element={<ForgetPassword />}
             />
+=======
+            <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
+            <Route path="/configuracoes/redefinir-senha" element={<ResetPassword />} />
+            
+>>>>>>> 8daa7681c38cd44c92452eb3e4bf81838022f41f
 
             <Route
               path="/configuracoes/parametros-orcamento"
