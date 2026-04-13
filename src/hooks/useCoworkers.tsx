@@ -9,8 +9,11 @@ import CoworkerService, {
   type CreateCoworkerPayload,
   type UpdateCoworkerPayload,
 } from "../services/CoworkerService";
-import type { CoworkerSchemaType } from "../schemas/coworkerSchema";
-import { coworkerSchema } from "../schemas/coworkerSchema";
+import type {
+  CoworkerEditSchemaType,
+  CoworkerSchemaType,
+} from "../schemas/coworkerSchema";
+import { coworkerEditSchema, coworkerSchema } from "../schemas/coworkerSchema";
 import type { AxiosError } from "axios";
 import type { Page } from "../interfaces/types/Page";
 
@@ -61,14 +64,13 @@ const matchesPermissionGroupFilter = (
 
   const roleAliases: Record<string, string[]> = {
     admin: ["admin", "administrador", "role_admin"],
-    vendedor: ["vendedor"],
     tecnico: [
       "tecnico",
       "tecnico instalador",
       "técnico",
       "técnico instalador",
     ],
-    suporte: ["suporte"],
+    secretaria: ["secretaria", "secretária"],
   };
 
   const acceptedRoles = roleAliases[normalizedFilter] ?? [normalizedFilter];
@@ -82,10 +84,8 @@ const permissionGroupMap: Record<string, number> = {
   "tecnico instalador": 2,
   técnico: 2,
   "técnico instalador": 2,
-  vendedor: 3,
   secretaria: 3,
   secretária: 3,
-  suporte: 4,
 };
 
 export default function useCoworkers(): UseCoworkersReturn {
@@ -272,9 +272,9 @@ export default function useCoworkers(): UseCoworkersReturn {
   );
 
   const updateCoworker = useCallback(
-    async (id: number, data: CoworkerSchemaType): Promise<Coworker> => {
+    async (id: number, data: CoworkerEditSchemaType): Promise<Coworker> => {
       try {
-        const validatedData = coworkerSchema.parse(data);
+        const validatedData = coworkerEditSchema.parse(data);
         const permissionGroupId =
           permissionGroupMap[normalizeText(validatedData.permissionGroupRole)];
 
@@ -294,12 +294,8 @@ export default function useCoworkers(): UseCoworkersReturn {
         setRefetchTrigger((prev) => prev + 1);
         return res;
       } catch (e) {
-        if (
-          e instanceof Error &&
-          (e.message.includes("validation") ||
-            e.message === "Perfil de permissão inválido.")
-        ) {
-          throw new Error(`Validacao falhou: ${e.message}`);
+        if (e instanceof Error && e.message === "Perfil de permissão inválido.") {
+          throw e;
         }
 
         const axiosError = e as AxiosError<{
