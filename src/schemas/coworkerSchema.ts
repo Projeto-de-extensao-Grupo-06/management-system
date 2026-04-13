@@ -1,30 +1,32 @@
 import { z } from "zod";
 
-export const coworkerSchema = z
-  .object({
-    firstName: z
-      .string()
-      .trim()
-      .min(3, "Nome deve ter pelo menos 3 caracteres")
-      .max(20, "Nome deve ter no máximo 20 caracteres"),
-    secondName: z
-      .string()
-      .trim()
-      .min(3, "Sobrenome deve ter pelo menos 3 caracteres")
-      .max(20, "Sobrenome deve ter no máximo 20 caracteres"),
-    email: z
-      .string()
-      .trim()
-      .email("E-mail inválido")
-      .min(1, "E-mail é obrigatório"),
-    phone: z.string().trim().min(1, "Telefone é obrigatório"),
-    permissionGroupRole: z
-      .string()
-      .trim()
-      .min(1, "Perfil de permissão é obrigatório"),
-    password: z.string().trim().min(1, "Senha é obrigatória"),
-  })
-  .superRefine((data, ctx) => {
+const coworkerBaseSchema = z.object({
+  firstName: z
+    .string()
+    .trim()
+    .min(3, "Nome deve ter pelo menos 3 caracteres")
+    .max(20, "Nome deve ter no máximo 20 caracteres"),
+  secondName: z
+    .string()
+    .trim()
+    .min(3, "Sobrenome deve ter pelo menos 3 caracteres")
+    .max(20, "Sobrenome deve ter no máximo 20 caracteres"),
+  email: z
+    .string()
+    .trim()
+    .email("E-mail inválido")
+    .min(1, "E-mail é obrigatório"),
+  phone: z.string().trim().min(1, "Telefone é obrigatório"),
+  permissionGroupRole: z
+    .string()
+    .trim()
+    .min(1, "Perfil de permissão é obrigatório"),
+});
+
+const validateBaseCoworkerFields = (
+  data: z.infer<typeof coworkerBaseSchema>,
+  ctx: z.RefinementCtx,
+) => {
     const firstName = data.firstName.trim();
     const secondName = data.secondName.trim();
     const phoneDigits = data.phone.replace(/\D/g, "");
@@ -52,6 +54,14 @@ export const coworkerSchema = z
         path: ["phone"],
       });
     }
+};
+
+export const coworkerSchema = coworkerBaseSchema
+  .extend({
+    password: z.string().trim().min(1, "Senha é obrigatória"),
+  })
+  .superRefine((data, ctx) => {
+    validateBaseCoworkerFields(data, ctx);
 
     if (
       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[\S]{8,}$/.test(
@@ -67,4 +77,11 @@ export const coworkerSchema = z
     }
   });
 
+export const coworkerEditSchema = coworkerBaseSchema
+  .extend({
+    permissionGroupRole: z.string().trim().optional().default(""),
+  })
+  .superRefine(validateBaseCoworkerFields);
+
 export type CoworkerSchemaType = z.infer<typeof coworkerSchema>;
+export type CoworkerEditSchemaType = z.infer<typeof coworkerEditSchema>;
