@@ -30,6 +30,13 @@ jobs:
           repository: Projeto-de-extensao-Grupo-06/infrastructure
           path: infrastructure
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Start Database and Backend Services
         run: |
           docker network create storage_network || true
