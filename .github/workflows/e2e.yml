@@ -54,8 +54,12 @@ jobs:
           docker compose --env-file ../../../.env up -d
           
           # Give the database and backend enough time to initialize
-          echo "Waiting 45 seconds for backend to be fully started..."
-          sleep 45
+          echo "Waiting 60 seconds for backend to be fully started..."
+          sleep 60
+          
+          # Print logs in case of failure for debugging
+          docker ps
+          docker logs backend-service || true
 
       - name: Start frontend service (Docker)
         run: |
@@ -66,7 +70,7 @@ jobs:
           # Here we point BACKEND_URL to the internal backend container's IP/port.
           docker run -d -p 80:80 \
             --network solarway_network \
-            -e BACKEND_URL="http://backend-service:8000/api" \
+            -e BACKEND_URL="http://backend-service:8000" \
             frontend
             
           # Give the container a few seconds to initialize
