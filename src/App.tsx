@@ -18,6 +18,7 @@ import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
+import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 import ResetPassword from "./pages/config/resetPassword/ResetPassword";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
@@ -32,7 +33,6 @@ import NotFound from "./pages/shared/NotFound";
 import NotImplemented from "./pages/shared/NotImplemented";
 import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
 import useAuthStore from "./store/useAuthStore";
-import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -127,17 +127,13 @@ function App() {
               path="/configuracoes/parametros-orcamento/:id"
               element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameterDetails />} />}
             />
+
+           <Route
+          path="/configuracoes/perfis-permissao"
+         element={<PermissionRoute permissions={["CONFIGURATION_READ"]} element={<PermissionProfiles />} />}
+          />
           </Route>
         </Route>
-        <Route
-          path="/configuracoes/perfis-permissao"
-          element={
-            <PermissionRoute
-              permissions={["PROJECT_READ"]}
-              element={<PermissionProfiles />}
-            />
-          }
-        />
       </Routes>
     </BrowserRouter>
   );

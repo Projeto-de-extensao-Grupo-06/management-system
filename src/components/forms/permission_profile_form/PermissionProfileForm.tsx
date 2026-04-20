@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import PermissionProfileFields from '../../../components/permissionProfile/PermissionProfileFields';
 import type { PermissionProfileFormProps, PermissionProfileFormRef } from '../../../interfaces/properties/FormProps';
 import { permissionProfileSchema, type PermissionProfileSchemaType } from '../../../schemas/permissionProfileSchema';
-import PermissionProfileFields from '../../../components/permissionProfile/PermissionProfileFields';
 import styles from './PermissionProfileForm.module.css';
 
 const PermissionProfileForm = forwardRef<PermissionProfileFormRef, PermissionProfileFormProps>(

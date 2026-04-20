@@ -1,7 +1,7 @@
 import type { AxiosError } from 'axios';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type {PermissionProfile} from '../interfaces/types/PermissionProfile';
 import type { Page } from '../interfaces/types/Page';
+import type { PermissionProfile } from '../interfaces/types/PermissionProfile';
 import type { PermissionProfileSchemaType } from '../schemas/permissionProfileSchema';
 import PermissionProfileService from '../services/PermissionProfileService';
 
@@ -11,42 +11,35 @@ export default function usePermissionProfiles() {
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('Todos');
+    const [moduleFilter, setModuleFilter] = useState('');  
     const [refetchTrigger, setRefetchTrigger] = useState(0);
 
     const service = useMemo(() => new PermissionProfileService(), []);
 
     useEffect(() => {
         service
-            .getAll(page, 30, searchTerm, statusFilter)
+            .getAll(page, 30, searchTerm, moduleFilter || undefined)  
             .then((resData: Page<PermissionProfile>) => {
                 const data = resData as any;
                 const pageMeta = data.page || data;
-
-                const totalElementsCount =
-                    pageMeta.totalElements ?? data.totalElements ?? 0;
-
-                const totalPagesCount =
-                    pageMeta.totalPages ?? data.totalPages ?? 0;
-
                 setProfiles(data.content || []);
-                setTotalPages(totalPagesCount);
-                setTotalElements(totalElementsCount);
+                setTotalPages(pageMeta.totalPages ?? data.totalPages ?? 0);
+                setTotalElements(pageMeta.totalElements ?? data.totalElements ?? 0);
             })
             .catch(() => {
                 setProfiles([]);
                 setTotalPages(0);
                 setTotalElements(0);
             });
-    }, [service, page, searchTerm, statusFilter, refetchTrigger]);
+    }, [service, page, searchTerm, moduleFilter, refetchTrigger]);
 
     const handleSearchChange = useCallback((term: string) => {
         setSearchTerm(term);
         setPage(0);
     }, []);
 
-    const handleStatusChange = useCallback((value: string) => {
-        setStatusFilter(value);
+    const handleModuleFilterChange = useCallback((value: string) => {
+        setModuleFilter(value);
         setPage(0);
     }, []);
 
@@ -57,10 +50,20 @@ export default function usePermissionProfiles() {
                 setRefetchTrigger((prev) => prev + 1);
             } catch (e) {
                 const axiosError = e as AxiosError<{ message: string }>;
-                throw new Error(
-                    axiosError.response?.data?.message ||
-                        'Erro ao criar perfil.'
-                );
+                throw new Error(axiosError.response?.data?.message || 'Erro ao criar perfil.');
+            }
+        },
+        [service]
+    );
+
+    const updateProfile = useCallback(
+        async (id: number, data: PermissionProfileSchemaType): Promise<void> => {
+            try {
+                await service.update(id, data);
+                setRefetchTrigger((prev) => prev + 1);
+            } catch (e) {
+                const axiosError = e as AxiosError<{ message: string }>;
+                throw new Error(axiosError.response?.data?.message || 'Erro ao atualizar perfil.');
             }
         },
         [service]
@@ -73,10 +76,7 @@ export default function usePermissionProfiles() {
                 setRefetchTrigger((prev) => prev + 1);
             } catch (e) {
                 const axiosError = e as AxiosError<{ message: string }>;
-                throw new Error(
-                    axiosError.response?.data?.message ||
-                        'Erro ao excluir perfil.'
-                );
+                throw new Error(axiosError.response?.data?.message || 'Erro ao excluir perfil.');
             }
         },
         [service]
@@ -88,11 +88,12 @@ export default function usePermissionProfiles() {
         totalPages,
         totalElements,
         searchTerm,
-        statusFilter,
+        moduleFilter,
         setPage,
         handleSearchChange,
-        handleStatusChange,
+        handleModuleFilterChange,  
         createProfile,
+        updateProfile,
         deleteProfile,
     };
 }

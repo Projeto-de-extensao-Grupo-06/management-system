@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 
-type Modules = "CLIENT" | "PROJECT" | "BUDGET" | "SCHEDULE";
+type Modules = "CLIENT" | "PROJECT" | "BUDGET" | "SCHEDULE" | "CONFIGURATION";
 type Actions = "READ" | "WRITE" | "UPDATE" | "DELETE";
 export type Permissions = `${Modules}_${Actions}`;
 

@@ -1,11 +1,25 @@
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import usePermissions from '../../../hooks/usePermissions';
 import type { PermissionProfileTableProps } from '../../../interfaces/properties/TableProps';
 import styles from '../../../pages/config/permission_profiles/PermissionProfiles.module.css';
 import SecureComponent from '../../security/SecureComponent';
 import { IconButton } from '../../ui/Form';
 import Table from '../Table';
+
+const MODULE_LABELS: Record<string, string> = {
+    CLIENT:        'Clientes',
+    CLIENT_LIST:   'Clientes',
+    PROJECT:       'Projetos',
+    PROJECT_LIST:  'Projetos',
+    SCHEDULE:      'Agenda',
+    MATERIAL:      'Materiais',
+    BUDGET:        'Orçamentos',
+    CONFIGURATION: 'Configurações',
+};
+
+function translateModule(value: string): string {
+    return MODULE_LABELS[value] ?? value;
+}
 
 export default function PermissionProfileTable({
     profiles,
@@ -14,17 +28,7 @@ export default function PermissionProfileTable({
     onRowClick,
 }: PermissionProfileTableProps) {
 
-    const permissions = usePermissions();
-
-    // const canManage =
-    //     permissions.includes('PERMISSION_PROFILE_UPDATE') ||
-    //     permissions.includes('PERMISSION_PROFILE_DELETE');
-
-    const headers = [
-        'Nome',
-        'Módulo Principal',
-        // ...(canManage ? ['Ações'] : []),
-    ];
+    const headers = ['Nome', 'Módulo Principal', 'Ações'];
 
     return (
         <Table
@@ -34,7 +38,13 @@ export default function PermissionProfileTable({
             className={styles.customTable}
         >
             {profiles.map((profile) => {
-                const isAdmin = profile.name === 'Administrador';
+                const isAdmin = profile.role.toUpperCase() === 'ADMIN';
+
+                const deleteTooltip = isAdmin
+                    ? 'O perfil Administrador não pode ser excluído.'
+                    : profile.inUse
+                    ? `Este perfil não pode ser excluído pois está em uso por ${profile.userCount ?? 'um ou mais'} colaborador(es).`
+                    : 'Excluir perfil';
 
                 return (
                     <tr
@@ -42,41 +52,38 @@ export default function PermissionProfileTable({
                         onClick={() => onRowClick?.(profile.id)}
                         className={onRowClick ? styles.clickableRow : styles.defaultCursor}
                     >
-                        <td>{profile.name}</td>
+                        <td>{profile.role}</td>
 
-                        <td>{profile.mainModule}</td>
+                        <td>{translateModule(profile.mainModule)}</td>
 
-                        {/* {canManage && ( */}
-                            <td>
-                                <div
-                                    className={styles.actions}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
+                        <td>
+                            <div
+                                className={styles.actions}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <SecureComponent permissions={['CONFIGURATION_UPDATE']}>
+                                    <IconButton
+                                        onClick={() => onEdit(profile.id)}
+                                        icon={<FontAwesomeIcon icon={faPen} />}
+                                        ariaLabel="Editar"
+                                        functionality="edit"
+                                        disabled={isAdmin}
+                                        title={isAdmin ? 'O perfil Administrador não pode ser editado.' : 'Editar perfil'}
+                                    />
+                                </SecureComponent>
 
-                                    {/* <SecureComponent permissions={['PERMISSION_PROFILE_UPDATE']}> */}
-                                        <IconButton
-                                            onClick={() => onEdit(profile.id)}
-                                            icon={<FontAwesomeIcon icon={faPen} />}
-                                            ariaLabel="Editar"
-                                            functionality="edit"
-                                            disabled={isAdmin}
-                                        />
-                                    {/* </SecureComponent>
-
-                                    <SecureComponent permissions={['PERMISSION_PROFILE_DELETE']}> */}
-                                        <IconButton
-                                            onClick={() => onDelete(profile.id)}
-                                            icon={<FontAwesomeIcon icon={faTrashCan} />}
-                                            ariaLabel="Excluir"
-                                            functionality="delete"
-                                            disabled={isAdmin || profile.inUse}
-                                        />
-                                    {/* </SecureComponent> */}
-
-                                </div>
-                            </td>
-                        {/* ) */}
-                        {/* } */}
+                                <SecureComponent permissions={['CONFIGURATION_DELETE']}>
+                                    <IconButton
+                                        onClick={() => onDelete(profile.id)}
+                                        icon={<FontAwesomeIcon icon={faTrashCan} />}
+                                        ariaLabel="Excluir"
+                                        functionality="delete"
+                                        disabled={isAdmin || profile.inUse}
+                                        title={deleteTooltip}
+                                    />
+                                </SecureComponent>
+                            </div>
+                        </td>
                     </tr>
                 );
             })}

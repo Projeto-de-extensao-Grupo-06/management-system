@@ -2,12 +2,14 @@ import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 import Modal from '../../../components/dialogs/modal/Modal';
+import PermissionProfileDialog from '../../../components/dialogs/permission_profile_dialog/PermissionProfileDialog';
+import type { PermissionProfileDialogRef } from '../../../components/dialogs/permission_profile_dialog/PermissionProfileDialog';
 import PermissionProfileForm from '../../../components/forms/permission_profile_form/PermissionProfileForm';
 import FilterBar from '../../../components/layout/FilterBar';
 import PageLayout from '../../../components/layout/PageLayout';
 import SecureComponent from '../../../components/security/SecureComponent';
-import PermissionProfileTable from '../../../components/tables/permission_profile_table/PermissionProfileTable';
 import { Pagination } from '../../../components/tables/pagination/Pagination';
+import PermissionProfileTable from '../../../components/tables/permission_profile_table/PermissionProfileTable';
 import { Alert } from '../../../components/ui/Alert';
 import {
     Button,
@@ -29,11 +31,12 @@ export default function PermissionProfiles() {
         totalPages,
         totalElements,
         searchTerm,
-        statusFilter,
+        moduleFilter,
         handleSearchChange,
-        handleStatusChange,
+        handleModuleFilterChange,
         setPage,
         createProfile,
+        updateProfile,
         deleteProfile,
     } = usePermissionProfiles();
 
@@ -43,6 +46,7 @@ export default function PermissionProfiles() {
 
     const formRef = useRef<PermissionProfileFormRef>(null);
     const modalRef = useRef<ModalRef>(null);
+    const dialogRef = useRef<PermissionProfileDialogRef>(null);
 
     const [globalAlert, setGlobalAlert] = useState<{
         message: string;
@@ -50,6 +54,11 @@ export default function PermissionProfiles() {
     } | null>(null);
 
     const [modalErrorMessage, setModalErrorMessage] = useState<string | null>(null);
+
+    const showGlobalAlert = (message: string, type: 'success' | 'error') => {
+        setGlobalAlert({ message, type });
+        setTimeout(() => setGlobalAlert(null), 5000);
+    };
 
     const handleAdd = () => {
         setModalErrorMessage(null);
@@ -63,16 +72,16 @@ export default function PermissionProfiles() {
         createProfile(data)
             .then(() => {
                 setIsCreateModalOpen(false);
-                setGlobalAlert({
-                    message: 'Perfil criado com sucesso!',
-                    type: 'success',
-                });
-                setTimeout(() => setGlobalAlert(null), 5000);
+                showGlobalAlert('Perfil criado com sucesso!', 'success');
             })
             .catch((e: Error) => {
                 setModalErrorMessage(e.message);
                 modalRef.current?.scrollToTop();
             });
+    };
+
+    const handleEdit = (id: number) => {
+        dialogRef.current?.openEdit(id);
     };
 
     const handleDelete = (id: number) => {
@@ -85,18 +94,11 @@ export default function PermissionProfiles() {
 
         deleteProfile(deleteId)
             .then(() => {
-                setGlobalAlert({
-                    message: 'Perfil excluído com sucesso!',
-                    type: 'success',
-                });
-                setTimeout(() => setGlobalAlert(null), 5000);
+                showGlobalAlert('Perfil excluído com sucesso!', 'success');
                 setIsDeleteModalOpen(false);
             })
             .catch((e: Error) => {
-                setGlobalAlert({
-                    message: e.message,
-                    type: 'error',
-                });
+                showGlobalAlert(e.message, 'error');
                 setIsDeleteModalOpen(false);
             });
     };
@@ -112,14 +114,7 @@ export default function PermissionProfiles() {
     );
 
     const deleteModalFooter = (
-        <div
-            style={{
-                display: 'flex',
-                gap: '1rem',
-                justifyContent: 'flex-end',
-                width: '100%',
-            }}
-        >
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', width: '100%' }}>
             <SimpleButton
                 text="Cancelar"
                 ariaLabel="Cancelar"
@@ -140,13 +135,10 @@ export default function PermissionProfiles() {
         <PageLayout
             title="Perfis de Permissão"
             titleAccessory={
-                <span className={styles.count}>
-                    ({totalElements ?? 0})
-                </span>
+                <span className={styles.count}>({totalElements ?? 0})</span>
             }
             rightActions={
-                // <SecureComponent // permissions={['PERMISSION_PROFILE_WRITE']}>
-                // >
+                <SecureComponent permissions={["CONFIGURATION_WRITE"]}>
                     <Button
                         icon={<FontAwesomeIcon icon={faPlus} />}
                         text="Novo Perfil"
@@ -154,15 +146,12 @@ export default function PermissionProfiles() {
                         onClick={handleAdd}
                         width="fit-content"
                     />
-                // </SecureComponent>
+                </SecureComponent>
             }
         >
             {globalAlert && !isCreateModalOpen && (
                 <div className={styles.alertWrapper}>
-                    <Alert
-                        message={globalAlert.message}
-                        type={globalAlert.type}
-                    />
+                    <Alert message={globalAlert.message} type={globalAlert.type} />
                 </div>
             )}
 
@@ -176,17 +165,10 @@ export default function PermissionProfiles() {
                 >
                     {modalErrorMessage && (
                         <div style={{ marginBottom: '1rem' }}>
-                            <Alert
-                                message={modalErrorMessage}
-                                type="error"
-                            />
+                            <Alert message={modalErrorMessage} type="error" />
                         </div>
                     )}
-
-                    <PermissionProfileForm
-                        ref={formRef}
-                        onSubmit={onFormSubmit}
-                    />
+                    <PermissionProfileForm ref={formRef} onSubmit={onFormSubmit} />
                 </Modal>
             )}
 
@@ -198,11 +180,16 @@ export default function PermissionProfiles() {
                     footer={deleteModalFooter}
                     maxWidth="400px"
                 >
-                    <p>
-                        Tem certeza que deseja excluir este perfil de permissão?
-                    </p>
+                    <p>Tem certeza que deseja excluir este perfil de permissão?</p>
                 </Modal>
             )}
+
+            <PermissionProfileDialog
+                ref={dialogRef}
+                onCreated={() => { }}
+                onUpdated={() => showGlobalAlert('Perfil atualizado com sucesso!', 'success')}
+                updateProfile={updateProfile}
+            />
 
             <FilterBar>
                 <div className={styles.filterRow}>
@@ -211,24 +198,15 @@ export default function PermissionProfiles() {
                             <FontAwesomeIcon icon={faFilter} />
                             Filtro:
                         </span>
-
                         <div className={styles.filterSelect}>
-                            <Select
-                                value={statusFilter}
-                                onChange={handleStatusChange}
-                            >
-                                <SelectOption
-                                    value="Todos"
-                                    label="Todos os status"
-                                />
-                                <SelectOption
-                                    value="ATIVO"
-                                    label="Ativo"
-                                />
-                                <SelectOption
-                                    value="INATIVO"
-                                    label="Inativo"
-                                />
+                            <Select value={moduleFilter} onChange={handleModuleFilterChange}>
+                                <SelectOption value="" label="Todos os módulos" />
+                                <SelectOption value="CLIENT" label="Clientes" />
+                                <SelectOption value="PROJECT" label="Projetos" />
+                                <SelectOption value="SCHEDULE" label="Agenda" />
+                                <SelectOption value="MATERIAL" label="Materiais" />
+                                <SelectOption value="BUDGET" label="Orçamentos" />
+                                <SelectOption value="CONFIGURATION" label="Configurações" />
                             </Select>
                         </div>
                     </div>
@@ -243,22 +221,20 @@ export default function PermissionProfiles() {
                 </div>
             </FilterBar>
 
-            <PermissionProfileTable
-                profiles={profiles}
-                onEdit={(id) => {
-                    
-                }}
-                onDelete={handleDelete}
-                onRowClick={(id) => {
-    
-                }}
-            />
+            <div className={styles.listContainer}>
+                <PermissionProfileTable
+                    profiles={profiles}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onRowClick={(id) => dialogRef.current?.openView(id)}
+                />
 
-            <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-            />
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
+            </div>
         </PageLayout>
     );
 }
