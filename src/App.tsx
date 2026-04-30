@@ -2,9 +2,9 @@ import "./App.css";
 
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route} from "react-router";
-import GlobalLoader from "./components/ui/GlobalLoader";
 import PermissionRoute from "./components/security/PermissionsRoute";
 import ProtectedRoute from "./components/security/ProtectedRoute";
+import GlobalLoader from "./components/ui/GlobalLoader";
 import AppLayout from "./layouts/app_layout/AppLayout";
 import ForgetPasswordLayout from "./layouts/login_layout/ForgetPasswordLayout";
 import LoginLayout from "./layouts/login_layout/LoginLayout";
