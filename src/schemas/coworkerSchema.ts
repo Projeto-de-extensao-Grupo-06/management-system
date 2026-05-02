@@ -77,11 +77,9 @@ export const coworkerSchema = coworkerBaseSchema
     }
   });
 
-export const coworkerEditSchema = coworkerBaseSchema
-  .extend({
-    permissionGroupRole: z.string().trim().optional().default(""),
-  })
-  .superRefine(validateBaseCoworkerFields);
+export const coworkerEditSchema = coworkerBaseSchema.superRefine(
+  validateBaseCoworkerFields,
+);
 
 export type CoworkerSchemaType = z.infer<typeof coworkerSchema>;
 export type CoworkerEditSchemaType = z.infer<typeof coworkerEditSchema>;

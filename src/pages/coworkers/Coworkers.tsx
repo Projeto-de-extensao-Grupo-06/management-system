@@ -66,7 +66,9 @@ export default function Coworkers() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteCoworkerId, setDeleteCoworkerId] = useState<number | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedCoworker, setSelectedCoworker] = useState<Coworker | null>(null);
+  const [selectedCoworker, setSelectedCoworker] = useState<Coworker | null>(
+    null,
+  );
 
   const mapPermissionGroupToFormValue = (role?: string | null) => {
     const normalizedRole = role?.trim().toLowerCase() ?? "";

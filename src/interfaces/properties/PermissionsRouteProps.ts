@@ -8,3 +8,4 @@ export interface PermissionRouteProps {
   permissions: Permissions[];
   element: JSX.Element;
 }
+ 
