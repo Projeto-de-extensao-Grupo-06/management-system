@@ -13,7 +13,8 @@ export default class ProjectService {
       name?: string;
       responsibleId?: number;
       projectType?: "ON_GRID" | "OFF_GRID";
-      description?: string
+      description?: string;
+      status?: string;
     }
   ): Promise<void> {
     await api.patch(`/projects/${id}`, data);
