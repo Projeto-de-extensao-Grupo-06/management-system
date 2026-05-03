@@ -27,33 +27,33 @@ const validateBaseCoworkerFields = (
   data: z.infer<typeof coworkerBaseSchema>,
   ctx: z.RefinementCtx,
 ) => {
-    const firstName = data.firstName.trim();
-    const secondName = data.secondName.trim();
-    const phoneDigits = data.phone.replace(/\D/g, "");
+  const firstName = data.firstName.trim();
+  const secondName = data.secondName.trim();
+  const phoneDigits = data.phone.replace(/\D/g, "");
 
-    if (!/^[A-Za-z]+$/.test(firstName)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Nome deve conter apenas letras, sem espaços ou números",
-        path: ["firstName"],
-      });
-    }
+  if (!/^[A-Za-z]+$/.test(firstName)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Nome deve conter apenas letras, sem espaços ou números",
+      path: ["firstName"],
+    });
+  }
 
-    if (!/^[A-Za-z]+$/.test(secondName)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Sobrenome deve conter apenas letras, sem espaços ou números",
-        path: ["secondName"],
-      });
-    }
+  if (!/^[A-Za-z]+$/.test(secondName)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Sobrenome deve conter apenas letras, sem espaços ou números",
+      path: ["secondName"],
+    });
+  }
 
-    if (phoneDigits.length < 10 || phoneDigits.length > 11) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Telefone deve ter DDD e 10 ou 11 dígitos",
-        path: ["phone"],
-      });
-    }
+  if (phoneDigits.length < 10 || phoneDigits.length > 11) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Telefone deve ter DDD e 10 ou 11 dígitos",
+      path: ["phone"],
+    });
+  }
 };
 
 export const coworkerSchema = coworkerBaseSchema
@@ -79,7 +79,10 @@ export const coworkerSchema = coworkerBaseSchema
 
 export const coworkerEditSchema = coworkerBaseSchema
   .extend({
-    permissionGroupRole: z.string().trim().optional().default(""),
+    permissionGroupRole: z
+      .string()
+      .trim()
+      .min(1, "Perfil de permissão é obrigatório"),
   })
   .superRefine(validateBaseCoworkerFields);
 
