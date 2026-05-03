@@ -54,11 +54,15 @@ function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
         <div className={styles.gridTwo}>
           <div>
             <label className={styles.fieldLabel}>Email:</label>
-            <div className={styles.readOnlyField}>{formValues.email || "-"}</div>
+            <div className={styles.readOnlyField}>
+              {formValues.email || "-"}
+            </div>
           </div>
           <div>
             <label className={styles.fieldLabel}>Telefone:</label>
-            <div className={styles.readOnlyField}>{formValues.phone || "-"}</div>
+            <div className={styles.readOnlyField}>
+              {formValues.phone || "-"}
+            </div>
           </div>
         </div>
 
@@ -73,9 +77,7 @@ function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
             <div>
               <label className={styles.fieldLabel}>Senha:</label>
               <div className={styles.readOnlyField}>
-                {"password" in formValues && formValues.password
-                  ? "••••••••"
-                  : "-"}
+                {formValues.password ? "••••••••" : "-"}
               </div>
             </div>
           )}
@@ -222,7 +224,7 @@ function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
                 <>
                   <PasswordInput
                     placeholder="Digite a senha"
-                    value={"password" in field ? field.value : ""}
+                    value={field.value}
                     onChange={field.onChange}
                   />
                   {error && (
@@ -241,7 +243,9 @@ function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
 const CoworkerForm = forwardRef<CoworkerFormRef, CoworkerFormProps>(
   ({ onSubmit, defaultValues, readOnly, mode = "create" }, ref) => {
     const methods = useForm<CoworkerFormData>({
-      resolver: zodResolver(mode === "edit" ? coworkerEditSchema : coworkerSchema),
+      resolver: zodResolver(
+        mode === "edit" ? coworkerEditSchema : coworkerSchema,
+      ),
       defaultValues: {
         firstName: "",
         secondName: "",
