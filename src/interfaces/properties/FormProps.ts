@@ -1,9 +1,9 @@
+import type { BudgetParameterSchemaType } from "../../schemas/budgetParameterSchema";
 import type { ClientSchemaType } from "../../schemas/clientSchema";
 import type {
   CoworkerEditSchemaType,
   CoworkerSchemaType,
 } from "../../schemas/coworkerSchema";
-import type { BudgetParameterSchemaType } from "../../schemas/budgetParameterSchema";
 export interface ClientFormRef {
   submit: () => void;
 }

@@ -1,6 +1,6 @@
-import type { Coworker } from "../types/Coworker";
 import type BudgetParameter from "../types/BudgetParameter";
 import type Client from "../types/Client";
+import type { Coworker } from "../types/Coworker";
 import type { Material } from "../types/Material";
 
 export interface ClientTableProps {

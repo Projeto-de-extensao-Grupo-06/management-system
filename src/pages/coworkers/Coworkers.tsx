@@ -1,28 +1,33 @@
-import useCoworkers from "../../hooks/useCoworkers";
-import type { CoworkerFormRef } from "../../interfaces/properties/FormProps";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import type { ModalRef } from "../../interfaces/properties/DialogProps";
-import type { CoworkerFormData } from "../../interfaces/properties/FormProps";
-import type { CoworkerEditSchemaType } from "../../schemas/coworkerSchema";
+
+import Modal from "../../components/dialogs/modal/Modal";
+import CoworkerForm from "../../components/forms/coworker_form/CoworkerForm";
+import FilterBar from "../../components/layout/FilterBar";
+import PageLayout from "../../components/layout/PageLayout";
+import SecureComponent from "../../components/security/SecureComponent";
+import CoworkerTable from "../../components/tables/coworker_table/CoworkerTable";
+import { Pagination } from "../../components/tables/pagination/Pagination";
+import { Alert } from "../../components/ui/Alert";
 import {
   Button,
   SearchInput,
   Select,
   SelectOption,
+  SimpleButton,
 } from "../../components/ui/Form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { SimpleButton } from "../../components/ui/Form";
-import PageLayout from "../../components/layout/PageLayout";
-import SecureComponent from "../../components/security/SecureComponent";
-import FilterBar from "../../components/layout/FilterBar";
-import { Alert } from "../../components/ui/Alert";
-import Modal from "../../components/dialogs/modal/Modal";
-import { Pagination } from "../../components/tables/pagination/Pagination";
-import CoworkerTable from "../../components/tables/coworker_table/CoworkerTable";
-import CoworkerForm from "../../components/forms/coworker_form/CoworkerForm";
+import useCoworkers from "../../hooks/useCoworkers";
+
+import type { ModalRef } from "../../interfaces/properties/DialogProps";
+import type {
+  CoworkerFormData,
+  CoworkerFormRef,
+} from "../../interfaces/properties/FormProps";
 import type { Coworker } from "../../interfaces/types/Coworker";
+import type { CoworkerEditSchemaType } from "../../schemas/coworkerSchema";
+
 import styles from "./Coworkers.module.css";
 
 export default function Coworkers() {

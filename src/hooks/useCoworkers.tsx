@@ -1,21 +1,21 @@
+import type { AxiosError } from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useCallback } from "react";
+import type { Coworker } from "../interfaces/types/Coworker";
 import type {
   CoworkerFilters,
   UseCoworkersReturn,
 } from "../interfaces/types/HookTypes";
-import type { Coworker } from "../interfaces/types/Coworker";
-import CoworkerService, {
-  type CreateCoworkerPayload,
-  type UpdateCoworkerPayload,
-} from "../services/CoworkerService";
+import type { Page } from "../interfaces/types/Page";
 import type {
   CoworkerEditSchemaType,
   CoworkerSchemaType,
 } from "../schemas/coworkerSchema";
 import { coworkerEditSchema, coworkerSchema } from "../schemas/coworkerSchema";
-import type { AxiosError } from "axios";
-import type { Page } from "../interfaces/types/Page";
+import CoworkerService, {
+  type CreateCoworkerPayload,
+  type UpdateCoworkerPayload,
+} from "../services/CoworkerService";
 
 const isCoworkerPageResponse = (
   data: Page<Coworker> | Coworker[],
