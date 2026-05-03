@@ -177,20 +177,14 @@ function App() {
               element={<Coworkers />}
             />
             <Route path="/configuracoes" element={<Config />} />
-<<<<<<< HEAD
             <Route
               path="/configuracoes/config-perfil"
               element={<ConfigPerfil />}
             />
             <Route
               path="/configuracoes/redefinir-senha"
-              element={<ForgetPassword />}
+              element={<ResetPassword />}
             />
-=======
-            <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
-            <Route path="/configuracoes/redefinir-senha" element={<ResetPassword />} />
-            
->>>>>>> 8daa7681c38cd44c92452eb3e4bf81838022f41f
 
             <Route
               path="/configuracoes/parametros-orcamento"
