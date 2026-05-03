@@ -7,10 +7,14 @@ import {
   useFormContext,
 } from "react-hook-form";
 import type {
-  CoworkerFormData,
-  CoworkerFormProps,
+  CoworkerCreateFormProps,
+  CoworkerEditFormProps,
   CoworkerFormRef,
 } from "../../../interfaces/properties/FormProps";
+import type {
+  CoworkerEditSchemaType,
+  CoworkerSchemaType,
+} from "../../../schemas/coworkerSchema";
 import {
   coworkerEditSchema,
   coworkerSchema,
@@ -30,7 +34,9 @@ interface BasicInfoFormProps {
 }
 
 function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
-  const { control, watch } = useFormContext<CoworkerFormData>();
+  const { control, watch } = useFormContext<
+    CoworkerSchemaType | CoworkerEditSchemaType
+  >();
   const formValues = watch();
 
   if (readOnly) {
@@ -77,7 +83,7 @@ function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
             <div>
               <label className={styles.fieldLabel}>Senha:</label>
               <div className={styles.readOnlyField}>
-                {formValues.password ? "••••••••" : "-"}
+                {(formValues as CoworkerSchemaType).password ? "••••••••" : "-"}
               </div>
             </div>
           )}
@@ -240,54 +246,62 @@ function CoworkerBasicInfoForm({ mode, readOnly }: BasicInfoFormProps) {
   );
 }
 
-const CoworkerForm = forwardRef<CoworkerFormRef, CoworkerFormProps>(
-  ({ onSubmit, defaultValues, readOnly, mode = "create" }, ref) => {
-    const methods = useForm<CoworkerFormData>({
-      resolver: zodResolver(
-        mode === "edit" ? coworkerEditSchema : coworkerSchema,
-      ),
-      defaultValues: {
-        firstName: "",
-        secondName: "",
-        email: "",
-        phone: "",
-        permissionGroupRole: "",
-        ...(mode === "create" ? { password: "" } : {}),
-        ...defaultValues,
-      },
+const CoworkerForm = forwardRef<
+  CoworkerFormRef,
+  CoworkerCreateFormProps | CoworkerEditFormProps
+>((props, ref) => {
+  const { onSubmit, defaultValues, readOnly, mode } = props;
+  const schema = mode === "edit" ? coworkerEditSchema : coworkerSchema;
+
+  const methods = useForm<CoworkerSchemaType | CoworkerEditSchemaType>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      firstName: "",
+      secondName: "",
+      email: "",
+      phone: "",
+      permissionGroupRole: "",
+      ...(mode === "create" ? { password: "" } : {}),
+      ...defaultValues,
+    },
+  });
+
+  const { handleSubmit, reset } = methods;
+
+  useEffect(() => {
+    reset({
+      firstName: "",
+      secondName: "",
+      email: "",
+      phone: "",
+      permissionGroupRole: "",
+      ...(mode === "create" ? { password: "" } : {}),
+      ...defaultValues,
     });
+  }, [defaultValues, mode, reset]);
 
-    const { handleSubmit, reset } = methods;
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      handleSubmit((data) => {
+        if (mode === "create") {
+          onSubmit(data as CoworkerSchemaType);
+        } else {
+          onSubmit(data as CoworkerEditSchemaType);
+        }
+      })();
+    },
+  }));
 
-    useEffect(() => {
-      reset({
-        firstName: "",
-        secondName: "",
-        email: "",
-        phone: "",
-        permissionGroupRole: "",
-        ...(mode === "create" ? { password: "" } : {}),
-        ...defaultValues,
-      });
-    }, [defaultValues, mode, reset]);
-
-    useImperativeHandle(ref, () => ({
-      submit: () => {
-        handleSubmit((data) => onSubmit(data))();
-      },
-    }));
-
-    return (
-      <FormProvider {...methods}>
-        <div className={styles.formContainer}>
-          <div className={styles.card}>
-            <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
-            <CoworkerBasicInfoForm mode={mode} readOnly={readOnly} />
-          </div>
+  return (
+    <FormProvider {...methods}>
+      <div className={styles.formContainer}>
+        <div className={styles.card}>
+          <h3 className={styles.sectionTitle}>Dados Cadastrais:</h3>
+          <CoworkerBasicInfoForm mode={mode} readOnly={readOnly} />
         </div>
-      </FormProvider>
-    );
-  },
-);
+      </div>
+    </FormProvider>
+  );
+});
 
 export default CoworkerForm;

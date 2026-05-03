@@ -29,7 +29,7 @@ export interface CoworkerEditFormProps {
   onSubmit: (data: CoworkerEditSchemaType) => void;
   defaultValues?: Partial<CoworkerEditSchemaType>;
   readOnly?: boolean;
-  mode: "create";
+  mode: "edit";
 }
 
 export type CoworkerFormProps = CoworkerCreateFormProps | CoworkerEditFormProps;

@@ -21,12 +21,12 @@ import {
 import useCoworkers from "../../hooks/useCoworkers";
 
 import type { ModalRef } from "../../interfaces/properties/DialogProps";
-import type {
-  CoworkerFormData,
-  CoworkerFormRef,
-} from "../../interfaces/properties/FormProps";
+import type { CoworkerFormRef } from "../../interfaces/properties/FormProps";
 import type { Coworker } from "../../interfaces/types/Coworker";
-import type { CoworkerEditSchemaType } from "../../schemas/coworkerSchema";
+import type {
+  CoworkerEditSchemaType,
+  CoworkerSchemaType,
+} from "../../schemas/coworkerSchema";
 
 import styles from "./Coworkers.module.css";
 
@@ -140,12 +140,7 @@ export default function Coworkers() {
     editFormRef.current?.submit();
   };
 
-  const onFormSubmit = (data: CoworkerFormData) => {
-    if (!("password" in data)) {
-      setModalMessage("Senha é obrigatória.");
-      return;
-    }
-
+  const onFormSubmit = (data: CoworkerSchemaType) => {
     setModalMessage(null);
     setGlobalAlert(null);
 
@@ -305,7 +300,7 @@ export default function Coworkers() {
               <Alert message={modalTypeMessage} type="error" />
             </div>
           )}
-          <CoworkerForm ref={formRef} onSubmit={onFormSubmit} />
+          <CoworkerForm ref={formRef} onSubmit={onFormSubmit} mode="create" />
         </Modal>
       )}
 
