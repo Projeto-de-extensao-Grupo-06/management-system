@@ -3,10 +3,8 @@ import type { CoworkerFormRef } from "../../interfaces/properties/FormProps";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import type { ModalRef } from "../../interfaces/properties/DialogProps";
-import type {
-  CoworkerEditSchemaType,
-  CoworkerSchemaType,
-} from "../../schemas/coworkerSchema";
+import type { CoworkerFormData } from "../../interfaces/properties/FormProps";
+import type { CoworkerEditSchemaType } from "../../schemas/coworkerSchema";
 import {
   Button,
   SearchInput,
@@ -66,7 +64,9 @@ export default function Coworkers() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteCoworkerId, setDeleteCoworkerId] = useState<number | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedCoworker, setSelectedCoworker] = useState<Coworker | null>(null);
+  const [selectedCoworker, setSelectedCoworker] = useState<Coworker | null>(
+    null,
+  );
 
   const mapPermissionGroupToFormValue = (role?: string | null) => {
     const normalizedRole = role?.trim().toLowerCase() ?? "";
@@ -135,7 +135,12 @@ export default function Coworkers() {
     editFormRef.current?.submit();
   };
 
-  const onFormSubmit = (data: CoworkerSchemaType) => {
+  const onFormSubmit = (data: CoworkerFormData) => {
+    if (!("password" in data)) {
+      setModalMessage("Senha é obrigatória.");
+      return;
+    }
+
     setModalMessage(null);
     setGlobalAlert(null);
 
