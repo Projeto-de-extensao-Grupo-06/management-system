@@ -18,14 +18,21 @@ export interface CoworkerFormRef {
   submit: () => void;
 }
 
-export type CoworkerFormData = CoworkerSchemaType | CoworkerEditSchemaType;
-
-export interface CoworkerFormProps {
-  onSubmit: (data: CoworkerFormData) => void;
-  defaultValues?: Partial<CoworkerFormData>;
+export interface CoworkerCreateFormProps {
+  onSubmit: (data: CoworkerSchemaType) => void;
+  defaultValues?: Partial<CoworkerSchemaType>;
   readOnly?: boolean;
-  mode?: "create" | "edit";
+  mode: "create";
 }
+
+export interface CoworkerEditFormProps {
+  onSubmit: (data: CoworkerEditSchemaType) => void;
+  defaultValues?: Partial<CoworkerEditSchemaType>;
+  readOnly?: boolean;
+  mode: "create";
+}
+
+export type CoworkerFormProps = CoworkerCreateFormProps | CoworkerEditFormProps;
 
 export interface BudgetParameterFormProps {
   onSubmit: (data: BudgetParameterSchemaType) => void;
