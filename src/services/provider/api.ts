@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useLoadingStore } from "../../store/useLoadingStore";
 
 const api = axios.create({
   baseURL: '/api',
@@ -8,9 +9,24 @@ const api = axios.create({
   },
 });
 
-api.interceptors.response.use(
-  (response) => response,
+api.interceptors.request.use(
+  (config) => {
+    useLoadingStore.getState().increment();
+    return config;
+  },
   (error) => {
+    useLoadingStore.getState().decrement();
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    useLoadingStore.getState().decrement();
+    return response;
+  },
+  (error) => {
+    useLoadingStore.getState().decrement();
     const isLoginRequest = error.config?.url?.includes('/auth/login');
     const isLoginPage = window.location.pathname.includes('/login') || window.location.pathname === '/';
     const isForgetPasswordPage = window.location.pathname.includes('/esqueci-senha') || window.location.pathname === '/';
