@@ -12,7 +12,7 @@ import Analysis from "./pages/analysis/Analysis";
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import BudgetDetails from "./pages/Budget/BudgetDetails";
-import BudgetParameterDetails from './pages/budget_parameters/BudgetParameterDetails';
+import BudgetParameterDetails from "./pages/budget_parameters/BudgetParameterDetails";
 import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
@@ -20,6 +20,7 @@ import Config from "./pages/config/Config";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
 import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 import ResetPassword from "./pages/config/resetPassword/ResetPassword";
+import Coworkers from "./pages/coworkers/Coworkers";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
@@ -48,7 +49,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Login />} />
 
-          <Route path="/internal-server-error" element={<InternalServerError />} />
+          <Route
+            path="/internal-server-error"
+            element={<InternalServerError />}
+          />
           <Route path="/not-implemented" element={<NotImplemented />} />
           <Route path="/bad-gateway" element={<BadGateway />} />
           <Route path="/service-unavailable" element={<ServiceUnavailable />} />
@@ -57,62 +61,121 @@ function App() {
         </Route>
 
         <Route element={<ForgetPasswordLayout />}>
-          <Route path="/esqueci-senha" element={< ForgetPassword />} />
+          <Route path="/esqueci-senha" element={<ForgetPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route
               path="/agenda"
-              element={<PermissionRoute permissions={["SCHEDULE_READ"]} element={<Schedule />} />}
+              element={
+                <PermissionRoute
+                  permissions={["SCHEDULE_READ"]}
+                  element={<Schedule />}
+                />
+              }
             />
 
             <Route
               path="/clientes"
-              element={<PermissionRoute permissions={["CLIENT_READ"]} element={<Clients />} />}
+              element={
+                <PermissionRoute
+                  permissions={["CLIENT_READ"]}
+                  element={<Clients />}
+                />
+              }
             />
 
             <Route
               path="/clientes/:id"
-              element={<PermissionRoute permissions={["CLIENT_READ"]} element={<ClientDetails />} />}
+              element={
+                <PermissionRoute
+                  permissions={["CLIENT_READ"]}
+                  element={<ClientDetails />}
+                />
+              }
             />
 
             <Route
               path="/materiais"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<Materials />}
+                />
+              }
             />
 
             <Route
               path="/projetos/:id"
-              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectDetails />} />}
+              element={
+                <PermissionRoute
+                  permissions={["PROJECT_READ"]}
+                  element={<ProjectDetails />}
+                />
+              }
             />
 
             <Route
               path="/analise"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Analysis />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<Analysis />}
+                />
+              }
             />
 
             <Route
               path="/projetos"
-              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<Projects />} />}
+              element={
+                <PermissionRoute
+                  permissions={["PROJECT_READ"]}
+                  element={<Projects />}
+                />
+              }
             />
 
             <Route
               path="/projetos/notificacoes"
-              element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectNotifications />} />}
+              element={
+                <PermissionRoute
+                  permissions={["PROJECT_READ"]}
+                  element={<ProjectNotifications />}
+                />
+              }
             />
 
             <Route
               path="/projetos/:id/orcamento"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetDetails />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetDetails />}
+                />
+              }
             />
             <Route
               path="/projetos/:id/materiais"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetMaterials />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetMaterials />}
+                />
+              }
             />
             <Route
               path="/materiais"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<Materials />}
+                />
+              }
+            />
+            <Route
+              path="/configuracoes/colaboradores"
+              element={<Coworkers />}
             />
             <Route path="/configuracoes" element={<Config />} />
             <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
@@ -121,11 +184,21 @@ function App() {
 
             <Route
               path="/configuracoes/parametros-orcamento"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameters />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetParameters />}
+                />
+              }
             />
             <Route
               path="/configuracoes/parametros-orcamento/:id"
-              element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameterDetails />} />}
+              element={
+                <PermissionRoute
+                  permissions={["BUDGET_READ"]}
+                  element={<BudgetParameterDetails />}
+                />
+              }
             />
 
            <Route

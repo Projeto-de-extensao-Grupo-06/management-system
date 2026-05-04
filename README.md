@@ -36,3 +36,32 @@ Este é um projeto de sistema de gestão desenvolvido com tecnologias modernas d
    ```bash
    npm run build
    ```
+
+## Testes E2E (End-toEnd)
+
+O projeto conta com uma suíte de testes E2E automatizados utilizando **Python** e **Playwright**.
+
+1. **Navegar até a pasta de testes:**
+   ```powershell
+   cd e2e
+   ```
+
+2. **Configurar ambiente virtual (Recomendado):**
+   ```powershell
+   python -m venv venv
+   .\venv\Scripts\Activate.ps1  # Windows
+   source venv/bin/activate     # Linux/macOS
+   ```
+
+3. **Instalar dependências e navegadores:**
+   ```powershell
+   pip install -r requirements.txt
+   playwright install
+   ```
+
+4. **Executar os testes:**
+   ```powershell
+   pytest
+   ```
+
+Para mais detalhes, consulte o [README de E2E](e2e/README.md).

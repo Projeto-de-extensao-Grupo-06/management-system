@@ -1,0 +1,142 @@
+.count {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+  max-width: 25rem;
+  margin-left: auto;
+}
+
+.alertWrapper {
+  margin-bottom: 1rem;
+}
+
+.mailLink {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.mailLink:hover {
+  color: #0134a3;
+}
+
+.highlightedMailLink {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.highlightedMailLink:hover {
+  color: #0134a3;
+}
+
+.modalDetails {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.deleteFooterActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 100%;
+}
+
+.deleteCancelButton {
+  background: #ffffff;
+  color: #333333;
+}
+
+.deleteConfirmButton {
+  background: #d32f2f;
+}
+
+.coworkersTable :global(.table th),
+.coworkersTable :global(.table td) {
+  text-align: left;
+  vertical-align: middle;
+  font-family: var(--font-family-primary);
+}
+
+.coworkersTable :global(.table) {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.coworkersTable :global(.table th),
+.coworkersTable :global(.table td) {
+  padding: 1rem 1.5rem;
+}
+
+.coworkersTable :global(.table thead th) {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #000000;
+}
+
+.coworkersTable :global(.table tbody td) {
+  font-size: 0.875rem;
+}
+
+.coworkersTable :global(.table th:nth-child(1)),
+.coworkersTable :global(.table td:nth-child(1)) {
+  width: 20%;
+}
+
+.coworkersTable :global(.table th:nth-child(2)),
+.coworkersTable :global(.table td:nth-child(2)) {
+  width: 20%;
+}
+
+.coworkersTable :global(.table th:nth-child(3)),
+.coworkersTable :global(.table td:nth-child(3)) {
+  width: 25%;
+  text-align: center;
+}
+
+.coworkersTable :global(.table th:nth-child(4)),
+.coworkersTable :global(.table td:nth-child(4)) {
+  width: 20%;
+}
+
+.coworkersTable :global(.table th:nth-child(5)),
+.coworkersTable :global(.table td:nth-child(5)) {
+  width: 15%;
+}
+
+.coworkersTable :global(.table th:nth-child(5)) {
+  text-align: right;
+}
+
+.coworkersTable :global(td > a) {
+  display: inline-block;
+}
+
+.coworkersTable :global(.table tbody tr:hover) {
+  background: transparent;
+}
+
+.coworkersTable :global(td:nth-child(5)) {
+  text-align: right;
+}
+
+.coworkersTable :global(td:last-child .edit-button) {
+  color: #374151;
+}
+
+.coworkersTable :global(td:last-child .delete-button) {
+  color: #ef4444;
+}

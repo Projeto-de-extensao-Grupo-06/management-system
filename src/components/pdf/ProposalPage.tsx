@@ -27,9 +27,10 @@ const ProposalPage = forwardRef<HTMLDivElement, ProposalPageProps>(function Prop
   const COMPANY_LEGAL = "0.296.743 SALVIO CARDOSO";
   const CNPJ = "60.296.743/0001-82";
 
-  const fixedParametersTotal = budget.fixedParameters.reduce((total, p) => total + (p.value || 0), 0);
+  const fixedParametersTotal = budget.fixedParameters.filter((p) => p.parameterName !== "Taxas de Homologação" && p.parameterName !== "Engenheiro").reduce((total, p) => total + (p.value || 0), 0);
   const personalizedParametersTotal = budget.personalizedParameters.reduce((total, p) => total + (p.value || 0), 0);
   const engineeringCost = fixedParametersTotal + personalizedParametersTotal;
+  const homologationCost = budget.fixedParameters.filter((p) => p.parameterName === "Taxas de Homologação" || p.parameterName === "Engenheiro").reduce((total, p) => total + (p.value || 0), 0);
 
   return (
     <div className="page" ref={ref}>
@@ -193,7 +194,7 @@ const ProposalPage = forwardRef<HTMLDivElement, ProposalPageProps>(function Prop
             <div className="svc-row">
               <div className="svc-col" style={{ flex: 1.2 }}>Projeto e Homologação</div>
               <div className="svc-col" style={{ flex: 2 }}>Elaboração do projeto elétrico, emissão de ART junto ao CREA e trâmites completos com a concessionária local.</div>
-              <div className="svc-col" style={{ flex: 0.8, textAlign: "right", color: "var(--verde)", fontSize: "12px", fontWeight: 600 }}>Incluso</div>
+              <div className="svc-col" style={{ flex: 0.8, textAlign: "right", fontSize: "12px", fontWeight: 600 }}>R$ {homologationCost.toLocaleString("pt-BR", { currency: "BRL", minimumFractionDigits: 2 })}</div>
             </div>
             <div className="svc-row">
               <div className="svc-col" style={{ flex: 1.2 }}>Comissionamento</div>
