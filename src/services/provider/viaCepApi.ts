@@ -10,22 +10,26 @@ const viaCepApi = axios.create({
 
 viaCepApi.interceptors.request.use(
     (config) => {
+        (config as any)._shouldDecrement = true;
         useLoadingStore.getState().increment();
         return config;
     },
     (error) => {
-        useLoadingStore.getState().decrement();
         return Promise.reject(error);
     }
 );
 
 viaCepApi.interceptors.response.use(
     (response) => {
-        useLoadingStore.getState().decrement();
+        if ((response.config as any)._shouldDecrement) {
+            useLoadingStore.getState().decrement();
+        }
         return response;
     },
     (error) => {
-        useLoadingStore.getState().decrement();
+        if (error.config?._shouldDecrement) {
+            useLoadingStore.getState().decrement();
+        }
         return Promise.reject(error);
     }
 );

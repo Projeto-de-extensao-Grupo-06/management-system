@@ -11,22 +11,26 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    (config as any)._shouldDecrement = true;
     useLoadingStore.getState().increment();
     return config;
   },
   (error) => {
-    useLoadingStore.getState().decrement();
     return Promise.reject(error);
   }
 );
 
 api.interceptors.response.use(
   (response) => {
-    useLoadingStore.getState().decrement();
+    if ((response.config as any)._shouldDecrement) {
+      useLoadingStore.getState().decrement();
+    }
     return response;
   },
   (error) => {
-    useLoadingStore.getState().decrement();
+    if (error.config?._shouldDecrement) {
+      useLoadingStore.getState().decrement();
+    }
     const isLoginRequest = error.config?.url?.includes('/auth/login');
     const isLoginPage = window.location.pathname.includes('/login') || window.location.pathname === '/';
     const isForgetPasswordPage = window.location.pathname.includes('/esqueci-senha') || window.location.pathname === '/';
