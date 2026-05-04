@@ -8,6 +8,7 @@ import type { AutoCompleteSelectOption } from "../../../../interfaces/properties
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
 import { CoworkerService } from "../../../../services/CoworkerService";
 import ProjectService from "../../../../services/ProjectService";
+import type { ProjectStatusType } from "../../../../interfaces/enum/ProjectStatus";
 import { translateBackendError, validateStatusTransition } from "../../../../utils/projectStatusTransitions";
 import { AutoCompleteSelect, Input, Select, SelectOption } from "../../../ui/Form";
 import styles from "./GeneralInfo.module.css";
@@ -29,7 +30,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
         name: string;
         responsibleId: number;
         projectType: "ON_GRID" | "OFF_GRID";
-        status: string;
+        status: ProjectStatusType;
     }>) {
         try {
             await projectService.updateProject(project.id, data);
@@ -67,7 +68,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
         await patchProject({ responsibleId: id });
     }
 
-    async function handleStatusChange(newStatus: string) {
+    async function handleStatusChange(newStatus: ProjectStatusType) {
         const previousStatus = project.status;
 
         if (newStatus === previousStatus) return;
@@ -102,10 +103,9 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
             if (!result.isConfirmed) return;
         }
 
-        // Aplica update otimista na UI
         setProject(prev => {
             if (!prev) return prev;
-            return { ...prev, status: newStatus as any };
+            return { ...prev, status: newStatus };
         });
 
         try {
@@ -194,7 +194,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                     <AutoCompleteSelect
                         isDisabled={!canEdit}
                         options={projectStatusOptions}
-                        onChange={(v) => handleStatusChange(v?.value ?? project.status)}
+                        onChange={(v) => handleStatusChange(v?.value as ProjectStatusType ?? project.status)}
                         value={
                             projectStatusOptions.find(o => o.value === project.status) ?? null
                         }

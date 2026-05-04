@@ -1,15 +1,4 @@
-/**
- * Validação de transições de status de projeto no frontend.
- *
- * Espelha as regras da State Machine do backend, com mensagens amigáveis
- * em português para guiar o usuário no fluxo correto do projeto.
- *
- * Estratégias de resposta:
- *  - "blocked"  → transição impossível (não chama a API, mostra erro imediato)
- *  - "warning"  → transição válida, mas exige pré-condição no sistema
- *                 (chama a API; se vier 409, exibe mensagem de fallback traduzida)
- *  - "allowed"  → transição livre (chama a API diretamente)
- */
+import type { ProjectStatusType } from "../interfaces/enum/ProjectStatus";
 
 export type TransitionResult =
   | { type: "allowed" }
@@ -21,7 +10,7 @@ export type TransitionResult =
 // Informam o usuário sobre o que precisa estar configurado para a transição
 // funcionar. Após confirmar, o sistema tenta mesmo assim.
 // ---------------------------------------------------------------------------
-const preConditionWarnings: Record<string, Record<string, string>> = {
+const preConditionWarnings: Partial<Record<ProjectStatusType, Partial<Record<ProjectStatusType, string>>>> = {
   NEW: {
     SCHEDULED_TECHNICAL_VISIT:
       "Para marcar o projeto como 'Visita técnica agendada', é necessário que haja uma visita técnica cadastrada nos agendamentos do projeto com data futura. Crie o agendamento primeiro e tente novamente.",
@@ -100,7 +89,7 @@ const TERMINAL_STATE_MESSAGE =
 const AWAITING_RETRY_GENERAL_MESSAGE =
   "Enquanto o projeto está em 'Aguardando nova tentativa', o único passo possível é aguardar o sistema iniciar automaticamente a retentativa de contato. Nenhuma alteração manual de status é permitida neste momento.";
 
-const blockedTransitions: Record<string, Record<string, string>> = {
+const blockedTransitions: Partial<Record<ProjectStatusType, Partial<Record<ProjectStatusType, string>>>> = {
   AWAITING_RETRY: {
     NEW: AWAITING_RETRY_GENERAL_MESSAGE,
     PRE_BUDGET: AWAITING_RETRY_GENERAL_MESSAGE,
@@ -214,8 +203,8 @@ const backendErrorTranslations: Array<{ pattern: string; message: string }> = [
  * Valida se a transição de status é permitida e retorna o resultado adequado.
  */
 export function validateStatusTransition(
-  currentStatus: string,
-  targetStatus: string
+  currentStatus: ProjectStatusType,
+  targetStatus: ProjectStatusType
 ): TransitionResult {
   if (currentStatus === targetStatus) {
     return { type: "allowed" };

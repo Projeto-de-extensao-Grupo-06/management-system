@@ -1,3 +1,4 @@
+import type { ProjectStatusType } from '../interfaces/enum/ProjectStatus';
 import type { ProjectDetails } from '../interfaces/types/ProjectDetails';
 import api from './provider/api';
   
@@ -14,7 +15,7 @@ export default class ProjectService {
       responsibleId?: number;
       projectType?: "ON_GRID" | "OFF_GRID";
       description?: string;
-      status?: string;
+      status?: ProjectStatusType;
     }
   ): Promise<void> {
     await api.patch(`/projects/${id}`, data);
