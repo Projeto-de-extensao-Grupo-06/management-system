@@ -167,7 +167,8 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
         { value: "SCHEDULED_INSTALLING_VISIT", label: "Instalação agendada" },
         { value: "INSTALLED", label: "Instalado" },
         { value: "COMPLETED", label: "Concluído" },
-        { value: "NEGOTIATION_FAILED", label: "Negociação não concluída" }
+        { value: "NEGOTIATION_FAILED", label: "Negociação não concluída" },
+        { value: "CONTACT_NOT_REQUESTED", label: "Contato não solicitado" }
     ], []);
 
     return (
