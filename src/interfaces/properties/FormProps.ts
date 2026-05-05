@@ -1,11 +1,11 @@
 import type { BudgetParameterSchemaType } from '../../schemas/budgetParameterSchema';
 import type { ClientSchemaType } from '../../schemas/clientSchema';
-import type { PermissionProfileSchemaType } from '../../schemas/permissionProfileSchema';
-
 import type {
   CoworkerEditSchemaType,
   CoworkerSchemaType,
 } from '../../schemas/coworkerSchema';
+import type { PermissionProfileSchemaType } from '../../schemas/permissionProfileSchema';
+
 export interface ClientFormRef {
   submit: () => void;
 }

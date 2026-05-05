@@ -134,6 +134,7 @@ export default function PermissionProfiles() {
     return (
         <PageLayout
             title="Perfis de Permissão"
+            backButton={true}
             titleAccessory={
                 <span className={styles.count}>({totalElements ?? 0})</span>
             }

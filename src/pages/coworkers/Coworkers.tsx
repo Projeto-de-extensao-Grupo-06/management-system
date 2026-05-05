@@ -1,4 +1,4 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
@@ -271,13 +271,22 @@ export default function Coworkers() {
       }
       rightActions={
         <SecureComponent permissions={["ROLE_ADMIN"]}>
-          <Button
-            icon={<FontAwesomeIcon icon={faPlus} />}
-            text="Cadastrar Colaborador"
-            ariaLabel="Cadastrar Colaborador"
-            onClick={handleAddCoworker}
-            width="fit-content"
-          />
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <SimpleButton
+              icon={<FontAwesomeIcon icon={faUserShield} />}
+              text="Gerenciar Perfis de Permissão"
+              ariaLabel="Gerenciar Perfis de Permissão"
+              onClick={() => navigate("/configuracoes/perfis-permissao")}
+            />
+
+            <Button
+              icon={<FontAwesomeIcon icon={faPlus} />}
+              text="Cadastrar Colaborador"
+              ariaLabel="Cadastrar Colaborador"
+              onClick={handleAddCoworker}
+              width="fit-content"
+            />
+          </div>
         </SecureComponent>
       }
     >
