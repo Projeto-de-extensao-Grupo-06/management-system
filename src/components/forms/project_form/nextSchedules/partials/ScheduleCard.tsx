@@ -4,7 +4,7 @@ import { faHouse, faWrench, faStickyNote } from "@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import type { Schedule } from "../../../../../interfaces/types/Schedule";
-import { CoworkerService } from "../../../../../services/CoworkerService";
+import CoworkerService from "../../../../../services/CoworkerService";
 import styles from "../NextSchedules.module.css";
 
 interface ScheduleCardProps {
