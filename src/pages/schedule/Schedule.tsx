@@ -46,6 +46,19 @@ export default function Schedule() {
         setIsCreateOpen(true);
     };
 
+    const handleDatesSet = (month: number, year: number) => {
+        service.getEvents(month, year).then(data => setEvents(prev => {
+            const merge = new Set(prev.map(e => e.id));
+            const mergedEvents = [...prev];
+            data.forEach(e => {
+                if (!merge.has(e.id)) {
+                    mergedEvents.push(e);
+                }
+            });
+            return mergedEvents;
+        }));
+    };
+
     const handleDateClick = (dateStr: string) => {
         setCreateDefaults({ ...scheduleDefaultValues(), start: dateStr });
         setIsCreateOpen(true);
@@ -120,6 +133,7 @@ export default function Schedule() {
                     events={events}
                     onEventClick={handleEventClick}
                     onDateClick={handleDateClick}
+                    onDatesSet={handleDatesSet}
                     popoverDisabled={anyModalOpen}
                 />
             </div>
