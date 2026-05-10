@@ -1,16 +1,39 @@
 import axios from "axios";
+import { useLoadingStore } from "../../store/useLoadingStore";
+
+const configuredBaseUrl = (import.meta.env.VITE_BACKEND_BASE_URL as string | undefined)?.trim();
+const baseURL = configuredBaseUrl ? configuredBaseUrl.replace(/\/+$/, "") : "/api";
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-api.interceptors.response.use(
-  (response) => response,
+api.interceptors.request.use(
+  (config) => {
+    (config as any)._shouldDecrement = true;
+    useLoadingStore.getState().increment();
+    return config;
+  },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    if ((response.config as any)._shouldDecrement) {
+      useLoadingStore.getState().decrement();
+    }
+    return response;
+  },
+  (error) => {
+    if (error.config?._shouldDecrement) {
+      useLoadingStore.getState().decrement();
+    }
     const isLoginRequest = error.config?.url?.includes('/auth/login');
     const isLoginPage = window.location.pathname.includes('/login') || window.location.pathname === '/';
     const isForgetPasswordPage = window.location.pathname.includes('/esqueci-senha') || window.location.pathname === '/';
