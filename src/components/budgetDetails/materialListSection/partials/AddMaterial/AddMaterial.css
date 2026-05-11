@@ -15,6 +15,8 @@
     justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid #e6e6e6;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .url {
@@ -24,6 +26,9 @@
     max-width: 40%;
     min-width: 40%;
     text-align: left;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
 }
 
 .addButton {
@@ -47,5 +52,6 @@
 
 .urlListRow {
     align-items: flex-start;
-    text-align: left !important;
+    text-align: left !important; 
+    word-break: break-all;   
 }
