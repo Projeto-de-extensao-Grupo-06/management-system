@@ -91,7 +91,7 @@ export default function useCoworkers(): UseCoworkersReturn {
     setError(null);
 
     coworkerService
-      .getAllCoworkers(page, 30, searchTerm, statusFilter)
+      .getAllCoworkers(searchTerm)
       .then((resData: Page<Coworker> | Coworker[]) => {
         if (Array.isArray(resData)) {
           const filteredCoworkers = resData.filter((coworker) =>

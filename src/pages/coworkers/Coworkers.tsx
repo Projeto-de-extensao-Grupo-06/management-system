@@ -32,7 +32,6 @@ export default function Coworkers() {
     document.title = "Colaboradores | SolarWay";
   }, []);
 
-  const navigate = useNavigate();
   const {
     coworkers,
     page,
