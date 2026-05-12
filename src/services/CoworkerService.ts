@@ -23,10 +23,7 @@ export interface UpdateCoworkerPayload {
 export default class CoworkerService {
   
   async getAllCoworkers(
-      page: number = 0,
-      size: number = 20,
       search: string = "",
-      status: string = "ACTIVE",
   ): Promise<CoworkersResponse> {
       const params = new URLSearchParams();
       

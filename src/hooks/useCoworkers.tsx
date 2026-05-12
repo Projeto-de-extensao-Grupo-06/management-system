@@ -30,24 +30,6 @@ const normalizeText = (value: string) =>
     .trim()
     .toLowerCase();
 
-const matchesCoworkerSearch = (coworker: Coworker, searchTerm: string) => {
-  const normalizedSearch = normalizeText(searchTerm);
-
-  if (!normalizedSearch) {
-    return true;
-  }
-
-  const searchableFields = [
-    `${coworker.firstName} ${coworker.lastName}`,
-    coworker.firstName,
-    coworker.lastName,
-    coworker.email,
-  ];
-
-  return searchableFields.some((field) =>
-    normalizeText(field ?? "").includes(normalizedSearch),
-  );
-};
 
 const matchesPermissionGroupFilter = (
   coworker: Coworker,

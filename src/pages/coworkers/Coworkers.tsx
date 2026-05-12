@@ -121,7 +121,7 @@ export default function Coworkers() {
   };
 
   const handleRowClick = (id: number) => {
-    navigate(`/coworkers/${id}`, { state: { edit: false } });
+    handleEdit(id);
   };
 
   const handleAddCoworker = () => {
