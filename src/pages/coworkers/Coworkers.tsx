@@ -1,7 +1,6 @@
 import useCoworkers from "../../hooks/useCoworkers";
 import type { CoworkerFormRef } from "../../interfaces/properties/FormProps";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
 import type { ModalRef } from "../../interfaces/properties/DialogProps";
 import type {
   CoworkerEditSchemaType,
