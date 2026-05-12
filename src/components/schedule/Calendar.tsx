@@ -1,4 +1,4 @@
-import type { EventClickArg } from "@fullcalendar/core";
+import type { DatesSetArg, EventClickArg } from "@fullcalendar/core";
 import ptBrLocale from "@fullcalendar/core/locales/pt-br";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -13,6 +13,7 @@ interface CalendarProps {
     events: CalendarEvent[];
     onEventClick: (event: CalendarEvent) => void;
     onDateClick?: (dateStr: string) => void;
+    onDatesSet: (month: number, year: number) => void;
     popoverDisabled?: boolean;
 }
 
@@ -20,6 +21,7 @@ export default function Calendar({
     events,
     onEventClick,
     onDateClick,
+    onDatesSet,
     popoverDisabled = false,
 }: CalendarProps) {
     const handleEventClick = (info: EventClickArg) => {
@@ -31,6 +33,12 @@ export default function Calendar({
 
     const handleDateClick = (info: DateClickArg) => {
         onDateClick?.(info.dateStr);
+    };
+
+    const handleDatesSet = (dateInfo: DatesSetArg) => {
+        const month = dateInfo.view.calendar.getDate().getMonth() + 1
+        const year = dateInfo.view.calendar.getDate().getFullYear();
+        onDatesSet(month, year);
     };
 
     return (
@@ -55,6 +63,7 @@ export default function Calendar({
                 eventContent={(eventInfo) => (
                     <EventPopover eventInfo={eventInfo} disabled={popoverDisabled} />
                 )}
+                datesSet={handleDatesSet}
             />
         </div>
     );

@@ -1,3 +1,4 @@
+import type { AxiosResponse } from 'axios';
 import type CalendarEvent from '../interfaces/types/CalendarEvent';
 import type { Schedule } from '../interfaces/types/Schedule';
 import type { ScheduleSchemaType } from '../schemas/scheduleSchema';
@@ -50,9 +51,20 @@ export default class ScheduleService {
     return res.data;
   }
 
-  async getEvents(): Promise<CalendarEvent[]> {
+  async getEvents(month?: number, year?: number): Promise<CalendarEvent[]> {
     try {
-      const res = await api.get<Schedule[]>('/schedules');
+      let res: AxiosResponse<Schedule[], any, {}>;
+
+      if (month && year) {
+        res = await api.get<Schedule[]>(`/schedules?month=${month}&year=${year}`);
+      } else {
+        res = await api.get<Schedule[]>(`/schedules`);
+      }
+
+      if(res.status === 204 || !res.data) {
+        return [];
+      }
+
       return res.data.map(toCalendarEvent);
     } catch (error: unknown) {
       const status = (error as { response?: { status?: number } }).response?.status;

@@ -7,15 +7,15 @@ import usePermissions from "../../../../hooks/usePermissions";
 import type { ProjectStatusType } from "../../../../interfaces/enum/ProjectStatus";
 import type { AutoCompleteSelectOption } from "../../../../interfaces/properties/ReactSelectFormProps";
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
-import { CoworkerService } from "../../../../services/CoworkerService";
+import CoworkerService from "../../../../services/CoworkerService";
 import ProjectService from "../../../../services/ProjectService";
 import { translateBackendError, validateStatusTransition } from "../../../../utils/projectStatusTransitions";
 import { AutoCompleteSelect, Input, Select, SelectOption } from "../../../ui/Form";
 import styles from "./GeneralInfo.module.css";
 
 interface GeneralInfoFormProps {
-    project: ProjectDetails;
-    setProject: React.Dispatch<React.SetStateAction<ProjectDetails | null>>;
+  project: ProjectDetails;
+  setProject: React.Dispatch<React.SetStateAction<ProjectDetails | null>>;
 }
 
 export default function GeneralInfoForm({ project, setProject }: GeneralInfoFormProps) {
@@ -67,7 +67,6 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
         });
         await patchProject({ responsibleId: id });
     }
-
     async function handleStatusChange(newStatus: ProjectStatusType) {
         const previousStatus = project.status;
 
@@ -134,12 +133,16 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
 
     useEffect(() => {
         const loadCoworkers = async () => {
-            const coworkers = await coworkerService.getAllCoworkers();
+            const coworkersResponse = await coworkerService.getAllCoworkers();
+
+            const coworkers = Array.isArray(coworkersResponse)
+                ? coworkersResponse
+                : (coworkersResponse.content ?? []);
 
             if (coworkers.length > 0) {
-                const coworkersLabels = coworkers.map(c => ({
+                const coworkersLabels = coworkers.map((c) => ({
                     value: c.id.toString(),
-                    label: `${c.firstName} ${c.lastName}`
+                    label: `${c.firstName} ${c.lastName}`,
                 }));
 
                 setCoworkersSelectOptions(coworkersLabels);

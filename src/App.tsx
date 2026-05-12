@@ -12,7 +12,7 @@ import Analysis from "./pages/analysis/Analysis";
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import BudgetDetails from "./pages/Budget/BudgetDetails";
-import BudgetParameterDetails from './pages/budget_parameters/BudgetParameterDetails';
+import BudgetParameterDetails from "./pages/budget_parameters/BudgetParameterDetails";
 import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
