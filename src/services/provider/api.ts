@@ -1,11 +1,8 @@
 import axios from "axios";
 import { useLoadingStore } from "../../store/useLoadingStore";
 
-const configuredBaseUrl = (import.meta.env.VITE_BACKEND_BASE_URL as string | undefined)?.trim();
-const baseURL = configuredBaseUrl ? configuredBaseUrl.replace(/\/+$/, "") : "/api";
-
 const api = axios.create({
-  baseURL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

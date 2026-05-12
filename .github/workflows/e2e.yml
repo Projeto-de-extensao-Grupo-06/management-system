@@ -51,7 +51,7 @@ jobs:
           
           echo "Starting Backend Monolith..."
           cd ../backend/monolith
-          docker compose --env-file ../../../.env up -d
+          DB_HOST=mysql-db-oltp docker compose --env-file ../../../.env up -d
           
           # Give the database and backend enough time to initialize
           echo "Waiting 60 seconds for backend to be fully started..."

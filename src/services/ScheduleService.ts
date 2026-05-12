@@ -53,7 +53,7 @@ export default class ScheduleService {
 
   async getEvents(month?: number, year?: number): Promise<CalendarEvent[]> {
     try {
-      let res: AxiosResponse<Schedule[], any, {}>;
+      let res: AxiosResponse<Schedule[], unknown>;
 
       if (month && year) {
         res = await api.get<Schedule[]>(`/schedules?month=${month}&year=${year}`);
