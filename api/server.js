@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports, no-undef */
 const jsonServer = require('json-server');
 const path = require('path');
 
