@@ -21,28 +21,19 @@ export interface UpdateCoworkerPayload {
 }
 
 export default class CoworkerService {
+  
   async getAllCoworkers(
-    page: number = 0,
-    size: number = 20,
-    search: string = "",
-    status: string = "ACTIVE",
+      page: number = 0,
+      size: number = 20,
+      search: string = "",
+      status: string = "ACTIVE",
   ): Promise<CoworkersResponse> {
-    const params = new URLSearchParams();
-    params.append("page", page.toString());
-    params.append("size", size.toString());
-    if (search) params.append("search", search);
-    if (status && status !== "Todos")
-      params.append(
-        "status",
-        status === "Ativo"
-          ? "ACTIVE"
-          : status === "Inativo"
-            ? "INACTIVE"
-            : status,
-      );
-
-    const response = await api.get<CoworkersResponse>("/coworkers", { params });
-    return response.data;
+      const params = new URLSearchParams();
+      
+      if (search) params.append("search", search);
+      
+      const response = await api.get<CoworkersResponse>("/coworkers", { params });
+      return response.data;
   }
 
   async deleteCoworker(id: number): Promise<void> {

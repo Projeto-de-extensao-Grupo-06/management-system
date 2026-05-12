@@ -113,8 +113,7 @@ export default function useCoworkers(): UseCoworkersReturn {
       .then((resData: Page<Coworker> | Coworker[]) => {
         if (Array.isArray(resData)) {
           const filteredCoworkers = resData.filter((coworker) =>
-            matchesPermissionGroupFilter(coworker, filters.permissionGroup) &&
-            matchesCoworkerSearch(coworker, searchTerm),
+            matchesPermissionGroupFilter(coworker, filters.permissionGroup)
           );
 
           setCoworkers(filteredCoworkers);
@@ -139,8 +138,7 @@ export default function useCoworkers(): UseCoworkersReturn {
 
           const filteredCoworkers = (data.content || []).filter(
             (coworker: Coworker) =>
-              matchesPermissionGroupFilter(coworker, filters.permissionGroup) &&
-              matchesCoworkerSearch(coworker, searchTerm),
+              matchesPermissionGroupFilter(coworker, filters.permissionGroup)
           );
 
           setCoworkers(filteredCoworkers);
