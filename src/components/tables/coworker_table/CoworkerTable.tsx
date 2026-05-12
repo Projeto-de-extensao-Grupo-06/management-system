@@ -1,11 +1,11 @@
+import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import usePermissions from "../../../hooks/usePermissions";
 import type { CoworkerTableProps } from "../../../interfaces/properties/TableProps";
+import styles from "../../../pages/clients/Clients.module.css";
 import SecureComponent from "../../security/SecureComponent";
 import { IconButton } from "../../ui/Form";
 import Table from "../Table";
-import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import styles from "../../../pages/clients/Clients.module.css";
 
 export default function CoworkerTable({
   coworkers,
