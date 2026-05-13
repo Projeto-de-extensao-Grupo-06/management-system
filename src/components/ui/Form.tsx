@@ -73,15 +73,25 @@ export function FilterButton({
   );
 }
 
-export function IconButton({ functionality = "edit", icon, type = "submit", onClick, disabled = false, ariaLabel, title }: IconButtonProps) {
+export function IconButton({
+  functionality = "edit",
+  icon,
+  type = "submit",
+  onClick,
+  disabled = false,
+  ariaLabel,
+  title
+}: IconButtonProps) {
   return (
     <button
       type={type}
-      className={`${functionality}-button`}
+      className={`${functionality}-button ${disabled ? 'icon-button-disabled' : ''}`}
       disabled={disabled}
-      onClick={onClick}
+      onClick={!disabled ? onClick : undefined}
       title={title}
-      aria-label={ariaLabel}>
+      aria-disabled={disabled}
+      aria-label={ariaLabel}
+    >
       {icon}
     </button>
   );

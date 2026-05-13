@@ -346,3 +346,9 @@
     cursor: default;
     opacity: 1;
 }
+
+.icon-button-disabled {
+  color: #bdbdbd !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+}

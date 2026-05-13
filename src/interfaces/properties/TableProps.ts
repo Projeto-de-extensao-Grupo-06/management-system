@@ -39,9 +39,17 @@ export interface TableProps {
 }
 
 export interface BudgetParameterTableProps {
-  parameters: BudgetParameter[];
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
-  onActivate: (id: number) => void;
-  onRowClick?: (id: number) => void;
+    parameters: BudgetParameter[];
+    onEdit: (id: number) => void;
+    onDelete: (id: number) => void;
+    onActivate: (id: number) => void;
+    onRowClick?: (id: number) => void;
 }
+
+export interface PermissionProfileTableProps {
+    profiles: any[];
+    onEdit: (id: number) => void;
+    onDelete: (id: number) => void;
+    onRowClick?: (id: number) => void;
+}
+  

@@ -18,7 +18,12 @@ export interface CoworkerFormRef {
   submit: () => void;
 }
 
-export type CoworkerFormData = CoworkerSchemaType | CoworkerEditSchemaType;
+export interface CoworkerCreateFormProps {
+  onSubmit: (data: CoworkerSchemaType) => void;
+  defaultValues?: Partial<CoworkerSchemaType>;
+  readOnly?: boolean;
+  mode: "create";
+}
 
 export interface CreateCoworkerFormProps {
   onSubmit: (data: CoworkerSchemaType) => void;
@@ -46,4 +51,13 @@ export interface BudgetParameterFormProps {
 
 export interface BudgetParameterFormRef {
   submit: () => void;
+}
+export interface PermissionProfileFormRef {
+    submit: () => void;
+}
+
+export interface PermissionProfileFormProps {
+    onSubmit: (data: PermissionProfileSchemaType) => void;
+    defaultValues?: Partial<PermissionProfileSchemaType>;
+    readOnly?: boolean;
 }

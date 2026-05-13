@@ -7,6 +7,11 @@ import {
   useFormContext,
 } from "react-hook-form";
 import type { CoworkerFormProps, CoworkerFormRef } from "../../../interfaces/properties/FormProps";
+import type {
+  CoworkerCreateFormProps,
+  CoworkerEditFormProps,
+  CoworkerFormRef,
+} from "../../../interfaces/properties/FormProps";
 import {
   coworkerEditSchema,
   coworkerSchema,
@@ -51,11 +56,15 @@ function CoworkerEditBasicInfoForm({ readOnly }: BasicInfoFormProps) {
         <div className={styles.gridTwo}>
           <div>
             <label className={styles.fieldLabel}>Email:</label>
-            <div className={styles.readOnlyField}>{formValues.email || "-"}</div>
+            <div className={styles.readOnlyField}>
+              {formValues.email || "-"}
+            </div>
           </div>
           <div>
             <label className={styles.fieldLabel}>Telefone:</label>
-            <div className={styles.readOnlyField}>{formValues.phone || "-"}</div>
+            <div className={styles.readOnlyField}>
+              {formValues.phone || "-"}
+            </div>
           </div>
         </div>
 
