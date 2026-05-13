@@ -7,11 +7,6 @@ import {
   useFormContext,
 } from "react-hook-form";
 import type { CoworkerFormProps, CoworkerFormRef } from "../../../interfaces/properties/FormProps";
-import type {
-  CoworkerCreateFormProps,
-  CoworkerEditFormProps,
-  CoworkerFormRef,
-} from "../../../interfaces/properties/FormProps";
 import {
   coworkerEditSchema,
   coworkerSchema,

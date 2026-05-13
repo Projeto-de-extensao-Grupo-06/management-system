@@ -1,6 +1,7 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import Modal from "../../components/dialogs/modal/Modal";
 import CoworkerForm from "../../components/forms/coworker_form/CoworkerForm";
 import FilterBar from "../../components/layout/FilterBar";
@@ -9,7 +10,6 @@ import SecureComponent from "../../components/security/SecureComponent";
 import CoworkerTable from "../../components/tables/coworker_table/CoworkerTable";
 import { Pagination } from "../../components/tables/pagination/Pagination";
 import { Alert } from "../../components/ui/Alert";
-import { SimpleButton } from "../../components/ui/Form";
 import {
   Button,
   SearchInput,
@@ -28,6 +28,8 @@ import type {
 import styles from "./Coworkers.module.css";
 
 export default function Coworkers() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.title = "Colaboradores | SolarWay";
   }, []);

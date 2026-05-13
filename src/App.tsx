@@ -119,8 +119,7 @@ function App() {
               <Route path="/configuracoes" element={<Config />} />
               <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
               <Route path="/configuracoes/redefinir-senha" element={<ResetPassword />} />
-              
-
+              <Route path="/configuracoes/colaboradores" element={<Coworkers />} />
               <Route
                 path="/configuracoes/parametros-orcamento"
                 element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameters />} />}

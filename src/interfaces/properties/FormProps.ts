@@ -4,6 +4,8 @@ import type {
   CoworkerEditSchemaType,
   CoworkerSchemaType,
 } from "../../schemas/coworkerSchema";
+import type { PermissionProfileSchemaType } from "../../schemas/permissionProfileSchema";
+
 export interface ClientFormRef {
   submit: () => void;
 }
