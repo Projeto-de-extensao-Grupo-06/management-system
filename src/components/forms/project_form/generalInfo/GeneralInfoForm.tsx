@@ -133,14 +133,11 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
 
     useEffect(() => {
         const loadCoworkers = async () => {
-            const coworkersResponse = await coworkerService.getAllCoworkers();
+            const coworkers = await coworkerService.getAllCoworkers();
+            const coworkersList = Array.isArray(coworkers) ? coworkers : coworkers.content ?? [];
 
-            const coworkers = Array.isArray(coworkersResponse)
-                ? coworkersResponse
-                : (coworkersResponse.content ?? []);
-
-            if (coworkers.length > 0) {
-                const coworkersLabels = coworkers.map((c) => ({
+            if (coworkersList.length > 0) {
+                const coworkersLabels = coworkersList.map(c => ({
                     value: c.id.toString(),
                     label: `${c.firstName} ${c.lastName}`,
                 }));

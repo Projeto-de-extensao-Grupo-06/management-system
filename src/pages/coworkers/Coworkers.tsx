@@ -2,7 +2,6 @@ import { faPlus, faUserShield } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-
 import Modal from "../../components/dialogs/modal/Modal";
 import CoworkerForm from "../../components/forms/coworker_form/CoworkerForm";
 import FilterBar from "../../components/layout/FilterBar";
@@ -19,7 +18,6 @@ import {
   SimpleButton,
 } from "../../components/ui/Form";
 import useCoworkers from "../../hooks/useCoworkers";
-
 import type { ModalRef } from "../../interfaces/properties/DialogProps";
 import type { CoworkerFormRef } from "../../interfaces/properties/FormProps";
 import type { Coworker } from "../../interfaces/types/Coworker";
@@ -27,15 +25,15 @@ import type {
   CoworkerEditSchemaType,
   CoworkerSchemaType,
 } from "../../schemas/coworkerSchema";
-
 import styles from "./Coworkers.module.css";
 
 export default function Coworkers() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.title = "Colaboradores | SolarWay";
   }, []);
 
-  const navigate = useNavigate();
   const {
     coworkers,
     page,
@@ -124,7 +122,7 @@ export default function Coworkers() {
   };
 
   const handleRowClick = (id: number) => {
-    navigate(`/coworkers/${id}`, { state: { edit: false } });
+    handleEdit(id);
   };
 
   const handleAddCoworker = () => {

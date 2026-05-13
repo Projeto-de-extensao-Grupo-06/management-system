@@ -19,6 +19,7 @@ import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
 import ResetPassword from "./pages/config/resetPassword/ResetPassword";
+import Coworkers from "./pages/coworkers/Coworkers";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
 import Materials from "./pages/materials/Materials";
 import ProjectDetails from "./pages/projects/ProjectDetails";
@@ -118,8 +119,7 @@ function App() {
               <Route path="/configuracoes" element={<Config />} />
               <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
               <Route path="/configuracoes/redefinir-senha" element={<ResetPassword />} />
-              
-
+              <Route path="/configuracoes/colaboradores" element={<Coworkers />} />
               <Route
                 path="/configuracoes/parametros-orcamento"
                 element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameters />} />}

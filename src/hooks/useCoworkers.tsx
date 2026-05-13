@@ -30,24 +30,6 @@ const normalizeText = (value: string) =>
     .trim()
     .toLowerCase();
 
-const matchesCoworkerSearch = (coworker: Coworker, searchTerm: string) => {
-  const normalizedSearch = normalizeText(searchTerm);
-
-  if (!normalizedSearch) {
-    return true;
-  }
-
-  const searchableFields = [
-    `${coworker.firstName} ${coworker.lastName}`,
-    coworker.firstName,
-    coworker.lastName,
-    coworker.email,
-  ];
-
-  return searchableFields.some((field) =>
-    normalizeText(field ?? "").includes(normalizedSearch),
-  );
-};
 
 const matchesPermissionGroupFilter = (
   coworker: Coworker,
@@ -109,12 +91,11 @@ export default function useCoworkers(): UseCoworkersReturn {
     setError(null);
 
     coworkerService
-      .getAllCoworkers(page, 30, searchTerm, statusFilter)
+      .getAllCoworkers(searchTerm)
       .then((resData: Page<Coworker> | Coworker[]) => {
         if (Array.isArray(resData)) {
           const filteredCoworkers = resData.filter((coworker) =>
-            matchesPermissionGroupFilter(coworker, filters.permissionGroup) &&
-            matchesCoworkerSearch(coworker, searchTerm),
+            matchesPermissionGroupFilter(coworker, filters.permissionGroup)
           );
 
           setCoworkers(filteredCoworkers);
@@ -139,8 +120,7 @@ export default function useCoworkers(): UseCoworkersReturn {
 
           const filteredCoworkers = (data.content || []).filter(
             (coworker: Coworker) =>
-              matchesPermissionGroupFilter(coworker, filters.permissionGroup) &&
-              matchesCoworkerSearch(coworker, searchTerm),
+              matchesPermissionGroupFilter(coworker, filters.permissionGroup)
           );
 
           setCoworkers(filteredCoworkers);
