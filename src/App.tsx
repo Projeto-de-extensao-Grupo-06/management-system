@@ -18,6 +18,7 @@ import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
+import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 import ResetPassword from "./pages/config/resetPassword/ResetPassword";
 import Coworkers from "./pages/coworkers/Coworkers";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
@@ -33,7 +34,6 @@ import NotFound from "./pages/shared/NotFound";
 import NotImplemented from "./pages/shared/NotImplemented";
 import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
 import useAuthStore from "./store/useAuthStore";
-import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
