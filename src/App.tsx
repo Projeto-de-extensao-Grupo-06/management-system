@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route} from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import PermissionRoute from "./components/security/PermissionsRoute";
 import ProtectedRoute from "./components/security/ProtectedRoute";
 import GlobalLoader from "./components/ui/GlobalLoader";
@@ -18,6 +18,7 @@ import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import Config from "./pages/config/Config";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
+import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 import ResetPassword from "./pages/config/resetPassword/ResetPassword";
 import Coworkers from "./pages/coworkers/Coworkers";
 import BudgetMaterials from "./pages/materials/BudgetMaterials";
@@ -127,6 +128,10 @@ function App() {
               <Route
                 path="/configuracoes/parametros-orcamento/:id"
                 element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameterDetails />} />}
+              />
+              <Route
+                path="/configuracoes/perfis-permissao"
+                element={<PermissionRoute permissions={["CONFIGURATION_READ"]} element={<PermissionProfiles />} />}
               />
             </Route>
           </Route>
