@@ -1,7 +1,7 @@
 import "./App.css";
 
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route} from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import PermissionRoute from "./components/security/PermissionsRoute";
 import ProtectedRoute from "./components/security/ProtectedRoute";
 import GlobalLoader from "./components/ui/GlobalLoader";
@@ -33,6 +33,7 @@ import NotFound from "./pages/shared/NotFound";
 import NotImplemented from "./pages/shared/NotImplemented";
 import ServiceUnavailable from "./pages/shared/ServiceUnavailable";
 import useAuthStore from "./store/useAuthStore";
+import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -127,6 +128,10 @@ function App() {
               <Route
                 path="/configuracoes/parametros-orcamento/:id"
                 element={<PermissionRoute permissions={["BUDGET_READ"]} element={<BudgetParameterDetails />} />}
+              />
+              <Route
+                path="/configuracoes/perfis-permissao"
+                element={<PermissionRoute permissions={["CONFIGURATION_READ"]} element={<PermissionProfiles />} />}
               />
             </Route>
           </Route>
