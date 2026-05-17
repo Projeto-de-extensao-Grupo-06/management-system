@@ -16,6 +16,7 @@ import BudgetParameterDetails from "./pages/budget_parameters/BudgetParameterDet
 import BudgetParameters from "./pages/budget_parameters/BudgetParameters";
 import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
+import AutomaticBudgetConfig from './pages/config/automatic_budget_config/AutomaticBudgetConfig';
 import Config from "./pages/config/Config";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
 import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
@@ -132,6 +133,10 @@ function App() {
               <Route
                 path="/configuracoes/perfis-permissao"
                 element={<PermissionRoute permissions={["CONFIGURATION_READ"]} element={<PermissionProfiles />} />}
+              />
+              <Route
+                path="/configuracoes/parametros-orcamento-automatico"
+                element={<PermissionRoute permissions={["CONFIGURATION_READ"]} element={<AutomaticBudgetConfig />} />}
               />
             </Route>
           </Route>

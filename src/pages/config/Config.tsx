@@ -5,6 +5,7 @@ import {
   faUser,
   faCalculator,
   faFolder,
+  faSlidersH
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useState } from "react";
@@ -17,8 +18,8 @@ import styles from "./Config.module.css";
 export default function Config() {
 
   useEffect(() => {
-  document.title = "Configurações | SolarWay";
-}, []);
+    document.title = "Configurações | SolarWay";
+  }, []);
 
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,6 +37,13 @@ export default function Config() {
       title: "Parâmetros de Orçamento Automático",
       description: "Defina regras de precificação",
       icon: faCalculator,
+      path: "/configuracoes/parametros-orcamento-automatico",
+    },
+      {
+      id: 7,
+      title: "Parâmetros de Orçamento",
+      description: "Gerencie parâmetros e custos utilizados no sistema",
+      icon: faSlidersH,
       path: "/configuracoes/parametros-orcamento",
     },
     {
