@@ -43,7 +43,7 @@ export default function ProjectDetails() {
 
             {/* MOBILE */}
             <div className={styles.mobileLayout}>
-                <ActionRequired projectStatus={project.status} clientId={project.clientId} />
+                <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} />
                 <NextSchedules projectId={project.id} />
                 <GeneralInfoForm project={project} setProject={setProject} />
                 <ClientInfoForm project={project} />
@@ -55,7 +55,7 @@ export default function ProjectDetails() {
             <div className={styles.desktopLayout}>
                 <div className={styles.container}>
                     <div className={styles.left}>
-                        <ActionRequired projectStatus={project.status} clientId={project.clientId} />
+                        <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} />
                         <NextSchedules projectId={project.id} />
                         <BudgetSummary projectId={project.id} />
                         <ProjectObservation project={project} setProject={setProject} />
