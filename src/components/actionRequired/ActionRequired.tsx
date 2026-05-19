@@ -2,12 +2,12 @@ import { faWarning } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from 'react';
-import type { ActionRequiredProps } from '../../interfaces/properties/ActionRequiredProps';
+import Swal from 'sweetalert2';
 import { ProjectStatus } from '../../interfaces/enum/ProjectStatus';
+import type { ActionRequiredProps } from '../../interfaces/properties/ActionRequiredProps';
 import ClientsService from '../../services/ClientsService';
 import ProjectService from '../../services/ProjectService';
 import styles from "./ActionRequired.module.css";
-import Swal from 'sweetalert2';
 
 const clientService = new ClientsService();
 
