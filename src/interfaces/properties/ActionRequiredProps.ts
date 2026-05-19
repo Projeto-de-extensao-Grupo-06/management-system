@@ -6,4 +6,6 @@ export type ProjectStatus = ProjectStatusType;
 export interface ActionRequiredProps {
     projectStatus: ProjectStatus;
     clientId: number;
+    projectId: number;
+    onActionComplete?: () => void;
 }
