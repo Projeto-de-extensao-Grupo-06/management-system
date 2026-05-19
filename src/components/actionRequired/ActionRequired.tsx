@@ -51,7 +51,7 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
         try {
             setLoading(true);
             await projectService.updateProject(projectId, {
-                status: ProjectStatus.AWAITING_RETRY
+                status: ProjectStatus.RETRYING
             });
             
             Swal.fire({
@@ -90,7 +90,7 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
                 try {
                     setLoading(true);
                     await projectService.updateProject(projectId, {
-                        status: ProjectStatus.RETRYING
+                        status: ProjectStatus.NEGOTIATION_FAILED
                     });
                     
                     Swal.fire({

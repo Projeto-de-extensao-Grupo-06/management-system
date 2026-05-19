@@ -21,15 +21,23 @@ export default function ProjectDetails() {
         if (!id) return;
 
         const loadProject = async () => {
-            const project = await projectService.getProjectById(id);
+            const data = await projectService.getProjectById(id);
 
-            if (project) {
-                setProject(project);
+            if (data) {
+                setProject(data);
             }
         }
 
         loadProject();
     }, [id, projectService]);
+
+    const reloadProject = async () => {
+        if (!id) return;
+        const data = await projectService.getProjectById(id);
+        if (data) {
+            setProject(data);
+        }
+    };
 
     if (!project) {
         return null;
@@ -43,7 +51,7 @@ export default function ProjectDetails() {
 
             {/* MOBILE */}
             <div className={styles.mobileLayout}>
-                <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} />
+                <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} onActionComplete={reloadProject} />
                 <NextSchedules projectId={project.id} />
                 <GeneralInfoForm project={project} setProject={setProject} />
                 <ClientInfoForm project={project} />
@@ -55,7 +63,7 @@ export default function ProjectDetails() {
             <div className={styles.desktopLayout}>
                 <div className={styles.container}>
                     <div className={styles.left}>
-                        <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} />
+                        <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} onActionComplete={reloadProject} />
                         <NextSchedules projectId={project.id} />
                         <BudgetSummary projectId={project.id} />
                         <ProjectObservation project={project} setProject={setProject} />
