@@ -1,12 +1,21 @@
+/* ──────────────────────────────────────────────
+   Wrapper
+────────────────────────────────────────────── */
 .calendar-wrapper {
     background-color: var(--color-background);
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     font-family: var(--font-family-primary);
-    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    /* Garante que o calendário sempre cresce com o conteúdo */
+    overflow: hidden;
 }
 
+/* ──────────────────────────────────────────────
+   Toolbar / navegação
+────────────────────────────────────────────── */
 .fc-toolbar-title {
     font-size: 1.25rem !important;
     font-weight: 500 !important;
@@ -36,6 +45,16 @@
     opacity: 0.5;
 }
 
+/* Esconde botões desnecessários */
+.fc-today-button,
+.fc-dayGridMonth-button,
+.fc-timeGridWeek-button {
+    display: none !important;
+}
+
+/* ──────────────────────────────────────────────
+   Grade / bordas
+────────────────────────────────────────────── */
 .fc-theme-standard td,
 .fc-theme-standard th {
     border: none !important;
@@ -45,6 +64,9 @@
     border: none !important;
 }
 
+/* ──────────────────────────────────────────────
+   Cabeçalho dos dias da semana
+────────────────────────────────────────────── */
 .fc-col-header-cell-cushion {
     text-decoration: none !important;
     color: #9CA3AF;
@@ -53,14 +75,25 @@
     padding-bottom: 1rem !important;
 }
 
+/* ──────────────────────────────────────────────
+   Número do dia
+────────────────────────────────────────────── */
 .fc-daygrid-day-number {
     text-decoration: none !important;
     color: #374151;
     font-size: 0.95rem;
     padding: 0.5rem 0.5rem 0 0 !important;
     font-weight: 400;
+    /* Área de toque mínima de 44px (WCAG) */
+    min-height: 44px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
 }
 
+/* ──────────────────────────────────────────────
+   Hoje
+────────────────────────────────────────────── */
 .fc-day-today {
     background-color: transparent !important;
 }
@@ -70,6 +103,9 @@
     color: var(--color-primary);
 }
 
+/* ──────────────────────────────────────────────
+   Eventos
+────────────────────────────────────────────── */
 .fc-event {
     border: none !important;
     padding: 4px 8px !important;
@@ -81,13 +117,104 @@
     text-align: center;
 }
 
-.fc-today-button,
-.fc-dayGridMonth-button,
-.fc-timeGridWeek-button {
-    display: none !important;
-}
-
+/* ──────────────────────────────────────────────
+   Hover no dia
+────────────────────────────────────────────── */
 .fc-daygrid-day:hover {
     background-color: #f3f4f6 !important;
     cursor: pointer;
+}
+
+/* ──────────────────────────────────────────────
+   TABLET  (≤ 900px)
+────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .calendar-wrapper {
+        padding: 1.25rem 1rem;
+        border-radius: 14px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.05rem !important;
+    }
+
+    .fc-col-header-cell-cushion {
+        font-size: 0.78rem;
+        padding-bottom: 0.6rem !important;
+    }
+
+    .fc-daygrid-day-number {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.35rem 0 0 !important;
+    }
+
+    .fc-event {
+        font-size: 0.7rem !important;
+        padding: 3px 5px !important;
+    }
+}
+
+/* ──────────────────────────────────────────────
+   MOBILE  (≤ 640px)
+────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .calendar-wrapper {
+        padding: 0.75rem 0.5rem;
+        border-radius: 12px;
+        /* Remove sombra pesada em tela pequena */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Abreviações de 3 letras → 1 letra */
+    .fc-col-header-cell-cushion {
+        font-size: 0.65rem;
+        padding-bottom: 0.4rem !important;
+        letter-spacing: -0.01em;
+    }
+
+    /* Número do dia menor e com área de toque razoável */
+    .fc-daygrid-day-number {
+        font-size: 0.72rem;
+        padding: 0.25rem 0.2rem 0 0 !important;
+        min-height: 32px;
+    }
+
+    /* Evento: só mostra 1 por célula — reduz colisão de toque */
+    .fc-event {
+        font-size: 0.62rem !important;
+        padding: 2px 4px !important;
+        border-radius: 3px !important;
+        margin-top: 1px !important;
+        /* trunca texto longo */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Limita a 1 evento visível em mobile — exibe "+N mais" para o restante */
+    .fc-daygrid-day-events {
+        min-height: 0 !important;
+    }
+
+    /* Célula de dia com altura mínima para não ficar espremida */
+    .fc-daygrid-day-frame {
+        min-height: 52px !important;
+    }
+
+    /* Botão "+N mais" — aumenta área de toque */
+    .fc-daygrid-more-link {
+        font-size: 0.62rem !important;
+        padding: 2px 3px !important;
+        font-weight: 600;
+        color: var(--color-primary) !important;
+    }
+
+    /* Título do toolbar */
+    .fc-toolbar-title {
+        font-size: 0.9rem !important;
+    }
+
+    .fc-toolbar.fc-header-toolbar {
+        margin-bottom: 0.75rem !important;
+    }
 }

@@ -37,7 +37,17 @@ export default function MaterialCard({ material, onChange, onDelete, editing }: 
                     }}
                 />
 
-                <span>{material.url}</span>
+                <a
+                    href={material.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={material.url}
+                    className={styles.urlLink}
+                >
+                    {material.url.length > 30
+                        ? `${material.url.substring(0, 30)}…`
+                        : material.url}
+                </a>
 
                 <span>
                     {material.unitPrice.toLocaleString("pt-BR", {

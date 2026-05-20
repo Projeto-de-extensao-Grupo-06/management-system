@@ -24,6 +24,9 @@ export default function Schedule() {
 
     const [events, setEvents] = useState<CalendarEvent[]>([]);
 
+    const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth() + 1);
+    const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
+
     const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -32,13 +35,30 @@ export default function Schedule() {
 
     const anyModalOpen = isDetailsOpen || isCreateOpen || isEditOpen;
 
-    const fetchEvents = useCallback(async () => {
-        const data = await service.getEvents();
-        setEvents(data);
-    }, []);
+    const fetchEvents = useCallback(async (month?: number, year?: number) => {
+        const m = month ?? currentMonth;
+        const y = year ?? currentYear;
+
+        // Busca mês anterior, atual e próximo para cobrir navegação
+        const prevMonth = m === 1 ? 12 : m - 1;
+        const prevYear = m === 1 ? y - 1 : y;
+        const nextMonth = m === 12 ? 1 : m + 1;
+        const nextYear = m === 12 ? y + 1 : y;
+
+        const [prev, curr, next] = await Promise.all([
+            service.getEvents(prevMonth, prevYear),
+            service.getEvents(m, y),
+            service.getEvents(nextMonth, nextYear),
+        ]);
+
+        const merged = new Map<string, CalendarEvent>();
+        [...prev, ...curr, ...next].forEach(e => merged.set(e.id, e));
+        setEvents(Array.from(merged.values()));
+    }, [currentMonth, currentYear]);
 
     useEffect(() => {
-        service.getEvents().then(data => setEvents(data));
+        fetchEvents();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleOpenCreate = () => {
@@ -47,15 +67,13 @@ export default function Schedule() {
     };
 
     const handleDatesSet = (month: number, year: number) => {
+        setCurrentMonth(month);
+        setCurrentYear(year);
         service.getEvents(month, year).then(data => setEvents(prev => {
-            const merge = new Set(prev.map(e => e.id));
-            const mergedEvents = [...prev];
-            data.forEach(e => {
-                if (!merge.has(e.id)) {
-                    mergedEvents.push(e);
-                }
-            });
-            return mergedEvents;
+            const merge = new Map<string, CalendarEvent>();
+            prev.forEach(e => merge.set(e.id, e));
+            data.forEach(e => merge.set(e.id, e));
+            return Array.from(merge.values());
         }));
     };
 
@@ -66,7 +84,7 @@ export default function Schedule() {
 
     const handleCreate = async (data: ScheduleSchemaType) => {
         await service.createEvent(data);
-        await fetchEvents();
+        await fetchEvents(currentMonth, currentYear);
         setIsCreateOpen(false);
     };
 
@@ -78,7 +96,7 @@ export default function Schedule() {
     const handleEdit = async (data: ScheduleSchemaType) => {
         if (!selectedEvent) return;
         await service.updateEvent(selectedEvent.id, data);
-        await fetchEvents();
+        await fetchEvents(currentMonth, currentYear);
         setIsEditOpen(false);
         setSelectedEvent(null);
     };
@@ -86,7 +104,7 @@ export default function Schedule() {
     const handleDelete = async () => {
         if (!selectedEvent) return;
         await service.deleteEvent(selectedEvent.id);
-        await fetchEvents();
+        await fetchEvents(currentMonth, currentYear);
         setIsDetailsOpen(false);
         setIsEditOpen(false);
         setSelectedEvent(null);

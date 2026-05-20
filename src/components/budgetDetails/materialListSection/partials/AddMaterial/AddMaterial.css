@@ -7,51 +7,59 @@
 .urlList {
     margin-top: 10px;
     list-style-type: none;
+    padding: 0;
+}
+
+.urlListRow {
+    align-items: flex-start;
+    text-align: left !important;
 }
 
 .urlListItem {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
     padding: 10px;
     border-bottom: 1px solid #e6e6e6;
     overflow: hidden;
     min-width: 0;
 }
 
+/* Link da URL — truncado com ellipsis, nunca quebra o layout */
 .url {
     color: #0b5d1e;
-    text-decoration: none;
-    font-weight: bold;
-    max-width: 40%;
-    min-width: 40%;
-    text-align: left;
-    overflow-wrap: break-word;
-    word-break: break-all;
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 13px;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.url:hover {
+    color: #094a18;
 }
 
 .addButton {
     font-weight: bold;
-    width: 20%;
+    flex-shrink: 0;
     cursor: pointer;
+    white-space: nowrap;
 }
-
 
 .materialPrice {
     font-weight: bold;
     color: #DD7428;
     font-size: medium;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .title {
     font-weight: bold;
     font-size: large;
     color: #0b5d1e;
-}
-
-.urlListRow {
-    align-items: flex-start;
-    text-align: left !important; 
-    word-break: break-all;   
 }

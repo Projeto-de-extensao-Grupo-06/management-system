@@ -39,8 +39,14 @@ export default function ExpandMaterial({ materialId, name, description, budgetMa
 
     const urlsList = urls.map((u, index) => (
         <li key={index} className="urlListItem">
-            <a href={u.url} className="url" target="_blank" rel="noopener noreferrer">
-                {u.url}
+            <a
+                href={u.url}
+                className="url"
+                target="_blank"
+                rel="noopener noreferrer"
+                title={u.url}
+            >
+                {u.url.length > 40 ? `${u.url.substring(0, 40)}…` : u.url}
             </a>
 
             <span className="materialPrice">{u.price.toLocaleString("pt-br", { style: "currency", currency: "BRL" })}</span>
