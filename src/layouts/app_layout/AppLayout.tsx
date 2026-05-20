@@ -1,5 +1,4 @@
 import {
-  faChartLine,
   faCalendar,
   faClipboard,
   faPeopleGroup,
@@ -30,7 +29,6 @@ export default function AppLayout() {
     { to: "/projetos", label: "Projetos", icon: faClipboard },
     { to: "/clientes", label: "Clientes", icon: faPeopleGroup },
     { to: "/materiais", label: "Materiais", icon: faWrench },
-    { to: "/analise", label: "Análises", icon: faChartLine },
     { to: "/configuracoes", label: "Configurações", icon: faGear },
   ];
   const navigate = useNavigate();

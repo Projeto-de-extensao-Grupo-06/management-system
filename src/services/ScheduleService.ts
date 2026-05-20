@@ -35,7 +35,13 @@ function toCalendarEvent(s: Schedule): CalendarEvent {
 }
 
 function toISODateTime(date: string, time: string): string {
-  return `${date}T${time || '00:00'}:00`;
+  // Monta a data/hora local e converte para UTC antes de enviar ao backend.
+  // O backend Java usa LocalDateTime sem fuso e compara com now() UTC,
+  // então precisamos enviar sempre em UTC para evitar rejeições incorretas.
+  const localDate = new Date(`${date}T${time || '00:00'}:00`);
+  // Formata como "YYYY-MM-DDTHH:mm:ss" em UTC (sem o 'Z' final, pois o backend espera LocalDateTime)
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${localDate.getUTCFullYear()}-${pad(localDate.getUTCMonth() + 1)}-${pad(localDate.getUTCDate())}T${pad(localDate.getUTCHours())}:${pad(localDate.getUTCMinutes())}:00`;
 }
 
 export default class ScheduleService {

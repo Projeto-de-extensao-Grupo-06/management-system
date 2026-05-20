@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
-const todayStr = () => new Date().toISOString().split('T')[0];
+// Usa a data local do usuário (não UTC) para evitar problemas de fuso horário.
+// Ex.: com UTC-3, toISOString() às 21h retornaria o dia seguinte em UTC.
+const todayStr = () => {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+};
 
 export const scheduleSchema = z.object({
     title: z.string().min(1, 'O título é obrigatório'),

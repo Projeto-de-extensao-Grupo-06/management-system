@@ -48,6 +48,14 @@ export default function ScheduleDetailsModal({
     const startDate = event.start;
     const endDate = event.end;
 
+    function formatDateBR(isoDate?: string): string {
+        if (!isoDate) return '';
+        // isoDate vem como "YYYY-MM-DD"
+        const [year, month, day] = isoDate.split('-');
+        if (!year || !month || !day) return isoDate;
+        return `${day}/${month}/${year}`;
+    }
+
     const footer = (
         <div className={styles.footerRow}>
             <Button
@@ -88,7 +96,7 @@ export default function ScheduleDetailsModal({
                     <span className={styles.detailIcon}>
                         <FontAwesomeIcon icon={faCalendarDays} />
                     </span>
-                    <span>{startDate} {endDate ? `até ${endDate}` : ''}</span>
+                    <span>{formatDateBR(startDate)} {endDate ? `até ${formatDateBR(endDate)}` : ''}</span>
                 </div>
 
                 {status && (
