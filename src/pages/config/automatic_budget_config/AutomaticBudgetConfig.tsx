@@ -1,7 +1,7 @@
 import { faPen, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { Resolver } from 'react-hook-form';
 import PageLayout from '../../../components/layout/PageLayout';
@@ -18,6 +18,7 @@ import styles from './AutomaticBudgetConfig.module.css';
 export default function AutomaticBudgetConfig() {
     const { config, loading, alert, setAlert, saveConfig } = useAutomaticBudgetConfig();
     const [isEditing, setIsEditing] = useState(false);
+    const alertTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const {
         register,
@@ -40,21 +41,30 @@ export default function AutomaticBudgetConfig() {
     });
 
     useEffect(() => {
-        if (config) {
-            reset(config);
-        }
+        if (config) reset(config);
     }, [config, reset]);
+
+    useEffect(() => {
+        return () => {
+            if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+        };
+    }, []);
+
+    const showAlert = (message: string, type: 'success' | 'error') => {
+        if (alertTimeoutRef.current) clearTimeout(alertTimeoutRef.current);
+        setAlert({ message, type });
+        alertTimeoutRef.current = setTimeout(() => setAlert(null), 5000);
+    };
 
     const onSubmit = (data: AutomaticBudgetConfigSchemaType) => {
         setAlert(null);
         saveConfig(data)
             .then(() => {
                 setIsEditing(false);
-                setAlert({ message: 'Configurações salvas com sucesso!', type: 'success' });
-                setTimeout(() => setAlert(null), 5000);
+                showAlert('Configurações salvas com sucesso!', 'success');
             })
             .catch((e: Error) => {
-                setAlert({ message: e.message, type: 'error' });
+                showAlert(e.message, 'error');
             });
     };
 
@@ -123,13 +133,14 @@ export default function AutomaticBudgetConfig() {
                 <h3 className={styles.sectionTitle}>Parâmetros de Custo Base</h3>
 
                 <div className={styles.fieldGroup}>
-                    <label className={styles.label}>Preço por Watt-pico (R$/Wp) *</label>
+                    <label htmlFor="pricePerKwp" className={styles.label}>Preço por Quilowatt-pico (R$/kWp) *</label>
                     <Input
                         {...register('pricePerKwp')}
+                        id="pricePerKwp"
                         type="number"
                         step="0.01"
                         min="0"
-                        placeholder="Ex: 3.20"
+                        placeholder="Ex: 4500.00"
                         readOnly={!isEditing}
                         onKeyDown={(e) => {
                             if (['e', 'E', '+', '-'].includes(e.key)) e.preventDefault();
@@ -144,9 +155,10 @@ export default function AutomaticBudgetConfig() {
                 </div>
 
                 <div className={styles.fieldGroup}>
-                    <label className={styles.label}>Tarifa Média de Energia (R$/kWh) *</label>
+                    <label htmlFor="energyTariff" className={styles.label}>Tarifa Média de Energia (R$/kWh) *</label>
                     <Input
                         {...register('energyTariff')}
+                        id="energyTariff"
                         type="number"
                         step="0.01"
                         min="0"
@@ -177,11 +189,14 @@ export default function AutomaticBudgetConfig() {
                     <tbody>
                         {propertyRows.map(({ label, field }) => (
                             <tr key={field}>
-                                <td>{label}</td>
+                                <td>
+                                    <label htmlFor={field}>{label}</label>
+                                </td>
                                 <td>
                                     <div className={styles.inputWrapper}>
                                         <Input
                                             {...register(field)}
+                                            id={field}
                                             type="number"
                                             step="0.01"
                                             min="0"
@@ -215,11 +230,14 @@ export default function AutomaticBudgetConfig() {
                     <tbody>
                         {roofRows.map(({ label, field }) => (
                             <tr key={field}>
-                                <td>{label}</td>
+                                <td>
+                                    <label htmlFor={field}>{label}</label>
+                                </td>
                                 <td>
                                     <div className={styles.inputWrapper}>
                                         <Input
                                             {...register(field)}
+                                            id={field}
                                             type="number"
                                             step="0.01"
                                             min="0"
