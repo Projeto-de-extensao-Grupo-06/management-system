@@ -55,9 +55,8 @@ export default function Calendar({
                 events={events}
                 editable={false}
                 displayEventTime={false}
-                dayMaxEvents={true}
-                height="65vh"
-                contentHeight="auto"
+                dayMaxEvents={2}
+                height="auto"
                 eventClick={handleEventClick}
                 dateClick={handleDateClick}
                 eventContent={(eventInfo) => (
