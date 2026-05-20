@@ -93,6 +93,21 @@
     overflow-wrap: anywhere;
 }
 
+.urlLink {
+    color: #ff6a00;
+    text-decoration: underline;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
+    font-size: 13px;
+}
+
+.urlLink:hover {
+    color: #cc5200;
+}
+
 
 .input {
     width: 100%;
