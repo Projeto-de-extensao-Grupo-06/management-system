@@ -18,6 +18,8 @@ const useAuthStore = create<AuthState>((set) => ({
         const firstName = getCookie('userFirstName');
         const lastName = getCookie('userLastName');
         const authoritiesCookie = getCookie('userAuthorities');
+        // Cookie opcional enviado pelo backend com o mainModule do perfil do usuário
+        const mainModule = getCookie('userMainModule') ?? undefined;
 
         if (firstName && lastName && authoritiesCookie) {
             try {
@@ -28,7 +30,8 @@ const useAuthStore = create<AuthState>((set) => ({
                     user: {
                         firstName,
                         lastName,
-                        authorities
+                        authorities,
+                        mainModule,
                     },
                     isAuthenticated: true
                 });
@@ -42,6 +45,7 @@ const useAuthStore = create<AuthState>((set) => ({
         deleteCookie('userFirstName');
         deleteCookie('userLastName');
         deleteCookie('userAuthorities');
+        deleteCookie('userMainModule');
         set({ user: null, isAuthenticated: false });
     },
 }));

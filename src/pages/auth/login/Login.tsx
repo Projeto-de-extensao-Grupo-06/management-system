@@ -6,6 +6,22 @@ import authService from "../../../services/AuthService";
 import useAuthStore from "../../../store/useAuthStore";
 import styles from "./Login.module.css";
 
+/**
+ * Mapeia o mainModule do perfil de permissão para a rota correspondente.
+ * O fallback padrão é /agenda quando o módulo não está mapeado ou está ausente.
+ */
+function resolveRedirectPath(mainModule?: string): string {
+  const moduleRouteMap: Record<string, string> = {
+    SCHEDULE:      '/agenda',
+    PROJECT:       '/projetos',
+    CLIENT:        '/clientes',
+    BUDGET:        '/projetos',
+    MATERIAL:      '/materiais',
+    CONFIGURATION: '/configuracoes',
+  };
+  return moduleRouteMap[mainModule ?? ''] ?? '/agenda';
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,12 +30,14 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const checkAuth = useAuthStore((state) => state.checkAuth);
+  const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const auth = new authService();
 
-  if (isAuthenticated) {
-    navigate("/clientes");
+  // Redireciona se já estiver autenticado
+  if (isAuthenticated && user) {
+    navigate(resolveRedirectPath(user.mainModule));
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -32,7 +50,9 @@ export default function LoginPage() {
       .then(() => {
         checkAuth();
         setLoading(false);
-        navigate("/clientes");
+        // Lê o mainModule do store após checkAuth popular os cookies
+        const currentUser = useAuthStore.getState().user;
+        navigate(resolveRedirectPath(currentUser?.mainModule));
       })
       .catch((err) => {
         if (!err.response) {

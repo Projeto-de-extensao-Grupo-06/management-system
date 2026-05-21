@@ -9,13 +9,16 @@ import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
 import SecureComponent from "../../components/security/SecureComponent";
 import { Button } from "../../components/ui/Form";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
+import type { ProjectStatusType } from "../../interfaces/enum/ProjectStatus";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
+import ProjectService from "../../services/ProjectService";
 import ScheduleService from "../../services/ScheduleService";
 import Swal from 'sweetalert2';
 import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
+const projectService = new ProjectService();
 
 export default function Schedule() {
 
@@ -88,6 +91,23 @@ export default function Schedule() {
             await service.createEvent(data);
             await fetchEvents(currentMonth, currentYear);
             setIsCreateOpen(false);
+
+            // Atualiza o status do projeto vinculado conforme o tipo de visita agendada
+            if (data.projectId) {
+                const statusMap: Partial<Record<ScheduleSchemaType['type'], ProjectStatusType>> = {
+                    TECHNICAL_VISIT: 'SCHEDULED_TECHNICAL_VISIT',
+                    INSTALL_VISIT:   'SCHEDULED_INSTALLING_VISIT',
+                };
+                const newStatus = statusMap[data.type];
+                if (newStatus) {
+                    try {
+                        await projectService.updateProject(data.projectId, { status: newStatus });
+                    } catch (statusErr) {
+                        console.warn('Agendamento criado, mas não foi possível atualizar o status do projeto:', statusErr);
+                    }
+                }
+            }
+
             Swal.fire({
                 icon: 'success',
                 title: 'Sucesso',

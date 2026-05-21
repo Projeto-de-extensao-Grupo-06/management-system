@@ -46,7 +46,7 @@ export default function ExpandMaterial({ materialId, name, description, budgetMa
                 rel="noopener noreferrer"
                 title={u.url}
             >
-                {u.url.length > 40 ? `${u.url.substring(0, 40)}…` : u.url}
+                {u.url.length > 25 ? `${u.url.substring(0, 25)}…` : u.url}
             </a>
 
             <span className="materialPrice">{u.price.toLocaleString("pt-br", { style: "currency", currency: "BRL" })}</span>

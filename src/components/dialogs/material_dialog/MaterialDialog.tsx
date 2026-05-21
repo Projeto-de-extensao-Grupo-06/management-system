@@ -213,8 +213,8 @@ const MaterialDialog = forwardRef<MaterialDialogRef, MaterialDialogProps>(
                   ) : (
                     links.map((link) => (
                       <div key={link.id} className={styles.linkCard}>
-                        <a href={link.url} target="_blank" rel="noreferrer" className={styles.linkAnchor}>
-                          <FontAwesomeIcon icon={faLink} /> {link.url}
+                        <a href={link.url} target="_blank" rel="noreferrer" className={styles.linkAnchor} title={link.url}>
+                          <FontAwesomeIcon icon={faLink} /> {link.url.length > 25 ? `${link.url.substring(0, 25)}…` : link.url}
                         </a>
                         <span className={styles.linkPrice}>
                           R$ {link.price.toFixed(2)}
