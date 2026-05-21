@@ -5,6 +5,7 @@ import {
   faUser,
   faCalculator,
   faFolder,
+  faSlidersH
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useState } from "react";
@@ -17,8 +18,8 @@ import styles from "./Config.module.css";
 export default function Config() {
 
   useEffect(() => {
-  document.title = "Configurações | SolarWay";
-}, []);
+    document.title = "Configurações | SolarWay";
+  }, []);
 
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,31 +37,38 @@ export default function Config() {
       title: "Parâmetros de Orçamento Automático",
       description: "Defina regras de precificação",
       icon: faCalculator,
+      path: "/configuracoes/parametros-orcamento-automatico",
+    },
+      {
+      id: 3,
+      title: "Parâmetros de Orçamento",
+      description: "Gerencie parâmetros e custos utilizados no sistema",
+      icon: faSlidersH,
       path: "/configuracoes/parametros-orcamento",
     },
     {
-      id: 3,
+      id: 4,
       title: "Colaboradores",
       description: "Gerencie usuários e permissões",
       icon: faUsers,
       path: "/configuracoes/colaboradores",
     },
     {
-      id: 4,
+      id: 5,
       title: "Portfólio",
       description: "Projetos que aparecerão no site institucional",
       icon: faFolder,
       path: "/configuracoes/portfolio",
     },
     {
-      id: 5,
+      id: 6,
       title: "Meu Perfil",
       description: "Edite informações pessoais",
       icon: faUser,
       path: "/configuracoes/config-perfil",
     },
     {
-      id: 6,
+      id: 7,
       title: "Redefinir Senha",
       description: "Altere sua senha de acesso",
       icon: faCog,

@@ -133,6 +133,7 @@ export default function BudgetParameters() {
     return (
         <PageLayout
             title="Parâmetros de Orçamento"
+            backButton={true}
             titleAccessory={
                 <span className={styles.count}>({totalElements ?? 0})</span>
             }
