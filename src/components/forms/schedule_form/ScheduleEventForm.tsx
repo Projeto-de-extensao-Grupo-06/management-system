@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import type { ScheduleSchemaType } from '../../../schemas/scheduleSchema';
-import { scheduleSchema } from '../../../schemas/scheduleSchema';
+import { scheduleSchema, scheduleEditSchema } from '../../../schemas/scheduleSchema';
 import ProjectsService from '../../../services/ProjectsService';
 import { Select, SelectOption, Input, AutoCompleteSelect } from '../../ui/Form';
 import type { AutoCompleteSelectOption } from '../../ui/Form';
@@ -16,13 +16,16 @@ export interface ScheduleFormProps {
     onSubmit: (data: ScheduleSchemaType) => void;
     defaultValues?: Partial<ScheduleSchemaType>;
     readOnly?: boolean;
+    mode?: 'create' | 'edit';
 }
 
 const projectsService = new ProjectsService();
 
 const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
-    ({ onSubmit, defaultValues, readOnly = false }, ref) => {
+    ({ onSubmit, defaultValues, readOnly = false, mode = 'create' }, ref) => {
         const [projectOptions, setProjectOptions] = useState<AutoCompleteSelectOption[]>([]);
+
+        const resolver = mode === 'edit' ? zodResolver(scheduleEditSchema) : zodResolver(scheduleSchema);
 
         const {
             register,
@@ -33,7 +36,7 @@ const ScheduleEventForm = forwardRef<ScheduleFormRef, ScheduleFormProps>(
             control,
             formState: { errors },
         } = useForm<ScheduleSchemaType>({
-            resolver: zodResolver(scheduleSchema),
+            resolver,
             defaultValues: {
                 type: 'TECHNICAL_VISIT',
                 start: '',

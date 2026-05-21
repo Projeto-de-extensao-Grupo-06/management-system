@@ -35,13 +35,10 @@ function toCalendarEvent(s: Schedule): CalendarEvent {
 }
 
 function toISODateTime(date: string, time: string): string {
-  // Monta a data/hora local e converte para UTC antes de enviar ao backend.
-  // O backend Java usa LocalDateTime sem fuso e compara com now() UTC,
-  // então precisamos enviar sempre em UTC para evitar rejeições incorretas.
-  const localDate = new Date(`${date}T${time || '00:00'}:00`);
-  // Formata como "YYYY-MM-DDTHH:mm:ss" em UTC (sem o 'Z' final, pois o backend espera LocalDateTime)
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${localDate.getUTCFullYear()}-${pad(localDate.getUTCMonth() + 1)}-${pad(localDate.getUTCDate())}T${pad(localDate.getUTCHours())}:${pad(localDate.getUTCMinutes())}:00`;
+  // Envia o horário exatamente como o usuário digitou (hora local).
+  // O backend usa LocalDateTime (sem fuso) e armazena o valor recebido literalmente.
+  // Converter para UTC adicionaria/subtrairia horas desnecessariamente.
+  return `${date}T${time || '00:00'}:00`;
 }
 
 export default class ScheduleService {
@@ -95,11 +92,15 @@ export default class ScheduleService {
   }
 
   async updateEvent(id: string, data: ScheduleSchemaType): Promise<CalendarEvent> {
+    const endDateValue = data.endDate && data.endDate.trim() !== ''
+      ? toISODateTime(data.endDate, data.time)
+      : null; // null explícito para limpar a data de término no backend
+
     const payload = {
       title: data.title,
       description: data.description ?? '',
       startDate: toISODateTime(data.start, data.time),
-      endDate: data.endDate ? toISODateTime(data.endDate, data.time) : undefined,
+      endDate: endDateValue,
       type: data.type,
       projectId: data.projectId
     };

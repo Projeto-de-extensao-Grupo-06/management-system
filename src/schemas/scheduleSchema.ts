@@ -8,21 +8,17 @@ const todayStr = () => {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 };
 
-export const scheduleSchema = z.object({
+// Schema base — campos comuns sem validação de data passada
+const scheduleBaseSchema = z.object({
     title: z.string().min(1, 'O título é obrigatório'),
     type: z.enum(['TECHNICAL_VISIT', 'INSTALL_VISIT', 'NOTE']),
-    start: z.string().min(1, 'Data de início é obrigatória').refine((val) => {
-        return val >= todayStr();
-    }, { message: 'A data não pode ser no passado' }),
-    endDate: z.string().optional().refine((val) => {
-        if (!val) return true;
-        return val >= todayStr();
-    }, { message: 'A data de término não pode ser no passado' }),
+    start: z.string().min(1, 'Data de início é obrigatória'),
+    endDate: z.string().optional(),
     time: z.string().min(1, 'Horário é obrigatório').regex(/^\d{2}:\d{2}$/, 'Horário inválido (use HH:MM)'),
     projectId: z.number().nullable().optional(),
     description: z.string().optional(),
 }).refine((data) => {
-    if (data.endDate && data.endDate < data.start) {
+    if (data.endDate && data.endDate.trim() !== '' && data.endDate < data.start) {
         return false;
     }
     return true;
@@ -39,7 +35,28 @@ export const scheduleSchema = z.object({
     path: ['projectId'],
 });
 
-export type ScheduleSchemaType = z.infer<typeof scheduleSchema>;
+// Schema para CRIAÇÃO — data de início não pode ser no passado
+export const scheduleSchema = scheduleBaseSchema.superRefine((data, ctx) => {
+    if (data.start < todayStr()) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'A data de início não pode ser no passado',
+            path: ['start'],
+        });
+    }
+    if (data.endDate && data.endDate.trim() !== '' && data.endDate < todayStr()) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'A data de término não pode ser no passado',
+            path: ['endDate'],
+        });
+    }
+});
+
+// Schema para EDIÇÃO — permite datas passadas (evento já existente)
+export const scheduleEditSchema = scheduleBaseSchema;
+
+export type ScheduleSchemaType = z.infer<typeof scheduleBaseSchema>;
 
 export const scheduleDefaultValues = (): Partial<ScheduleSchemaType> => ({
     title: '',

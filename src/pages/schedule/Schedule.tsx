@@ -88,12 +88,25 @@ export default function Schedule() {
             await service.createEvent(data);
             await fetchEvents(currentMonth, currentYear);
             setIsCreateOpen(false);
-            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento criado!', timer: 2000, showConfirmButton: false });
-        } catch (error: any) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso',
+                text: 'Agendamento criado!',
+                timer: 2000,
+                showConfirmButton: false,
+                customClass: { container: 'swal-above-modal' },
+            });
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string; messages?: string[] } } };
+            const msg =
+                err?.response?.data?.messages?.[0] ||
+                err?.response?.data?.message ||
+                'Não foi possível criar o agendamento.';
             Swal.fire({
                 icon: 'error',
-                title: 'Erro',
-                text: error?.response?.data?.message || 'Não foi possível criar o agendamento',
+                title: 'Erro ao criar agendamento',
+                text: msg,
+                customClass: { container: 'swal-above-modal' },
             });
         }
     };
@@ -110,12 +123,25 @@ export default function Schedule() {
             await fetchEvents(currentMonth, currentYear);
             setIsEditOpen(false);
             setSelectedEvent(null);
-            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento atualizado!', timer: 2000, showConfirmButton: false });
-        } catch (error: any) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso',
+                text: 'Agendamento atualizado!',
+                timer: 2000,
+                showConfirmButton: false,
+                customClass: { container: 'swal-above-modal' },
+            });
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string; messages?: string[] } } };
+            const msg =
+                err?.response?.data?.messages?.[0] ||
+                err?.response?.data?.message ||
+                'Não foi possível atualizar o agendamento.';
             Swal.fire({
                 icon: 'error',
-                title: 'Erro',
-                text: error?.response?.data?.message || 'Não foi possível atualizar o agendamento',
+                title: 'Erro ao atualizar agendamento',
+                text: msg,
+                customClass: { container: 'swal-above-modal' },
             });
         }
     };

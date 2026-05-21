@@ -66,6 +66,7 @@ export default function ScheduleFormModal({
                 ref={formRef}
                 onSubmit={onSubmit}
                 defaultValues={defaultValues}
+                mode={mode}
             />
         </Modal>
     );
