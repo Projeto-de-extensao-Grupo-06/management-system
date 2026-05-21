@@ -12,6 +12,7 @@ import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
 import ScheduleService from "../../services/ScheduleService";
+import Swal from 'sweetalert2';
 import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
@@ -83,9 +84,18 @@ export default function Schedule() {
     };
 
     const handleCreate = async (data: ScheduleSchemaType) => {
-        await service.createEvent(data);
-        await fetchEvents(currentMonth, currentYear);
-        setIsCreateOpen(false);
+        try {
+            await service.createEvent(data);
+            await fetchEvents(currentMonth, currentYear);
+            setIsCreateOpen(false);
+            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento criado!', timer: 2000, showConfirmButton: false });
+        } catch (error: any) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: error?.response?.data?.message || 'Não foi possível criar o agendamento',
+            });
+        }
     };
 
     const handleOpenEdit = () => {
@@ -95,10 +105,19 @@ export default function Schedule() {
 
     const handleEdit = async (data: ScheduleSchemaType) => {
         if (!selectedEvent) return;
-        await service.updateEvent(selectedEvent.id, data);
-        await fetchEvents(currentMonth, currentYear);
-        setIsEditOpen(false);
-        setSelectedEvent(null);
+        try {
+            await service.updateEvent(selectedEvent.id, data);
+            await fetchEvents(currentMonth, currentYear);
+            setIsEditOpen(false);
+            setSelectedEvent(null);
+            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento atualizado!', timer: 2000, showConfirmButton: false });
+        } catch (error: any) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: error?.response?.data?.message || 'Não foi possível atualizar o agendamento',
+            });
+        }
     };
 
     const handleDelete = async () => {

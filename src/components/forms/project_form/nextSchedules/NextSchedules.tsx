@@ -1,11 +1,14 @@
-import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 import type { Schedule } from "../../../../interfaces/types/Schedule";
 import type { ScheduleSchemaType } from "../../../../schemas/scheduleSchema";
+import { scheduleDefaultValues } from "../../../../schemas/scheduleSchema";
 import ScheduleService from "../../../../services/ScheduleService";
 import ScheduleFormModal from "../../../dialogs/schedule/ScheduleFormModal";
 import SecureComponent from "../../../security/SecureComponent";
+import { Button } from "../../../ui/Form";
 import styles from "./NextSchedules.module.css";
 import ScheduleCard from "./partials/ScheduleCard";
 
@@ -19,7 +22,8 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     async function fetchSchedules() {
         try {
@@ -38,27 +42,56 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
 
     function openEditModal(schedule: Schedule) {
         setEditingSchedule(schedule);
-        setIsModalOpen(true);
+        setIsEditModalOpen(true);
     }
 
-    function closeModal() {
-        setIsModalOpen(false);
+    function closeEditModal() {
+        setIsEditModalOpen(false);
         setEditingSchedule(null);
+    }
+
+    function openCreateModal() {
+        setIsCreateModalOpen(true);
+    }
+
+    function closeCreateModal() {
+        setIsCreateModalOpen(false);
     }
 
     async function handleEditSubmit(data: ScheduleSchemaType) {
         if (!editingSchedule) return;
         try {
             await scheduleService.updateEvent(String(editingSchedule.id), data);
-            closeModal();
+            closeEditModal();
             fetchSchedules();
-        } catch (error) {
-            console.error("Erro ao atualizar compromisso", error);
+            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento atualizado!', timer: 2000, showConfirmButton: false });
+        } catch (error: any) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: error?.response?.data?.message || 'Erro ao atualizar compromisso',
+            });
+        }
+    }
+
+    async function handleCreateSubmit(data: ScheduleSchemaType) {
+        try {
+            // Force the projectId from the current project page
+            const payload = { ...data, projectId };
+            await scheduleService.createEvent(payload);
+            closeCreateModal();
+            fetchSchedules();
+            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento criado!', timer: 2000, showConfirmButton: false });
+        } catch (error: any) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: error?.response?.data?.message || 'Erro ao criar compromisso',
+            });
         }
     }
 
     function buildDefaultValues(schedule: Schedule): Partial<ScheduleSchemaType> {
-        // startDate vem como "2025-05-20T21:00:00" — extrair date e time
         const dateStr = schedule.startDate ? schedule.startDate.substring(0, 10) : "";
         const timeStr = schedule.startDate ? schedule.startDate.substring(11, 16) : "";
         const endDateStr = schedule.endDate ? schedule.endDate.substring(0, 10) : "";
@@ -74,6 +107,8 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
         };
     }
 
+    const createDefaults = { ...scheduleDefaultValues(), projectId };
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.header}>
@@ -81,6 +116,15 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
                     <FontAwesomeIcon icon={faCalendar} />
                     <span>Próximos compromissos</span>
                 </div>
+                <SecureComponent permissions={["SCHEDULE_WRITE"]}>
+                    <Button 
+                        icon={<FontAwesomeIcon icon={faPlus} />}
+                        text="Novo"
+                        onClick={openCreateModal}
+                        width="fit-content"
+                        style={{ padding: '8px 16px' }}
+                    />
+                </SecureComponent>
             </div>
 
             {loading && <p>Carregando...</p>}
@@ -112,13 +156,21 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
 
             {editingSchedule && (
                 <ScheduleFormModal
-                    isOpen={isModalOpen}
-                    onClose={closeModal}
+                    isOpen={isEditModalOpen}
+                    onClose={closeEditModal}
                     onSubmit={handleEditSubmit}
                     defaultValues={buildDefaultValues(editingSchedule)}
                     mode="edit"
                 />
             )}
+
+            <ScheduleFormModal
+                isOpen={isCreateModalOpen}
+                onClose={closeCreateModal}
+                onSubmit={handleCreateSubmit}
+                defaultValues={createDefaults}
+                mode="create"
+            />
         </div>
     );
 }
