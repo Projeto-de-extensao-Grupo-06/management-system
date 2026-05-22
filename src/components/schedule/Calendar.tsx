@@ -4,6 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import type { DateClickArg } from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
+import { useEffect, useRef } from "react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import EventPopover from "./EventPopover";
@@ -24,6 +25,17 @@ export default function Calendar({
     onDatesSet,
     popoverDisabled = false,
 }: CalendarProps) {
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!wrapperRef.current) return;
+        const observer = new ResizeObserver(() => {
+            window.dispatchEvent(new Event("resize"));
+        });
+        observer.observe(wrapperRef.current);
+        return () => observer.disconnect();
+    }, []);
+
     const handleEventClick = (info: EventClickArg) => {
         const fullEvent = events.find((e) => e.id === info.event.id);
         if (fullEvent) {
@@ -42,7 +54,7 @@ export default function Calendar({
     };
 
     return (
-        <div className="calendar-wrapper">
+        <div className="calendar-wrapper" ref={wrapperRef}>
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
