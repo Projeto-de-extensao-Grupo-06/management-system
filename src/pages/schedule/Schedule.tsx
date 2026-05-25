@@ -1,6 +1,7 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 import ScheduleDetailsModal from "../../components/dialogs/schedule/ScheduleDetailsModal";
 import ScheduleFormModal from "../../components/dialogs/schedule/ScheduleFormModal";
 import PageLayout from "../../components/layout/PageLayout";
@@ -8,13 +9,12 @@ import Calendar from "../../components/schedule/Calendar";
 import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
 import SecureComponent from "../../components/security/SecureComponent";
 import { Button } from "../../components/ui/Form";
-import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ProjectStatusType } from "../../interfaces/enum/ProjectStatus";
+import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
 import ProjectService from "../../services/ProjectService";
 import ScheduleService from "../../services/ScheduleService";
-import Swal from 'sweetalert2';
 import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
