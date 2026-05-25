@@ -1,3 +1,4 @@
+import re
 from e2e.pages.login_page import LoginPage
 from e2e.config import Config
 
@@ -5,8 +6,8 @@ def test_successful_login(page):
     login_page = LoginPage(page)
     login_page.login(Config.TEST_USER_EMAIL, Config.TEST_USER_PASSWORD)
     
-    # Wait for any valid dashboard route (resolves dynamic redirect based on mainModule)
-    dashboard_pattern = r".*/(clientes|agenda|projetos|materiais|configuracoes).*"
+    # Use a compiled regex to ensure Playwright treats it as a pattern, not a glob
+    dashboard_pattern = re.compile(r".*/(clientes|agenda|projetos|materiais|configuracoes).*")
     page.wait_for_url(dashboard_pattern)
     
     assert any(route in page.url for route in ["/clientes", "/agenda", "/projetos", "/materiais", "/configuracoes"])

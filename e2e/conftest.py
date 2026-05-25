@@ -1,4 +1,5 @@
 import pytest
+import re
 from playwright.sync_api import sync_playwright
 from e2e.config import Config
 from e2e.pages.login_page import LoginPage
@@ -27,8 +28,8 @@ def authenticated_page(page):
     login_page = LoginPage(page)
     login_page.login(Config.TEST_USER_EMAIL, Config.TEST_USER_PASSWORD)
     
-    # Wait for any valid dashboard route
-    dashboard_pattern = r".*/(clientes|agenda|projetos|materiais|configuracoes).*"
+    # Use a compiled regex to ensure Playwright treats it as a pattern, not a glob
+    dashboard_pattern = re.compile(r".*/(clientes|agenda|projetos|materiais|configuracoes).*")
     page.wait_for_url(dashboard_pattern)
     
     return page
