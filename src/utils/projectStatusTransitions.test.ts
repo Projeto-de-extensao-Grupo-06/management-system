@@ -9,14 +9,14 @@ describe('Project Status Transitions (Frontend Logic)', () => {
       states.forEach((target: any) => {
         const result = validateStatusTransition('COMPLETED', target);
         expect(result.type).toBe('blocked');
-        expect(result.message).toContain('status final');
+        expect((result as any).message).toContain('status final');
       });
     });
 
     it('should block all manual transitions from AWAITING_RETRY', () => {
       const result = validateStatusTransition('AWAITING_RETRY', 'RETRYING' as any);
       expect(result.type).toBe('blocked');
-      expect(result.message).toContain('único passo possível é aguardar');
+      expect((result as any).message).toContain('único passo possível é aguardar');
     });
   });
 
@@ -24,13 +24,13 @@ describe('Project Status Transitions (Frontend Logic)', () => {
     it('should return a warning when transitioning from NEW to SCHEDULED_TECHNICAL_VISIT', () => {
       const result = validateStatusTransition('NEW', 'SCHEDULED_TECHNICAL_VISIT');
       expect(result.type).toBe('warning');
-      expect(result.message).toContain('necessário que haja uma visita técnica cadastrada');
+      expect((result as any).message).toContain('necessário que haja uma visita técnica cadastrada');
     });
 
     it('should return a warning when transitioning from INSTALLED to COMPLETED', () => {
       const result = validateStatusTransition('INSTALLED', 'COMPLETED');
       expect(result.type).toBe('warning');
-      expect(result.message).toContain('documento de homologação precisa estar anexado');
+      expect((result as any).message).toContain('documento de homologação precisa estar anexado');
     });
   });
 
