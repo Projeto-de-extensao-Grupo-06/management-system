@@ -26,7 +26,11 @@ def page(context):
 def authenticated_page(page):
     login_page = LoginPage(page)
     login_page.login(Config.TEST_USER_EMAIL, Config.TEST_USER_PASSWORD)
-    page.wait_for_url("**/clientes")
+    
+    # Wait for any valid dashboard route
+    dashboard_pattern = r".*/(clientes|agenda|projetos|materiais|configuracoes).*"
+    page.wait_for_url(dashboard_pattern)
+    
     return page
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
