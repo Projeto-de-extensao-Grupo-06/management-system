@@ -198,7 +198,7 @@
 
     /* Célula de dia com altura mínima para não ficar espremida */
     .fc-daygrid-day-frame {
-        min-height: 52px !important;
+        min-height: 80px !important;
     }
 
     /* Botão "+N mais" — aumenta área de toque */

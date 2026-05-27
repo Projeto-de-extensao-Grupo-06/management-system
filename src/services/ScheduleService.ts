@@ -35,6 +35,9 @@ function toCalendarEvent(s: Schedule): CalendarEvent {
 }
 
 function toISODateTime(date: string, time: string): string {
+  // Envia o horário exatamente como o usuário digitou (hora local).
+  // O backend usa LocalDateTime (sem fuso) e armazena o valor recebido literalmente.
+  // Converter para UTC adicionaria/subtrairia horas desnecessariamente.
   return `${date}T${time || '00:00'}:00`;
 }
 
@@ -89,11 +92,15 @@ export default class ScheduleService {
   }
 
   async updateEvent(id: string, data: ScheduleSchemaType): Promise<CalendarEvent> {
+    const endDateValue = data.endDate && data.endDate.trim() !== ''
+      ? toISODateTime(data.endDate, data.time)
+      : null; // null explícito para limpar a data de término no backend
+
     const payload = {
       title: data.title,
       description: data.description ?? '',
       startDate: toISODateTime(data.start, data.time),
-      endDate: data.endDate ? toISODateTime(data.endDate, data.time) : undefined,
+      endDate: endDateValue,
       type: data.type,
       projectId: data.projectId
     };

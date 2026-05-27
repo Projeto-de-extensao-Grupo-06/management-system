@@ -1,6 +1,7 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 import ScheduleDetailsModal from "../../components/dialogs/schedule/ScheduleDetailsModal";
 import ScheduleFormModal from "../../components/dialogs/schedule/ScheduleFormModal";
 import PageLayout from "../../components/layout/PageLayout";
@@ -8,13 +9,16 @@ import Calendar from "../../components/schedule/Calendar";
 import ScheduleKpiBoard from "../../components/schedule/ScheduleKpiBoard";
 import SecureComponent from "../../components/security/SecureComponent";
 import { Button } from "../../components/ui/Form";
+import type { ProjectStatusType } from "../../interfaces/enum/ProjectStatus";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
+import ProjectService from "../../services/ProjectService";
 import ScheduleService from "../../services/ScheduleService";
 import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
+const projectService = new ProjectService();
 
 export default function Schedule() {
 
@@ -83,9 +87,63 @@ export default function Schedule() {
     };
 
     const handleCreate = async (data: ScheduleSchemaType) => {
-        await service.createEvent(data);
-        await fetchEvents(currentMonth, currentYear);
-        setIsCreateOpen(false);
+        try {
+            await service.createEvent(data);
+            await fetchEvents(currentMonth, currentYear);
+            setIsCreateOpen(false);
+
+            // Atualiza o status do projeto vinculado conforme o tipo de visita agendada
+            if (data.projectId) {
+                const statusMap: Partial<Record<ScheduleSchemaType['type'], ProjectStatusType>> = {
+                    TECHNICAL_VISIT: 'SCHEDULED_TECHNICAL_VISIT',
+                    INSTALL_VISIT:   'SCHEDULED_INSTALLING_VISIT',
+                };
+                const newStatus = statusMap[data.type];
+                if (newStatus) {
+                    try {
+                        await projectService.updateProject(data.projectId, { status: newStatus });
+                    } catch (statusErr) {
+                        console.warn('Agendamento criado, mas não foi possível atualizar o status do projeto:', statusErr);
+                    }
+                }
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso',
+                text: 'Agendamento criado!',
+                timer: 2000,
+                showConfirmButton: false,
+                customClass: { container: 'swal-above-modal' },
+            });
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string; messages?: string[]; validationErrors?: { field: string; message: string }[] } } };
+            const validationErrors = err?.response?.data?.validationErrors;
+            
+            let validationMsg = '';
+            if (validationErrors && validationErrors.length > 0) {
+                const translatedErrors = validationErrors.map(v => {
+                    if (v.field === 'startDate') return 'A data de início não pode estar no passado.';
+                    if (v.field === 'endDate') return 'A data de término não pode estar no passado.';
+                    if (v.field === 'title') return 'O título é obrigatório.';
+                    if (v.field === 'type') return 'O tipo de evento é obrigatório.';
+                    return v.message;
+                });
+                validationMsg = translatedErrors.join('\n');
+            }
+
+            const msg =
+                validationMsg ||
+                err?.response?.data?.messages?.[0] ||
+                err?.response?.data?.message ||
+                'Não foi possível criar o agendamento.';
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao criar agendamento',
+                text: msg,
+                customClass: { container: 'swal-above-modal' },
+            });
+        }
     };
 
     const handleOpenEdit = () => {
@@ -95,10 +153,47 @@ export default function Schedule() {
 
     const handleEdit = async (data: ScheduleSchemaType) => {
         if (!selectedEvent) return;
-        await service.updateEvent(selectedEvent.id, data);
-        await fetchEvents(currentMonth, currentYear);
-        setIsEditOpen(false);
-        setSelectedEvent(null);
+        try {
+            await service.updateEvent(selectedEvent.id, data);
+            await fetchEvents(currentMonth, currentYear);
+            setIsEditOpen(false);
+            setSelectedEvent(null);
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso',
+                text: 'Agendamento atualizado!',
+                timer: 2000,
+                showConfirmButton: false,
+                customClass: { container: 'swal-above-modal' },
+            });
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string; messages?: string[]; validationErrors?: { field: string; message: string }[] } } };
+            const validationErrors = err?.response?.data?.validationErrors;
+            
+            let validationMsg = '';
+            if (validationErrors && validationErrors.length > 0) {
+                const translatedErrors = validationErrors.map(v => {
+                    if (v.field === 'startDate') return 'A data de início não pode estar no passado.';
+                    if (v.field === 'endDate') return 'A data de término não pode estar no passado.';
+                    if (v.field === 'title') return 'O título é obrigatório.';
+                    if (v.field === 'type') return 'O tipo de evento é obrigatório.';
+                    return v.message;
+                });
+                validationMsg = translatedErrors.join('\n');
+            }
+
+            const msg =
+                validationMsg ||
+                err?.response?.data?.messages?.[0] ||
+                err?.response?.data?.message ||
+                'Não foi possível atualizar o agendamento.';
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao atualizar agendamento',
+                text: msg,
+                customClass: { container: 'swal-above-modal' },
+            });
+        }
     };
 
     const handleDelete = async () => {

@@ -88,12 +88,20 @@ export default function BudgetDetails() {
       return;
     }
 
-    if (!isEditing && budget.id > 0) {
-      updateBudget();
-      updateFixedParameters();
-      updatePersonalizedParameters();
-      updateMaterials();
+    async function saveAll() {
+      if (!isEditing && budget.id > 0) {
+        try {
+          await updateBudget();
+          await updateFixedParameters();
+          await updatePersonalizedParameters();
+          await updateMaterials();
+        } catch (error) {
+          console.error("Erro ao salvar orçamento", error);
+        }
+      }
     }
+
+    saveAll();
   }, [isEditing]);
 
   useEffect(() => {

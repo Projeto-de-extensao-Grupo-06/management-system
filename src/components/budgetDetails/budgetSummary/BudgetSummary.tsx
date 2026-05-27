@@ -121,7 +121,7 @@ export default function BudgetSummary({
                                 Baixar PDF
                             </button>
 
-                            <button className={styles.botButton}>Enviar via Bot</button>
+
                         </>
                     )
                 }

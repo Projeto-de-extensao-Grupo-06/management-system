@@ -8,7 +8,7 @@ import GlobalLoader from "./components/ui/GlobalLoader";
 import AppLayout from "./layouts/app_layout/AppLayout";
 import ForgetPasswordLayout from "./layouts/login_layout/ForgetPasswordLayout";
 import LoginLayout from "./layouts/login_layout/LoginLayout";
-import Analysis from "./pages/analysis/Analysis";
+
 import { ForgetPassword } from "./pages/auth/forgetPassword/ForgetPassword";
 import Login from "./pages/auth/login/Login";
 import BudgetDetails from "./pages/Budget/BudgetDetails";
@@ -91,10 +91,7 @@ function App() {
                 element={<PermissionRoute permissions={["PROJECT_READ"]} element={<ProjectDetails />} />}
               />
 
-              <Route
-                path="/analise"
-                element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Analysis />} />}
-              />
+
 
               <Route
                 path="/projetos"

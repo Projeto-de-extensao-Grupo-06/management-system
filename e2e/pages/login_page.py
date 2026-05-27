@@ -12,8 +12,9 @@ class LoginPage(BasePage):
         self.navigate("/login")
         self.page.wait_for_load_state("networkidle")
         
-        # If redirected to /clientes, it means we're already logged in. Logout first.
-        if "/clientes" in self.page.url:
+        # If already on a dashboard route, logout first.
+        dashboard_routes = ["/clientes", "/agenda", "/projetos", "/materiais", "/configuracoes"]
+        if any(route in self.page.url for route in dashboard_routes):
             self.logout()
             self.navigate("/login")
             

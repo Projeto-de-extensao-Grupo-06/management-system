@@ -44,8 +44,8 @@ export default function MaterialCard({ material, onChange, onDelete, editing }: 
                     title={material.url}
                     className={styles.urlLink}
                 >
-                    {material.url.length > 30
-                        ? `${material.url.substring(0, 30)}…`
+                    {material.url.length > 25
+                        ? `${material.url.substring(0, 25)}…`
                         : material.url}
                 </a>
 

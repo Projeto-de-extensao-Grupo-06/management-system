@@ -109,3 +109,8 @@ body,
   height: 100%;
   width: 100%;
 }
+
+/* SweetAlert acima de modais */
+.swal2-container.swal-above-modal {
+  z-index: 99999 !important;
+}
