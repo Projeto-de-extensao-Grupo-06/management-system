@@ -6,6 +6,7 @@ import type { Schedule } from "../../../../interfaces/types/Schedule";
 import type { ScheduleSchemaType } from "../../../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../../../schemas/scheduleSchema";
 import ScheduleService from "../../../../services/ScheduleService";
+import { getErrorMessage } from "../../../../utils/errorTranslator";
 import ScheduleFormModal from "../../../dialogs/schedule/ScheduleFormModal";
 import SecureComponent from "../../../security/SecureComponent";
 import { Button } from "../../../ui/Form";
@@ -64,12 +65,21 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
             await scheduleService.updateEvent(String(editingSchedule.id), data);
             closeEditModal();
             fetchSchedules();
-            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento atualizado!', timer: 2000, showConfirmButton: false });
+            Swal.fire({ 
+                icon: 'success', 
+                title: 'Sucesso', 
+                text: 'Agendamento atualizado!', 
+                timer: 2000, 
+                showConfirmButton: false,
+                customClass: { container: 'swal-above-modal' }
+            });
         } catch (error: any) {
+            const msg = getErrorMessage(error);
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
-                text: error?.response?.data?.message || 'Erro ao atualizar compromisso',
+                text: msg,
+                customClass: { container: 'swal-above-modal' }
             });
         }
     }
@@ -81,12 +91,21 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
             await scheduleService.createEvent(payload);
             closeCreateModal();
             fetchSchedules();
-            Swal.fire({ icon: 'success', title: 'Sucesso', text: 'Agendamento criado!', timer: 2000, showConfirmButton: false });
+            Swal.fire({ 
+                icon: 'success', 
+                title: 'Sucesso', 
+                text: 'Agendamento criado!', 
+                timer: 2000, 
+                showConfirmButton: false,
+                customClass: { container: 'swal-above-modal' }
+            });
         } catch (error: any) {
+            const msg = getErrorMessage(error);
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
-                text: error?.response?.data?.message || 'Erro ao criar compromisso',
+                text: msg,
+                customClass: { container: 'swal-above-modal' }
             });
         }
     }

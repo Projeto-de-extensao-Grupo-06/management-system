@@ -48,7 +48,8 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
                 showConfirmButton: true,
                 cancelButtonText: "Cancelar",
                 confirmButtonText: "Deletar",
-                confirmButtonColor: "#d22828"
+                confirmButtonColor: "#d22828",
+                customClass: { container: "swal-above-modal" }
             })
             .then(async (e) => {
                 if(e.isConfirmed) {
@@ -64,7 +65,8 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
                     icon: "error",
                     title: "Erro ao deletar arquivo",
                     text: "Se persistir consulte o suporte.",
-                    confirmButtonColor: "#1e5128"
+                    confirmButtonColor: "#1e5128",
+                    customClass: { container: "swal-above-modal" }
                 })
             }
         }
@@ -76,7 +78,8 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
                 icon: "warning",
                 title: "Nenhum arquivo selecionado",
                 text: "Selecione um arquivo antes de enviar.",
-                confirmButtonColor: "#1e5128"
+                confirmButtonColor: "#1e5128",
+                customClass: { container: "swal-above-modal" }
             });
             return;
         }
@@ -85,6 +88,7 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
             title: "Enviando arquivo...",
             text: "Aguarde enquanto o upload é realizado.",
             allowOutsideClick: false,
+            customClass: { container: "swal-above-modal" },
             didOpen: () => {
                 Swal.showLoading();
             }
@@ -101,7 +105,8 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
                 icon: "success",
                 title: "Upload realizado!",
                 text: "Arquivo enviado com sucesso.",
-                confirmButtonColor: "#1e5128"
+                confirmButtonColor: "#1e5128",
+                customClass: { container: "swal-above-modal" }
             });
 
             setSelectedFile(null);
@@ -116,7 +121,8 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
                 icon: "error",
                 title: "Erro no upload",
                 text: "Não foi possível enviar o arquivo.",
-                confirmButtonColor: "#1e5128"
+                confirmButtonColor: "#1e5128",
+                customClass: { container: "swal-above-modal" }
             });
         }
     }
