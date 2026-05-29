@@ -41,6 +41,7 @@ class ClientsPage(BasePage):
 
     def submit_form(self):
         self.confirm_create_button.click()
+        self.confirm_create_button.wait_for(state="hidden")
 
     def get_validation_errors(self):
         # Captures Zod errors and global Alert component errors
@@ -49,9 +50,12 @@ class ClientsPage(BasePage):
         return errors + alerts
 
     def delete_client_by_name(self, name):
-        self.search_input.fill(name)
+        self.search_input.clear()
+        self.search_input.press_sequentially(name, delay=100)
         # Wait for search debounce and table update
         self.page.locator("tr").filter(has_text=name).first.wait_for()
         row = self.page.locator("tr").filter(has_text=name).first
         row.get_by_label("Deletar").click()
-        self.page.get_by_role("button", name="Confirmar").click()
+        confirm_button = self.page.get_by_role("button", name="Confirmar")
+        confirm_button.click()
+        confirm_button.wait_for(state="hidden")

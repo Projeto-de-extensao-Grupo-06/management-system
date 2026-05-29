@@ -15,6 +15,7 @@ import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
 import ProjectService from "../../services/ProjectService";
 import ScheduleService from "../../services/ScheduleService";
+import { getErrorMessage } from "../../utils/errorTranslator";
 import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
@@ -117,26 +118,7 @@ export default function Schedule() {
                 customClass: { container: 'swal-above-modal' },
             });
         } catch (error: unknown) {
-            const err = error as { response?: { data?: { message?: string; messages?: string[]; validationErrors?: { field: string; message: string }[] } } };
-            const validationErrors = err?.response?.data?.validationErrors;
-            
-            let validationMsg = '';
-            if (validationErrors && validationErrors.length > 0) {
-                const translatedErrors = validationErrors.map(v => {
-                    if (v.field === 'startDate') return 'A data de início não pode estar no passado.';
-                    if (v.field === 'endDate') return 'A data de término não pode estar no passado.';
-                    if (v.field === 'title') return 'O título é obrigatório.';
-                    if (v.field === 'type') return 'O tipo de evento é obrigatório.';
-                    return v.message;
-                });
-                validationMsg = translatedErrors.join('\n');
-            }
-
-            const msg =
-                validationMsg ||
-                err?.response?.data?.messages?.[0] ||
-                err?.response?.data?.message ||
-                'Não foi possível criar o agendamento.';
+            const msg = getErrorMessage(error);
             Swal.fire({
                 icon: 'error',
                 title: 'Erro ao criar agendamento',
@@ -167,26 +149,7 @@ export default function Schedule() {
                 customClass: { container: 'swal-above-modal' },
             });
         } catch (error: unknown) {
-            const err = error as { response?: { data?: { message?: string; messages?: string[]; validationErrors?: { field: string; message: string }[] } } };
-            const validationErrors = err?.response?.data?.validationErrors;
-            
-            let validationMsg = '';
-            if (validationErrors && validationErrors.length > 0) {
-                const translatedErrors = validationErrors.map(v => {
-                    if (v.field === 'startDate') return 'A data de início não pode estar no passado.';
-                    if (v.field === 'endDate') return 'A data de término não pode estar no passado.';
-                    if (v.field === 'title') return 'O título é obrigatório.';
-                    if (v.field === 'type') return 'O tipo de evento é obrigatório.';
-                    return v.message;
-                });
-                validationMsg = translatedErrors.join('\n');
-            }
-
-            const msg =
-                validationMsg ||
-                err?.response?.data?.messages?.[0] ||
-                err?.response?.data?.message ||
-                'Não foi possível atualizar o agendamento.';
+            const msg = getErrorMessage(error);
             Swal.fire({
                 icon: 'error',
                 title: 'Erro ao atualizar agendamento',

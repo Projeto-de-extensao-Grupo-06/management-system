@@ -7,6 +7,7 @@ import { ProjectStatus } from '../../interfaces/enum/ProjectStatus';
 import type { ActionRequiredProps } from '../../interfaces/properties/ActionRequiredProps';
 import ClientsService from '../../services/ClientsService';
 import ProjectService from '../../services/ProjectService';
+import { getErrorMessage } from '../../utils/errorTranslator';
 import styles from "./ActionRequired.module.css";
 
 const clientService = new ClientsService();
@@ -58,17 +59,20 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
                 title: 'Sucesso!',
                 text: 'Ação adiada para mais tarde.',
                 icon: 'success',
-                confirmButtonColor: 'var(--color-primary)'
+                confirmButtonColor: 'var(--color-primary)',
+                customClass: { container: 'swal-above-modal' }
             });
             
             onActionComplete?.();
         } catch (error) {
             console.error('Error deferring action:', error);
+            const msg = getErrorMessage(error);
             Swal.fire({
                 title: 'Erro!',
-                text: 'Erro ao adiar ação.',
+                text: msg,
                 icon: 'error',
-                confirmButtonColor: 'var(--color-primary)'
+                confirmButtonColor: 'var(--color-primary)',
+                customClass: { container: 'swal-above-modal' }
             });
         } finally {
             setLoading(false);
@@ -84,7 +88,8 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
             confirmButtonColor: '#ef4444',
             cancelButtonColor: '#ccc',
             confirmButtonText: 'Confirmar',
-            cancelButtonText: 'Cancelar'
+            cancelButtonText: 'Cancelar',
+            customClass: { container: 'swal-above-modal' }
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
@@ -97,17 +102,20 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
                         title: 'Dispensado!',
                         text: 'Ação dispensada com sucesso.',
                         icon: 'success',
-                        confirmButtonColor: 'var(--color-primary)'
+                        confirmButtonColor: 'var(--color-primary)',
+                        customClass: { container: 'swal-above-modal' }
                     });
                     
                     onActionComplete?.();
                 } catch (error) {
                     console.error('Error dismissing action:', error);
+                    const msg = getErrorMessage(error);
                     Swal.fire({
                         title: 'Erro!',
-                        text: 'Erro ao dispensar ação.',
+                        text: msg,
                         icon: 'error',
-                        confirmButtonColor: 'var(--color-primary)'
+                        confirmButtonColor: 'var(--color-primary)',
+                        customClass: { container: 'swal-above-modal' }
                     });
                 } finally {
                     setLoading(false);

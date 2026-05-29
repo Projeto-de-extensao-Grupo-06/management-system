@@ -36,13 +36,17 @@ def test_clients_crud_flow(authenticated_page):
         errors = clients_page.get_validation_errors()
         pytest.fail(f"Falha na validação do formulário: {errors}")
     
-    clients_page.search_input.fill(test_first_name)
+    clients_page.search_input.clear()
+    clients_page.search_input.press_sequentially(test_first_name, delay=100)
     authenticated_page.locator("tr").filter(has_text=full_name).first.wait_for()
     assert authenticated_page.locator("tr").filter(has_text=full_name).is_visible()
 
     clients_page.delete_client_by_name(full_name)
     authenticated_page.wait_for_selector("text=Cliente removido com sucesso!")
     
-    clients_page.search_input.fill(test_first_name)
-    authenticated_page.wait_for_timeout(1000)
-    assert authenticated_page.locator("text=Nenhum cliente encontrado.").is_visible()
+    clients_page.search_input.clear()
+    clients_page.search_input.press_sequentially(test_first_name, delay=100)
+    # Use wait_for to allow for search debounce and UI update
+    empty_state_locator = authenticated_page.locator("text=Nenhum cliente encontrado.")
+    empty_state_locator.wait_for(state="visible")
+    assert empty_state_locator.is_visible()

@@ -1,6 +1,5 @@
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 import usePermissions from "../../../../hooks/usePermissions";
@@ -9,7 +8,8 @@ import type { AutoCompleteSelectOption } from "../../../../interfaces/properties
 import type { ProjectDetails } from "../../../../interfaces/types/ProjectDetails";
 import CoworkerService from "../../../../services/CoworkerService";
 import ProjectService from "../../../../services/ProjectService";
-import { translateBackendError, validateStatusTransition } from "../../../../utils/projectStatusTransitions";
+import { getErrorMessage } from "../../../../utils/errorTranslator";
+import { validateStatusTransition } from "../../../../utils/projectStatusTransitions";
 import { AutoCompleteSelect, Input, Select, SelectOption } from "../../../ui/Form";
 import styles from "./GeneralInfo.module.css";
 
@@ -82,6 +82,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                 icon: "error",
                 confirmButtonText: "Entendido",
                 confirmButtonColor: "var(--color-primary)",
+                customClass: { container: 'swal-above-modal' }
             });
             return;
         }
@@ -97,6 +98,7 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                 cancelButtonText: "Cancelar",
                 confirmButtonColor: "var(--color-primary)",
                 cancelButtonColor: "#6b7280",
+                customClass: { container: 'swal-above-modal' }
             });
 
             if (!result.isConfirmed) return;
@@ -116,17 +118,15 @@ export default function GeneralInfoForm({ project, setProject }: GeneralInfoForm
                 return { ...prev, status: previousStatus };
             });
 
-            const rawMessage =
-                axios.isAxiosError(err) && err.response?.data?.message
-                    ? err.response.data.message
-                    : "";
+            const msg = getErrorMessage(err);
 
             Swal.fire({
                 title: "Não foi possível alterar o status",
-                text: translateBackendError(rawMessage),
+                text: msg,
                 icon: "error",
                 confirmButtonText: "Entendido",
                 confirmButtonColor: "var(--color-primary)",
+                customClass: { container: 'swal-above-modal' }
             });
         }
     }
