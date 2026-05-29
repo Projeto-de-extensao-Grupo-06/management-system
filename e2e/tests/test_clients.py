@@ -46,5 +46,7 @@ def test_clients_crud_flow(authenticated_page):
     
     clients_page.search_input.clear()
     clients_page.search_input.press_sequentially(test_first_name, delay=100)
-    authenticated_page.wait_for_timeout(1000)
-    assert authenticated_page.locator("text=Nenhum cliente encontrado.").is_visible()
+    # Use wait_for to allow for search debounce and UI update
+    empty_state_locator = authenticated_page.locator("text=Nenhum cliente encontrado.")
+    empty_state_locator.wait_for(state="visible")
+    assert empty_state_locator.is_visible()

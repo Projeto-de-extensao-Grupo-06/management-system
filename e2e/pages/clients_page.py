@@ -56,4 +56,6 @@ class ClientsPage(BasePage):
         self.page.locator("tr").filter(has_text=name).first.wait_for()
         row = self.page.locator("tr").filter(has_text=name).first
         row.get_by_label("Deletar").click()
-        self.page.get_by_role("button", name="Confirmar").click()
+        confirm_button = self.page.get_by_role("button", name="Confirmar")
+        confirm_button.click()
+        confirm_button.wait_for(state="hidden")
