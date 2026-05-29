@@ -13,9 +13,9 @@ import type { ProjectStatusType } from "../../interfaces/enum/ProjectStatus";
 import type CalendarEvent from "../../interfaces/types/CalendarEvent";
 import type { ScheduleSchemaType } from "../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../schemas/scheduleSchema";
-import { getErrorMessage } from "../../utils/errorTranslator";
 import ProjectService from "../../services/ProjectService";
 import ScheduleService from "../../services/ScheduleService";
+import { getErrorMessage } from "../../utils/errorTranslator";
 import styles from "./Schedule.module.css";
 
 const service = new ScheduleService();
