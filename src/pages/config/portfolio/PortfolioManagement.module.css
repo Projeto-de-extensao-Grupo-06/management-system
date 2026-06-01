@@ -1,0 +1,358 @@
+.headerActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.alertWrapper {
+  margin-bottom: 1rem;
+}
+
+.summaryBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(12, 57, 0, 0.08), rgba(246, 139, 31, 0.1));
+  border: 1px solid rgba(12, 57, 0, 0.08);
+}
+
+.summaryBadges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  overflow: hidden;
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.cover {
+  min-height: 220px;
+  background: linear-gradient(135deg, #0c3900, #1f7a1f);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+}
+
+.cardContent {
+  padding: 1.25rem;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.cardTop h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+}
+
+.cardTop p {
+  margin: 0;
+  color: #64748b;
+}
+
+.metaRow {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.metaRow span {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(12, 57, 0, 0.06);
+  color: #0c3900;
+  font-size: 0.9rem;
+}
+
+.testimonial {
+  margin: 0 0 1rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.actionGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.emptyState {
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px dashed rgba(15, 23, 42, 0.18);
+  color: #475569;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(2, 6, 23, 0.62);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.modal,
+.modalLarge,
+.modalEditor {
+  width: min(100%, 680px);
+  max-height: 92vh;
+  overflow: auto;
+  border-radius: 28px;
+  background: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 28px 80px rgba(2, 6, 23, 0.32);
+}
+
+.modalLarge,
+.modalEditor {
+  width: min(100%, 980px);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modalHeader h2,
+.modalHeader h3 {
+  margin: 0 0 0.25rem;
+}
+
+.modalHeader p {
+  margin: 0;
+  color: #64748b;
+}
+
+.choiceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.choiceCard {
+  padding: 1.25rem;
+  border-radius: 24px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: linear-gradient(180deg, rgba(12, 57, 0, 0.04), rgba(255, 255, 255, 1));
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.choiceCard strong {
+  color: #0f172a;
+}
+
+.choiceCard span {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.searchBox {
+  margin-bottom: 1rem;
+}
+
+.projectList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.projectItem {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 18px;
+  padding: 1rem;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.projectItem strong,
+.projectItem span {
+  display: block;
+}
+
+.projectItem span {
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field,
+.fieldWide {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldWide {
+  grid-column: 1 / -1;
+}
+
+.field span,
+.fieldWide span {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.inlineFields {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 0.75rem;
+}
+
+.importPanel {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: 22px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(248, 250, 252, 0.92);
+}
+
+.attachmentGrid,
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.attachmentCard,
+.imageCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #fff;
+}
+
+.attachmentCard {
+  cursor: pointer;
+}
+
+.attachmentCard input {
+  align-self: flex-start;
+}
+
+.attachmentPreview,
+.imagePreview {
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(12, 57, 0, 0.12), rgba(246, 139, 31, 0.14));
+  background-size: cover;
+  background-position: center;
+  min-height: 140px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #0f172a;
+  padding: 0.75rem;
+}
+
+.imageMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.imageActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.footerActions {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.uploadButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  background: #0c3900;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.uploadButton input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 960px) {
+  .grid,
+  .choiceGrid,
+  .editorGrid,
+  .attachmentGrid,
+  .imageGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryBar,
+  .cardTop,
+  .cardFooter,
+  .modalHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inlineFields {
+    grid-template-columns: 1fr;
+  }
+}

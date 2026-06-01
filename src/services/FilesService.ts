@@ -11,13 +11,18 @@ export default class FilesService {
     }
   }
 
+  async downloadFileBlob(projectId: number, fileId: number): Promise<Blob> {
+    const response = await api.get(`/projects/${projectId}/files/${fileId}/download`, {
+      responseType: 'blob',
+    });
+
+    return response.data;
+  }
+
   async downloadFile(projectId: number, fileId: number): Promise<void> {
-    const response = await api.get(
-      `/projects/${projectId}/files/${fileId}/download`,
-      {
-        responseType: "blob",
-      }
-    );
+    const response = await api.get(`/projects/${projectId}/files/${fileId}/download`, {
+      responseType: 'blob',
+    });
     const contentDisposition = response.headers["content-disposition"];
 
     let fileName = "download";
@@ -29,8 +34,7 @@ export default class FilesService {
       }
     }
 
-    const blob = new Blob([response.data]);
-    const url = window.URL.createObjectURL(blob);
+    const url = window.URL.createObjectURL(response.data);
 
     const a = document.createElement("a");
     a.href = url;

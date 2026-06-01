@@ -9,6 +9,11 @@ import ClientsService from '../../services/ClientsService';
 import ProjectService from '../../services/ProjectService';
 import { getErrorMessage } from '../../utils/errorTranslator';
 import styles from "./ActionRequired.module.css";
+<<<<<<< Updated upstream
+=======
+import Swal from 'sweetalert2';
+import { validateStatusTransition, translateBackendError } from '../../utils/projectStatusTransitions';
+>>>>>>> Stashed changes
 
 const clientService = new ClientsService();
 
@@ -16,6 +21,7 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
     const [clientName, setClientName] = useState("");
     const [clientPhone, setClientPhone] = useState("");
     const [loading, setLoading] = useState(false);
+    const [closed, setClosed] = useState(false);
     const projectService = useMemo(() => new ProjectService(), []);
 
     useEffect(() => {
@@ -28,6 +34,10 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
 
         fetchClient();
     }, []);
+
+    useEffect(() => {
+        setClosed(false);
+    }, [projectStatus, projectId]);
 
     const message = (() => {
         if (projectStatus === "CLIENT_AWAITING_CONTACT") {
@@ -49,12 +59,48 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
     };
 
     const handleLater = async () => {
+        // escolher status alvo dependendo do status atual
+        const targetStatus = projectStatus === ProjectStatus.CLIENT_AWAITING_CONTACT
+            ? ProjectStatus.AWAITING_RETRY
+            : ProjectStatus.RETRYING;
+
+        const validation = validateStatusTransition(projectStatus as any, targetStatus as any);
+
+        if (validation.type === 'blocked') {
+            Swal.fire({
+                title: 'Transição não permitida',
+                text: validation.message,
+                icon: 'error',
+                confirmButtonColor: 'var(--color-primary)'
+            });
+            return;
+        }
+
+        if (validation.type === 'warning') {
+            const result = await Swal.fire({
+                title: 'Atenção — pré-condição necessária',
+                text: validation.message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Tentar mesmo assim',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: 'var(--color-primary)',
+                cancelButtonColor: '#6b7280'
+            });
+
+            if (!result.isConfirmed) return;
+        }
+
         try {
             setLoading(true);
             await projectService.updateProject(projectId, {
+<<<<<<< Updated upstream
                 status: ProjectStatus.RETRYING
+=======
+                status: targetStatus as any
+>>>>>>> Stashed changes
             });
-            
+
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Ação adiada para mais tarde.',
@@ -62,14 +108,24 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
                 confirmButtonColor: 'var(--color-primary)',
                 customClass: { container: 'swal-above-modal' }
             });
-            
+
+            setClosed(true);
             onActionComplete?.();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deferring action:', error);
+<<<<<<< Updated upstream
             const msg = getErrorMessage(error);
             Swal.fire({
                 title: 'Erro!',
                 text: msg,
+=======
+
+            const rawMessage = error?.response?.data?.message ?? '';
+
+            Swal.fire({
+                title: 'Não foi possível adiar',
+                text: `${translateBackendError(rawMessage)}${rawMessage ? '\n\nDetalhe: ' + rawMessage : ''}${error?.message ? '\n\nErro: ' + error.message : ''}`,
+>>>>>>> Stashed changes
                 icon: 'error',
                 confirmButtonColor: 'var(--color-primary)',
                 customClass: { container: 'swal-above-modal' }
@@ -106,6 +162,7 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
                         customClass: { container: 'swal-above-modal' }
                     });
                     
+                    setClosed(true);
                     onActionComplete?.();
                 } catch (error) {
                     console.error('Error dismissing action:', error);
@@ -124,6 +181,8 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
         });
     };
 
+    if (closed) return null;
+
     if (message) {
         return (
             <div className={styles.content}>
@@ -139,7 +198,7 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
                     <div className={styles.actions}>
                         <button 
                             className={clsx(styles.actionButton, styles.contactButton)}
-                            onClick={handleContact}
+                            onClick={async () => { await handleContact(); await handleDismiss(); }}
                         >
                             Contatar
                         </button>
@@ -163,5 +222,5 @@ export default function ActionRequired({ projectStatus, clientId, projectId, onA
         );
     }
 
-    return null;
-}
+        return null;
+    }
