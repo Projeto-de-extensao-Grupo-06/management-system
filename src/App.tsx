@@ -18,6 +18,7 @@ import ClientDetails from "./pages/clients/ClientDetails";
 import Clients from "./pages/clients/Clients";
 import AutomaticBudgetConfig from './pages/config/automatic_budget_config/AutomaticBudgetConfig';
 import Config from "./pages/config/Config";
+import PortfolioManagement from "./pages/config/portfolio/PortfolioManagement";
 import ConfigPerfil from "./pages/config/configPerfil/configPerfil";
 import PermissionProfiles from "./pages/config/permission_profiles/PermissionProfiles";
 import ResetPassword from "./pages/config/resetPassword/ResetPassword";
@@ -116,6 +117,7 @@ function App() {
                 element={<PermissionRoute permissions={["BUDGET_READ"]} element={<Materials />} />}
               />
               <Route path="/configuracoes" element={<Config />} />
+              <Route path="/configuracoes/portfolio" element={<PortfolioManagement />} />
               <Route path="/configuracoes/config-perfil" element={<ConfigPerfil />} />
               <Route path="/configuracoes/redefinir-senha" element={<ResetPassword />} />
               <Route path="/configuracoes/colaboradores" element={<Coworkers />} />

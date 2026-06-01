@@ -17,17 +17,26 @@ export default function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState<ProjectDetails | null>(null);
 
-    useEffect(() => {
+    const loadProject = async () => {
         if (!id) return;
 
+<<<<<<< Updated upstream
         const loadProject = async () => {
             const data = await projectService.getProjectById(id);
 
             if (data) {
                 setProject(data);
             }
-        }
+=======
+        const project = await projectService.getProjectById(id);
 
+        if (project) {
+            setProject(project);
+>>>>>>> Stashed changes
+        }
+    };
+
+    useEffect(() => {
         loadProject();
     }, [id, projectService]);
 
@@ -51,7 +60,11 @@ export default function ProjectDetails() {
 
             {/* MOBILE */}
             <div className={styles.mobileLayout}>
+<<<<<<< Updated upstream
                 <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} onActionComplete={reloadProject} />
+=======
+                <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} onActionComplete={loadProject} />
+>>>>>>> Stashed changes
                 <NextSchedules projectId={project.id} />
                 <GeneralInfoForm project={project} setProject={setProject} />
                 <ClientInfoForm project={project} />
@@ -63,7 +76,11 @@ export default function ProjectDetails() {
             <div className={styles.desktopLayout}>
                 <div className={styles.container}>
                     <div className={styles.left}>
+<<<<<<< Updated upstream
                         <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} onActionComplete={reloadProject} />
+=======
+                        <ActionRequired projectStatus={project.status} clientId={project.clientId} projectId={project.id} onActionComplete={loadProject} />
+>>>>>>> Stashed changes
                         <NextSchedules projectId={project.id} />
                         <BudgetSummary projectId={project.id} />
                         <ProjectObservation project={project} setProject={setProject} />
