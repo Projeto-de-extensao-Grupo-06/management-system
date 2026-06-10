@@ -1,10 +1,12 @@
 import { faCalendar, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Swal from 'sweetalert2';
+import type { ProjectStatusType } from "../../../../interfaces/enum/ProjectStatus";
 import type { Schedule } from "../../../../interfaces/types/Schedule";
 import type { ScheduleSchemaType } from "../../../../schemas/scheduleSchema";
 import { scheduleDefaultValues } from "../../../../schemas/scheduleSchema";
+import ProjectService from "../../../../services/ProjectService";
 import ScheduleService from "../../../../services/ScheduleService";
 import { getErrorMessage } from "../../../../utils/errorTranslator";
 import ScheduleFormModal from "../../../dialogs/schedule/ScheduleFormModal";
@@ -17,9 +19,11 @@ const scheduleService = new ScheduleService();
 
 interface NextSchedulesProps {
     projectId: number;
+    onScheduleChange?: () => void;
 }
 
-export default function NextSchedules({ projectId }: NextSchedulesProps) {
+export default function NextSchedules({ projectId, onScheduleChange }: NextSchedulesProps) {
+    const projectService = useMemo(() => new ProjectService(), []);
     const [schedules, setSchedules] = useState<Schedule[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
@@ -63,8 +67,26 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
         if (!editingSchedule) return;
         try {
             await scheduleService.updateEvent(String(editingSchedule.id), data);
+
+            // Atualiza o status do projeto vinculado conforme o tipo de visita agendada/atualizada
+            const statusMap: Partial<Record<ScheduleSchemaType['type'], ProjectStatusType>> = {
+                TECHNICAL_VISIT: 'SCHEDULED_TECHNICAL_VISIT',
+                INSTALL_VISIT:   'SCHEDULED_INSTALLING_VISIT',
+            };
+            const newStatus = statusMap[data.type];
+            if (newStatus) {
+                try {
+                    await projectService.updateProject(projectId, { status: newStatus });
+                } catch (statusErr) {
+                    console.warn('Agendamento atualizado, mas não foi possível atualizar o status do projeto:', statusErr);
+                }
+            }
+
             closeEditModal();
             fetchSchedules();
+            if (onScheduleChange) {
+                onScheduleChange();
+            }
             Swal.fire({ 
                 icon: 'success', 
                 title: 'Sucesso', 
@@ -89,8 +111,26 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
             // Force the projectId from the current project page
             const payload = { ...data, projectId };
             await scheduleService.createEvent(payload);
+
+            // Atualiza o status do projeto vinculado conforme o tipo de visita agendada
+            const statusMap: Partial<Record<ScheduleSchemaType['type'], ProjectStatusType>> = {
+                TECHNICAL_VISIT: 'SCHEDULED_TECHNICAL_VISIT',
+                INSTALL_VISIT:   'SCHEDULED_INSTALLING_VISIT',
+            };
+            const newStatus = statusMap[data.type];
+            if (newStatus) {
+                try {
+                    await projectService.updateProject(projectId, { status: newStatus });
+                } catch (statusErr) {
+                    console.warn('Agendamento criado, mas não foi possível atualizar o status do projeto:', statusErr);
+                }
+            }
+
             closeCreateModal();
             fetchSchedules();
+            if (onScheduleChange) {
+                onScheduleChange();
+            }
             Swal.fire({ 
                 icon: 'success', 
                 title: 'Sucesso', 
@@ -104,6 +144,34 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
+                text: msg,
+                customClass: { container: 'swal-above-modal' }
+            });
+        }
+    }
+
+    async function handleDelete() {
+        if (!editingSchedule) return;
+        try {
+            await scheduleService.deleteEvent(String(editingSchedule.id));
+            closeEditModal();
+            fetchSchedules();
+            if (onScheduleChange) {
+                onScheduleChange();
+            }
+            Swal.fire({ 
+                icon: 'success', 
+                title: 'Sucesso', 
+                text: 'Agendamento excluído!', 
+                timer: 2000, 
+                showConfirmButton: false,
+                customClass: { container: 'swal-above-modal' }
+            });
+        } catch (error: any) {
+            const msg = getErrorMessage(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao excluir agendamento',
                 text: msg,
                 customClass: { container: 'swal-above-modal' }
             });
@@ -178,6 +246,7 @@ export default function NextSchedules({ projectId }: NextSchedulesProps) {
                     isOpen={isEditModalOpen}
                     onClose={closeEditModal}
                     onSubmit={handleEditSubmit}
+                    onDelete={handleDelete}
                     defaultValues={buildDefaultValues(editingSchedule)}
                     mode="edit"
                 />
