@@ -137,6 +137,23 @@ export default function Schedule() {
         if (!selectedEvent) return;
         try {
             await service.updateEvent(selectedEvent.id, data);
+
+            // Atualiza o status do projeto vinculado conforme o tipo de visita agendada/atualizada
+            if (data.projectId) {
+                const statusMap: Partial<Record<ScheduleSchemaType['type'], ProjectStatusType>> = {
+                    TECHNICAL_VISIT: 'SCHEDULED_TECHNICAL_VISIT',
+                    INSTALL_VISIT:   'SCHEDULED_INSTALLING_VISIT',
+                };
+                const newStatus = statusMap[data.type];
+                if (newStatus) {
+                    try {
+                        await projectService.updateProject(data.projectId, { status: newStatus });
+                    } catch (statusErr) {
+                        console.warn('Agendamento atualizado, mas não foi possível atualizar o status do projeto:', statusErr);
+                    }
+                }
+            }
+
             await fetchEvents(currentMonth, currentYear);
             setIsEditOpen(false);
             setSelectedEvent(null);
